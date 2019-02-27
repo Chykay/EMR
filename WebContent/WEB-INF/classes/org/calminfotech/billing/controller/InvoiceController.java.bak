@@ -1,0 +1,1032 @@
+package org.calminfotech.billing.controller;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URLDecoder;
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import javax.validation.Valid;
+
+import org.calminfotech.billing.boInterface.BillSchemeBo;
+import org.calminfotech.billing.boInterface.BillSchemeItemBo;
+import org.calminfotech.billing.boInterface.BillSchemeItemPriceBo;
+import org.calminfotech.billing.boInterface.BillSchemeMeasurePriceBo;
+import org.calminfotech.billing.boInterface.BillingInvoiceBo;
+import org.calminfotech.billing.forms.InvoiceBillForm;
+import org.calminfotech.billing.forms.InvoiceBill_ChargetoForm;
+import org.calminfotech.billing.forms.PaymentForm;
+import org.calminfotech.billing.models.BillInvoice;
+import org.calminfotech.billing.models.BillInvoicePayment;
+import org.calminfotech.billing.models.BillSchemeMeasurePrice;
+import org.calminfotech.billing.models.Invoice;
+import org.calminfotech.hmo.boInterface.HmoPackageBo;
+import org.calminfotech.hmo.boInterface.HmoPackageItemBo;
+import org.calminfotech.hrunit.boInterface.HrunitCategoryBo;
+import org.calminfotech.hrunit.boInterface.StaffRegBoInterface;
+import org.calminfotech.patient.boInterface.PatientHmoBo;
+import org.calminfotech.system.boInterface.GlobalItemBo;
+import org.calminfotech.system.boInterface.GlobalItemUnitofMeasureBo;
+import org.calminfotech.system.boInterface.SettingBo;
+import org.calminfotech.system.models.SettingsAssignment;
+import org.calminfotech.user.utils.UserIdentity;
+import org.calminfotech.utils.Alert;
+import org.calminfotech.utils.Auditor;
+import org.calminfotech.utils.BillschemestatusList;
+import org.calminfotech.utils.DateUtils;
+import org.calminfotech.utils.PaymodeList;
+import org.calminfotech.utils.annotations.Layout;
+import org.calminfotech.visitqueue.boInterface.VisitBo;
+import org.calminfotech.visitqueue.boInterface.VisitStatusBo;
+import org.calminfotech.visitqueue.daoInterface.VisitDao;
+import org.calminfotech.visitqueue.forms.PrescribedSearchForm;
+import org.calminfotech.visitqueue.forms.VisitWorkflowUserConfigurationForm;
+import org.calminfotech.visitqueue.models.Visit;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
+import org.xhtmlrenderer.pdf.ITextRenderer;
+
+import com.lowagie.text.DocumentException;
+
+//*.*;
+
+@Controller
+@RequestMapping(value = "/invoice")
+public class InvoiceController {
+
+	@Autowired
+	private BillSchemeBo billschemeBo;
+
+	@Autowired
+	private BillSchemeItemBo billschemeItemBo;
+
+	@Autowired
+	private BillSchemeItemPriceBo billschemeItemPriceBo;
+
+	@Autowired
+	private BillSchemeMeasurePriceBo billschememeasurepriceBo;
+
+	@Autowired
+	private StaffRegBoInterface staffRegBo;
+
+	@Autowired
+	private GlobalItemUnitofMeasureBo itemUnitOfMeasureBo;
+
+	@Autowired
+	private GlobalItemBo globalItemBo;
+
+	@Autowired
+	private org.calminfotech.hmo.boInterface.HmoBo hmoBo;
+
+	@Autowired
+	private Alert alert;
+
+	@Autowired
+	private SettingBo settingBo;
+
+	@Autowired
+	private BillschemestatusList billschemestatusList;
+
+	@Autowired
+	private UserIdentity userIdentity;
+
+	@Autowired
+	private Auditor auditor;
+
+	@Autowired
+	private VisitBo visitBo;
+
+	@Autowired
+	private VisitDao visitDao;
+
+	@Autowired
+	private VisitStatusBo visitStatusBo;
+
+	@Autowired
+	private HrunitCategoryBo unitBo;
+
+	@Autowired
+	private BillingInvoiceBo billinvoiceBo;
+
+	@Autowired
+	private PatientHmoBo patienthmopackageBo;
+
+	@Autowired
+	private HmoPackageBo hmopackageBo;
+
+	@Autowired
+	private PaymodeList paymodeBo;
+
+	@Autowired
+	private HmoPackageItemBo PackageItemBo;
+
+	@Autowired
+	private org.calminfotech.hmo.boInterface.HmoBo HmoBo;
+
+	@SuppressWarnings("unused")
+	@Layout(value = "layouts/datatable")
+	@RequestMapping(value = "/raiseinvoice")
+	public String viewAction(
+			Model model,
+			@Valid @ModelAttribute("vForm") VisitWorkflowUserConfigurationForm vfc,
+			BindingResult result, RedirectAttributes redirectAttributes) {
+
+		System.out.print("vstsearchraise" + vfc.getVisitId());
+		Visit vst = this.visitBo.getVisitationById(vfc.getVisitId());
+		if (null == vst) {
+			alert.setAlert(redirectAttributes, Alert.DANGER,
+					"Error! Invalid Visit");
+			System.out.print("vstsearchraiserror" + vfc.getVisitId());
+
+			return this.process(model);
+
+		}
+
+		System.out.print(vfc.getVisitId());
+		System.out.print(vfc.getQty());
+		System.out.print(vfc.getItemmeasureid());
+
+		System.out.print(vfc.getAmt());
+
+		System.out.print(vfc.getUnitId());
+		System.out.print(userIdentity.getOrganisation().getId());
+
+		Double vat = 0.00;
+		SettingsAssignment setass = this.settingBo.fetchsettings(
+				"VAT_PERCENT_VALU", userIdentity.getOrganisation().getId());
+
+		if (setass != null) {
+			try {
+				vat = Double.parseDouble(setass.getSettings_value());
+			} catch (Exception e)
+
+			{
+				vat = 0.00;
+
+			}
+		}
+
+		System.out.println("use hmo" + vfc.getUsehmo());
+		// System.out.println("use hmo" + vfc.getUsehmo().toString());
+
+		// System.out.println("use hmo" + vfc.getUsehmo().booleanValue());
+
+		Invoice invoice = this.billinvoiceBo.Getinvoice(vfc.getVisitId(),
+				vfc.getQty(), vfc.getItemmeasureid(), vfc.getAmt(),
+				vfc.getUnitId(), userIdentity.getOrganisation().getId(),
+				vfc.getUsehmo());
+
+		if (invoice == null) {
+			alert.setAlert(redirectAttributes, Alert.DANGER,
+					"Check if Scheme has been assigned to unit and other settings!");
+
+			return this.process(model);
+
+		}
+
+		InvoiceBillForm invoiceform = new InvoiceBillForm();
+
+		invoiceform.setGlobalitemname(invoice.getGlobalitemname());
+
+		invoiceform.setSurname(invoice.getSurname());
+
+		invoiceform.setFirst_name(invoice.getFirst_name());
+
+		invoiceform.setItemmeasurename(invoice.getItemmeasurename());
+
+		invoiceform.setUsehmo(vfc.getUsehmo());
+
+		System.out.print("myqty " + invoice.getQty());
+
+		invoiceform.setVat(vat);
+
+		invoiceform.setQty(invoice.getQty());
+
+		// invoiceform.setQty(20);
+
+		System.out.print("myqtyform " + invoiceform.getQty());
+
+		invoiceform.setInvamt(invoice.getInvamt());
+
+		invoiceform.setGroamt(invoice.getInvamt());
+
+		invoiceform.setAddamt(0.00);
+		invoiceform.setDedamt(0.00);
+
+		// invoiceform.setVatamt(0.1*invoice.getInvamt());
+
+		invoiceform.setVisitid(invoice.getVisitid());
+
+		invoiceform.setGlobalitemid(invoice.getGlobalitemid());
+
+		invoiceform.setUnitid(invoice.getUnitid());
+		invoiceform.setDescription(invoice.getGlobalitemname());
+
+		invoiceform.setReferenceid(invoice.getVisitid());
+
+		invoiceform.setItemmeasureid(invoice.getItemmeasureid());
+
+		System.out.print("ppppppppp");
+
+		System.out.print(invoiceform);
+
+		System.out.print(invoiceform.getUsehmo());
+
+		System.out.print("ppppppppp");
+
+		model.addAttribute("invoiceForm", invoiceform);
+
+		model.addAttribute("invoice", invoice);
+
+		model.addAttribute("stafflist", this.staffRegBo
+				.fetchAllByOrganisation(userIdentity.getOrganisation().getId()));
+
+		model.addAttribute("v", vst);
+
+		return "invoice/show";
+	}
+
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	@Layout(value = "layouts/datatable")
+	public String saveAction(
+			@Valid @ModelAttribute("invoiceForm") InvoiceBillForm invoiceform,
+			BindingResult result, RedirectAttributes redirectAttributes,
+			Model model) {
+		Visit vst = this.visitBo.getVisitationById(invoiceform.getVisitid());
+
+		System.out.print("vstsearchpost" + invoiceform.getVisitid());
+		if (null == vst) {
+			alert.setAlert(redirectAttributes, Alert.DANGER,
+					"Error! Invalid Visit");
+			// VisitsController h = new VisitsController();
+			System.out.print("vstsearchposterrror" + invoiceform.getVisitid());
+			return this.process(model);
+
+		}
+
+		System.out.print(invoiceform.getVisitid());
+		System.out.print(invoiceform.getQty());
+		System.out.print(invoiceform.getItemmeasureid());
+		System.out.print(invoiceform.getInvamt());
+
+		System.out.print(invoiceform.getUnitid());
+		System.out.print(userIdentity.getOrganisation().getId());
+
+		System.out.print("addaddaddadd");
+
+		// System.out.println("use hmo" + invoiceform.getUsehmo().toString());
+
+		System.out.println("use hmo" + invoiceform.getUsehmo());
+
+		System.out.print("addaddaddadd");
+
+		Invoice invoice = this.billinvoiceBo
+				.Getinvoice(invoiceform.getVisitid(), invoiceform.getQty(),
+						invoiceform.getItemmeasureid(),
+						invoiceform.getInvamt(), invoiceform.getUnitid(),
+						userIdentity.getOrganisation().getId(),
+						invoiceform.getUsehmo());
+
+		/*
+		 * List<Chargeto> chargeinvoicelist =
+		 * this.billinvoiceBo.Getchargetolist(invoiceform.getVisitid(),
+		 * invoiceform.getQty(), invoiceform.getItemmeasureid(),
+		 * invoiceform.getInvamt(),
+		 * invoiceform.getUnitid(),userIdentity.getOrganisation().getId());
+		 * 
+		 * 
+		 * System.out.print("ccccccc" + chargeinvoicelist.size());
+		 */
+		// if (invoice==null || chargeinvoicelist.size()<1)
+		if (invoice == null) {
+			alert.setAlert(redirectAttributes, Alert.DANGER,
+					"Check if Scheme has been assigned to unit and other settings!!");
+			System.out.print("vstsearchpostnoinvoive"
+					+ invoiceform.getVisitid());
+			return this.process(model);
+			// return "redirect:/visits/labtestlist";
+		}
+
+		BillInvoice billinv = new BillInvoice();
+
+		if (invoice.getGlobalitemid() != null) {
+			billinv.setGlobalitem(this.globalItemBo.getGlobalItemById(invoice
+					.getGlobalitemid()));
+		}
+
+		billinv.setVisit(this.visitBo.getVisitationById(invoice.getVisitid()));
+
+		billinv.setDuedate(vst.getEffectiveDate());
+
+		billinv.setReferenceid(invoiceform.getReferenceid());
+
+		if (invoice.getBillschemeid() != null) {
+			billinv.setBillscheme(billschemeBo.getBillSchemeById(invoice
+					.getBillschemeid()));
+		}
+
+		if (invoice.getPatienthmopackageid() != null) {
+			billinv.setPatienthmopackage(patienthmopackageBo
+					.getPatientHmoById(invoice.getPatienthmopackageid()));
+		}
+
+		if (invoice.getHmoid() != null) {
+			billinv.setHmo(hmoBo.getHmoById(invoice.getHmoid()));
+		}
+
+		if (invoice.getHmopackageid() != null) {
+			billinv.setHmopackage(hmopackageBo.getHmoPackageById(invoice
+					.getHmopackageid()));
+		}
+
+		if (invoice.getItemmeasureid() != null) {
+
+			billinv.setItemmeasure(this.itemUnitOfMeasureBo
+					.getGlobalItemUnitofMeasureByIdvw(invoice
+							.getItemmeasureid()));
+		}
+
+		System.out.print("qqqqq" + invoice.getQty());
+		billinv.setQty(invoice.getQty());
+
+		System.out.print("uuuuu" + invoice.getUnitid());
+
+		if (invoice.getUnitid() != null) {
+			billinv.setUnit(this.unitBo.getHrunitCategoryById(invoice
+					.getUnitid()));
+		}
+
+		billinv.setDescription(invoiceform.getDescription());
+		billinv.setGroamt(invoiceform.getGroamt());
+		billinv.setAddamt(invoiceform.getAddamt());
+		billinv.setDedamt(invoiceform.getDedamt());
+
+		billinv.setInvamt(invoice.getInvamt());
+
+		billinv.setCashamt(invoice.getCashamt());
+
+		billinv.setHmoamt(invoice.getHmoamt());
+		billinv.setVatamt(invoiceform.getVatamt());
+
+		billinv.setCreatedBy(userIdentity.getUsername());
+		billinv.setCreatedDate(new GregorianCalendar().getTime());
+		billinv.setOrganisationId(userIdentity.getOrganisation().getId());
+		billinv.setDeleted(false);
+
+		if (invoiceform.getStaffid().intValue() != 0) {
+			billinv.setStaffreg(this.staffRegBo.getStaffById(invoiceform
+					.getStaffid()));
+
+		}
+
+		/*
+		 * Set<BillInvoiceChargedto> billto = new HashSet();
+		 * 
+		 * System.out.print("111111111"+chargeinvoicelist.size());
+		 * 
+		 * for (Chargeto invcharge : chargeinvoicelist)
+		 * 
+		 * {
+		 * 
+		 * BillInvoiceChargedto invchar = new BillInvoiceChargedto();
+		 * 
+		 * 
+		 * invchar.setBillinvoice(billinv);
+		 * 
+		 * invchar.setDuedate(vst.getEffectiveDate());
+		 * 
+		 * 
+		 * 
+		 * 
+		 * if (invcharge.getPatienthmopackageid() != null) {
+		 * 
+		 * invchar.setPatienthmopackage(patienthmopackageBo.getPatientHmoById(
+		 * invcharge.getPatienthmopackageid())); }
+		 * 
+		 * 
+		 * if (invcharge.getHmopackageitemid() != null) {
+		 * 
+		 * invchar.setHmopackageitem(this.PackageItemBo.getHmoItemById(invcharge.
+		 * getHmopackageitemid())); }
+		 * 
+		 * 
+		 * 
+		 * if (invcharge.getHmopackageid() != null) {
+		 * invchar.setHmopackage(hmopackageBo
+		 * .getHmoPackageById(invcharge.getHmopackageid())); }
+		 * 
+		 * System.out.print("id" + invcharge.getId());
+		 * 
+		 * System.out.print("referenceid" + invcharge.getReferenceid());
+		 * 
+		 * System.out.print("hmopackage" + invcharge.getHmopackageid());
+		 * 
+		 * System.out.print("code" + invcharge.getCode());
+		 * 
+		 * System.out.print("cash" + invcharge.getCashamt());
+		 * 
+		 * 
+		 * System.out.print("hmo" + invcharge.getHmoamt());
+		 * 
+		 * 
+		 * System.out.print("inv" + invcharge.getInvamt());
+		 * 
+		 * 
+		 * invchar.setInvamt(invcharge.getInvamt());
+		 * 
+		 * invchar.setCashamt(invcharge.getCashamt());
+		 * 
+		 * invchar.setHmoamt(invcharge.getHmoamt());
+		 * 
+		 * 
+		 * invchar.setCreatedBy(userIdentity.getUsername());
+		 * invchar.setCreatedDate(new GregorianCalendar().getTime());
+		 * invchar.setOrganisationId(userIdentity.getOrganisation().getId());
+		 * 
+		 * billto.add(invchar);
+		 * 
+		 * }
+		 * 
+		 * 
+		 * billinv.setInvoicecharged(billto);
+		 */
+
+		if (invoice.getInvamt().intValue() <= 0) {
+
+			alert.setAlert(redirectAttributes, Alert.DANGER,
+					"Invoice Amount cannot be less or equal to zero!!!");
+		} else {
+			this.billinvoiceBo.save(billinv);
+			alert.setAlert(redirectAttributes, Alert.SUCCESS,
+					"Invoice created succesfully!!!");
+
+		}
+		return this.process(model);
+		// return "redirect:/visits/frontdesklist";
+
+	}
+
+	@RequestMapping(value = "/billdelete/{id}", method = RequestMethod.GET)
+	@Layout(value = "layouts/blank")
+	public String confirmDeletebill(@PathVariable("id") Integer id,
+	// @ModelAttribute("cForm") VisitPresentingComplainCategoryForm cForm,
+			RedirectAttributes redirectAttributes) {
+
+		BillInvoice billinvoice = this.billinvoiceBo.getBillInvoiceById(id);
+
+		billinvoice.setModifiedBy(userIdentity.getUsername());
+		billinvoice.setModifiedDate(new GregorianCalendar().getTime());
+		billinvoice.setDeleted(true);
+		billinvoiceBo.update(billinvoice);
+		alert.setAlert(redirectAttributes, Alert.SUCCESS,
+				"Success! Bill Deleted");
+		return "redirect:/invoice/invoicelist/"
+				+ billinvoice.getVisit().getId();
+
+	}
+
+	@SuppressWarnings("unused")
+	@Layout(value = "layouts/datatable")
+	@RequestMapping(value = "/invoicelist/{vid}")
+	public String viewActionil(Model model, @PathVariable("vid") Integer vid,
+			RedirectAttributes redirectAttributes) {
+
+		Visit vst = this.visitBo.getVisitationById(vid);
+
+		if (null == vst) {
+			alert.setAlert(redirectAttributes, Alert.DANGER,
+					"Error! Invalid Visit");
+			return "redirect:/visits/frontdesklist";
+		}
+
+		// List <BillInvoice> billinvoicelist =
+		// billinvoiceBo.fetchAllByOrganisationbyVisit(vst);
+		// List <BillInvoicePayment> billpaymentlist =
+		// billinvoiceBo.fetchPaymentByOrganisationbyVisit(vst);
+
+		PrescribedSearchForm prescribedSearch = new PrescribedSearchForm();
+		PaymentForm paymentForm = new PaymentForm();
+		paymentForm.setVisitId(vid);
+
+		// model.addAttribute("mfig",getsum(vst));
+
+		model.addAttribute("paymentForm", paymentForm);
+		model.addAttribute("prescribedSearch", prescribedSearch);
+		// model.addAttribute("invoicelist",billinvoicelist);
+		// model.addAttribute("billpaymentlist",billpaymentlist);
+		model.addAttribute("v", vst);
+		model.addAttribute("paymodelist", this.paymodeBo.fetchAll());
+
+		return "invoice/invoicelistbyvisittab";
+	}
+
+	@SuppressWarnings("unused")
+	@Layout(value = "layouts/datatable")
+	@RequestMapping(value = "/invoicepaymentlist/{vid}")
+	public String viewActionilinvb(Model model,
+			@PathVariable("vid") Integer vid,
+			RedirectAttributes redirectAttributes) {
+
+		BillInvoice inv = this.billinvoiceBo.getBillInvoiceById(vid);
+
+		if (null == inv) {
+			alert.setAlert(redirectAttributes, Alert.DANGER,
+					"Error! Invalid Visit");
+			return "redirect:/visits/frontdesklist";
+		}
+
+		// List <BillInvoice> billinvoicelist =
+		// billinvoiceBo.fetchAllByOrganisationbyVisit(vst);
+		// List <BillInvoicePayment> billpaymentlist =
+		// billinvoiceBo.fetchPaymentByOrganisationbyVisit(vst);
+
+		PrescribedSearchForm prescribedSearch = new PrescribedSearchForm();
+		PaymentForm paymentForm = new PaymentForm();
+		paymentForm.setVisitId(inv.getVisit().getId());
+		paymentForm.setBillinvoiceId(inv.getId());
+
+		// model.addAttribute("mfig",getsum(vst));
+
+		model.addAttribute("paymentForm", paymentForm);
+		model.addAttribute("prescribedSearch", prescribedSearch);
+		// model.addAttribute("invoicelist",billinvoicelist);
+		// model.addAttribute("billpaymentlist",billpaymentlist);
+		model.addAttribute("v", inv);
+		model.addAttribute("paymodelist", this.paymodeBo.fetchAll());
+
+		return "invoice/paymentlistbyvisittab";
+	}
+
+	@SuppressWarnings("unused")
+	@Layout(value = "layouts/datatable")
+	@RequestMapping(value = "/invoicelist")
+	public String viewActionil(Model model,
+			RedirectAttributes redirectAttributes) {
+		/*
+		 * Visit vst = this.visitBo.getVisitationById(vid);
+		 * 
+		 * if (null == vst) { alert.setAlert(redirectAttributes, Alert.DANGER,
+		 * "Error! Invalid Visit"); return "redirect:/visits/frontdesklist"; }
+		 */
+
+		List<BillInvoice> billinvoicelist = billinvoiceBo
+				.fetchAllByOrganisation(userIdentity.getOrganisation().getId());
+
+		PrescribedSearchForm prescribedSearch = new PrescribedSearchForm();
+
+		model.addAttribute("hmolist",
+				this.HmoBo.fetchAll(userIdentity.getOrganisation().getId()));
+		model.addAttribute("invoicelist", billinvoicelist);
+		// model.addAttribute("v",vst);
+
+		model.addAttribute("prescribedSearch", prescribedSearch);
+
+		return "invoice/invoicelist";
+	}
+
+	@SuppressWarnings("unused")
+	@Layout(value = "layouts/datatable")
+	@RequestMapping(value = "/invoicelist", method = RequestMethod.POST)
+	public String viewActionil(
+			Model model,
+			@ModelAttribute("prescribedSearch") PrescribedSearchForm prescribedSearchForm,
+			BindingResult result, RedirectAttributes redirectAttributes) {
+		/*
+		 * Visit vst = this.visitBo.getVisitationById(vid);
+		 * 
+		 * if (null == vst) { alert.setAlert(redirectAttributes, Alert.DANGER,
+		 * "Error! Invalid Visit"); return "redirect:/visits/frontdesklist"; }
+		 */
+
+		List<BillInvoice> billinvoicelist = billinvoiceBo
+				.fetchAllByOrganisationbyparam(userIdentity.getOrganisation()
+						.getId(), DateUtils
+						.formatStringToDate(prescribedSearchForm.getDat1()),
+						DateUtils.formatStringToDate(prescribedSearchForm
+								.getDat2()), prescribedSearchForm.getHmoId());
+
+		PrescribedSearchForm prescribedSearch = new PrescribedSearchForm();
+
+		model.addAttribute("invoicelist", billinvoicelist);
+		// model.addAttribute("v",vst);
+
+		model.addAttribute("prescribedSearch", prescribedSearch);
+
+		return "invoice/invoicelist";
+	}
+
+	@RequestMapping(value = "/paymentsave", method = RequestMethod.POST)
+	@Layout(value = "layouts/datatable")
+	public String saveActionpay(
+			@Valid @ModelAttribute("paymentForm") PaymentForm payform,
+			BindingResult result, RedirectAttributes redirectAttributes,
+			Model model) {
+		Visit vst = this.visitBo.getVisitationById(payform.getVisitId());
+
+		BillInvoice inv = this.billinvoiceBo.getBillInvoiceById(payform
+				.getBillinvoiceId());
+
+		if (null == vst || null == inv) {
+			alert.setAlert(redirectAttributes, Alert.DANGER,
+					"Error! Invalid Visit");
+
+			return "redirect:/invoice/invoicepaymentlist/"
+					+ payform.getBillinvoiceId();
+
+		}
+
+		Double tot = (Double) inv.getMfig().get("totpaymt")
+				+ payform.getAmtpaid();
+		if (tot > inv.getCashamt()) {
+			alert.setAlert(redirectAttributes, Alert.DANGER,
+					"Total Payment cannot be more than Bill Amount!!!");
+
+			return "redirect:/invoice/invoicepaymentlist/"
+					+ payform.getBillinvoiceId();
+
+		}
+
+		BillInvoicePayment billpay = new BillInvoicePayment();
+
+		billpay.setEffectivedate(DateUtils.formatStringToDate(payform
+				.getEffectivedate()));
+		billpay.setDescription(payform.getDescription());
+
+		billpay.setAmtpaid(payform.getAmtpaid());
+
+		billpay.setCreatedBy(userIdentity.getUsername());
+		billpay.setCreatedDate(new GregorianCalendar().getTime());
+		billpay.setOrganisationId(userIdentity.getOrganisation().getId());
+		billpay.setVisit(vst);
+		billpay.setBillInv(inv);
+		billpay.setPaymode(this.paymodeBo.getPaymodeTypeById(payform
+				.getPaymode_id()));
+		billpay.setDeleted(false);
+		this.billinvoiceBo.save(billpay);
+
+		alert.setAlert(redirectAttributes, Alert.SUCCESS,
+				"Payment created succesfully!!!");
+		// return "redirect:/invoice/invoicelist/" + payform.getVisitId();
+		return "redirect:/invoice/invoicepaymentlist/"
+				+ payform.getBillinvoiceId();
+
+	}
+
+	@RequestMapping(value = "/paymentdelete/{id}", method = RequestMethod.GET)
+	@Layout(value = "layouts/blank")
+	public String confirmDelete(@PathVariable("id") Integer id,
+	// @ModelAttribute("cForm") VisitPresentingComplainCategoryForm cForm,
+			RedirectAttributes redirectAttributes) {
+
+		BillInvoicePayment billpay = this.billinvoiceBo.getPaymentbyId(id);
+
+		billpay.setModifiedBy(userIdentity.getUsername());
+		billpay.setModifiedDate(new GregorianCalendar().getTime());
+		billpay.setDeleted(true);
+		billinvoiceBo.update(billpay);
+		alert.setAlert(redirectAttributes, Alert.SUCCESS,
+				"Success! Payment Deleted");
+		// return "redirect:/invoice/invoicelist/" + billpay.getVisit().getId();
+		return "redirect:/invoice/invoicepaymentlist/"
+				+ billpay.getBillInv().getId();
+	}
+
+	@SuppressWarnings("unused")
+	@Layout(value = "layouts/datatable")
+	@RequestMapping(value = "/chargelist/{id}")
+	public String viewActionicl(Model model, @PathVariable("id") Integer id,
+			RedirectAttributes redirectAttributes) {
+
+		BillInvoice inv = this.billinvoiceBo.getBillInvoiceById(id);
+
+		// if (null == inv) {
+		// alert.setAlert(redirectAttributes, Alert.DANGER,
+		// "Error! Invalid Visit");
+		// return "redirect:/invoice/accountlist";
+		// }
+
+		InvoiceBill_ChargetoForm invoicechargeform = new InvoiceBill_ChargetoForm();
+
+		// invoiceform.setVisitId(vst.getId());
+		// model.addAttribute("patienthmolist",
+		// this.billinvoiceBo.GetPatientHmoList(vst.getId(),userIdentity.getOrganisation().getId()));
+		// model.addAttribute("billitemlist",
+		// this.billinvoiceBo.GetBillItembyPointList(vst.getId(),userIdentity.getOrganisation().getId()));
+
+		model.addAttribute("v", inv);
+		// model.addAttribute("v",vst);
+		model.addAttribute("invoicechargeForm", invoicechargeform);
+
+		return "invoice/chargelist";
+	}
+
+	@SuppressWarnings("unused")
+	@Layout(value = "layouts/datatable")
+	@RequestMapping(value = "/charge/{id}")
+	public String viewAction4(Model model, @PathVariable("id") Integer id,
+			RedirectAttributes redirectAttributes) {
+
+		Visit vst = this.visitBo.getVisitationById(id);
+
+		if (null == vst) {
+			alert.setAlert(redirectAttributes, Alert.DANGER,
+					"Error! Invalid Visit");
+			return "redirect:/invoice/accountlist";
+		}
+
+		InvoiceBillForm invoiceform = new InvoiceBillForm();
+
+		// invoiceform.setVisitId(vst.getId());
+
+		return "invoice/add";
+	}
+
+	@RequestMapping(value = "/getamount/{visitid}/{referenceid}/{code}/{itemmeasureid}/{qty}/{amt}/{itemid}/{unitid}/{patienthmopackageid}/{billschemeid}", method = RequestMethod.GET, produces = "text/html")
+	@ResponseBody
+	public String ajaxfetchcategory(@PathVariable("visitid") Integer visitid,
+			@PathVariable("referenceid") String referenceid,
+			@PathVariable("code") String code,
+			@PathVariable("itemmeasureid") String itemmeasureid,
+			@PathVariable("qty") String qty, @PathVariable("amt") String amt,
+			@PathVariable("itemid") String itemid,
+			@PathVariable("unitid") String unitid,
+			@PathVariable("patienthmopackageid") String patienthmopackageid,
+			@PathVariable("billschemeid") String billschemeid, Model model,
+			RedirectAttributes redirectAttributes) {
+
+		try {
+			if (amt.equalsIgnoreCase("null"))
+
+			{
+				BillSchemeMeasurePrice bsmp = this.billschememeasurepriceBo
+						.getBillSchemeMeasurePriceBySchemeandItemmeasure(
+								Integer.parseInt(billschemeid),
+								Integer.parseInt(itemmeasureid));
+
+				if (bsmp == null) {
+					amt = "0.0";
+				} else {
+					amt = Double.toString(bsmp.getPrice()
+							* Double.parseDouble(URLDecoder.decode(qty)));
+
+				}
+
+			}
+
+			else {
+
+				// else stuff
+
+			}
+
+		}
+
+		catch (Exception e) {
+
+			amt = "0.00";
+
+		}
+
+		return referenceid + "##" + code + "##" + itemmeasureid + "##"
+				+ URLDecoder.decode(qty) + "##" + amt + "##" + itemid + "##"
+				+ unitid + "##" + patienthmopackageid + "##" + billschemeid;
+
+		// +"##" + hmoamt + "##" + cashamt;
+
+	}
+
+	@SuppressWarnings("unused")
+	@Layout(value = "layouts/blank")
+	@RequestMapping(value = "/printinvoice/{id}")
+	public String viewActionprintinvoice(Model model,
+			@PathVariable("id") Integer id,
+			RedirectAttributes redirectAttributes) {
+
+		Visit vst = this.visitBo.getVisitationById(id);
+
+		// if (null == vst) {
+		// alert.setAlert(redirectAttributes, Alert.DANGER,
+		// "Error! Invalid Visit");
+		// return "redirect:/invoice/accountlist";
+		// }
+		model.addAttribute("v", vst);
+		return "invoice/printinvoice";
+	}
+
+	@SuppressWarnings("unused")
+	@Layout(value = "layouts/blank")
+	@RequestMapping(value = "/printinvoicep/{id}")
+	public String viewActionprintinvoicepw(Model model,
+			@PathVariable("id") Integer id,
+			RedirectAttributes redirectAttributes) throws IOException,
+			DocumentException {
+
+		Visit vst = this.visitBo.getVisitationById(id);
+
+		// if (null == vst) {
+		// alert.setAlert(redirectAttributes, Alert.DANGER,
+		// "Error! Invalid Visit");
+		// return "redirect:/invoice/accountlist";
+		// }
+		model.addAttribute("v", vst);
+
+		ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+		templateResolver.setSuffix(".html");
+		templateResolver.setTemplateMode("HTML");
+
+		TemplateEngine templateEngine = new TemplateEngine();
+		templateEngine.setTemplateResolver(templateResolver);
+
+		Context context = new Context();
+		context.setVariable("name", "v");
+
+		// Get the plain HTML with the resolved ${name} variable!
+		String html = templateEngine.process("template", context);
+		OutputStream outputStream = new FileOutputStream("message.pdf");
+		ITextRenderer renderer = new ITextRenderer();
+		renderer.setDocument(html);
+		renderer.layout();
+		renderer.createPDF(outputStream);
+
+		outputStream.close();
+
+		return null;
+	}
+
+	@SuppressWarnings("unused")
+	@Layout(value = "layouts/datatable")
+	@RequestMapping(value = "/chargeinvoice/{id}")
+	public String viewActionchargeinvs(Model model,
+			@PathVariable("id") Integer id,
+			RedirectAttributes redirectAttributes) {
+		/*
+		 * BillInvoice inv = this.billinvoiceBo.getBillInvoiceById(id);
+		 * 
+		 * HmoPackageItem hpid =
+		 * this.PackageItemBo.getHmoItemByAll(inv.getPatienthmopackage
+		 * ().getId());
+		 * 
+		 * 
+		 * //GetCurrentDaterange gcdr = this.billinvoiceBo.Getcurrentdaterange(
+		 * inv.getVisit().getId(), inv.getItemid().getItemId(),
+		 * inv.getPatienthmopackage().getId());
+		 * 
+		 * Double hmoamt=0.00;
+		 * 
+		 * Double cashamt=0.00;
+		 * 
+		 * Integer packageitemid=0;
+		 * 
+		 * Double camt=0.00;
+		 * 
+		 * //Double amt=inv.getNetamount();
+		 * 
+		 * 
+		 * 
+		 * 
+		 * if (gcdr != null && hpid !=null) {
+		 * 
+		 * if (gcdr.getNohmousedforitem()< gcdr.getNooftimeslimit())
+		 * 
+		 * {
+		 * 
+		 * 
+		 * 
+		 * 
+		 * Double diffused=( gcdr.getSpendinglimit() * gcdr.getNooftimeslimit()
+		 * ) - gcdr.getHmoamountusedforitem();
+		 * 
+		 * if (diffused >=amt)
+		 * 
+		 * {
+		 * 
+		 * hmoamt=amt;
+		 * 
+		 * cashamt=0.00;
+		 * 
+		 * }
+		 * 
+		 * if (diffused < amt)
+		 * 
+		 * {
+		 * 
+		 * hmoamt=diffused;
+		 * 
+		 * cashamt= amt-diffused;
+		 * 
+		 * }
+		 * 
+		 * 
+		 * if (diffused < 0)
+		 * 
+		 * {
+		 * 
+		 * hmoamt = 0.00;
+		 * 
+		 * cashamt = amt;
+		 * 
+		 * }
+		 * 
+		 * packageitemid=gcdr.getPackageitemid();
+		 * 
+		 * }
+		 * 
+		 * else
+		 * 
+		 * {
+		 * 
+		 * packageitemid=null;
+		 * 
+		 * }
+		 * 
+		 * 
+		 * } else
+		 * 
+		 * {
+		 * 
+		 * hmoamt=amt; cashamt=0.00;
+		 * 
+		 * }
+		 * 
+		 * 
+		 * 
+		 * 
+		 * if (packageitemid !=null) {
+		 * inv.setPackageitem(this.PackageItemBo.getHmoItemById
+		 * (gcdr.getPackageitemid()));
+		 * inv.setPatienthmopackage(this.patienthmopackageBo
+		 * .getPatientHmoById(inv.getPatienthmopackage().getId()));
+		 * 
+		 * }
+		 * 
+		 * inv.setCashamount(cashamt); inv.setHmoamount(hmoamt);
+		 * this.billinvoiceBo.update(inv);
+		 */
+		// return "redirect:/invoice/invoicelist/" + inv.getVisit().getId();
+		return null;
+	}
+
+	public String process(Model model) {
+
+		System.out.print("adeprocess" + userIdentity.getCurrentPointId());
+		if (userIdentity.getCurrentPointId() == 1) {
+			return "redirect:/visits/frontdesklist";
+		}
+
+		if (userIdentity.getCurrentPointId() == 2) {
+			return "redirect:/visits/vitallist";
+
+		}
+
+		if (userIdentity.getCurrentPointId() == 3) {
+			return "redirect:/visits/consultationlist";
+
+		}
+
+		if (userIdentity.getCurrentPointId() == 4) {
+			return "redirect:/visits/injectionlist";
+
+		}
+
+		if (userIdentity.getCurrentPointId() == 5) {
+			return "redirect:/visits/druglist";
+
+		}
+
+		if (userIdentity.getCurrentPointId() == 6) {
+			return "redirect:/visits/labtestlist";
+
+		}
+
+		if (userIdentity.getCurrentPointId() == 7) {
+			return "redirect:/visits/surgerylist";
+
+		}
+
+		if (userIdentity.getCurrentPointId() == 8) {
+			return "redirect:/visits/xraylist";
+
+		}
+
+		if (userIdentity.getCurrentPointId() == 9) {
+			return "redirect:/visits/admissionlist";
+
+		}
+
+		return "redirect:/";
+
+	}
+
+}

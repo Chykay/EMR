@@ -1,0 +1,45 @@
+<div class="page-header">
+	<h1>
+		View <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			View an Ailment
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-primary"
+			th:href="@{/system/medical/components/ailments}"><i
+			class="fa fa-list"></i> All Ailments</a> <a
+			class="btn btn-xs btn-warning"
+			th:href="@{/system/medical/components/ailments/edit/{id} (id=${ailment.id})}"><i
+			class="fa fa-edit"></i> Edit ailment</a> <a class="btn btn-xs btn-danger"
+			th:href="@{/system/medical/components/ailments/delete/{id} (id=${ailment.id})}"><i
+			class="fa fa-trash-o"></i> Delete ailment</a>
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<dl class="dl-horizontal">
+			<dt>Name:</dt>
+			<dd th:text="${ailment.name}"></dd>
+			<dt>Classification:</dt>
+			<dd th:text="${ailment.ailmentClassification.name}"></dd>
+			<dt>Description:</dt>
+			<dd
+				th:text="${ailment.description == null || ailment.description == ''} ? 'Not set': ${ailment.description}"></dd>
+			<dt>Created date</dt>
+			<dd
+				th:text="${ #dates.format(ailment.createdDate, 'MMM dd, yyyy HH:mm')}"></dd>
+			<dt>Last modified date</dt>
+			<dd
+				th:text="${ailment.modifiedDate == null} ? 'Not modified yet!': ${ #dates.format(ailment.modifiedDate, 'MMM dd, yyyy HH:mm')}"></dd>
+		</dl>
+	</div>
+</div>

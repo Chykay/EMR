@@ -1,0 +1,146 @@
+<div class="page-header">
+	<h1>
+		Edit <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			Edit a Surgery
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-primary" th:href="@{/system/surgery/index}"><i
+			class="fa fa-list"></i> Recent Surgery  </a>
+			<a
+			class="btn btn-xs btn-primary" th:href="@{/system/surgery/index/all}"><i
+			class="fa fa-list"></i>View All Surgery  </a>
+			
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+
+		<form role="form" class="form-horizontal" method="POST"
+			th:object="${surgeryForm}">
+			<legend>EDIT Surgery  Form</legend>
+
+
+			
+			
+		 	<div class="form-group">
+				<label for="gender" class="col-sm-3 control-label no-padding-right"> Surgery Type:</label>
+				<div class="col-sm-9">
+					<select th:field="*{surgeryTypeId}" class="col-xs-10 col-sm-5"  required="required" id="typeId">
+						<option value="">Select..</option>
+						<option th:each="g: ${surgeryType}" th:value="${g.surgeryTypeId}"
+							th:text="${g.surgerytypename}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('surgeryTypeId')}"
+						th:errors="*{surgeryTypeId}"></span>
+				</div>
+			</div>
+			
+			
+				<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Lab Test Name:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" 
+						th:field="*{surgeryName}" required="required" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('surgeryName')}"
+						th:errors="*{surgeryName}"></span>
+				</div>
+			</div>
+
+			
+			
+			<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Lab Test Category:</label>
+				<div class="col-sm-9">
+					<select type="text" class="col-xs-10 col-sm-5"
+						placeholder="Parent Category" th:field="*{parentCategoryId}" id="parentCategoryId"	required="required" >
+						<option value="">Select..</option>
+						<option th:each="c: ${categories}" th:value="${c.categoryId}" th:text="${c.categoryName}"></option>
+					</select> 
+					<span class="text-danger"
+						th:if="${#fields.hasErrors('parentCategoryId')}"
+						th:errors="*{parentCategoryId}"></span>
+				</div>
+			</div>
+							<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Description:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" 
+						th:field="*{surgeryDescription}" required="required" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('surgeryDescription')}"
+						th:errors="*{surgeryDescription}"></span>
+				</div>
+			</div>
+
+
+
+			<div class="clearfix form-actions">
+				<div class="col-md-offset-3 col-md-9">
+			
+					<button class="btn btn-primary" type="submit">
+						<i class="ace-icon fa fa-check bigger-110"></i> Update
+					</button>
+
+					<button class="btn btn-danger" type="reset">
+						<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<script> 
+
+$(function() {
+	/* Lga Selector*/
+	$('#typeId').change(
+			function(event) {
+//alert('change');
+				$.ajax({
+	type : "GET",
+
+	url : "/../' + window.location.pathname.split('/')[1] + '/system/surgerycategory/fetchcategorybytype/"
+			+ $('#typeId').val(),
+	beforeSend : function() {
+		$.gritter.add({
+			title : "Progress...",
+			text : "Fetching Ctegories of global type",
+			time : 3000
+		});
+	},
+	success : function(html) {
+		$('#itemCategoryId').html(html);
+		$.gritter.add({
+			title : "Success!",
+			text : "Categories fetched",
+			time : 4000
+		});
+	},
+	error : function() {
+		$.gritter.add({
+			title : "Error!",
+			text : "Error fetching Categories",
+			time : 4000
+		});
+	}
+
+});
+
+
+
+
+
+		});
+});
+
+
+
+</script>

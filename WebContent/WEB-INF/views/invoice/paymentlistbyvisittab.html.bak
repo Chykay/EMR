@@ -1,0 +1,466 @@
+<div class="page-header">
+	<h1>
+		Invoice<small> <i
+			class="ace-icon fa fa-angle-double-right"></i>
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard</a> 
+			
+		<a class="btn btn-danger btn-xs" data-toggle="modal"
+								href="#paymentadd"> <i
+								class="ace-icon fa fa-plus bigger-110"></i> Make payment</a> 
+								
+			<!-- <a class="btn btn-success btn-xs" data-toggle="modal" onclick = "printinvoice();"
+								> <i
+			class="fa fa-list-alt"></i>  Print Invoice</a>--> 
+			
+			<a class="btn btn-xs btn-danger" th:href="@{/invoice/invoicelist/{vid}(vid=${v.visit.id}) }"><i
+			class="fa fa-home"></i> Invoice Bill List</a> 
+	</div>
+</div>
+<div class="hr hr-18 dotted hr-double"></div>
+
+<div class="row">
+
+<div class="profile-info-row">
+								<div class="profile-info-name">Visit Code:</div>
+
+								<div class="profile-info-value" style="text-align: left">
+									<span  th:text="${v.visit.code}">
+									
+					</span>				  
+					
+								</div>
+							</div>
+
+<div class="profile-info-row">
+								<div class="profile-info-name">Patient Name: </div>
+
+								<div class="profile-info-value" style="text-align: left">
+									<span th:text="${v.visit.patient.surname + ' ' + v.visit.patient.firstName} "></span>
+									
+							  
+					
+								</div>
+							</div>
+
+
+<div class="profile-info-row">
+								<div class="profile-info-name">Bill Item:</div>
+
+								<div class="profile-info-value" style="text-align: left">
+									<span th:text="${v.globalitem != null ? v.globalitem.GlobalitemName : ''} "></span>
+										  
+					
+								</div>
+							</div>
+
+
+<div class="profile-info-row">
+								<div class="profile-info-name">Measure:</div>
+
+								<div class="profile-info-value" style="text-align: left">
+									<span th:text="${v.itemmeasure != null ? v.itemmeasure.measurename : ''} "></span>
+										  
+					
+								</div>
+							</div>
+
+<div class="profile-info-row">
+								<div class="profile-info-name">Quantity:</div>
+
+								<div class="profile-info-value" style="text-align: left">
+									<span th:text="${v.qty} "></span>
+										  
+					
+								</div>
+							</div>
+
+					
+
+
+<div class="profile-info-row">
+								<div class="profile-info-name">Bill Owner:</div>
+
+								<div class="profile-info-value" style="text-align: left">
+									<span th:text="${v.visit.patientbillto?.surname + ' ' + v.visit.patientbillto?.firstName} "></span>
+										  
+					
+								</div>
+							</div>
+
+
+
+
+
+
+					
+
+							
+	              <div class="profile-info-row">
+								<div class="profile-info-name">HMO:</div>
+
+								<div class="profile-info-value" style="text-align: left">
+									<span th:text="${#numbers.formatDecimal(v.hmoamt, 0, 'COMMA', 2, 'POINT')}"></span>
+								</div>
+							</div>
+								<div class="profile-info-row">
+								<div class="profile-info-name">Cash:</div>
+
+								<div class="profile-info-value" style="text-align: left">
+									<span th:text="${#numbers.formatDecimal(v.cashamt, 0, 'COMMA', 2, 'POINT')}"></span>
+								</div>
+							</div>
+
+<div class="profile-info-row">
+								<div class="profile-info-name">Bill Item Amount:</div>
+
+								<div class="profile-info-value" style="text-align: left">
+									<span  th:text="${#numbers.formatDecimal(v.invamt, 0, 'COMMA', 2, 'POINT')}">
+									
+					</span>				  
+					
+								</div>
+							</div>
+
+							
+<div class="hr hr-18 dotted hr-double"></div>
+						<div class="profile-info-row">
+								<div class="profile-info-name">Total Payment:</div>
+
+								<div class="profile-info-value" style="text-align: left">
+									<b><span th:text="${#numbers.formatDecimal(v.mfig.totpaymt, 0, 'COMMA', 2, 'POINT')}"></span></b>
+								</div>
+							</div>
+						
+						
+						
+						
+								
+								
+								</div>
+								<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<div class="tabbable">
+
+			<ul class="nav nav-tabs padding-18">
+				<!-- <li class="active"><a data-toggle="tab" href="#home"> <i 
+						class="green ace-icon fa fa-pencil-square-o bigger-120"></i>
+						Invoice Bills
+				</a></li> -->
+				
+				
+				<li class="active"><a data-toggle="tab" href="#payment"> <i
+						class="brown ace-icon fa fa-user bigger-120"> </i> Payments
+				</a></li>
+				
+			</ul>
+			<div class="tab-content no-border padding-24">
+				<div id="payment" >
+					<div class="row">
+						<div class="col-xs-12 col-sm-3 col-md-3 center">
+							<div class="space space-4"></div>
+							
+						</div>
+						<!-- /.col -->
+
+						<!-- /.col -->
+
+						
+						
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<div class="table-header">Lists of Payment </div>
+				<!-- /. End view content here -->
+<table id="dTable"
+										class="table table-striped table-bordered table-hover">
+										<thead>
+											<tr>
+												
+											 <th>Bill Id</th>
+												<th>Payment Date</th>
+												<th>Global Item</th>
+												<th>Unit</th>
+												<th>Qty</th>
+												
+												<th>Other Details</th>
+												
+												<th>Amount</th>
+												
+												<th>Payment Mode</th>
+												
+												
+											
+												<th><i class="glyphicon glyphicon-asterisk"></i></th>
+											</tr>
+										</thead>
+										<tbody th:if="${v.billinvoicepayment != null}">
+										
+											<tr th:each="v : ${v.billinvoicepayment }">
+												<td th:text="${v.billInv?.id}"></td>
+							
+												<td th:text="${v.effectivedate}"></td>
+					
+					
+					<td th:text="${v.billInv?.globalitem != null ? v.billInv?.globalitem.GlobalitemName : ''}"> </td>
+					
+					
+					
+					<td th:text="${v.billInv?.itemmeasure != null ? v.billInv?.itemmeasure.measurename : ''}"> </td>
+					
+					<td th:text="${v.billInv?.qty}"> </td>
+					
+								<td th:text="${v.description}"></td>
+									
+												<td style="text-align: right" th:text="${#numbers.formatDecimal(v.amtpaid, 0, 'COMMA', 2, 'POINT')}"></td>
+												<td th:text="${v.paymode.name}"></td>
+												
+											<!-- 	<td th:text="${v.hrunit.categoryName}"></td>-->
+												<td>
+												<!-- <a class="btn btn-xs btn-warning tooltips"
+													title="Edit Period"
+													th:href="@{/admissionperiod/edit/{id} (id=${v.id})}">
+														<i class="fa fa-edit"></i>
+												</a>-->
+												
+												<a class="btn btn-xs btn-danger tooltips"
+													title="delete"   th:id="${'pay' +  v.id}"  onclick="return Confirm(this.id)" 
+													th:href="@{/invoice/paymentdelete/{id} (id=${v.id})}">
+														<i class="fa fa-trash-o"></i>
+												</a>  
+						<!-- 						
+					<a class="label label-sm label-primary arrowed arrowed-right" data-toggle="modal"   title="View Comment"
+			   	    th:attr="href='#manage'+${v.id}"> <i
+			class="ace-icon fa fa-share bigger-110"></i>Manage
+		</a>
+		-->
+								
+												</td>
+											</tr>
+										</tbody>
+									</table>
+
+
+
+
+
+	</div>
+
+</div>
+						
+						
+						
+						
+						
+						<!-- /.col -->
+					</div>
+
+				</div>
+				
+			<div id="payment2" class="tab-pane ">
+					<div class="row">
+						<div class="col-md-12">
+						<!-- 	<a class="btn btn-danger btn-xs" data-toggle="modal"
+								href="#paymentadd"> <i
+								class="ace-icon fa fa-plus bigger-110"></i> Add payment</a> -->
+							<div class="hr hr-18 dotted hr-double"></div>
+								<div class="row">
+								<div class="col-xs-12">
+									<div class="table-header">Payment List	Detail</div>
+																	</div>
+
+
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<!-- //.item -->
+			
+			
+						
+			
+			
+			
+			
+			
+			</div>
+		</div>
+	</div>
+
+
+
+<div class="modal fade" id="paymentadd">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		
+			<!-- Modal heading -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title"> Payment</h4>
+			</div>
+			<!-- // Modal heading END -->
+			<!-- Modal body -->
+			<div class="modal-body">
+				<div class="row">
+					<!-- Dropzone -->
+					<div class="space space-4"></div>
+					<form role="form" class="form-horizontal" method="POST"
+						th:object="${paymentForm}"  th:action="@{/invoice/paymentsave}" >
+<!-- onsubmit="return mypersonnel() -->
+	
+	 	<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-3 no-padding-right"
+								for="date-picker">Payment Date:</label>
+
+							<div class="col-xs-12 col-sm-9">
+								<div class="clearfix">
+
+									<input type="text" class="col-xs-12 col-sm-3 date-picker"
+										id="date-picker" th:field="*{effectivedate}"
+										data-date-format="yyyy-mm-dd" />
+										
+										<span class="text-danger"
+										th:if="${#fields.hasErrors('effectivedate')}" th:errors="effectivedate"></span>
+
+								</div>
+							</div>
+				</div>
+	
+	
+		<div class="form-group">
+							<label for="Tels"
+								class="col-sm-3 control-label no-padding-right">Description:</label>
+							<div class="col-sm-9">
+								<input  type="text" class="col-xs-10 col-sm-10" 	  
+									th:field="*{description}"  ></input>
+								<span class="text-danger"
+									th:if="${#fields.hasErrors('description')}"
+									th:errors="description"></span>
+							</div>
+						</div>
+						
+						
+						
+						
+						
+			<div class="form-group">
+							<label for="Tels"
+								class="col-sm-3 control-label no-padding-right"> Amount:</label>
+							<div class="col-sm-9">
+								<input type="text" class="col-xs-10 col-sm-5" 	
+									th:field="*{amtpaid}" required="required"  
+					oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"
+					></input>
+								<span class="text-danger"
+									th:if="${#fields.hasErrors('amtpaid')}"
+									th:errors="amtpaid"></span>
+							</div>
+						</div>
+						
+			<div class="form-group">
+				<label for="title" class="col-sm-3 control-label no-padding-right">Pay Mode:</label>
+				<div class="col-sm-9">
+					<select th:field="*{paymode_id}" class="col-xs-10 col-sm-5">
+					<!-- 	<option value="">Select..</option>  -->
+						<option th:each="s: ${paymodelist}" th:value="${s.paymode_id}"
+							th:text="${s.name}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('paymode_id')}"
+						th:errors="*{paymode_id}"></span>
+				</div>
+			</div>
+		
+						<div class="clearfix form-actions">
+							<div class="col-md-offset-3 col-md-9">
+							
+								<input  type="hidden" th:field="*{visitId}" />
+							
+								<input  type="hidden" th:field="*{billinvoiceId}" />
+								<button class="btn btn-primary" type="submit">
+									<i class="ace-icon fa fa-check bigger-110"></i> Add
+								</button>
+
+								<button class="btn btn-danger" type="reset">
+									<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+								</button>
+							</div>
+						</div>
+
+
+
+
+
+
+					</form>
+					<!-- /.Dropzone -->
+					<!-- /.col -->
+				</div>
+			</div>
+		</div>
+	
+	
+	
+	</div>
+</div>
+
+
+</div>
+
+
+<script type="text/javascript" th:inline="text">
+
+
+function printinvoice() {
+
+
+	
+	   var myWindow = window.open("/../' + window.location.pathname.split('/')[1] + '/invoice/printinvoice/"+ [[${v.id}]], "MsgWindow", "width=500, height=700");
+	   myWindow.resizeTo(600,750);
+	   myWindow.focus();
+    return false
+}
+
+
+
+$(function(){
+	/* DatePicker*/
+	$('.date-picker').datepicker({
+		autoclose : true,
+		format: 'yyyy-mm-dd',
+		todayHighlight : true
+	})//show datepicker when clicking on the icon
+	.next().on(ace.click_event, function() {
+		$(this).prev().focus();
+	});
+	
+
+	$(".tooltips").tooltip({
+		animation : true
+	});
+});
+
+function Confirm(id)
+	{
+	
+		
+	    job=confirm("Are you sure to delete ?");
+	    if(job!=true)
+	    {
+	        return false;
+	    }
+		
+	};
+	
+</script>
+

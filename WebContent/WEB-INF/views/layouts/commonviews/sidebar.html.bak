@@ -1,0 +1,1173 @@
+<!-- Sidebar Menu -->
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="sidebar"
+	id="sidebar" class="sidebar responsive">
+	<script type="text/javascript">
+		try {
+			ace.settings.check('sidebar', 'fixed')
+		} catch (e) {
+		}
+	</script>
+
+	<div class="sidebar-shortcuts" id="sidebar-shortcuts">
+		<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+			<button class="btn btn-success">
+				<i class="ace-icon fa fa-signal"></i>
+			</button>
+
+			<button class="btn btn-info" > 
+				<i class="ace-icon fa fa-pencil"></i>
+			</button>
+
+			<!-- #section:basics/sidebar.layout.shortcuts -->
+			<button class="btn btn-warning" >
+				<i class="ace-icon fa fa-users"></i>
+			</button>
+
+			<button class="btn btn-danger">
+				<i class="ace-icon fa fa-cogs"></i>
+			</button>
+
+			<!-- /section:basics/sidebar.layout.shortcuts -->
+		</div>
+
+		<div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+			<span class="btn btn-success"></span> <span class="btn btn-info"></span>
+
+			<span class="btn btn-warning"></span> <span class="btn btn-danger"></span>
+		</div>
+	</div>
+	<!-- /.sidebar-shortcuts -->
+	<ul class="nav nav-list">
+		<li class=""><a th:href="@{/}"> <i
+				class="menu-icon fa fa-tachometer"></i> <span class="menu-text">Dashboard
+			</span>
+		</a> <b class="arrow"></b>
+		</li>
+ 		<!-- 
+		<li class=""><a th:href="@{/user/clocking/user}"> <i
+				class="menu-icon fa fa-male"></i> <span class="menu-text">Clocking</span>
+		</a> <b class="arrow"></b></li>
+		 
+	
+		-->
+		
+		
+		<!-- Front Desk -->
+		
+			<!-- Start Module -->
+			<li class="">
+                            <a href="#" class="dropdown-toggle"> <i
+					class="menu-icon fa fa-desktop"></i> <span class="menu-text">
+						Front Desk </span> <b class="arrow fa fa-angle-down"></b>
+                            </a>
+				<ul class="submenu">
+					<!-- Patient -->
+					<li class=""><a href="#" class="dropdown-toggle"> <i
+							class="menu-icon fa fa-caret-right"></i> Patient <b
+							class="arrow fa fa-angle-down"></b>
+					</a> <b class="arrow"></b>
+						<ul class="submenu">
+							<!-- Sub Menu -->
+								<li class=""><a th:href="@{/patients/add}"
+									> <i
+										class="menu-icon fa fa-caret-right"></i> New Patient
+								</a></li>
+								<li class=""><a th:href="@{/patients/index/all}"
+									> <i
+										class="menu-icon fa fa-caret-right"></i> Manage Patient
+								</a></li>
+							<!-- Sub Menu -->
+						</ul></li>
+					<!-- .//Patient -->
+					<li class=""><a href="#" class="dropdown-toggle"> <i
+							class="menu-icon fa fa-caret-right"></i> Visit <b
+							class="arrow fa fa-angle-down"></b>
+					</a> <b class="arrow"></b>
+						<ul class="submenu">
+							<!-- Sub Menu visits/queue/1-->
+								<li class=""><a th:href="@{/visits/queue/1}"
+									> <i
+										class="menu-icon fa fa-caret-right"></i>Visit List
+								</a></li>
+								<!-- <li class=""><a th:href="@{/patients/index/all}"
+									> <i
+										class="menu-icon fa fa-caret-right"></i> List Manage
+								</a></li>-->
+							<!-- Sub Menu -->
+						</ul></li>
+					
+				</ul></li>
+			<!-- End Module -->
+	
+		<!-- .//Front Desk -->
+		
+			<!-- Appointment Desk -->
+		
+			<!-- Start Module -->
+			<li class="">
+                            <a href="#" class="dropdown-toggle"> <i
+					class="menu-icon fa fa-calendar"></i> <span class="menu-text">
+						Appointment </span> <b class="arrow fa fa-angle-down"></b>
+                            </a>
+				<ul class="submenu">
+					
+					<li class=""><a href="#" class="dropdown-toggle"> <i
+							class="menu-icon fa fa-caret-right"></i> Schedule Appoint. <b
+							class="arrow fa fa-angle-down"></b>
+					</a> <b class="arrow"></b>
+						<ul class="submenu">
+							<!-- Sub Menu -->
+								<li class=""><a th:href="@{/appointment/calendar}"
+									> <i
+										class="menu-icon fa fa-caret-right"></i> New Appointment
+								</a></li>
+								
+								<li class=""><a th:href="@{/appointment/index}"
+									> <i
+										class="menu-icon fa fa-caret-right"></i> Manage Appointment
+								</a></li> 
+								
+							<!-- Sub Menu -->
+						</ul></li>
+					<!-- .//Patient -->
+				<!--	<li class=""><a href="#" class="dropdown-toggle"> <i
+							class="menu-icon fa fa-caret-right"></i> Visit <b
+							class="arrow fa fa-angle-down"></b>
+					</a> <b class="arrow"></b>
+						<ul class="submenu">
+							<!- - Sub Menu visits/queue/1- ->
+								<li class=""><a th:href="@{/visits/queue/1}"
+									> <i
+										class="menu-icon fa fa-caret-right"></i>Visit List
+								</a></li>
+								<! - - <li class=""><a th:href="@{/patients/index/all}"
+									> <i
+										class="menu-icon fa fa-caret-right"></i> List Manage
+								</a></li>- ->
+							<!- - Sub Menu - ->
+						</ul></li>-->
+					
+				</ul></li>
+			<!-- End Module -->
+	
+		<!-- .//Front Desk -->
+		
+
+	<!-- VITALS Desk -->
+		
+			<!-- Start Module -->
+			<li class="">
+                            <a href="#" class="dropdown-toggle"> <i
+					class="menu-icon fa fa-bar-chart-o"></i> <span class="menu-text">
+						Vitals </span> <b class="arrow fa fa-angle-down"></b>
+                            </a>
+				<ul class="submenu">
+					<!-- Patient -->
+					<li class=""><a href="#" class="dropdown-toggle"> <i
+							class="menu-icon fa fa-caret-right"></i> Vitals <b
+							class="arrow fa fa-angle-down"></b>
+					</a> <b class="arrow"></b>
+						<ul class="submenu">
+							<!-- Sub Menu -->
+								<li class=""><a th:href="@{/visits/queue/2}"
+									> <i 
+										class="menu-icon fa fa-caret-right"></i> Vitals List
+								</a></li>
+							<!--	<li class=""><a th:href="@{/patients/index/all}"
+									>
+									  <i
+										class="menu-icon fa fa-caret-right"></i> Manage Patient
+								</a></li> -->
+								
+							<!-- Sub Menu -->
+						</ul></li>
+					<!-- .//Patient -->
+				
+					
+				</ul></li>
+			<!-- End Module -->
+	
+	
+	<!-- CONSULTATION Desk -->
+		
+			<!-- Start Module -->
+			<li class="">
+                            <a href="#" class="dropdown-toggle"> <i
+					class="menu-icon fa fa-stethoscope"></i> <span class="menu-text">
+						Consultation </span> <b class="arrow fa fa-angle-down"></b>
+                            </a>
+				<ul class="submenu">
+					<!-- Patient -->
+					<li class=""><a href="#" class="dropdown-toggle"> <i
+							class="menu-icon fa fa-caret-right"></i> Consultation <b
+							class="arrow fa fa-angle-down"></b>
+					</a> <b class="arrow"></b>
+						<ul class="submenu">
+							<!-- Sub Menu -->
+								<li class=""><a th:href="@{/visits/queue/3}"
+									> <i 
+										class="menu-icon fa fa-caret-right"></i> Awaiting List
+								</a></li>
+							<!--	<li class=""><a th:href="@{/patients/index/all}"
+									>
+									  <i
+										class="menu-icon fa fa-caret-right"></i> Manage Patient
+								</a></li> -->
+								
+							<!-- Sub Menu -->
+						</ul></li>
+					<!-- .//Patient -->
+				
+					
+				</ul></li>
+			<!-- End Module -->
+	
+	
+	
+		<!-- .//VITALS Desk -->
+	
+	
+	
+	
+<!-- INJECTION ROOM -->
+
+	<li class="">
+           <a href="#" class="dropdown-toggle"> <i
+					class="menu-icon fa fa-plus-square"></i> <span class="menu-text">
+						Injection Room </span> <b class="arrow fa fa-angle-down"></b>
+                            </a>
+				<ul class="submenu">
+				
+							<!-- Sub Menu -->
+							
+					<li class=""><a th:href="@{/visits/queue/4}" ><i class="menu-icon fa fa-caret-right"></i>Give Injection<b
+							class=""></b>
+						</a> <b class="arrow"></b>
+					</li>		
+							<!-- Sub Menu -->
+				</ul>
+				</li>
+			<!-- End Module -->
+	
+		<!-- .//INJECTIONDesk -->
+
+	
+	
+	
+<!--PHAMARCY Desk -->
+		
+			<!-- Start Module -->
+			<li class=""> <a href="#" class="dropdown-toggle"> <i
+					class="menu-icon fa fa-plus-square"></i> <span class="menu-text">
+						Pharmacy </span> <b class="arrow fa fa-angle-down"></b>
+                            </a>
+				<ul class="submenu">
+							
+					<li class="">
+						<a th:href="@{/visits/queue/5}" > 
+							<i class="menu-icon fa fa-caret-right"></i>Dispensing List <b
+							class=""></b>
+						</a> <b class="arrow"></b>
+					</li>
+								
+							<!-- Sub Menu -->
+						</ul>
+	</li>
+	
+			<!-- End Module -->
+	
+		<!-- .//PHAMARCYDesk -->
+	
+	
+		<!--LABORATORY Desk -->
+		
+			<!-- Start Module -->
+			<li class="">
+                            <a href="#" class="dropdown-toggle"> <i
+					class="menu-icon  fa fa-flask"></i> <span class="menu-text">
+						Laboratory </span> <b class="arrow fa fa-angle-down"></b>
+                            </a>
+				<ul class="submenu">
+				
+				<li class=""><a href="#" class="dropdown-toggle"> <i
+							class="menu-icon fa fa-caret-right"></i>Laboratory Test<b
+							class="arrow fa fa-angle-down"></b>
+					</a> <b class="arrow"></b>
+						<ul class="submenu">
+							<!-- Sub Menu -->
+							
+					<li class="">
+						<a th:href="@{/visits/queue/6}" 
+							 > 
+							<i
+							class="menu-icon fa fa-caret-right"></i>Lab Test on Queue<b
+							class=""></b>
+						</a> <b class="arrow"></b>
+					</li><!--	<li class=""><a th:href="@{/patients/index/all}"
+									>
+									  <i
+										class="menu-icon fa fa-caret-right"></i> Manage Patient
+								</a></li> -->
+								
+							<!-- Sub Menu -->
+						</ul></li>
+					
+				
+				
+				
+				
+					<!-- Patient -->
+					<li class=""><a href="#" class="dropdown-toggle"> <i
+							class="menu-icon fa fa-caret-right"></i>Laboratory Setup<b
+							class="arrow fa fa-angle-down"></b>
+					</a> <b class="arrow"></b>
+						<ul class="submenu">
+							<!-- Sub Menu -->
+							
+					<li class="">
+						<a th:href="@{/system/labtest/index/allresultsetup}" 
+							 > 
+							<i
+							class="menu-icon fa fa-caret-right"></i>Test Component <b
+							class=""></b>
+						</a> <b class="arrow"></b>
+					</li>
+					<!--	<li class=""><a th:href="@{/patients/index/all}"
+									>
+									  <i
+										class="menu-icon fa fa-caret-right"></i> Manage Patient
+								</a></li> -->
+								
+							<!-- Sub Menu -->
+						</ul></li>
+					<!-- .//Patient -->
+				
+				
+				
+				</ul>
+				
+				
+				
+				</li>
+			<!-- End Module -->
+	
+		<!-- .//LABORATORYDesk -->
+	
+	
+<!--SURGERY Desk -->
+		
+			<!-- Start Module -->
+			<li class="">
+                            <a href="#" class="dropdown-toggle"> <i
+					class="menu-icon fa fa-cloud"></i> <span class="menu-text">
+						Surgery </span> <b class="arrow fa fa-angle-down"></b>
+                            </a>
+				<ul class="submenu">
+				
+				<li class=""><a href="#" class="dropdown-toggle"> <i
+							class="menu-icon fa fa-caret-right"></i>Surgery<b
+							class="arrow fa fa-angle-down"></b>
+					</a> <b class="arrow"></b>
+						<ul class="submenu">
+							<!-- Sub Menu -->
+							
+					<li class="">
+						<a th:href="@{/visits/queue/7}" 
+							 > 
+							<i
+							class="menu-icon fa fa-caret-right"></i>Surgery on Queue<b
+							class=""></b>
+						</a> <b class="arrow"></b>
+					</li><!--	<li class=""><a th:href="@{/patients/index/all}"
+									>
+									  <i
+										class="menu-icon fa fa-caret-right"></i> Manage Patient
+								</a></li> -->
+								
+							<!-- Sub Menu -->
+						</ul></li>
+					
+				
+				</ul>
+				
+				
+				
+				</li>
+			<!-- End Module -->
+	
+		<!-- .//SURGERYDesk -->
+	
+	
+<!--XRAY Desk -->
+		
+			<!-- Start Module -->
+		
+			<li class="">
+                            <a href="#" class="dropdown-toggle"> <i
+					class="menu-icon fa fa-bullhorn "></i> <span class="menu-text">
+						Radiology </span> <b class="arrow fa fa-angle-down"></b>
+                            </a>
+				<ul class="submenu">
+				
+				<li class=""><a href="#" class="dropdown-toggle"> <i
+							class="menu-icon fa fa-caret-right"></i>Radiology<b
+							class="arrow fa fa-angle-down"></b>
+					</a> <b class="arrow"></b>
+						<ul class="submenu">
+			
+				
+					<li class="">
+						<a th:href="@{/visits/queue/8}" 
+							 > 
+							<i
+							class="menu-icon fa fa-caret-right"></i>Xray on Queue..<b
+							class=""></b>
+						</a> <b class="arrow"></b>
+					</li>
+				
+								
+							
+					
+						</ul></li>
+					
+				
+					
+				
+				</ul>
+				
+				
+				
+				</li> 
+				
+				
+			<!-- End Module -->
+	
+		<!-- .//XRAYDesk -->
+
+	
+	<!-- Admission Module -->
+		
+			<!-- Module -->
+			<li class=""><a href="#" class="dropdown-toggle"> <i
+					class="menu-icon fa fa-inbox"></i> <span class="menu-text">
+						Admission </span> <b class="arrow fa fa-angle-down"></b>
+			</a> <b class="arrow"></b>				<ul class="submenu">
+					<li class="">
+						<a href="#" class="dropdown-toggle"> <i
+							class="menu-icon fa fa-caret-right"></i> <span class="menu-text">
+								 Admission List </span> <b class="arrow fa fa-angle-down"></b>
+						</a>
+					
+						<ul class="submenu">
+							 <li class=""><a th:href="@{/visits/queue/9}"
+								> <i
+									class="menu-icon fa fa-caret-right"></i>Admission on Queue
+							</a> <b class="arrow"></b></li> 
+							
+								 <li class=""><a th:href="@{/admissionperiod/listperiod}"
+								> <i
+									class="menu-icon fa fa-caret-right"></i>List Admission Period
+							</a> <b class="arrow"></b></li> 
+							<!-- 
+							 <li class=""><a th:href="@{/hrunit/hrunitcategory/index}"
+								> <i
+									class="menu-icon fa fa-caret-right"></i> Unit Creation
+							</a> <b class="arrow"></b></li>  -->
+							
+							
+							
+							
+						</ul>
+						
+					</li>
+					
+					
+					<li class="">
+						<a href="#" class="dropdown-toggle"> <i
+							class="menu-icon fa fa-caret-right"></i> <span class="menu-text">
+								Admission Setup </span> <b class="arrow fa fa-angle-down"></b>
+						</a> 
+						
+						
+						
+						<ul class="submenu">
+							<li class=""><a th:href="@{/system/bedcategory/index}"
+								> <i
+									class="menu-icon fa fa-caret-right"></i> Assign Room to Unit
+							</a> <b class="arrow"></b></li> 
+							
+							
+							
+							<li class=""><a th:href="@{/system/bed/index}"
+								> <i
+									class="menu-icon fa fa-caret-right"></i> Assign Bed to Room
+							</a> <b class="arrow"></b></li> 
+							
+							</ul>
+						
+						</li>
+					
+					
+					
+				</ul></li>
+			<!-- /.system -->
+		
+		<!-- ./Admission Setup Module -->
+		
+	
+	
+	
+	
+	
+	
+		
+		<!-- HMO Setup Module -->
+		
+	
+			<li class=""><a href="#" class="dropdown-toggle"> <i
+					class="menu-icon fa fa-ambulance"></i> <span class="menu-text">
+						HMO </span> <b class="arrow fa fa-angle-down"></b>
+			</a> <b class="arrow"></b>
+				<ul class="submenu">
+					<li class="">
+						<a href="#" class="dropdown-toggle"> <i
+							class="menu-icon fa fa-caret-right"></i> <span class="menu-text">
+								HMO Setup </span> <b class="arrow fa fa-angle-down"></b>
+						</a>
+						<ul class="submenu">
+							<li class=""><a th:href="@{/hmo/add}"
+								> <i
+									class="menu-icon fa fa-caret-right"></i> New HMO
+							</a> <b class="arrow"></b></li>
+							
+						 <li class=""><a th:href="@{/hmo/index}"
+								> <i
+									class="menu-icon fa fa-caret-right"></i> Manage HMO
+							</a> <b class="arrow"></b></li>
+							<!-- 							<li class=""><a th:href="@{/admin/hmos}"
+								th:if="${@userIdentity.renderLink(18)}"> <i
+									class="menu-icon fa fa-caret-right"></i> HMO Service Group
+							</a> <b class="arrow"></b></li>-->
+							
+						</ul>
+					</li>
+				</ul></li>
+			<!-- /.system -->
+
+		<!-- .//HMO Setup Module -->
+	
+	
+	
+	
+	
+	<!-- HR Module -->
+		
+			<!-- Module -->
+			<li class=""><a href="#" class="dropdown-toggle"> <i
+					class="menu-icon fa fa-users"></i> <span class="menu-text">
+						Staff Units Clocking</span> <b class="arrow fa fa-angle-down"></b>
+			</a> <b class="arrow"></b>
+				<ul class="submenu">
+					<li class="">
+						<a href="#" class="dropdown-toggle"> <i
+							class="menu-icon fa fa-caret-right"></i> <span class="menu-text">
+								Staff Unit </span> <b class="arrow fa fa-angle-down"></b>
+						</a>
+					
+						<ul class="submenu">
+							 <li class=""><a th:href="@{/hrunit/staffreg/index}"
+								> <i
+									class="menu-icon fa fa-caret-right"></i> Create Staff
+							</a> <b class="arrow"></b></li> 
+							
+							 <li class=""><a th:href="@{/hrunit/hrunitcategory/index}"
+								> <i
+									class="menu-icon fa fa-caret-right"></i> Unit Creation
+							</a> <b class="arrow"></b></li> 
+							
+							<li class=""><a th:href="@{/hrunit/staffreg/designation}"
+								> <i
+									class="menu-icon fa fa-caret-right"></i> Designation Setup
+							</a> <b class="arrow"></b></li> 
+							
+							
+							
+							
+						</ul>
+						
+					</li>
+					
+					
+					<li class="">
+						<a href="#" class="dropdown-toggle"> <i
+							class="menu-icon fa fa-caret-right"></i> <span class="menu-text">
+								Clocking </span> <b class="arrow fa fa-angle-down"></b>
+						</a> 
+						
+						
+						
+						<ul class="submenu">
+							<li class=""><a th:href="@{/hrunit/clocking/index}"
+								> <i
+									class="menu-icon fa fa-caret-right"></i> Clock In
+							</a> <b class="arrow"></b></li> 
+							
+							
+							 
+							
+							
+						</ul>
+						
+						
+						
+						
+						
+						
+						
+						
+						</li>
+					
+					
+					
+				</ul></li>
+			<!-- /.system -->
+		
+		<!-- ./HR Setup Module -->
+		
+		
+	<!-- BILLING SCHEME Setup Module -->
+			<li class=""><a href="#" class="dropdown-toggle"> <i
+					class="menu-icon fa fa-credit-card"></i> <span class="menu-text">
+						Accounts and Billing  </span> <b class="arrow fa fa-angle-down"></b>
+			</a> <b class="arrow"></b>
+				<ul class="submenu">
+					<li class="">
+					
+						<a href="#" class="dropdown-toggle"> <i
+							class="menu-icon fa fa-caret-right"></i> <span class="menu-text">
+								Scheme Scale Setup </span> <b class="arrow fa fa-angle-down"></b>
+						</a>
+						<ul class="submenu">
+							<li class=""><a th:href="@{/billscheme/add}"
+								> <i
+									class="menu-icon fa fa-caret-right"></i> New Bill Scale
+							</a> <b class="arrow"></b></li>
+							
+						 <li class=""><a th:href="@{/billscheme}"
+								> <i
+									class="menu-icon fa fa-caret-right"></i> Manage Scale
+							</a> <b class="arrow"></b></li>
+							
+							<!-- <li class=""><a th:href="@{/admin/hmos}"
+								th:if="${@userIdentity.renderLink(18)}"> <i
+									class="menu-icon fa fa-caret-right"></i> HMO Service Group
+							</a> <b class="arrow"></b></li> -->
+							
+						</ul>
+					</li>
+				<li class="">
+						<a href="#" class="dropdown-toggle"> <i
+							class="menu-icon fa fa-caret-right"></i> <span class="menu-text">
+								Invoice Bills</span> <b class="arrow fa fa-angle-down"></b>
+						</a>
+						<ul class="submenu">
+							<li class=""><a th:href="@{/invoice/invoicelist}"
+								> <i
+									class="menu-icon fa fa-caret-right"></i> Bill List
+							</a> <b class="arrow"></b></li>
+							
+					<!-- 	 <li class=""><a th:href="@{/billscheme}"
+								> <i
+									class="menu-icon fa fa-caret-right"></i> manage Scale
+							</a> <b class="arrow"></b></li> -->
+							
+							<!-- <li class=""><a th:href="@{/admin/hmos}"
+								th:if="${@userIdentity.renderLink(18)}"> <i
+									class="menu-icon fa fa-caret-right"></i> HMO Service Group
+							</a> <b class="arrow"></b></li> -->
+							
+						</ul>
+					</li>
+				</ul>
+				
+				
+				
+				
+				
+				</li>
+			
+			<!-- /.system -->
+
+		<!-- .//BILLING Scheme Setup Module -->
+	
+
+	<!-- STORE Setup Module -->
+		
+	
+			<li class=""><a href="#" class="dropdown-toggle"> <i
+					class="menu-icon fa fa-gift"></i> <span class="menu-text">
+						Store Management </span> <b class="arrow fa fa-angle-down"></b>
+			</a> <b class="arrow"></b>
+				<ul class="submenu">
+					<li class="">
+						<a href="#" class="dropdown-toggle"> <i
+							class="menu-icon fa fa-caret-right"></i> <span class="menu-text">
+								Store </span> <b class="arrow fa fa-angle-down"></b>
+						</a>
+						<ul class="submenu">
+						
+									
+						
+							<li class=""><a th:href="@{/inventory/vendor}"> <i
+						class="menu-icon fa fa-caret-right"></i> Vendors
+				</a><b class="arrow"></b></li>
+				
+						<li class=""><a th:href="@{/inventory/stock_opening_balance/index/all}">
+						<i class="menu-icon fa fa-caret-right"></i> Opening Bal/Adjust
+				</a><b class="arrow"></b></li>
+				<li class=""><a href="#" class="dropdown-toggle"> <i
+							class="menu-icon fa fa-caret-right"></i> Request
+				</a><b class="arrow"></b>
+	    			
+	    			<ul class="submenu">
+								
+                       <li class=""><a th:href="@{/inventory/makerequest}">
+                       <i class="menu-icon fa fa-caret-right"></i> Make Request
+								</a><b class="arrow"></b></li>
+						<li class=""><a th:href="@{/inventory/request}">
+						<i class="menu-icon fa fa-caret-right"></i> Approve Request
+								</a><b class="arrow"></b></li>
+<!-- 
+			<li class=""><a th:href="@{/inventory/request}">
+						<i class="menu-icon fa fa-caret-right"></i> View Requests
+								</a><b class="arrow"></b></li>
+ -->
+							</ul>
+				
+				
+				</li>
+				
+				<li class=""><a href="#" class="dropdown-toggle"> <i
+							class="menu-icon fa fa-caret-right"></i> Stock In
+				</a><b class="arrow"></b>
+	    		
+	<ul class="submenu">
+								
+                       <li class=""><a th:href="@{/inventory/stock_in}">
+                       <i class="menu-icon fa fa-caret-right"></i> Vendor StockIn
+								</a><b class="arrow"></b></li>
+						<li class=""><a th:href="@{/inventory/point/stock_in}">
+						<i class="menu-icon fa fa-caret-right"></i> Inter Unit StockIn
+								</a><b class="arrow"></b></li>
+				
+</ul>				
+				
+				
+				</li>
+	
+	
+	
+				<li class=""><a th:href="@{/inventory/index/all}"> <i
+						class="menu-icon fa fa-caret-right"></i> Inventory
+				</a><b class="arrow"></b></li>
+				<!-- 
+				<li class=""><a th:href="@{/inventory/changestore}"> <i
+						class="menu-icon fa fa-caret-right"></i> Set Current Store
+				</a><b class="arrow"></b></li> -->
+			</ul>
+	</li>
+	
+	</ul>
+	</li>
+	
+	
+	
+	<!-- User and Permission Setup Module -->
+		
+			<!-- Module -->
+			
+			<li class=""> <a href="#" class="dropdown-toggle"> <i
+					class="menu-icon fa fa-lock"></i> <span class="menu-text">
+						Security </span> <b class="arrow fa fa-angle-down"></b>
+			</a> <b class="arrow"></b>
+				<ul class="submenu">
+					<li class="">
+						<a href="#" class="dropdown-toggle"> <i
+							class="menu-icon fa fa-caret-right"></i> <span class="menu-text">
+								Users </span> <b class="arrow fa fa-angle-down"></b>
+						</a>
+					
+						<ul class="submenu">
+							 <li class=""><a th:href="@{/system/umgt/users}"
+								> <i
+									class="menu-icon fa fa-caret-right"></i> User Management
+							</a> <b class="arrow"></b></li> 
+							
+							
+							
+							
+						</ul>
+						
+					</li>
+					
+					
+					<li class="">
+						<a href="#" class="dropdown-toggle"> <i
+							class="menu-icon fa fa-caret-right"></i> <span class="menu-text">
+								Permission </span> <b class="arrow fa fa-angle-down"></b>
+						</a> 
+						
+						
+						
+						<ul class="submenu">
+							<li class=""><a th:href="@{/system/umgt/roles}"
+								> <i
+									class="menu-icon fa fa-caret-right"></i> Manage Group
+							</a> <b class="arrow"></b></li> 
+							
+							
+							 <li class=""><a th:href="@{/system/umgt/permission/role/index}"
+								> <i
+									class="menu-icon fa fa-caret-right"></i>  Group Permision
+							</a> <b class="arrow"></b></li> 
+							
+							<li class=""><a th:href="@{/system/umgt/permission/user/index}"
+								> <i
+									class="menu-icon fa fa-caret-right"></i> User Permission
+							</a> <b class="arrow"></b>
+							
+							
+							
+							</li>
+							
+							<li class=""><a th:href="@{/hrunit/clockingsec/index}"
+								> <i
+									class="menu-icon fa fa-caret-right"></i> Clock Permission
+							</a> <b class="arrow"></b>
+							
+							
+							
+							</li>
+							
+						</ul>
+						
+						
+						
+						
+						
+						
+						
+						
+						</li>
+					
+					
+					
+				</ul>
+				
+				</li>
+			<!-- /.system -->
+		
+		<!-- .//User and permission Setup Module -->
+	
+	
+	
+	
+	
+	
+	
+	
+		<!-- Hospital Setup Module -->
+		
+			<!-- Module -->
+			<li class=""><a href="#" class="dropdown-toggle"> <i
+					class="menu-icon fa fa-cog fa-spin"></i> <span class="menu-text">Global Admin
+						 </span> <b class="arrow fa fa-angle-down"></b>
+			</a>
+			 <b class="arrow"></b>
+				<ul class="submenu">
+				
+			<!-- Allergy Setup -->
+			
+			<!-- 
+		<li class=""><a href="#" class="dropdown-toggle"> <i
+					class="menu-icon fa fa-caret-right"></i> <span class="menu-text">
+						Allergy </span> <b class="arrow fa fa-angle-down"></b>
+			</a>
+				<ul class="submenu">
+				
+<li class="">
+						<a th:href="@{/system/examination/index}" 
+							 > 
+							<i
+							class="menu-icon fa fa-caret-right"></i> Allergy  Setup <b
+							class=""></b>
+						</a> <b class="arrow"></b>
+					</li>
+					
+					<li class="">
+						<a th:href="@{/system/examinationcategory/index}" 
+							 > 
+							<i
+							class="menu-icon fa fa-caret-right"></i> Allergy Category <b
+							class=""></b>
+						</a> <b class="arrow"></b>
+					</li>
+				
+				</ul></li>  --> 
+			<!-- Allergy -->
+			
+			
+			<!-- Examination Setup -->
+			<li class=""><a href="#" class="dropdown-toggle"> <i
+					class="menu-icon fa fa-caret-right"></i> <span class="menu-text">
+						Examination </span> <b class="arrow fa fa-angle-down"></b>
+			</a>
+				<ul class="submenu">
+					<!-- Start of Submenu -->
+					<li class="">
+						<a th:href="@{/system/examination/index}" 
+							 > 
+							<i
+							class="menu-icon fa fa-caret-right"></i>Examination Setup <b
+							class=""></b>
+						</a> <b class="arrow"></b>
+					</li>
+					
+					<li class="">
+						<a th:href="@{/system/examinationcategory/index}" 
+							 > 
+							<i
+							class="menu-icon fa fa-caret-right"></i> Examination Category <b
+							class=""></b>
+						</a> <b class="arrow"></b>
+					</li>
+					<!-- End of Submenu -->
+				</ul></li>
+			<!-- Examination Setup -->
+			
+			
+			<!-- Disease Setup -->
+			<li class=""><a href="#" class="dropdown-toggle"> <i
+					class="menu-icon fa fa-caret-right"></i> <span class="menu-text">
+						Diagnosis  </span> <b class="arrow fa fa-angle-down"></b>
+			</a>
+				<ul class="submenu">
+					<!-- Start of Submenu -->
+					<li class="">
+						<a th:href="@{/system/diseases/index}" 	 > 
+							<i class="menu-icon fa fa-caret-right"></i> Diagnosis Setup <b class=""></b>
+						</a> <b class="arrow"></b>
+					</li>
+					
+					<li class="">
+				
+						<a th:href="@{/system/diseasescategory/index}" 
+							 > 
+							<i
+							class="menu-icon fa fa-caret-right"></i> Diagnosis Category <b
+							class=""></b>
+						</a> <b class="arrow"></b>
+					</li>
+					<!-- End of Submenu -->
+				</ul></li>
+			<!-- End Disease Setup -->
+			
+			
+			<!-- Allergy Setup -->
+			<!-- <li class=""><a href="#" class="dropdown-toggle"> <i
+					class="menu-icon fa fa-caret-right"></i> <span class="menu-text">
+						Allergy </span> <b class="arrow fa fa-angle-down"></b>
+			</a>
+				<ul class="submenu">
+				
+					 Start of Submenu 
+					<li class="">
+						<a th:href="@{/admin/medical/components/allergies}" 
+							th:if="${@userIdentity.renderLink(3)}" > 
+							<i
+							class="menu-icon fa fa-caret-right"></i> Allergy Setup <b
+							class=""></b>
+						</a> <b class="arrow"></b>
+					</li>
+					
+					<li class="">
+						<a th:href="@{/admin/allergy/category/list}" 
+							th:if="${@userIdentity.renderLink(3)}" > 
+							<i
+							class="menu-icon fa fa-caret-right"></i> Allergy Category Setup<b
+							class=""></b>
+						</a> <b class="arrow"></b>
+					</li>
+					 End of Submenu 
+				</ul></li>-->
+			<!-- End Allergy Setup -->
+				
+								<!-- Global Item -->		
+				<li class="">
+					<a href="#" class="dropdown-toggle"> <i
+							class="menu-icon fa fa-caret-right"></i> <span class="menu-text">
+								Global Item </span> <b class="arrow fa fa-angle-down"></b>
+					</a>
+							<ul class="submenu">
+								<li class=""><a
+									th:href="@{/system/globalitem/index/all}"
+									> <i class="menu-icon fa fa-caret-right"></i>
+									  Global Item </a> <b class="arrow"></b>
+								</li>
+								<!-- th:if="${@userIdentity.renderLink(19)}"-->
+								<li class=""><a
+									th:href="@{/system/globalitemcategory/index}"
+									> <i
+										class="menu-icon fa fa-caret-right"></i> Global Item Category 
+								</a> <b class="arrow"></b>
+								</li>
+								
+								
+							</ul>
+				 </li>
+				
+			
+			
+			
+								<!-- Hospital Item -->		
+				<li class="">
+				<!--  th:text="${@orgIns.getOrgid()}"-->
+					<a href="#" class="dropdown-toggle"> <i
+							class="menu-icon fa fa-caret-right"></i> <span class="menu-text" >
+								Organisation</span> <b class="arrow fa fa-angle-down"></b>
+					</a>
+							<ul class="submenu">
+								<li class=""><a
+									th:href="@{/system/organisations/index}"
+									> <i class="menu-icon fa fa-caret-right"></i>
+									  Organisation Setup </a> <b class="arrow"></b>
+								</li>
+								
+								<!-- th:if="${@userIdentity.renderLink(19)}"-->
+								<li class="">								
+								<a	th:href="@{/system/organisationcategory/index}"> <i class="menu-icon fa fa-caret-right"></i>
+								Org. Category 
+								 </a>
+								
+								<b class="arrow"></b> 
+								
+								</li>
+								<li class="">								
+								<a	th:href="@{/system/setting/entersetting}"> <i class="menu-icon fa fa-caret-right"></i>
+								Settings 
+								 </a>
+								
+								<b class="arrow"></b> 
+								
+								</li>
+								
+							</ul>
+				 </li>
+				
+				
+				
+				
+				
+								
+				
+				
+					</ul><!-- .//Submenu -->
+			</li>
+	
+	
+	
+	
+	
+		<!-- Report Listing Module -->
+		
+			<!-- Module -->
+			<li class=""><a href="#" class="dropdown-toggle"> <i
+					class="menu-icon fa fa-cog fa-spin"></i> <span class="menu-text">REPORTS
+						 </span> <b class="arrow fa fa-angle-down"></b>
+			</a>
+			 <b class="arrow"></b>
+				<ul class="submenu">
+				
+			
+			<!-- Examination Setup -->
+			<li class=""><a href="#" class="dropdown-toggle"> <i
+					class="menu-icon fa fa-caret-right"></i> <span class="menu-text">
+						Patient </span> <b class="arrow fa fa-angle-down"></b>
+			</a>
+				<ul class="submenu">
+					<!-- Start of Submenu -->
+					<li class="">
+						<a href="javascript:allpatientlist()" onclick="javascript:allpatientlist()" > 
+							<i
+							class="menu-icon fa fa-caret-right"></i>All Patient List <b
+							class=""></b>
+						</a> <b class="arrow"></b>
+					</li>
+					
+					
+					<!-- End of Submenu -->
+				</ul></li>
+			<!-- Examination Setup -->
+			
+			
+			<!-- Disease Setup -->
+			
+				
+								<!-- Global Item -->		
+				
+								
+				
+				
+					</ul><!-- .//Submenu -->
+			</li>
+	
+	
+			
+			</ul>
+			
+			
+			
+	
+		
+		
+		
+		
+
+
+	
+				
+			
+			
+
+	<!-- #section:basics/sidebar.layout.minimize -->
+	<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+		<i class="ace-icon fa fa-angle-double-left"
+		
+			data-icon1="ace-icon fa fa-angle-double-left"
+			data-icon2="ace-icon fa fa-angle-double-right"></i>
+	</div>
+
+	<!-- /section:basics/sidebar.layout.minimize -->
+	<script type="text/javascript">
+		try {
+			ace.settings.check('sidebar', 'collapsed')
+		} catch (e) {
+		}
+	</script>
+
+</div>
+<script >
+
+function allpatientlist() {
+
+//	var pat = $('#patientId').val();
+
+	//alert("7878");
+	
+	   var myWindow = window.open("/../' + window.location.pathname.split('/')[1] + '/patientsreport/allpatientlist/", "MsgWindow", "width=1000, height=700");
+	   //myWindow.resizeTo(900,750);
+	   myWindow.focus();
+    return false
+}
+</script>
+<!-- // Sidebar Menu END -->

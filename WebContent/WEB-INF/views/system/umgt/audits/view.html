@@ -1,0 +1,51 @@
+<div class="page-header">
+	<h1>
+		View Audit <small> <i
+			class="ace-icon fa fa-angle-double-right"></i> Detail of Audit
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i class="fa fa-home"></i> System
+			Dashboard</a> <a class="btn btn-xs btn-warning"
+			th:href="@{/system/umgt/audits}"><i class="glyphicon glyphicon-list"></i> All Audits</a>
+	</div>
+</div>
+<div class="hr hr-18 dotted hr-double"></div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<div class="widget-box widget-color-dark">
+			<div class="widget-header widget-header-flat">
+				<h4 class="widget-title smaller">Audit detail</h4>
+			</div>
+
+			<div class="widget-body">
+				<div class="widget-main">
+					<dl class="dl-horizontal">
+						<dt>Action:</dt>
+						<dd th:text="${ audit.actionUrl }">Action Url</dd>
+						<dt>Form Name</dt>
+						<dd th:text="${ audit.formName }">Form Name</dd>
+						<dt>Field Name</dt>
+						<dd th:text="${ audit.fieldName }">Field Name</dd>
+						<dt>Old Value</dt>
+						<dd th:text="${ audit.oldValue } != null ? ${ audit.oldValue }  : 'No Value'">Old Value</dd>
+						<dt>New Value</dt>
+						<dd th:text="${ audit.newValue }">Old Value</dd>
+						<dt>Updated By</dt>
+						<dd th:text="${ audit.updatedBy }">Updated By</dd>
+						<dt>Update Date</dt>
+						<dd th:text="${ #dates.format(audit.updatedDate, 'MMM dd yyyy HH:mm') }">Updated Date</dd>
+						<dt>Created Date</dt>
+						<dd th:text="${ #dates.format(audit.createdDate, 'MMM dd yyyy HH:mm') }">Created Date</dd>
+					</dl>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

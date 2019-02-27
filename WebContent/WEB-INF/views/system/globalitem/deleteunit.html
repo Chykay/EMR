@@ -1,0 +1,21 @@
+
+<div class="page-header">
+	<h1>Delete a CategoryItem Unit</h1>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+		<p>
+			You are about to delete <strong
+				th:text="${itemUnit.unit.unitOfMeasure}">name</strong> Are you sure?
+		</p>
+
+		<form role="form" method="POST" th:object="${itemUnitForm}">
+			<input type="hidden" th:field="*{itemUnitId}" />
+			<button class="btn btn-danger" type="submit">
+				<i class="ace-icon fa fa-check bigger-110"></i> Yes
+			</button>
+			<a class="btn btn-primary"
+				th:href="@{/system/categoryitem/unit/{id} (id = ${itemUnit.itemUnitId})}">No</a>
+		</form>
+	</div>
+</div>

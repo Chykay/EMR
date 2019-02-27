@@ -1,0 +1,237 @@
+
+<div class="page-header">
+	<h1>
+		PHARMACY OFFICE MANAGEMENT<small> <i
+			class="ace-icon fa fa-angle-double-right"></i> QUEUE MANAGEMENT
+			MODULE
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard </a> <a
+			class="btn btn-xs btn-primary"
+			th:href="@{/pharmacy/prescriptions/visit_id/{id}(id=${visitPrescribedDrug.visit.id}) }">
+			<i class="fa fa-plus-circle"></i>Prescriptions
+		</a> <a class="btn btn-xs btn-purple"
+			th:href="@{/pharmacy/prescriptions/visit_id/{id}(id=${visitPrescribedDrug.visit.id}) }"><i
+			class="fa fa-list"></i> Billings</a>
+		<!--<a class="btn btn-xs btn-warning"
+			th:href="@{/consultations/visits}"><i class="fa fa-list"></i>
+			Create Visit </a>  -->
+	</div>
+</div>
+
+<div class="space-4"></div>
+
+<style>
+.table {
+	margin: auto;
+}
+
+ul.req-stat-ul li {
+	list-style-type: none;
+	float: left;
+	margin-right: 10px;
+}
+
+ul.req-stat-ul li:first {
+	margin-right: 30px;
+	font-weight: bold;
+}
+<!--
+-->
+</style>
+
+<div class="col-xs-12">
+	<!-- View contents here -->
+
+	<div class="well well-sm">
+		<ul>
+			<li>Global Item/Drug:&nbsp; <span class="text-danger"
+				th:text="${visitPrescribedDrug.drugs.name}">Global Item/Drug</span>
+			</li>
+
+			<li>Total Quantity:&nbsp; <span class="text-danger"
+				th:text="${visitPrescribedDrug.quantity}">Quantity</span>
+			</li>
+		</ul>
+	</div>
+
+	<div class="col-md-offset-0 col-xs-11">
+
+		<table class="table" id="container"
+			th:with="prescriptionMeasurementStatusEnum=${T(org.calminfotech.consultation.utils.PrescriptionMeasurementStatus)}">
+			<thead>
+				<tr>
+					<th>S/No:</th>
+					<th>Unit Of Measurement:</th>
+					<th>Quantity:</th>
+					<th></th>
+				</tr>
+			</thead>
+
+			<tbody>
+
+				<th:block th:if="${visitPrescribedDrug !=null}">
+					<tr
+						th:each="prescriptionMeasurement,iterStat : ${visitPrescribedDrug.prescriptionMeasurements}">
+						<td th:text="${iterStat.count}">S/No</td>
+						<td class=""
+							th:text="${prescriptionMeasurement.globalUnitofMeasure?.searchname}">Unit
+							Of Measurement:</td>
+						<td class="" th:text="${prescriptionMeasurement.quantity}">Quantity</td>
+						<td>
+							<div class="hidden-sm hidden-xs action-buttons">
+
+								<th:block
+									th:if="${prescriptionMeasurement.prescriptionMeasurementStatus == prescriptionMeasurementStatusEnum.Pending.code}">
+									<a class="btn btn-xs btn-primary tooltip-info"
+										data-rel="tooltip"
+										th:href="@{/pharmacy/prescriptions/raise_bill/{id}(id=${prescriptionMeasurement.id}) }"><i
+										class="fa fa-plus-circle"></i>Raise Bill</a>
+									<a class="btn btn-xs btn-primary tooltip-info"
+										data-rel="tooltip"
+										th:href="@{/pharmacy/prescriptions/issue/{id}(id=${prescriptionMeasurement.id}) }"><i
+										class="fa fa-plus-circle"></i>Issue </a>
+								</th:block>
+
+								<th:block
+									th:if="${prescriptionMeasurement.prescriptionMeasurementStatus == prescriptionMeasurementStatusEnum.Billed.code}">
+									<button disabled="disabled"
+										class="btn btn-xs btn-primary tooltip-info" type="button">
+										<i class="ace-icon fa fa-check bigger-110"></i>Raise Bill
+									</button>
+									<a class="btn btn-xs btn-primary tooltip-info"
+										data-rel="tooltip"
+										th:href="@{/pharmacy/prescriptions/issue/{id}(id=${prescriptionMeasurement.id}) }"><i
+										class="fa fa-plus-circle"></i>Issue </a>
+
+								</th:block>
+
+								<th:block
+									th:if="${prescriptionMeasurement.prescriptionMeasurementStatus == prescriptionMeasurementStatusEnum.Issued.code}">
+									<button disabled="disabled"
+										class="btn btn-xs btn-primary tooltip-info" type="button">
+										<i class="ace-icon fa fa-check bigger-110"></i>Raise Bill
+									</button>
+									<button disabled="disabled"
+										class="btn btn-xs btn-primary tooltip-info" type="button">
+										<i class="ace-icon fa fa-plus-circle"></i>Issue
+									</button>
+								</th:block>
+								
+								
+							</div>
+						</td>
+					</tr>
+				</th:block>
+			</tbody>
+		</table>
+		<div class="hr hr-18 dotted hr-double"></div>
+
+		<!--  
+		<div class="clearfix form-actions">
+			<div class="col-md-offset-4 col-md-9">
+				<button class="btn btn-primary" type="submit">
+					<i class="ace-icon fa fa-check bigger-110"></i> Submit
+				</button>
+				<a class="btn btn-danger" th:href="@{/inventory/order_request }">
+					<i class="fa fa-plus-circle bigger-110"></i>Cancel
+				</a>
+			</div>
+		</div>-->
+	</div>
+
+</div>
+
+
+<th:block th:if="${showInvoice}">
+
+	<div id="modal-table" class="modal fade" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header no-padding">
+					<div class="table-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">
+							<span class="white">&times;</span>
+						</button>
+						Billing Invoice:
+					</div>
+				</div>
+
+
+				<div class="modal-body no-padding">
+					<table
+						class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
+						<tbody>
+							<tr>
+								<td>Patient:</td>
+								<td
+									th:text="${billingInvoice.visit.patient.surname} + ' ' + ${billingInvoice.visit.patient.firstName} + ' ' + ${billingInvoice.visit.patient.othernames}">Patient
+									Name</td>
+							</tr>
+
+							<tr>
+								<td>Section:</td>
+								<td th:text="${billingInvoice.section.session_name}">Section</td>
+							</tr>
+
+							<tr>
+								<td>Scheme:</td>
+								<td th:text="${billingInvoice.scheme}">Scheme</td>
+							</tr>
+
+							<tr>
+								<td>Point:</td>
+								<td th:text="${billingInvoice.point.name}">Point</td>
+							</tr>
+
+							<tr>
+								<td>Item:</td>
+								<td th:text="${billingInvoice.item.name}">Item</td>
+							</tr>
+							<tr>
+								<td>Quantity:</td>
+								<td th:text="${billingInvoice.quantity}">Quantity</td>
+							</tr>
+							<tr>
+								<td>Price:</td>
+								<td th:text="${billingInvoice.price}">price</td>
+							</tr>
+
+						</tbody>
+					</table>
+				</div>
+				<div class="clearfix form-actions">
+					<div class="col-md-offset-3 col-md-9">
+						<a class="btn btn-primary" data-rel="tooltip"
+							th:href="@{/inventory/vendor/edit/}"><i
+							class="ace-icon fa fa-check bigger-110"></i>Make Payment </a>
+						<button type="button" class="btn btn-danger" data-dismiss="modal"
+							aria-hidden="true">
+							<i class="fa fa-plus-circle"></i>Exit
+						</button>
+					</div>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+
+	<a id="modal_view" href="#modal-table" role="button" class="green"
+		data-toggle="modal"> </a>
+	<script type="text/javascript">
+		//height
+		jQuery(function($) {
+			$('#modal_view').click();
+		});
+	</script>
+
+</th:block>
+

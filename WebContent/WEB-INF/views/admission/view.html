@@ -1,0 +1,718 @@
+<div class="page-header">
+	<h1>
+	
+	
+		Admission View <small> <i
+			class="ace-icon fa fa-angle-double-right"></i> 
+									</small>
+	</h1>
+</div>
+<div class="row">
+	
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard</a> 
+		<a class="btn btn-xs btn-primary" th:href="@{/visits/queue/9}"><i
+			class="fa fa-plus-circle"></i> Prescribed Admission </a>
+			 <a
+			class="btn btn-danger btn-xs" th:href="@{/admissionperiod/listperiod}"><i
+			class="fa fa-list-alt"></i> Admission Period List</a> 
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<div class="tabbable">
+
+			<ul class="nav nav-tabs padding-18">
+				<li class="active"><a data-toggle="tab" href="#home"> <i 
+						class="green ace-icon fa fa-pencil-square-o bigger-120"></i>
+						Admission Details
+				</a></li>
+				
+				
+				<li class=""><a data-toggle="tab" href="#admissionperiod"> <i
+						class="brown ace-icon fa fa-user bigger-120"> </i> Admission Period Setup
+				</a></li>
+				
+			</ul>
+			<div class="tab-content no-border padding-24">
+				<div id="home" class="tab-pane active">
+					<div class="row">
+						<div class="col-xs-12 col-sm-3 col-md-3 center">
+							<div class="space space-4"></div>
+							
+						</div>
+						<!-- /.col -->
+
+						<!-- /.col -->
+
+						<div class="col-xs-12 col-sm-9">
+								<div class="profile-info-row">
+								<div class="profile-info-name">Patient Name</div>
+
+								<div class="profile-info-value">
+									<span th:text="${visitprescribedAdmission.visitConsultation.visit.patient.surname + ' ' + visitprescribedAdmission.visitConsultation.visit.patient.firstName}"></span>
+								</div>
+							</div>
+
+							<div class="profile-info-row">
+								<div class="profile-info-name">Other Details</div>
+
+								<div class="profile-info-value">
+									<span th:text="${visitprescribedAdmission.other_detail}"></span>
+								</div>
+							</div>
+													
+							
+
+							<div class="hr hr-8 dotted"></div>
+						</div>
+						<!-- /.col -->
+					</div>
+
+				</div>
+				
+			<div id="admissionperiod" class="tab-pane">
+					<div class="row">
+						<div class="col-md-12">
+							<a class="btn btn-danger btn-xs" data-toggle="modal"
+								href="#admissionperiodadd"> <i
+								class="ace-icon fa fa-plus bigger-110"></i> Add Admission Period</a>
+							<div class="hr hr-18 dotted hr-double"></div>
+								<div class="row">
+								<div class="col-xs-12">
+									<div class="table-header">Setup	Detail</div>
+									<table id="dTable"
+										class="table table-striped table-bordered table-hover">
+										<thead>
+											<tr>
+												<th>Start Date</th>
+												
+												<th>Bed Room</th>
+												
+												<th>Bed Space</th>
+												
+												<th>HR Unit</th>
+												
+												<th>End Date</th>
+												
+												<th>Status</th>
+
+												<th><i class="glyphicon glyphicon-asterisk"></i></th>
+											</tr>
+										</thead>
+										<tbody th:if="${visitprescribedAdmission.admissionperiod != null}">
+											<tr th:each="v : ${visitprescribedAdmission.admissionperiod}">
+												<td th:text="${v.startdate}"></td>
+												<td th:text="${v.bedroom.bedroomitem.GlobalitemName}"></td>
+												<td th:text="${v.bed.beditem.GlobalitemName}"></td>
+												<td th:text="${v.hrunit.categoryName}"></td>
+												<td th:text="${v.enddate}"></td>
+												<td th:text="${v.admissionperiodstatus.name}"></td>
+												<td>
+												<!-- <a class="btn btn-xs btn-warning tooltips"
+													title="Edit Period"
+													th:href="@{/admissionperiod/edit/{id} (id=${v.id})}">
+														<i class="fa fa-edit"></i>
+												</a>-->
+												
+												<a class="btn btn-xs btn-danger tooltips"
+													title="delete"   th:id="${'admissionperiod' +  v.id}"  onclick="return Confirm(this.id)" 
+													th:href="@{/admissionperiod/delete/{id} (id=${v.id})}">
+														<i class="fa fa-trash-o"></i>
+												</a>  
+												
+					<a class="label label-sm label-primary arrowed arrowed-right" data-toggle="modal"   title="View Comment"
+			   	    th:attr="href='#manage'+${v.id}"> <i
+			class="ace-icon fa fa-share bigger-110"></i>Manage
+		</a>
+		
+												
+															
+			<a class="btn btn-danger btn-xs" data-toggle="modal"   title="Raise Bill"
+			    th:attr="href='#bill-'+${v.id}"> <i
+			class="ace-icon  fa fa-credit-card bigger-110"></i>Billing
+		</a>
+			<a class="btn btn-xs btn-purple tooltips" title="Consult"
+						th:href="@{/consultation/listing/{vid} (vid=${v.prescribedadmission.visitConsultation.visit.id}) }">
+							<i class="fa fa-trash-o"></i> Consult
+					</a>							
+			
+												
+<div class="modal fade" th:id="${'manage' + v.id}" >
+	<div class="modal-dialog">
+		<div class="modal-content">
+		
+			<!-- Modal heading -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title"> Manage Admission Period</h4>
+			</div>
+			<!-- // Modal heading END -->
+			<!-- Modal body -->
+			<div class="modal-body">
+				<div class="row">
+					<!-- Dropzone -->
+					<div class="space space-4"></div>
+				<form role="form" class="form-horizontal" th:object="${vform}" 	th:action="@{/admissionperiod/manage}" method="post">
+					
+					<input type="text" hidden="hidden"  th:attr="value = ${v.id}"  name="id"   />
+					
+		
+					
+					
+					
+					
+					<div class="form-group">
+						<label for="gender" class="col-sm-3 control-label no-padding-right"> Select Status:</label>
+						<div class="col-sm-9">
+							<select class="col-xs-10 col-sm-10" th:id="${'s-' + v.id}" 
+								    th:field="*{statusId}"  required="true" >
+								  
+								 <option value="">Select..</option>
+								<option th:each="s: ${admissionperiodstatuslist}" th:value="${s.admissionperiodstatus_id}"
+									th:text="${s.name}"></option>
+							</select> <span class="text-danger"
+								th:if="${#fields.hasErrors('statusId')}"
+								th:errors="*{statusId}"></span>
+						</div>
+					</div>
+					
+					
+			 
+	 <div class="form-group">
+	<label for="datetimepicker1" class="col-sm-3 control-label no-padding-right">End Date / Time </label>
+					
+	<div class="col-sm-5">
+	<div class="input-group">
+	<input id="datetimepicker2" type="text" class="form-control" th:field="*{end_date}"/>
+	<span class="input-group-addon">
+	<i class="fa fa-clock-o bigger-110"></i>
+	</span>
+	
+	</div>
+	
+	<span class="text-danger" th:if="${#fields.hasErrors('end_date')}" th:errors="end_date"></span>
+	</div>
+
+		</div>
+		
+		
+		
+		
+		
+					<!-- 
+					<div class="form-group">
+							<label for="Tels"
+								class="col-xs-12  col-sm-12 control-label no-padding-right">Comment Details:</label>
+							<div class="col-sm-12">
+						
+								<textarea type="text" class="col-xs-10 col-sm-12" 	placeholder="comment" 
+								   th:field="*{comment}"
+									   required="required">  </textarea><span class="text-danger"
+									th:if="${#fields.hasErrors('comment')}"
+									th:errors="*{comment}"></span>
+							</div>
+						
+						</div>
+					-->
+					
+					
+					
+				
+					<div class="clearfix form-actions">
+						<br />
+						<button type="submit" class="btn btn-primary btn-xs">
+							<i class=""></i> Save
+						</button>
+					</div>
+				</form>
+				<!-- /Dform -->
+			</div>
+			<!-- // Modal body END -->
+
+			<!-- Modal footer -->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-xs" data-dismiss="modal">Cancel</button>
+			</div>
+			<!-- // Modal footer END -->
+		</div>
+	</div>
+</div>
+												
+												
+												
+												
+			</div>
+			
+			
+				
+			
+			
+			
+			
+		<div class="modal fade" th:id=" ${'bill-'+v.id}">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- Modal heading -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Billing </h4>
+			</div>
+			<!-- // Modal heading END -->
+			<!-- Modal body -->
+			<div class="modal-body">
+	
+				
+				<form th:object="${vform}" 
+					th:action="@{/invoice/raiseinvoice}" method="post">
+					
+					
+		
+
+
+
+					 <div class="form-group">
+				<label for="billId" class="col-sm-12 col-xs-12 control-label no-padding-left">Select Bill Item:</label>
+				<div class="col-sm-9">
+							<select class="col-xs-10 col-sm-12" th:id="${'item-' + v.id}"  onchange="myFetchmeasure(this.id)"
+								th:field="*{globaitemid}" required="true" >
+								 <option value="">Select..</option>
+					<option th:text=" ${v.bedroom.bedroomitem.GlobalitemName}" th:value="${v.bedroom.bedroomitem.itemId}"
+									></option>
+							
+							 
+								<option th:each="g: ${globalitemlist}" th:value="${g.itemId}"
+									th:text="${g.GlobalitemName}"></option>
+							
+							
+							
+							</select>
+							
+							
+							 <span class="text-danger"		th:if="${#fields.hasErrors('globaitemid')}"
+								th:errors="*{globaitemid}"></span>
+						</div>
+					</div>
+
+
+<br></br>
+
+	<div class="form-group">
+						<label for="userId" class="col-sm-12 col-xs-12 control-label no-padding-left">Select Measure:</label>
+						<div class="col-sm-9">
+						<select class="col-xs-10 col-sm-12" th:id="${'itemmeasure-' + v.id}" 
+								th:field="*{itemmeasureid}" required="true" >
+					
+								
+							</select>
+							
+							
+							 <span class="text-danger"		th:if="${#fields.hasErrors('itemmeasureid')}"
+								th:errors="*{itemmeasureid}"></span>
+						</div>
+					
+</div>
+
+
+
+<div class="form-group">
+  <label for="userId" class="col-sm-12 col-xs-12 control-label no-padding-left">Use HMO:</label>
+	<div class="col-xs-12 col-sm-8">
+	<input type="checkbox" 	name="usehmo" Checked="checked" />
+	<span class="text-danger" th:if="${#fields.hasErrors('usehmo')}"
+	th:errors="*{usehmo}">
+															</span>
+						</div>
+					
+</div>
+
+		
+						<div class="clearfix form-actions">
+			
+		
+		
+		
+			<div hidden="hidden" >
+					<input type="text"   th:attr="value = ${v.prescribedadmission.visitConsultation.visit.id}"  name="visitId" />
+				<input type="text"   th:attr="value = ${v.id}"  name="referenceid" />
+				<input type="text"   th:attr="value = ${v.hrunit.categoryId}"  name="unitId" />
+				
+				<input type="text"   th:attr="value = ${v.days}"   name="qty" th:id="${'qty-' + v.id}" />
+				
+				</div>
+		
+		
+							<div class="col-md-offset-5 col-md-9" style="margin-top:15px">
+						<button type="submit" class="btn btn-primary btn-xs">
+							<i class=""></i> Raise Bill
+						</button>
+					</div>
+							</div>
+
+
+
+
+					</form>
+		
+		
+	
+		
+		
+		
+					<!-- /.Dropzone -->
+					<!-- /.col -->
+				</div>
+
+			<!-- Modal footer -->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-xs" data-dismiss="modal">Cancel</button>
+			</div>
+			<!-- // Modal footer END -->
+		</div>
+	</div>
+</div>
+			
+			
+			
+			
+			
+			
+			
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+
+
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<!-- //.item -->
+			
+			
+						
+			
+			
+			
+			
+			
+			</div>
+		</div>
+	</div>
+
+
+<script>
+//	jQuery(function($) {
+	//	var oTable1 = $('#dTable').dataTable({
+	//		bAutoWidth : false,
+	//		"aoColumns" : [ { "bSortable" : true
+				
+		//	}, null, null ]
+//		});
+
+//	});
+</script>
+
+<div class="modal fade" id="admissionperiodadd">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		
+			<!-- Modal heading -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title"> Admission Period</h4>
+			</div>
+			<!-- // Modal heading END -->
+			<!-- Modal body -->
+			<div class="modal-body">
+				<div class="row">
+					<!-- Dropzone -->
+					<div class="space space-4"></div>
+					<form role="form" class="form-horizontal" method="POST"
+						th:object="${admissionperiodForm}"  th:action="@{/admissionperiod/save}" >
+<!-- onsubmit="return mypersonnel() -->
+	
+	 
+	 <div class="form-group">
+	<label for="datetimepicker1" class="col-sm-3 control-label no-padding-right">Start Date / Time </label>
+
+													
+	<div class="col-sm-5">
+	
+	<div class="input-group">
+	<input id="datetimepicker1" type="text" class="form-control" th:field="*{start_date}"  required="required"/>
+	
+	<span class="input-group-addon">
+	<i class="fa fa-clock-o bigger-110"></i>
+	</span>
+	
+	</div>
+	
+	
+	<span class="text-danger" th:if="${#fields.hasErrors('start_date')}" th:errors="start_date"></span>
+	</div>
+
+		</div>
+		
+		<!-- 
+		
+		<div class="col-sm-9">
+							<select class="col-xs-10 col-sm-12" th:id="unitId" onchange="myProcesshr(this.id)"
+								th:field="*{hrunit_id}" required="true" >
+								 <option value="">Select..</option>
+								<option th:each="u: ${unitcategory}" th:value="${u.categoryId}"
+									th:text="${u.categoryName}"></option>
+							</select> <span class="text-danger"
+								th:if="${#fields.hasErrors('hrunit_id')}"
+								th:errors="*{hrunit_id}"></span>
+						</div>
+					</div>
+		
+		
+		
+		-->
+		
+		
+		<div class="form-group">
+				<label for="gender" class="col-sm-3 control-label no-padding-right"> Room Name:</label>
+				<div class="col-sm-9">
+					<select th:field="*{bedroom_id}" class="col-xs-10 col-sm-10" onchange="myFunction()" required="required" id="bedroom_id">
+						<option value="">Select..</option>
+						<option th:each="b: ${bedroom}" th:value="${b.categoryId}"
+							th:text="${b.bedroomitem.GlobalitemName}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('bedroom_id')}"
+						th:errors="*{bedroom_id}"></span>
+				</div>
+			</div>
+			
+			
+			<div class="form-group">
+						<label for="userId" class="col-sm-3 control-label no-padding-left">Bed :</label>
+						<div class="col-sm-9">
+							<select class="col-xs-10 col-sm-10" th:field="*{bed_id}"
+								th:id="bed_id" required="required">
+								
+								
+								
+							</select> <span class="text-danger" th:if="${#fields.hasErrors('bed_id')}"
+								th:errors="*{bed_id}"></span>
+						</div>
+					</div> 	
+	
+			
+			
+			
+	<!-- 
+		
+		<div class="form-group">
+				<label for="gender" class="col-sm-3 control-label no-padding-right"> Unit Name:</label>
+				<div class="col-sm-9">
+					<select th:field="*{hrunit_id}" class="col-xs-10 col-sm-10"  required="required" id="hrunit_id">
+								 <option value="">Select..</option>
+								<option th:each="u: ${unitcategory}" th:value="${u.categoryId}"
+									th:text="${u.categoryName}"></option>
+							</select> <span class="text-danger"
+								th:if="${#fields.hasErrors('hrunit_id')}"
+								th:errors="*{hrunit_id}"></span>
+						</div>
+					</div>
+	
+
+		
+		
+		
+		
+		 
+	 <div class="form-group">
+	<label for="datetimepicker1" class="col-sm-3 control-label no-padding-right">End Date / Time </label>
+
+													
+	<div class="col-sm-5">
+	
+	<div class="input-group">
+	<input id="datetimepicker2" type="text" class="form-control" th:field="*{end_date}"/>
+	
+	<span class="input-group-addon">
+	<i class="fa fa-clock-o bigger-110"></i>
+	</span>
+	
+	</div>
+	
+	
+	<span class="text-danger" th:if="${#fields.hasErrors('end_date')}" th:errors="end_date"></span>
+	</div>
+
+		</div>
+		
+	-->	
+		
+		
+		
+						<div class="clearfix form-actions">
+							<div class="col-md-offset-3 col-md-9">
+								<input  type="hidden" th:field="*{prescribedadmissionId}" />
+								<button class="btn btn-primary" type="submit">
+									<i class="ace-icon fa fa-check bigger-110"></i> Add
+								</button>
+
+								<button class="btn btn-danger" type="reset">
+									<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+								</button>
+							</div>
+						</div>
+
+
+
+
+
+
+					</form>
+					<!-- /.Dropzone -->
+					<!-- /.col -->
+				</div>
+			</div>
+		</div>
+	
+	
+	
+	</div>
+</div>
+
+
+</div>
+
+
+
+<script type="text/javascript">
+	//height
+</script>
+<script type="text/javascript">
+     $(function () {
+         $('#datetimepicker1').datetimepicker({
+			autoclose : true,
+			format: 'YYYY-MM-DD HH:mm',
+			todayHighlight : true
+		});
+     });
+ </script>
+ 
+ <script type="text/javascript">
+     $(function () {
+         $('#datetimepicker2').datetimepicker({
+			autoclose : true,
+			format: 'YYYY-MM-DD HH:mm',
+			todayHighlight : true
+		});
+     });
+ </script>
+<script>
+
+	
+	function Confirm(id)
+	{
+	
+		
+	    job=confirm("Are you sure to delete ?");
+	    if(job!=true)
+	    {
+	        return false;
+	    }
+		
+	};
+
+	
+	
+	function myFunction()
+	{
+	            	
+					$.ajax({
+						type : "GET",
+						url : '/../'+ window.location.pathname.split('/')[1] + '/admissionperiod/fetchbedbyroom/'	+ $('#bedroom_id').val(),
+						beforeSend : function() {
+							 $.gritter.add({
+								title : "Progress...",
+								text : "Fetching Bed...",
+								time : 3000
+							}); 
+						},
+						success : function(html) {
+							$("#bed_id").html(html);
+							 $.gritter.add({
+								title : "Success!",
+								text : "Bed Fetched",
+								time : 4000
+							}); 
+						},
+						error : function() {
+							$.gritter.add({
+								title : "Error!",
+								text : "Error fetching Bed",
+								time : 4000
+							});
+
+						}
+				});
+			
+		}
+	
+	
+
+
+	function myFetchmeasure(d)
+		{
+		var  h= d.split("-");	
+						$.ajax({
+							type : "GET",
+							url : '/../'+ window.location.pathname.split('/')[1] + '/visits/fetchdrugmeasurekind/' + $('#' + d).val(),
+							beforeSend : function() {
+								 $.gritter.add({
+									title : "Progress...",
+									text : "Fetching Measure",
+									time : 3000
+								}); 
+							},
+							success : function(retval) {
+							//	alert(retval);
+								var rt=retval.split("##");
+								
+								$('#itemmeasure-'+h[1]).html(rt[0]);
+							
+								if (rt[1]==1)
+								{
+								$('#qty-'+h[1]).val(1);
+								}
+								
+								 $.gritter.add({
+									title : "Success!",
+									text : "Measure Fetched",
+									time : 4000,
+									class_name: 'gritter-success' 
+								}); 
+							},
+							error : function() {
+								$.gritter.add({
+									title : "Error!",
+									text : "Error Fetching Measure",
+									time : 4000
+								});
+
+							}
+					});
+				
+			}
+			
+
+
+	</script>
+

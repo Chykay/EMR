@@ -1,0 +1,478 @@
+<div class="page-header">
+	<h1>
+		Casualty Patient Profile <small> <i
+			class="ace-icon fa fa-angle-double-right"></i></small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/customers}"><i
+			class="fa fa-home"></i> Customer Dashboard</a> <a
+			class="btn btn-xs btn-primary" th:href="@{/customers/caspatient }">
+			<i class="glyphicon glyphicon-list"></i> All Casualty patients
+		</a> <a class="btn btn-xs btn-warning"
+			th:href="@{/customers/caspatient/transfer/{id} (id = ${cascaspatient.id})}">
+			<i class="fa fa-edit"></i> Update Casualty Profile
+		</a> 
+	
+		
+			<a href="#modal-simple" data-toggle="modal" class="btn btn-danger">  Transfer Casualty Profile </a>
+		
+		
+		
+		<a class="btn btn-danger"> CREATE VISIT </a>
+
+	</div>
+</div>
+<div class="hr hr-18 dotted hr-double"></div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<!-- User Profile -->
+		<div id="user-profile-2" class="user-profile">
+			<div class="tabbable">
+
+
+				<div class="tab-content no-border padding-24">
+					<div id="home" class="tab-pane in active">
+						<div class="row">
+							<div class="col-xs-12 col-sm-3 col-md-3 center">
+								<input type="hidden" th:field="*{id}" />
+
+								<div class="col-xs-12 col-sm-9">
+									<h4 class="blue">
+										<span class="middle"
+											th:text="${cascaspatient.title.acronym} + ' ' + ${cascaspatient.surname} + ' ' + ${cascaspatient.othernames}">Alex
+											M. Doe</span>
+									</h4>
+
+
+							
+										<div class="profile-user-info">
+										<div class="profile-info-row">
+												<div class="profile-info-name">Reference ID</div>
+
+										<div class="profile-info-value">
+											<span th:text="${cascaspatient.patient_id}">alexdoe</span>
+										</div>
+										</div>
+										
+										
+										
+<!-- 
+										<div class="profile-info-row">
+											<div class="profile-info-name">Languaage</div>
+
+											<div class="profile-info-value">
+												<span
+													th:text="${cascaspatient.language == null}? 'Not set' : ${cascaspatient.language.name}">3
+													hours ago</span>
+											</div>
+										</div>
+										 -->
+										
+										<div class="profile-info-row">
+											<div class="profile-info-name">Gender</div>
+
+											<div class="profile-info-value">
+												<span
+													th:text="${cascaspatient.gender == null}? 'Not set' : ${cascaspatient.gender.type}">3
+													hours ago</span>
+											</div>
+										</div>
+		
+												<div class="profile-info-row">
+											<div class="profile-info-name">	Genotype</div>
+
+											<div class="profile-info-value">
+												<span
+													th:text="${cascaspatient.genotype == null}? 'Not set' : ${cascaspatient.genotype}">2010/06/20</span>
+											</div>
+										</div>
+										
+										
+										
+										
+												<div class="profile-info-row">
+											<div class="profile-info-name">Blood Group</div>
+
+											<div class="profile-info-value">
+											 <span
+													th:text="${cascaspatient.bldgrp == null}? 'Not set' : ${cascaspatient.bldgrp}">2010/06/20</span>
+											</div>
+										</div>
+										
+										
+										
+												<div class="profile-info-row">
+											<div class="profile-info-name">Height</div>
+
+											<div class="profile-info-value">
+										<span
+													th:text="${cascaspatient.height == null}? 'Not set' : ${cascaspatient.height}">2010/06/20</span>
+											</div>
+										</div>
+
+
+									
+										<div class="profile-info-row">
+											<div class="profile-info-name">Email ID</div>
+
+											<div class="profile-info-value">
+												<span th:text="${cascaspatient.email}">alexdoe</span>
+											</div>
+											</div>
+										
+										
+										
+										
+								
+										<div class="profile-info-row">
+											<div class="profile-info-name">Home Number</div>
+
+											<div class="profile-info-value">
+												<span th:text="${cascaspatient.homeNumber}">alexdoe</span>
+											</div>
+											
+						</div>
+										
+										
+								
+										<div class="profile-info-row">
+											<div class="profile-info-name">Phone Number</div>
+
+											<div class="profile-info-value">
+												<span th:text="${cascaspatient.phoneNumber}">alexdoe</span>
+											</div>
+</div>
+										
+										
+
+
+										<div class="profile-info-row">
+											<div class="profile-info-name">Home Address</div>
+
+											<div class="profile-info-value">
+												<i class="fa fa-map-marker light-orange bigger-110"></i> <span
+													th:text="${cascaspatient.address == null}? 'Not set' : ${cascaspatient.address}">2010/06/20</span>
+											</div>
+										</div>
+
+
+										<div class="profile-info-row">
+											<div class="profile-info-name">LGA</div>
+
+											<div class="profile-info-value">
+												<span
+													th:text="${cascaspatient.lga == null}? 'Not set' : ${cascaspatient.lga.localGovernmentAreasName}">3
+													hours ago</span>
+											</div>
+										</div>
+
+
+										<div class="profile-info-row">
+											<div class="profile-info-name">State</div>
+
+											<div class="profile-info-value">
+												<span
+													th:text="${cascaspatient.state == null}? 'Not set' : ${cascaspatient.state.stateName}">3
+													hours ago</span>
+											</div>
+										</div>
+</div>
+
+
+									</div>
+
+									<div class="hr hr-8 dotted"></div>
+								</div>
+								<!-- /.col -->
+							</div>
+							<!-- /.row -->
+
+							<div class="space-20"></div>
+						</div>
+						<!-- /#home -->
+					</div>
+				</div>
+			</div>
+		</div>
+</div>
+
+
+
+
+<!-- this is the modal window that pops up to transfer casualty patient to patient table -->
+
+<div class="modal fade" id="modal-simple">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- Form -->
+					
+				
+					<form role="form" class="form-horizontal" method="POST"
+								th:object="${caspxform}">
+								
+				<!-- Modal heading -->
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title">Transfer Casualty Patient to Patient Profile</h4>
+				</div>
+				<!-- // Modal heading END -->
+				<!-- Modal body -->
+				<div class="modal-body">
+					
+	
+
+
+
+<div class="row">
+	
+				<div class="form-group">
+				<label for="title" class="col-sm-3 control-label no-padding-right">Title:</label>
+				<div class="col-sm-9">
+					<select th:field="*{titleId}" readonly="readonly"  class="col-xs-10 col-sm-5">
+						<option value="0">Select..</option>
+						<option th:each="t: ${titles}" th:value="${t.id}"
+							th:text="${t.acronym}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('titleId')}"
+						th:errors="*{titleId}"></span>
+				</div>
+			</div>
+</div>
+	<div class="space-2"></div>
+		<div class="space-2"></div>
+		
+		
+		
+		
+		
+
+<div class="row">
+	
+			<div class="form-group">
+				<label for="surname" class="col-sm-3 control-label no-padding-right">Surname:</label>
+				<div class="col-sm-9">
+					<input type="text"  class="col-xs-10 col-sm-5" placeholder="Surname"
+						th:field="*{surname}" readonly="readonly" required="required" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('surname')}"
+						th:errors="*{surname}"></span>
+				</div>
+			</div>
+</div>
+	<div class="space-2"></div>
+		<div class="space-2"></div>
+
+
+
+
+<div class="row">
+	
+	
+			<div class="form-group">
+				<label for="gender" class="col-sm-3 control-label no-padding-right">Gender:</label>
+				<div class="col-sm-9">
+					<select th:field="*{genderId}" readonly="readonly"  class="col-xs-10 col-sm-5">
+						<option value="0">Select..</option>
+						<option th:each="g: ${genders}" th:value="${g.id}"
+							th:text="${g.type}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('genderId')}"
+						th:errors="*{genderId}"></span>
+				</div>
+			</div>
+			
+</div>
+	<div class="space-2"></div>
+		<div class="space-2"></div>
+
+
+
+<div class="row">
+	
+	
+		<div class="form-group">
+				<label for="email" class="col-sm-3 control-label no-padding-right">Email:</label>
+				<div class="col-sm-9">
+					<input type="email" readonly="readonly"  class="col-xs-10 col-sm-5" placeholder="Email"
+						th:field="*{email}" /> <span class="text-danger"
+						th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+				</div>
+			</div>
+
+</div>
+	<div class="space-2"></div>
+		<div class="space-2"></div>
+
+	
+
+<div class="row">
+	
+		<div class="form-group">
+				<label for="address" class="col-sm-3 control-label no-padding-right">Address:</label>
+				<div class="col-sm-9">
+					<input type="text" readonly="readonly" class="col-xs-10 col-sm-5" placeholder="Address"
+						th:field="*{address}" /> <span class="text-danger"
+						th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></span>
+				</div>
+			</div>
+	
+
+</div>
+	<div class="space-2"></div>
+		<div class="space-2"></div>
+		
+		
+		<div class="row">
+	
+	<div class="form-group">
+				<label for="phoneNumber"
+					class="col-sm-3 control-label no-padding-right">Phone
+					Number:</label>
+				<div class="col-sm-9">
+					<input type="text" readonly="readonly" class="col-xs-10 col-sm-5"
+						placeholder="Phone Number" th:field="*{phoneNumber}" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('phoneNumber')}"
+						th:errors="*{phoneNumber}"></span>
+				</div>
+			</div>
+	
+
+</div>
+	<div class="space-2"></div>
+		<div class="space-2"></div>
+		
+		
+			
+		<div class="row">
+	
+	<div class="form-group">
+				<label for="homeNumber"
+					class="col-sm-3 control-label no-padding-right">Home
+					Number:</label>
+				<div class="col-sm-9">
+					<input type="text" readonly="readonly"  class="col-xs-10 col-sm-5"
+						placeholder="Home Number" th:field="*{homeNumber}" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('homeNumber')}"
+						th:errors="*{homeNumber}"></span>
+				</div>
+			</div>
+
+	
+
+</div>
+	<div class="space-2"></div>
+		<div class="space-2"></div>
+		
+		
+		
+			<div class="row">
+<div class="form-group">
+				<label for="height" class="col-sm-3 control-label no-padding-right">Height(in metres):</label>
+				<div class="col-sm-9">
+					<input type="text" readonly="readonly"  class="col-xs-10 col-sm-5" placeholder="Surname"
+						th:field="*{height}" required="required" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('height')}"
+						th:errors="*{height}"></span>
+				</div>
+			</div>
+
+	
+
+</div>
+	<div class="space-2"></div>
+		<div class="space-2"></div>
+		
+		
+		<div class="row">	
+	<div class="form-group">
+				<label for="bldgrp" class="col-sm-3 control-label no-padding-right">Select Blood Group:</label>
+				<div class="col-sm-9">
+					<select th:field="*{bldgrp}" readonly="readonly" 
+										 class="col-xs-10 col-sm-5">
+										<option value="0">Select...</option>
+							
+										<option value="A=">A+</option>
+										<option value="A-">A-</option>
+										<option value="B+">B+</option>
+										<option value="B-">B-</option>
+										<option value="O+">O+</option>
+											<option value="O-">O-</option>
+										<option value="AB+">AB+</option>
+										<option value="AB-">AB-</option>
+									
+										
+			</select>  <span class="text-danger" th:if="${#fields.hasErrors('bldgrp')}"
+			th:errors="*{bldgrp}"></span>
+				</div>
+			</div>
+	
+
+</div>
+	<div class="space-2"></div>
+		<div class="space-2"></div>
+		
+		
+				<div class="row">
+	<div class="form-group">
+				<label for="genotype" class="col-sm-3 control-label no-padding-right">Select Genotype:</label>
+				<div class="col-sm-9">
+					<select readonly="readonly"  th:field="*{genotype}"
+										 class="col-xs-10 col-sm-5">
+										<option value="0">Select...</option>
+							
+										<option value="AA">AA</option>
+										<option value="AS">AS</option>
+										<option value="AC">AC</option>
+										<option value="SS-">SS</option>
+								
+									
+										
+			</select>  <span class="text-danger" th:if="${#fields.hasErrors('genotype')}"
+			th:errors="*{genotype}"></span>
+				</div>
+			</div>
+		
+</div>
+	<div class="space-2"></div>
+		<div class="space-2"></div>
+		
+		
+		
+		
+				</div>
+			
+				
+				
+				
+				
+				
+				<!-- // Modal body END -->
+
+				<!-- Modal footer -->
+				<div class="modal-footer">
+				
+				
+						
+						<input type="hidden" th:field="*{id}" />
+										<button class="btn btn-primary" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i> Transfer
+										</button>
+
+										<button class="btn btn-danger" type="reset">
+											<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+										</button>
+										
+										
+					
+				</div>
+				<!-- // Modal footer END -->
+			</form>
+			<!-- /.Form -->
+		</div>
+	</div>
+</div>
+

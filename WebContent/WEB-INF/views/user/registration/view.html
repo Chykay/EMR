@@ -1,0 +1,237 @@
+<div class="page-header">
+	<h1>
+		View User <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			User profile
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-success" th:href="@{/system/users}"><i
+			class="glyphicon glyphicon-list"></i> All Users</a> <a
+			class="btn btn-xs btn-danger" th:switch="${user.lock}"
+			th:href="@{/system/users/lock/{id}(id=${user.userId}) }"> <span
+			th:case="true"> <i class="fa fa-lock"></i> Unlock
+		</span> <span th:case="false"> <i class="fa fa-unlock"></i> Lock
+		</span>
+		</a> <a class="btn btn-xs btn-warning"
+			th:href="@{/system/users/reactivate/{id}(id=${user.userId}) }"> <i
+			class="fa fa-bolt"></i> Reactivate
+		</a>
+	</div>
+</div>
+<div class="hr hr-18 dotted hr-double"></div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<!-- User Profile -->
+		<div id="user-profile-2" class="user-profile">
+			<div class="tabbable">
+				<ul class="nav nav-tabs padding-18">
+					<li class="active"><a data-toggle="tab" href="#home"> <i
+							class="green ace-icon fa fa-user bigger-120"></i> Profile
+					</a></li>
+
+					<li><a href="#feed" data-toggle="tab"> <i
+							class="orange ace-icon fa fa-rss bigger-120"></i> Activity Feed
+					</a></li>
+				</ul>
+
+				<div class="tab-content no-border padding-24">
+					<div id="home" class="tab-pane in active">
+						<div class="row">
+							<div class="col-xs-12 col-sm-3 col-md-3 center">
+								<span class="profile-picture"> <img
+									th:if="${user.userProfile.profileImage == null}" id="avatar2"
+									th:src="@{/resources/img/nhis.png}" alt="Profile"
+									class="img-responsive" /> <img
+									th:if="${user.userProfile.profileImage != null}" id="avatar2"
+									th:src="@{/system/users/image/{id}(id=${user.userId})}"
+									alt="Profile" class="img-responsive" />
+								</span>
+
+								<div class="space space-4"></div>
+
+							</div>
+							<!-- /.col -->
+
+							<div class="col-xs-12 col-sm-9">
+								<h4 class="blue">
+									<span class="middle"
+										th:text="${user.userProfile.lastName} + ' ' + ${user.userProfile.otherNames}">Alex
+										M. Doe</span> <span class="label label-purple arrowed-in-right">
+										<i class="ace-icon fa fa-circle smaller-80 align-middle"></i>
+										online
+									</span>
+								</h4>
+
+								<div class="profile-user-info">
+									<div class="profile-info-row">
+										<div class="profile-info-name">Username</div>
+
+										<div class="profile-info-value">
+											<span th:text="${user.username}">alexdoe</span>
+										</div>
+									</div>
+
+									<div class="profile-info-row">
+										<div class="profile-info-name">Gender</div>
+
+										<div class="profile-info-value">
+											<span
+												th:text="${user.userProfile.gender == null}? 'Not set' : ${user.userProfile.gender.type}">3
+												hours ago</span>
+										</div>
+									</div>
+
+									<div class="profile-info-row">
+										<div class="profile-info-name">Address</div>
+
+										<div class="profile-info-value">
+											<i class="fa fa-map-marker light-orange bigger-110"></i> <span
+												th:text="${user.userProfile.address == null}? 'Not set' : ${user.userProfile.address}">2010/06/20</span>
+										</div>
+									</div>
+									<!-- 
+									<div class="profile-info-row">
+										<div class="profile-info-name">Last Online</div>
+
+										<div class="profile-info-value">
+											<span>3 hours ago</span>
+										</div>
+									</div> -->
+								</div>
+
+								<div class="hr hr-8 dotted"></div>
+
+								<!-- <div class="profile-user-info">
+									<div class="profile-info-row">
+										<div class="profile-info-name">Website</div>
+
+										<div class="profile-info-value">
+											<a href="#" target="_blank">www.alexdoe.com</a>
+										</div>
+									</div>
+
+									<div class="profile-info-row">
+										<div class="profile-info-name">
+											<i
+												class="middle ace-icon fa fa-facebook-square bigger-150 blue"></i>
+										</div>
+
+										<div class="profile-info-value">
+											<a href="#">Find me on Facebook</a>
+										</div>
+									</div>
+
+									<div class="profile-info-row">
+										<div class="profile-info-name">
+											<i
+												class="middle ace-icon fa fa-twitter-square bigger-150 light-blue"></i>
+										</div>
+
+										<div class="profile-info-value">
+											<a href="#">Follow me on Twitter</a>
+										</div>
+									</div>
+								</div> -->
+							</div>
+							<!-- /.col -->
+						</div>
+						<!-- /.row -->
+
+						<div class="space-20"></div>
+					</div>
+					<!-- /#home -->
+
+					<div id="feed" class="tab-pane">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="widget-box transparent">
+									<div class="widget-header widget-header-flat">
+										<h4 class="widget-title lighter">
+											<i class="ace-icon fa fa-star orange"></i> Login Activity
+										</h4>
+
+										<div class="widget-toolbar">
+											<a href="#" data-action="collapse"> <i
+												class="ace-icon fa fa-chevron-up"></i>
+											</a>
+										</div>
+									</div>
+
+									<div class="widget-body">
+										<div class="widget-main">
+											<table id="login-table" class="table table-bordered table-striped">
+												<thead class="thin-border-bottom">
+													<tr>
+														<th><i class="ace-icon fa fa-cog blue"></i></th>
+
+														<th><i class="ace-icon fa fa-lock blue"></i> Action
+															Type</th>
+
+														<th class="hidden-480"><i
+															class="ace-icon fa fa-calendar blue"></i>Timestamp</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr th:each="l : ${loginSessionList}">
+														<td th:switch="${l.actionType}">
+														<span
+															th:case="'Logout'"><i
+																class="ace-icon fa fa-mail-reply blue"></i> </span> 
+														<span
+															th:case="'Login'"><i
+																class="ace-icon fa fa-mail-forward red"></i></span></td>
+														<td th:text="${l.actionType}"></td>
+														<td
+															th:text="${#dates.format(l.timeStamp, 'MMM dd yyyy HH:mm')}"></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+										<!-- /.widget-main -->
+									</div>
+									<!-- /.widget-body -->
+								</div>
+							</div>
+						</div>
+						<!-- /.row -->
+					</div>
+					<!-- /#feed -->
+				</div>
+			</div>
+		</div>
+
+		<!-- Profile Ends  -->
+		<!-- End View contents here -->
+	</div>
+</div>
+<script>
+	jQuery(function($) {
+		var oTable1 = $('#login-table').dataTable({
+			bAutoWidth : false,
+			"aoColumns" : [ {
+				"bSortable" : true
+			}, null, null ]
+
+		//,
+		//"sScrollY": "200px",
+		//"bPaginate": false,
+
+		//"sScrollX": "100%",
+		//"sScrollXInner": "120%",
+		//"bScrollCollapse": true,
+		//Note: if you are applying horizontal scrolling (sScrollX) on a ".table-bordered"
+		//you may want to wrap the table inside a "div.dataTables_borderWrap" element
+
+		//"iDisplayLength": 50
+		});
+
+	});
+</script>

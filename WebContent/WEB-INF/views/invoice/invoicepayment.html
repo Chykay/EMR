@@ -1,0 +1,371 @@
+<div class="page-header">
+	<h1>
+		Invoice <span th:text="${v.code + ' - ' + v.patient.surname + v.patient.firstName + v.patient.othernames}"> </span>
+		<small> <i class="ace-icon fa fa-angle-double-right"></i>
+		Invoice No:	<span th:text="${v.code}"> </span>
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-primary" th:href="@{/invoice/invoicelist/{id}(id=${v.id})}"><i
+			class="fa fa-list"></i> Invoice List</a>
+			<a
+			class="btn btn-xs btn-primary" th:href="@{/invocie/accountlist}"><i
+			class="fa fa-list"></i>Visit List</a>
+			
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+
+		<form role="form" class="form-horizontal" method="POST" 
+			th:object="${invoiceForm}"  th:action="@{/invoice/add}">
+			
+			<legend>Invoice </legend>
+			
+			
+						<div class="col-xs-12 col-sm-9">
+
+								<div class="profile-info-row">
+								<div class="profile-info-name">Visit Id:</div>
+
+								<div class="profile-info-value">
+									<span th:text="${invoice.visitid}"></span>
+								</div>
+							</div>
+
+						
+						
+								<div class="profile-info-row">
+								<div class="profile-info-name">Client Name:</div>
+
+								<div class="profile-info-value">
+									<span th:text="${invoice.surname + invoice.first_name}"></span>
+								</div>
+							</div>
+
+							<div class="profile-info-row">
+								<div class="profile-info-name">Item/Service:</div>
+
+								<div class="profile-info-value">
+									<span th:text="${invoice.globalitemname}"></span>
+								</div>
+							</div>		
+							<div class="profile-info-row">
+									<div class="profile-info-name">Measure</div>
+
+									<div class="profile-info-value">
+										<span
+											th:text="${invoice.itemmeasurename}">
+											</span>
+									</div>
+								</div>
+														
+	<div class="profile-info-row">
+									<div class="profile-info-name">Qty</div>
+
+									<div class="profile-info-value">
+										<span
+											th:text="${invoice.qty}">
+											</span>
+									</div>
+								</div>
+							
+
+
+			
+					<div class="form-group">
+							<label for="Tels"
+								class="col-sm-3 control-label no-padding-right">Bill Amount:</label>
+							<div class="col-sm-9">
+								<input type="text" class="col-xs-10 col-sm-5" 	
+									th:field="*{groamt}" required="required"   id="groamt" readonly="readonly"
+					oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"
+					></input>
+								<span class="text-danger"
+									th:if="${#fields.hasErrors('groamt')}"
+									th:errors="groamt"></span>
+							</div>
+						</div>
+
+		
+			
+		
+								<div class="form-group">
+							<label for="Tels"
+								class="col-sm-3 control-label no-padding-right">Net Amount:</label>
+							<div class="col-sm-9">
+								<input type="text" class="col-xs-10 col-sm-5" 	
+									th:field="*{invamt}" required="required"   id="invamt" readonly="readonly"
+					oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"
+					></input>
+								<span class="text-danger"
+									th:if="${#fields.hasErrors('invamt')}"
+									th:errors="invamt"></span>
+							</div>
+						</div>
+		
+				<div class="form-group">
+							<label for="Tels"
+								class="col-sm-3 control-label no-padding-right">Description:</label>
+							<div class="col-sm-9">
+								<input  type="text" class="col-xs-10 col-sm-5" 	  
+									th:field="*{description}"  ></input>
+								<span class="text-danger"
+									th:if="${#fields.hasErrors('description')}"
+									th:errors="description"></span>
+							</div>
+						</div>
+						
+						
+
+
+	
+
+								<div class="form-group">
+							<label for="Tels"  
+								class="col-sm-3 control-label no-padding-right">Discount:</label>
+							<div class="col-sm-9">
+								<input type="text" class="col-xs-10 col-sm-5" 	  onkeyup="calculate()" id="dedamt"
+									th:field="*{dedamt}" 
+					oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"
+					></input>
+								<span class="text-danger"
+									th:if="${#fields.hasErrors('dedamt')}"
+									th:errors="dedamt"></span>
+							</div>
+						</div>
+						
+
+
+
+
+								<div class="form-group">
+							<label for="Tels"
+								class="col-sm-3 control-label no-padding-right">Add Amt:</label>
+							<div class="col-sm-9">
+								<input  type="text" class="col-xs-10 col-sm-5" 	
+									th:field="*{addamt}"   onkeyup="calculate()" id="addamt"
+					oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"
+					></input>
+								<span class="text-danger"
+									th:if="${#fields.hasErrors('addamt')}"
+									th:errors="addamt"></span>
+							</div>
+						</div>
+						
+						
+						<!-- 
+								<div class="form-group">
+							<label for="Tels"
+								class="col-sm-3 control-label no-padding-right">Net Bill Amount:</label>
+							<div class="col-sm-9">
+								<input type="text" class="col-xs-10 col-sm-5" 	 
+									th:field="*{netamount}" required="required"  id="netamount" readonly="readonly"
+					oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"
+					></input>
+								<span class="text-danger"
+									th:if="${#fields.hasErrors('netamount')}"
+									th:errors="netamount"></span>
+							</div>
+						</div>
+						 -->
+						
+
+
+
+						
+
+
+			<div class="clearfix form-actions">
+				<div class="col-md-offset-3 col-md-9">
+			
+			 <input    th:field="*{visitid}"   />
+			 
+			 <input   th:field="*{referenceid}" /> 
+			
+			 
+			 <input   th:field="*{code}" /> 
+			 
+			 
+			 <input  th:field="*{itemmeasureid}" /> 
+			 
+			 <input  th:field="*{unitid}" /> 
+			 
+			 
+			 <input type="text"  th:field="*{qty}" /> 
+			 
+			 
+		
+			
+					<button class="btn btn-primary" type="submit">
+						<i class="ace-icon fa fa-check bigger-110"></i> Add
+					</button>
+
+					<button class="btn btn-danger" type="reset">
+						<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+					</button>
+				</div>
+			</div>
+</div>
+		</form>
+
+	</div>
+</div>
+
+
+<script> 
+//<![CDATA[
+           
+           /*
+function myFunction()
+	{
+
+	 $('#referenceid').val("");
+	 $('#code').val("");
+	 $('#itemmeasureid').val("");
+ 	 $('#billamount').val("");
+ 	 
+ 	 $('#qty').val("");
+	 $('#itemid').val("");
+	 $('#unitid').val("");
+	 
+	 $('patienthmopackageid').val("");
+	 $('#billSchemeId').val("");
+
+var   a=$('#globalItemId').val().split("##");
+var   b=$('#patienthmopackageId').val().split("##");
+	
+var p1 = $('#globalItemId');  
+var p2 = $('#patienthmopackageId'); 
+	
+//  if (txt.val() != null && txt.val() != '') 
+		  
+if ( p1.val() !=''  && p2.val() !='')
+
+$.ajax({
+	type : "GET",
+
+	
+	
+url : '/../'+ window.location.pathname.split('/')[1] + '/invoice/getamount/' + $('#visitId').val() +"/"+ a[0] + "/" + a[1]+ "/" +a[2]+ "/" + encodeURIComponent(a[3]) + "/" + encodeURIComponent(a[4]) + "/" + encodeURIComponent(a[5]) + "/" + encodeURIComponent(a[6]) + "/" + b[0]+ "/" + b[1] ,
+//	url : '/../'+ window.location.pathname.split('/')[1] + '/invoice/getamount/" + a[0] + "/" 2/3/4/2/5" ,
+	
+	beforeSend : function() {
+		$.gritter.add({
+			title : "Progress...",
+			text : "Fetching Amount",
+			time : 3000
+		});
+	},
+	success : function(html) {
+
+		// return referenceid + "##" + code + "##" + itemmeasureid + "##" + URLDecoder.decode(qty) + "##" + amt + "##" + itemid + "##" + unitid +"##"  + "##" + billschemeid ;
+		 
+		 
+	//alert (html);
+
+		 stuffstr=html.split("##");
+		 
+		 $('#referenceid').val(stuffstr[0]);
+		 $('#code').val(stuffstr[1]);
+		
+		 if (stuffstr[2]=='null'){
+			
+			 $('#itemmeasureid').val("0");
+		 }
+			 else
+			{	 
+		 $('#itemmeasureid').val(stuffstr[2]);
+			}
+		 
+		 $('#qty').val(stuffstr[3]);
+		 
+		 $('#billamount').val(stuffstr[4]);
+		
+		 $('#itemid').val(stuffstr[5]);
+		 
+		
+		
+		//alert("**");
+		//alert(stuffstr[6]);
+		if (stuffstr[6]=='null'){
+			$('#unitid').val('');
+			
+		//	$("#unitid").attr("readonly", false);
+			//alert("jj");
+			$('#unitid option:not(:selected)').attr('disabled', false);
+			
+		}
+		else
+			{
+			$('#unitid').val(stuffstr[6]);
+			
+			//$("#unitid").attr("readonly", "readonly");
+			$('#unitid option:not(:selected)').attr('disabled', true);
+			
+			//$('#fieldName').attr("disabled","disabled") 
+			//$('#fieldName').attr("disabled", true) 
+			//$('#fieldName').attr("readonly", true) 
+			
+			}
+		$('#patienthmopackageid').val(stuffstr[7]);
+
+		$('#billSchemeId').val(stuffstr[8]);
+		
+		
+		$.gritter.add({
+			title : "Success!",
+			text : "Amount fetched",
+			time : 4000
+		});
+	},
+	error : function() {
+		$.gritter.add({
+			title : "Error!",
+			text : "Error fetching Amount",
+			time : 4000
+		});
+
+	}
+});
+
+}
+	}
+	
+	*/
+	
+function calculate()
+{
+	
+	var groamt = Number($('#groamt').val());
+	var dedamt = Number($('#dedamt').val());
+	var addamt = Number($('#addamt').val());
+	
+	var d = parseFloat('0' + groamt) + parseFloat('0' + addamt) - parseFloat('0' + dedamt);
+
+if (d<0) 
+	{
+	
+	d=0.00;
+	}
+	
+	$('#invamt').val(d);
+		
+	
+}
+
+
+$(document).ready(function() {
+});
+
+//]]>
+</script>

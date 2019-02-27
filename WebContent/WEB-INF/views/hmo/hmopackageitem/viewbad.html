@@ -1,0 +1,333 @@
+<div class="page-header">
+	<h1>
+	
+	
+		HMO Package View <small> <i
+			class="ace-icon fa fa-angle-double-right"></i> 
+		
+			<span
+		th:text="${hmopackageitem.name}"></span>
+									</small>
+	</h1>
+</div>
+<div class="row">
+	
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard</a> 
+		<a class="btn btn-xs btn-primary" th:href="@{/hmo/add}"><i
+			class="fa fa-plus-circle"></i> Add HMO </a>
+	<a class="btn btn-xs btn-primary" th:href="@{/hmo/index}"><i
+			class="fa fa-plus-circle"></i> View HMO List </a>
+			
+	
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<div class="tabbable">
+
+			<ul class="nav nav-tabs padding-18">
+				<li class="active"><a data-toggle="tab" href="#home"> <i 
+						class="green ace-icon fa fa-pencil-square-o bigger-120"></i>
+						HMO PACKAGE ITEM Details
+				</a></li>
+				
+				
+				<li class=""><a data-toggle="tab" href="#hmopackagecontentitem"> <i
+						class="brown ace-icon fa fa-user bigger-120"> </i> HMO Package Item Setup
+				</a></li>
+				
+			</ul>
+			<div class="tab-content no-border padding-24">
+				<div id="home" class="tab-pane active">
+					<div class="row">
+						<div class="col-xs-12 col-sm-3 col-md-3 center">
+							<div class="space space-4"></div>
+							
+						</div>
+						<!-- /.col -->
+	
+						<div class="col-xs-12 col-sm-9">
+								<div class="profile-info-row">
+								<div class="profile-info-name">HMO Package Item</div>
+
+								<div class="profile-info-value">
+									<span th:text="${hmopackageitem.name}"></span>
+								</div>
+							</div>
+                         <div class="col-xs-12 col-sm-9">
+								<div class="profile-info-row">
+								<div class="profile-info-name">Description</div>
+
+								<div class="profile-info-value">
+									<span th:text="${hmopackageitem.description}"></span>
+								</div>
+							</div>
+
+							<div class="profile-info-row">
+								<div class="profile-info-name">HMO Status</div>
+
+								<div class="profile-info-value">
+									<span th:text="${hmopackageitem.hmostatus.name}"></span>
+								</div>
+							</div>		
+							
+							<div class="hr hr-8 dotted"></div>
+						</div>
+						<!-- /.col -->
+					</div>
+				</div>
+			
+				
+				<!-- item -->
+				
+			<div id="hmopackagecontentitem" class="tab-pane">
+					<div class="row">
+						<div class="col-md-12">
+							<a class="btn btn-danger btn-xs" data-toggle="modal"
+								href="#hmopackageitemcontentadd"> <i
+								class="ace-icon fa fa-plus bigger-110"></i> Add HMO Content Item
+							</a>
+							<div class="hr hr-18 dotted hr-double"></div>
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="table-header">Setup	Details</div>
+									<table id="dTablePack"
+										class="table table-striped table-bordered table-hover">
+										<thead>
+											<tr>
+												<th>Bill Item</th>
+												
+												<th>Description</th>
+												<th>Spending Limit</th>
+												<th>Status</th>
+												
+	
+
+												<th><i class="glyphicon glyphicon-asterisk"></i></th>
+											</tr>
+										</thead>
+										<tbody th:if="${hmopackageitem.hmopackageItemContent != null}">
+										
+											<tr th:each="hpo : ${hmopackageitem.hmopackageItemContent}">
+												
+												
+												<td th:text="${hpo.billitem.name}"></td>
+												<td th:text="${hpo.description}"></td>
+											<td th:text="${hpo.spendingLimit}"></td>
+												<td th:text="${hpo.hmostatus.name}"></td>
+												
+												
+												<td>
+												
+												
+												
+												
+												<a class="btn btn-xs btn-warning tooltips"
+													title="Edit"
+													th:href="@{/hmo/hmopackageitemcontent/edit/{id} (id=${hpi.id})}">
+														<i class="fa fa-edit"></i>
+												</a>
+												<!-- 
+												<a class="btn btn-xs btn-primary tooltips"
+					         	 title="Manage" 		  
+					        	th:href="@{/hmo/hmopackageitem/view/{id} (id=${hpi.id}) }"> <i
+							class="fa fa-eye"></i>
+					</a>  -->
+												
+												<!-- 
+												<a class="btn btn-xs btn-danger tooltips"
+													title="delete"   th:id="${'examresultsetup' + exam.id}"  onclick="return Confirm(this.id)" 
+													th:href="@{/system/examinationresultsetup/delete/{id} (id=${exam.id})}">
+														<i class="fa fa-trash-o"></i>
+												</a>  --> 
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+
+
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<!-- //.item -->
+			
+			
+						
+			
+			
+			
+			
+			
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script>
+	jQuery(function($) {
+		var oTable1 = $('#dTablePack').dataTable({
+			bAutoWidth : false,
+			"aoColumns" : [ { "bSortable" : true
+				
+			}, null, null,null,null ]
+		});
+
+	});
+</script>
+
+ 
+<div class="modal fade" id="hmopackageitemcontentadd">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		
+			<!-- Modal heading -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title"> HMO Package Content </h4>
+			</div>
+			<!-- // Modal heading END -->
+			<!-- Modal body -->
+			<div class="modal-body">
+				<div class="row">
+					<!-- Dropzone -->
+					<div class="space space-4"></div>
+					<form role="form" class="form-horizontal" method="POST"
+						th:object="${hmopackcontentForm}"  th:action="@{/hmo/hmopackageitemcontent/save}" 
+onsubmit="return mybillingitem()">
+		                 
+					 	<div class="form-group">
+				<label for="description"
+					class="col-sm-3 control-label no-padding-right">
+					 Billing Item</label>
+				<div class="col-sm-9">
+				
+				<input type="text" class="col-xs-10 col-sm-8"  	placeholder="Billing Item" 
+									  id="billingitem"   required="required" disabled="disabled" />  
+									  
+								<input type="text" class="col-xs-5 col-sm-5"  placeholder="Billing Item" 
+									th:field="*{billingitem_id}"  hidden="hidden" />  
+									
+		<a	class="btn btn-xs btn-success" onclick ="myOpenbillingitemwin()"> <i	class="glyphicon glyphicon-list"></i> Search</a>
+			
+									
+									 <span class="text-danger"
+						th:if="${#fields.hasErrors('billingitem_id')}"
+						th:errors="*{billingitem_id}"></span>
+				</div>
+			</div>
+			
+			
+			
+				
+			
+			
+			
+			
+
+			
+			
+			<div class="form-group">
+				<label for="title" class="col-sm-3 control-label no-padding-right">Status:</label>
+				<div class="col-sm-9">
+					<select th:field="*{status_id}" class="col-xs-10 col-sm-5">
+					
+						<option th:each="s: ${hmostatus}" th:value="${s.hmostatus_id}"
+							th:text="${s.name}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('status_id')}"
+						th:errors="*{status_id}"></span>
+				</div>
+			</div>
+						
+
+						<div class="clearfix form-actions">
+							<div class="col-md-offset-3 col-md-9">
+								<input  type="hidden" th:field="*{hmopackageitem_id}" />
+								<button class="btn btn-primary" type="submit">
+									<i class="ace-icon fa fa-check bigger-110"></i> Add
+								</button>
+
+								<button class="btn btn-danger" type="reset">
+									<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+								</button>
+							</div>
+						</div>
+
+
+
+
+
+
+					</form>
+					<!-- /.Dropzone -->
+					<!-- /.col -->
+				</div>
+			</div>
+		</div>
+		</div>
+		
+	</div>
+	
+	
+	
+	
+
+
+
+
+
+
+<script>
+
+	
+	function Confirm(id)
+	{
+	
+		
+	    job=confirm("Are you sure to delete ?");
+	    if(job!=true)
+	    {
+	        return false;
+	    }
+		
+	};
+
+	
+	
+	function myOpenbillingitemwin() {
+		   var myWindow = window.open("/EMR/search/billingitemwin", "MsgWindow", "width=550, height=600");
+		  //  myWindow.document.write("<p>This window's name is: " + myWindow.name + "</p>");
+		    myWindow.focus();
+		    return false
+		  
+		};
+		
+	
+	function mybillingitem()
+	{
+		
+		if ( $('#billingitem').val()=='' )
+			
+			{
+			
+			alert("Billing Item cannot be empty");
+			return false;	
+			}
+		
+		
+		
+	};
+	
+	
+</script>
+

@@ -1,0 +1,292 @@
+
+
+<div class="page-header">
+	<h1>
+		INVENTORY OFFICE MANAGEMENT<small> <i
+			class="ace-icon fa fa-angle-double-right"></i> REQUEST MODULE <i
+			class="ace-icon fa fa-angle-double-right"></i>Process Point Request
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard </a> <a
+			class="btn btn-xs btn-primary" th:href="@{/inventory/request }">
+			<i class="fa fa-plus-circle"></i>Point Requests
+		</a>
+	</div>
+</div>
+<p></p>
+
+<style>
+.table {
+	margin: auto;
+}
+
+ul.req-stat-ul li {
+	list-style-type: none;
+	float: left;
+	margin-right: 10px;
+}
+
+ul.req-stat-ul li:first {
+	margin-right: 30px;
+	font-weight: bold;
+}
+<!--
+-->
+</style>
+
+<div class="col-xs-12">
+	<!-- View contents here -->
+
+	
+	<div class="well well-sm">
+		<ul>
+			<li>Request ID:&nbsp;<span class="text-danger"
+				th:text="${pointRequest.requestBatchId}">Request ID</span>
+			</li>
+			
+			<li>Request Status:&nbsp;<span
+				 class="text-danger" th:text="${T(org.calminfotech.inventory.utils.PointRequestStatus).fromCode(pointRequest.requestStatus)}">Request
+				Status</span>
+			</li>
+			
+			<li>Unit: &nbsp; <span class="text-danger"
+				th:text="${pointRequest.unit?.unitName}">Unit</span>
+			</li>
+			
+					
+			<li>Point:&nbsp; <span class="text-danger"
+				th:text="${pointRequest.visitWorkflowPoint?.name}"> Point</span>
+			</li>
+						
+			<li><span class=""> Department:&nbsp;<span
+					class="text-danger" th:text="${pointRequest.department?.departmentName}">
+						Department</span>
+			</span></li>
+			
+	
+			<li><span class=""> Date Of Request:&nbsp;<span
+					class="text-danger" th:text="${pointRequest.requestDate}">Date Of Request</span>
+			</span></li>
+
+		</ul>
+	</div>
+	
+
+	<div class="col-md-offset-0 col-xs-11">
+
+		<table class="table" id="container"
+			th:with="pointRequestEnum=${T(org.calminfotech.inventory.utils.PointRequestStatus)}">
+			<thead>
+				<tr>
+					<th>S/No:</th>
+					<th>Global Item:</th>
+					<th>Unit Of Measure:</th>
+					<th>Qty Requested:</th>
+					<th>Qty Available:</th>
+					<th>Qty Approved:</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+
+				<th:block th:if="${pointRequest !=null}">
+
+					<tr
+						th:each=" pointRequestLine,iterStat : ${pointRequest.pointRequestLines}">
+						<form role="form" method="POST"
+							th:action="@{/inventory/request/line_request/approve}"
+							th:object="${processPointRequestForm}">
+							<td th:text="${iterStat.count}">S/No</td>
+							<td class="" th:text="${pointRequestLine.globalItem?.name}">GlobalItem</td>
+							<td class=""
+								th:text="${pointRequestLine.globalUnitofMeasure?.searchname}">Unit
+								Of Measure</td>
+							<td class="" th:text="${pointRequestLine.quantity}">Qty
+								Requested</td>
+							<td class="" th:text="${pointRequestLine.quantityAvailable}">Qty
+								Available</td>
+							<td class=""><input
+								th:value="${pointRequestLine.quantityApproved}"
+								th:name="qty_approved" type="text"
+								class="col-xs-7 col-sm-8 input-qty-approved"
+								placeholder="Enter Quantity" /></td>
+							<td>
+								<div class="hidden-sm hidden-xs action-buttons">
+
+									<th:block
+										th:if="${pointRequestLine.requestStatus == pointRequestEnum.Pending.code}">
+										<button class="btn btn-xs btn-primary tooltip-info"
+											type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i>Approve
+										</button>
+										<a class="btn btn-xs btn-primary tooltip-info"
+											data-rel="tooltip"
+											th:href="@{/inventory/request/line_request/issue/{id}/batch/{bid}(id=${pointRequestLine.id},bid=${pointRequest.id}) }"><i
+											class="fa fa-plus-circle"></i>Issue </a>
+										<a class="btn btn-xs btn-primary tooltip-info"
+											data-rel="tooltip"
+											th:href="@{/inventory/request/line_request/disapprove/{id}/batch/{bid}(id=${pointRequestLine.id},bid=${pointRequest.id}) }"><i
+											class="fa fa-plus-circle"></i>Disapprove </a>
+									</th:block>
+									<th:block
+										th:if="${pointRequestLine.requestStatus == pointRequestEnum.Approved.code}">
+										<button disabled="disabled"
+											class="btn btn-xs btn-primary tooltip-info" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i>Approve
+										</button>
+										<a class="btn btn-xs btn-primary tooltip-info"
+											data-rel="tooltip"
+											th:href="@{/inventory/request/line_request/issue/{id}/batch/{bid}(id=${pointRequestLine.id},bid=${pointRequest.id}) }"><i
+											class="fa fa-plus-circle"></i>Issue </a>
+										<a class="btn btn-xs btn-primary tooltip-info"
+											data-rel="tooltip"
+											th:href="@{/inventory/request/line_request/disapprove/{id}/batch/{bid}(id=${pointRequestLine.id},bid=${pointRequest.id}) }"><i
+											class="fa fa-plus-circle"></i>Disapprove </a>
+									</th:block>
+									<th:block
+										th:if="${pointRequestLine.requestStatus == pointRequestEnum.Issued.code}">
+										<button disabled="disabled"
+											class="btn btn-xs btn-primary tooltip-info" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i>Approve
+										</button>
+										<button disabled="disabled"
+											class="btn btn-xs btn-primary tooltip-info" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i>Issue
+										</button>
+										<button disabled="disabled"
+											class="btn btn-xs btn-primary tooltip-info" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i>Disapprove
+										</button>
+									</th:block>
+									<a class="btn btn-xs btn-primary tooltip-info"
+										data-rel="tooltip"
+										th:href="@{/inventory/request/line_request/delete/{id}/batch/{bid}(id=${pointRequestLine.id},bid=${pointRequest.id}) }"><i
+										class="fa fa-plus-circle"></i>Delete </a>
+								</div>
+							</td> <input type="hidden" name="request_line_id"
+								th:value="${pointRequestLine.id}" /> <input type="hidden"
+								name="request_id" th:value="${pointRequest.id}" />
+
+						</form>
+					</tr>
+				</th:block>
+
+			</tbody>
+		</table>
+		<div class="hr hr-18 dotted hr-double"></div>
+
+
+		<div class="hr hr-18 dotted hr-double"></div>
+		<div class="clearfix form-actions">
+			<div class="col-md-offset-4 col-md-9">
+				<button class="btn btn-primary" type="submit">
+					<i class="ace-icon fa fa-check bigger-110"></i> Submit
+				</button>
+				<a class="btn btn-danger" th:href="@{/inventory/request }"> <i
+					class="fa fa-plus-circle bigger-110"></i>Cancel
+				</a>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+
+<script>
+	$(document).ready(function() {
+
+		/*	$('.input-qty-approved').change(function(event) {
+				$this = $(this);
+				alert($this.attr('name') + "/' + $this.val())
+			});*/
+
+	});
+</script>
+
+<th:block th:if="${pageDelete}">
+
+	<div id="modal-table" class="modal fade" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header no-padding">
+					<div class="table-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">
+							<span class="white">&times;</span>
+						</button>
+						Are you sure you want to delete this record?:
+					</div>
+				</div>
+				<form role="form" class="form-horizontal" method="POST">
+
+					<div class="modal-body no-padding">
+						<table
+							class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
+							<tbody>
+
+								<tr>
+									<td>Global Item:</td>
+									<td th:text="${pointRequestLine.globalItem.name}">Global
+										Item:</td>
+								</tr>
+
+								<tr>
+									<td>Unit Of Measure:</td>
+									<td
+										th:text="${pointRequestLine.globalUnitofMeasure.searchname}">Unit
+										Of Measure</td>
+								</tr>
+
+								<tr>
+									<td>Quantity:</td>
+									<td th:text="${pointRequestLine.quantity}">Quantity</td>
+								</tr>
+
+							</tbody>
+						</table>
+					</div>
+					<div class="clearfix form-actions">
+						<div class="col-md-offset-3 col-md-9">
+							<input type="hidden" name="requestLineId"
+								th:value="${pointRequestLine.id}" /> <input type="hidden"
+								name="requestBatchId" th:value="${pointRequest.id}" />
+							<button class="btn btn-primary" type="submit">
+								<i class="ace-icon fa fa-check bigger-110"></i> Confirm Delete
+							</button>
+
+							<button type="button" class="btn btn-danger" data-dismiss="modal"
+								aria-hidden="true">
+								<i class="fa fa-plus-circle"></i>Cancel
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+
+	<a id="modal_view" href="#modal-table" role="button" class="green"
+		data-toggle="modal"> </a>
+	<script type="text/javascript">
+		//height
+		jQuery(function($) {
+			$('#modal_view').click();
+		});
+	</script>
+
+</th:block>
+
+
+
+
+
+
+

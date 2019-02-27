@@ -1,0 +1,20 @@
+
+<div class="page-header">
+	<h1>Delete an Ailment classification</h1>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+		<p>
+			You are about to delete an classification: <strong th:text="${classification.name}">name</strong>.
+			Are you sure?
+		</p>
+
+		<form role="form" method="POST" th:object="${cForm}">
+			<input type="hidden" th:field="*{id}" />
+			<button class="btn btn-danger" type="submit">
+				<i class="ace-icon fa fa-check bigger-110"></i> Yes
+			</button>
+			<a class="btn btn-primary" th:href="@{/system/medical/components/ailments/classifications}">No</a>
+		</form>
+	</div>
+</div>

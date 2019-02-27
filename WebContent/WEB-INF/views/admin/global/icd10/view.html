@@ -1,0 +1,77 @@
+<div class="page-header">
+	<h1>
+		View <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			View an allergy
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/admin}"><i
+			class="fa fa-home"></i> Admin Dashboard</a> <a
+			class="btn btn-xs btn-primary"
+			th:href="@{/admin/global/icd10/index}"><i
+			class="fa fa-list"></i> All </a> <a
+			class="btn btn-xs btn-warning"
+			th:href="@{/admin/global/icd10/edit/{id} (id=${diseases.diseaseId})}"><i
+			class="fa fa-edit"></i> Edit allergy</a> <a class="btn btn-xs btn-danger"
+			th:href="@{/admin/global/icd10/delete/{id} (id=${diseases.diseaseId})}"><i
+			class="fa fa-trash-o"></i> Delete allergy</a>
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+	<table id="dTable"
+			class="table table-striped table-bordered table-hover">
+		<!-- View contents here -->
+		<!-- Table heading -->
+		<thead>
+		<tr>
+			<th>Name</th>
+			<th>Description</th>
+			<th>Create Date</th>
+			<th><i class="glyphicon glyphicon-asterisk"></i></th>
+		</tr>
+		</thead>
+		
+		
+		
+	<tbody>
+			<tr th:each="diseases : ${diseases}">
+			<td th:text="${diseases.name}"> Name</td>
+			
+			
+			<td
+				th:text="${diseases.description == null || diseases.description == ''} ? 'Not set': ${diseases.description}"> Description</td>
+			
+			
+			<td
+				th:text="${ #dates.format(diseases.createDate, 'MMM dd, yyyy HH:mm')}"> Created date</td>
+				
+		<td>
+		<!-- 
+		 <a class="btn btn-xs btn-primary tooltips"
+						title="view disease details"
+						th:href="@{/admin/global/category/view/{id} (id=${diseases.diseaseId}) }">
+							<i class="fa fa-eye"></i>
+					</a> -->
+					
+					<a class="btn btn-xs btn-warning tooltips"
+						title="edit disease details"
+						th:href="@{/admin/global/icd10/edit/{id}(id=${diseases.diseaseId}) }">
+							<i class="fa fa-edit"></i>
+					</a> <a class="btn btn-xs btn-danger tooltips"
+						title="Delete disease details"
+						th:href="@{/admin/global/icd10/delete/{id}(id=${diseases.diseaseId}) }">
+							<i class="fa fa-trash-o"></i>
+					</a></td>
+			
+		</tr>
+	</tbody>
+		</table>
+	</div>
+</div>

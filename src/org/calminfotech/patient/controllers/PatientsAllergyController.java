@@ -1,0 +1,296 @@
+package org.calminfotech.patient.controllers;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.sql.Blob;
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+
+import org.apache.commons.io.IOUtils;
+
+import org.calminfotech.hmo.boInterface.HmoBo;
+import org.calminfotech.hmo.boInterface.HmoPackageBo;
+import org.calminfotech.hmo.models.Hmo;
+import org.calminfotech.hmo.models.HmoPackage;
+
+
+
+import org.calminfotech.patient.boInterface.PatientAllergyBo;
+import org.calminfotech.patient.boInterface.PatientBo;
+import org.calminfotech.patient.boInterface.PatientBo;
+import org.calminfotech.patient.boInterface.PatientDocumentBo;
+import org.calminfotech.patient.boInterface.PatientDocumentBo;
+import org.calminfotech.patient.boInterface.PatientHmoBo;
+import org.hibernate.SessionFactory;
+
+import org.calminfotech.patient.boInterface.PatientPaymentOptionBo;
+import org.calminfotech.patient.boInterface.PatientSearchBo;
+
+import org.calminfotech.patient.forms.PatientAllergyForm;
+import org.calminfotech.patient.forms.PatientDocumentForm;
+import org.calminfotech.patient.forms.PatientEmergencyForm;
+import org.calminfotech.patient.forms.PatientForm;
+import org.calminfotech.patient.forms.PatientHmoForm;
+import org.calminfotech.patient.forms.PatientImageForm;
+import org.calminfotech.patient.forms.PatientPaymentOptionForm;
+import org.calminfotech.patient.forms.PatientAllergyForm;
+import org.calminfotech.patient.forms.PatientSearchForm;
+import org.calminfotech.patient.models.Patient;
+import org.calminfotech.patient.models.PatientAllergy;
+import org.calminfotech.patient.models.PatientAllergy;
+
+import org.calminfotech.patient.models.PatientDocument;
+
+import org.calminfotech.patient.models.PatientHmo;
+
+import org.calminfotech.patient.models.PatientPaymentOption;
+
+import org.calminfotech.patient.utils.PatientCodeGenerator;
+
+import org.calminfotech.system.boInterface.GlobalItemBo;
+import org.calminfotech.system.boInterface.LanguageBo;
+import org.calminfotech.system.boInterface.TitleBo;
+import org.calminfotech.billing.boInterface.BillSchemeBo;
+import org.calminfotech.billing.boInterface.BillSchemeItemBo;
+
+import org.calminfotech.system.boInterface.PointBo;
+import org.calminfotech.system.forms.AllergyForm;
+
+import org.calminfotech.system.models.Diseases;
+import org.calminfotech.system.models.GlobalItem;
+
+import org.calminfotech.system.models.Title;
+
+import org.calminfotech.user.utils.UserIdentity;
+import org.calminfotech.utils.Alert;
+
+import org.calminfotech.utils.AllergyList;
+import org.calminfotech.utils.Auditor;
+import org.calminfotech.utils.BloodgenotypeList;
+import org.calminfotech.utils.BloodgroupList;
+import org.calminfotech.utils.DateUtils;
+import org.calminfotech.utils.GenderList;
+import org.calminfotech.utils.LifestatusList;
+import org.calminfotech.utils.LocalGovernmentAreaList;
+import org.calminfotech.utils.MaritalStatusList;
+import org.calminfotech.utils.OccupationList;
+import org.calminfotech.utils.SearchUtility;
+import org.calminfotech.utils.StatesList;
+import org.calminfotech.utils.SurgicalList;
+import org.calminfotech.utils.annotations.Layout;
+import org.calminfotech.utils.models.Allergywinsearch;
+import org.calminfotech.utils.models.LocalGovernmentArea;
+import org.calminfotech.utils.models.MaritalStatus;
+import org.calminfotech.utils.models.State;
+import org.hibernate.Hibernate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import javax.servlet.http.HttpSession;
+@Controller
+@RequestMapping(value = "/patients")
+public class PatientsAllergyController {
+	
+	
+	
+	@Autowired
+	private PatientBo patientBo;
+
+	
+
+	@Autowired
+	private Alert alert;
+
+	@Autowired
+	private UserIdentity userIdentity;
+
+	@Autowired
+	private Auditor auditor;
+
+	@Autowired
+	private LocalGovernmentAreaList lgasList;
+
+	@Autowired
+	private MaritalStatusList MSList;
+
+	@Autowired
+	private OccupationList occuList;
+	
+	
+	@Autowired
+	private BloodgroupList groupList;
+	
+	@Autowired
+	private BloodgenotypeList genoList;
+	
+	@Autowired
+	private LifestatusList lifeList;
+	
+
+	@Autowired
+	private AllergyList allergyBo;
+
+	
+	@Autowired
+	private StatesList stateList;
+	
+	@Autowired
+	private HmoBo hmoBo;
+	
+	/*@Autowired
+	private EhmoBo ehmoBo;*/
+
+//	@Autowired
+	//private SearchUtility patientallergyBo;
+
+
+
+
+	
+	@Autowired
+	private PatientPaymentOptionBo patientPaymentOptionBo;
+
+	@Autowired
+	private PatientSearchBo searchBo;
+
+
+	
+	
+	@Autowired
+	private PatientCodeGenerator patientCodeGenerator;
+	
+	@Autowired
+	private PatientAllergyBo patientAllergyBo;
+	
+	@RequestMapping(value = "/allergy/save", method = RequestMethod.POST)
+	@Layout("layouts/datatable")
+	public String addAllergy(
+			@ModelAttribute("allergyForm") PatientAllergyForm allergyForm,
+			BindingResult result, Model model, 
+			RedirectAttributes redirectAttributes) {
+	
+		PatientAllergy  patientallergy = new PatientAllergy();
+		Patient patient= patientBo.getPatientById(allergyForm.getPatientId());
+		
+		Allergywinsearch allergy= allergyBo.getAllergyById(allergyForm.getAllergyId());
+		
+	
+		patientallergy.setPatient(patient);
+		patientallergy.setAllergy(allergy);
+		patientallergy.setReaction(allergyForm.getReaction());
+		patientallergy.setCreatedBy(userIdentity.getUsername());
+		patientallergy.setCreateDate(new GregorianCalendar().getTime());
+		
+		patientallergy.setOrganisation(userIdentity.getOrganisation());
+		
+		patientAllergyBo.save(patientallergy);
+		
+		
+		return "redirect:/patients/view/" + patientallergy.getPatient().getPatientId();
+	
+	}
+
+	@RequestMapping(value = "/allergy/edit/{id}", method = RequestMethod.GET)
+	@Layout("layouts/datatable")
+	public String geteditAllergy(@PathVariable("id") Integer id,
+			@ModelAttribute("allergyForm") PatientAllergyForm allergyForm,
+			BindingResult result, Model model, 
+			RedirectAttributes redirectAttributes,HttpServletRequest request) {
+
+		PatientAllergy  patientallergy = patientAllergyBo.getPatientAllergyById(id);
+		//List<Allergytype> allergytype = allergytypeBo.fetchAll();
+		
+		allergyForm.setId(patientallergy.getId());
+		allergyForm.setAllergyId(patientallergy.getAllergy().getId());
+		
+		//allergyForm.setAllergyname(patientallergy.getAllergy().getName());
+		allergyForm.setReaction(patientallergy.getReaction());
+		
+		model.addAttribute("allergyname",patientallergy.getAllergy().getName());
+	
+		this.auditor.before(request, "Patient Allergy", allergyForm);
+		return "customers/patientsallergy/edit";
+	
+	}
+
+	
+
+	@RequestMapping(value = "/allergy/edit/{id}", method = RequestMethod.POST)
+	@Layout("layouts/datatable")
+	public String posteditAllergy( @PathVariable("id") Integer id,
+			@ModelAttribute("allergyForm") PatientAllergyForm allergyForm,
+			BindingResult result, Model model, 
+			RedirectAttributes redirectAttributes, HttpServletRequest request) {
+	
+		PatientAllergy  patientallergy = patientAllergyBo.getPatientAllergyById(id);
+		
+	//	patientallergy.setPatient(patientBo.getPatientById(allergyForm.getPatientId());
+		
+	
+		patientallergy.setAllergy(allergyBo.getAllergyById(allergyForm.getAllergyId()));
+		patientallergy.setReaction(allergyForm.getReaction());
+		patientallergy.setModifiedBy(userIdentity.getUsername());
+		
+		patientallergy.setModifiedDate(new GregorianCalendar().getTime());
+		patientAllergyBo.update(patientallergy);
+				
+		alert.setAlert(redirectAttributes, Alert.SUCCESS,
+				"Success! Allergy  Updated");
+		this.auditor.after(request, "Patient Allergy", allergyForm,
+				this.userIdentity.getUsername(),id);
+		
+		return "redirect:/patients/view/" + patientallergy.getPatient().getPatientId();
+	
+	}
+
+	
+	
+	@RequestMapping(value = "/allergy/delete/{id}", method = RequestMethod.GET)
+	public String confirmDelete(@PathVariable("id") Integer id,
+	@ModelAttribute("allergyForm") PatientAllergyForm allergyForm,
+	RedirectAttributes redirectAttributes) {
+		
+		PatientAllergy  patientallergy = patientAllergyBo.getPatientAllergyById(id);
+		
+		patientallergy.setModifiedBy(userIdentity.getUsername());
+		patientallergy.setModifiedDate(new GregorianCalendar().getTime());
+		patientallergy.setDeleted(true);
+		patientAllergyBo.update(patientallergy);
+		
+		alert.setAlert(redirectAttributes, Alert.SUCCESS,
+				"Success! Allergy  deleted");
+		return "redirect:/patients/view/" + patientallergy.getPatient().getPatientId();
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+}

@@ -1,0 +1,242 @@
+<div class="page-header">
+	<h1>
+		Edit <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			Admission Period
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-primary" th:href="@{/visits/queue}"><i
+			class="fa fa-list"></i>Prescribed Admission </a>
+			
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+								<form role="form" class="form-horizontal" method="POST"
+						th:object="${admissionperiodForm}"   >
+<!-- onsubmit="return mypersonnel() -->
+	
+	 <!-- th:action="@{/admissionperiod/save}" -->
+	 <div class="form-group">
+	<label for="datetimepicker1" class="col-sm-3 control-label no-padding-right">Start Date / Time </label>
+
+													
+	<div class="col-sm-5">
+	
+	<div class="input-group">
+	<input id="datetimepicker1" type="text" class="form-control" th:field="*{start_date}"  required="required"/>
+	
+	<span class="input-group-addon">
+	<i class="fa fa-clock-o bigger-110"></i>
+	</span>
+	
+	</div>
+	
+	
+	<span class="text-danger" th:if="${#fields.hasErrors('start_date')}" th:errors="start_date"></span>
+	</div>
+
+		</div>
+		
+		<!-- 
+		
+		<div class="col-sm-9">
+							<select class="col-xs-10 col-sm-12" th:id="unitId" onchange="myProcesshr(this.id)"
+								th:field="*{hrunit_id}" required="true" >
+								 <option value="">Select..</option>
+								<option th:each="u: ${unitcategory}" th:value="${u.categoryId}"
+									th:text="${u.categoryName}"></option>
+							</select> <span class="text-danger"
+								th:if="${#fields.hasErrors('hrunit_id')}"
+								th:errors="*{hrunit_id}"></span>
+						</div>
+					</div>
+		
+		
+		
+		-->
+		
+		
+		<div class="form-group">
+				<label for="gender" class="col-sm-3 control-label no-padding-right"> Room Name:</label>
+				<div class="col-sm-9">
+					<select th:field="*{bedroom_id}" class="col-xs-10 col-sm-10" onchange="myFunction()" required="required" id="bedroom_id">
+						<option value="">Select..</option>
+						<option th:each="b: ${bedroom}" th:value="${b.categoryId}"
+							th:text="${b.bedroomitem.GlobalitemName}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('bedroom_id')}"
+						th:errors="*{bedroom_id}"></span>
+				</div>
+			</div>
+			
+			
+			<div class="form-group">
+						<label for="userId" class="col-sm-3 control-label no-padding-left">Bed :</label>
+						<div class="col-sm-9">
+							<select class="col-xs-10 col-sm-10" th:field="*{bed_id}"
+								th:id="bed_id" required="required">
+							<option value="">Select..</option>
+						<option th:each="b: ${bedlist}" th:value="${b.bedId}"
+							th:text="${b.beditem.GlobalitemName}"></option>
+								
+							</select> <span class="text-danger" th:if="${#fields.hasErrors('bed_id')}"
+								th:errors="*{bed_id}"></span>
+						</div>
+					</div> 	
+	
+			
+			
+			
+	<!-- 
+		
+		<div class="form-group">
+				<label for="gender" class="col-sm-3 control-label no-padding-right"> Unit Name:</label>
+				<div class="col-sm-9">
+					<select th:field="*{hrunit_id}" class="col-xs-10 col-sm-10"  required="required" id="hrunit_id">
+								 <option value="">Select..</option>
+								<option th:each="u: ${unitcategory}" th:value="${u.categoryId}"
+									th:text="${u.categoryName}"></option>
+							</select> <span class="text-danger"
+								th:if="${#fields.hasErrors('hrunit_id')}"
+								th:errors="*{hrunit_id}"></span>
+						</div>
+					</div>
+	
+
+		
+		
+		
+		
+		 
+	 <div class="form-group">
+	<label for="datetimepicker1" class="col-sm-3 control-label no-padding-right">End Date / Time </label>
+
+													
+	<div class="col-sm-5">
+	
+	<div class="input-group">
+	<input id="datetimepicker2" type="text" class="form-control" th:field="*{end_date}"/>
+	
+	<span class="input-group-addon">
+	<i class="fa fa-clock-o bigger-110"></i>
+	</span>
+	
+	</div>
+	
+	
+	<span class="text-danger" th:if="${#fields.hasErrors('end_date')}" th:errors="end_date"></span>
+	</div>
+
+		</div>
+		
+	-->	
+		
+		
+		
+						<div class="clearfix form-actions">
+							<div class="col-md-offset-3 col-md-9">
+								<input  type="hidden" th:field="*{prescribedadmissionId}" />
+								<button class="btn btn-primary" type="submit">
+									<i class="ace-icon fa fa-check bigger-110"></i> Update
+								</button>
+
+								<button class="btn btn-danger" type="reset">
+									<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+								</button>
+							</div>
+						</div>
+
+
+
+
+
+
+					</form>
+			
+			
+	</div>
+</div>
+
+
+ <script type="text/javascript">
+     $(function () {
+         $('#datetimepicker1').datetimepicker({
+			autoclose : true,
+			format: 'YYYY-MM-DD HH:mm',
+			todayHighlight : true
+		});
+     });
+ </script>
+<script> 
+
+
+function myOpenpersonnelwin() {
+	   var myWindow = window.open("/EMR/search/personnelsearchwin", "MsgWindow", "width=550, height=600");
+	  //  myWindow.document.write("<p>This window's name is: " + myWindow.name + "</p>");
+	    myWindow.focus();
+	    return false
+	  
+	}
+
+function mypersonnel()
+{
+	
+	if ( $('#personnelname').val()=='' )
+		
+		{
+		
+		alert("Personnel Name cannot be empty");
+		return false;	
+		}
+	
+	
+	
+}
+
+
+
+function myFunction()
+{
+            	
+				$.ajax({
+					type : "GET",
+					url : '/../'+ window.location.pathname.split('/')[1] + '/admissionperiod/fetchbedbyroom/"	+ $('#bedroom_id').val(),
+					beforeSend : function() {
+						 $.gritter.add({
+							title : "Progress...",
+							text : "Fetching Bed...",
+							time : 3000
+						}); 
+					},
+					success : function(html) {
+						$("#bed_id").html(html);
+						 $.gritter.add({
+							title : "Success!",
+							text : "Bed Fetched",
+							time : 4000
+						}); 
+					},
+					error : function() {
+						$.gritter.add({
+							title : "Error!",
+							text : "Error fetching Bed",
+							time : 4000
+						});
+
+					}
+			});
+		
+	}
+
+
+</script>
+

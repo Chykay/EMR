@@ -1,0 +1,406 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+    "-//Hibernate/Hibernate Configuration DTD//EN"
+    "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory>
+	<!-- Customer Model -->
+	
+	
+	
+		<mapping class="org.calminfotech.patient.models.Patient" />
+		<mapping class="org.calminfotech.patient.models.PatientRelated" />
+		<mapping class="org.calminfotech.patient.models.PatientDocument" />
+		<mapping class="org.calminfotech.patient.models.CasPatient" />
+	    <mapping class="org.calminfotech.patient.models.PatientHmo" /> 
+        <mapping class="org.calminfotech.patient.models.PatientAllergy" />
+		
+		<mapping class="org.calminfotech.patient.models.PatientHistory" />
+		<mapping class="org.calminfotech.patient.models.PatientFamilyHistory" />
+		<!-- <mapping class="org.calminfotech.patient.models.PatientPaymentOption" /> -->
+		<mapping class="org.calminfotech.patient.models.PatientAddress" />
+		<mapping class="org.calminfotech.patient.models.PatientTelephone" />
+		<mapping class="org.calminfotech.patient.models.PatientNok" />
+		
+	    <!-- Consultations Model 
+		 <mapping class="org.calminfotech.consultation.models.VisitConsultation" />
+		 -->
+	
+
+		<!-- 
+		<mapping class="org.calminfotech.consultation.models.RescheduledVisit" />
+		<mapping class="org.calminfotech.consultation.models.VitalQueue" />
+		
+		<mapping class="org.calminfotech.consultation.models.PaymentItem" />
+		<mapping class="org.calminfotech.consultation.models.PaymentItemType" />
+		<mapping class="org.calminfotech.consultation.models.VisitConsultationPrescriptionMeasurement" />
+		
+		<mapping class="org.calminfotech.consultation.models.VisitDoctor" />
+		<mapping class="org.calminfotech.consultation.models.VisitConsultationExamination" />
+	<mapping class="org.calminfotech.consultation.models.VisitConsultationExaminationDocument" />
+		<mapping class="org.calminfotech.consultation.models.VisitConsultationDiseases" />
+		<mapping class="org.calminfotech.consultation.models.VisitLaboratory" />
+		<mapping class="org.calminfotech.consultation.models.VisitPayment" />
+		<mapping class="org.calminfotech.consultation.models.VisitPharmacy" />
+		<mapping class="org.calminfotech.consultation.models.VisitConsultationPresentingComplaint" />
+		<mapping class="org.calminfotech.consultation.models.VisitConsultationNote" />
+
+		<mapping class="org.calminfotech.consultation.models.AdmissionFollowup" />
+		<mapping class="org.calminfotech.consultation.models.VisitConsultationPrescribedLabtest"/>
+		<mapping class="org.calminfotech.consultation.models.VisitConsultationInjectionSpread" />
+		<mapping class="org.calminfotech.consultation.models.VisitConsultationPrescribedDrug" />
+		<mapping class="org.calminfotech.consultation.models.VisitConsultationPrescribedSurgery" />
+		<mapping class="org.calminfotech.consultation.models.VisitConsultationPrescribedXray" />
+		<mapping class="org.calminfotech.consultation.models.VisitConsultationPrescribedAdmission" />
+		<mapping class="org.calminfotech.consultation.models.VisitConsultationReferral" />
+		 -->
+		
+		
+		
+		<!-- HMO 
+		
+		
+		<mapping class="org.calminfotech.hmo.models.HmoType" />
+		
+	-->
+	
+		<mapping class="org.calminfotech.hmo.models.HmoPackage" />
+		<mapping class="org.calminfotech.hmo.models.Hmo" />
+    	<mapping class="org.calminfotech.hmo.models.HmoPackageItem" />
+    	
+    	<mapping class="org.calminfotech.hmo.models.HmoPackageItemContent" />
+    	
+
+
+
+<!-- HR Unit
+	
+      
+        <mapping class="org.calminfotech.hrunit.models.ClockinLog_sec"/>
+        
+         <mapping class="org.calminfotech.hrunit.models.ClockAssignment_sec"/>
+         
+        
+        
+         <mapping class="org.calminfotech.hrunit.models.GetClockingUnitProc_sec"/>
+        <mapping class="org.calminfotech.hrunit.models.Designation"/>
+        -->
+        
+        <mapping class="org.calminfotech.hrunit.models.ClockinLog"/>
+        <mapping class="org.calminfotech.hrunit.models.ClockAssignment"/>
+        <mapping class="org.calminfotech.hrunit.models.GetClockingUnitProc"/>
+        
+        <mapping class="org.calminfotech.hrunit.models.StaffRegistration"/>
+        <mapping class="org.calminfotech.hrunit.models.HrUnitView"/>
+        <mapping class="org.calminfotech.hrunit.models.Hrunit"/>
+        <mapping class="org.calminfotech.hrunit.models.HrunitCategoryVw"/>
+        <mapping class="org.calminfotech.hrunit.models.Staffgroup"/>
+        <mapping class="org.calminfotech.hrunit.models.Staffgroupranking"/>
+        <mapping class="org.calminfotech.hrunit.models.Staffgroupspecialization"/>
+        <mapping class="org.calminfotech.hrunit.models.Staffemploymentmode"/>
+         
+        
+        <mapping class="org.calminfotech.hrunit.models.HrunitType"/>
+        
+        
+        <mapping class="org.calminfotech.hrunit.models.HrunitCategory"/>
+        <mapping class="org.calminfotech.hrunit.models.HrunitCategoryList"/>
+        
+
+<!-- System Model -->
+	<mapping class="org.calminfotech.system.models.GlobalUnitofMeasure"/>
+   
+    
+         <mapping class="org.calminfotech.system.models.Point"/>
+		<mapping class="org.calminfotech.system.models.Setting" />
+		
+		<mapping class="org.calminfotech.system.models.OrganisationDirector"/>
+		<mapping class="org.calminfotech.system.models.OrganisationDocument" />
+		<mapping class="org.calminfotech.system.models.OrganisationCategory" />
+		<mapping class="org.calminfotech.system.models.OrganisationType"/>
+		<mapping class="org.calminfotech.system.models.OrganisationCategoryVw" />
+		<mapping class="org.calminfotech.system.models.OrganisationCategoryList" />
+        <mapping class="org.calminfotech.system.models.SysSettings" />
+		<mapping class="org.calminfotech.system.models.LoginSection" />
+		<mapping class="org.calminfotech.system.models.LoginSectionPoint" />
+		<mapping class="org.calminfotech.system.models.Resource" />
+		<mapping class="org.calminfotech.system.models.ConsultationStatus" />
+		<mapping class="org.calminfotech.system.models.GlobalItemReorder"/>
+		<mapping class="org.calminfotech.system.models.GlobalItemUnitofMeasure"/>
+		<mapping class="org.calminfotech.system.models.GlobalItemUnitofMeasureVw"/>
+		<mapping class="org.calminfotech.system.models.GlobalItemRanking"/>
+		<mapping class="org.calminfotech.system.models.GlobalItemCategory" />
+		<mapping class="org.calminfotech.system.models.GlobalItemCategoryList" />
+		<mapping class="org.calminfotech.system.models.GlobalItemPoint"/>
+			<mapping class="org.calminfotech.system.models.GlobalItem" />
+			
+			
+		<mapping class="org.calminfotech.system.models.Audit"/>
+		<mapping class="org.calminfotech.system.models.AssetCategory"/>
+		<mapping class="org.calminfotech.system.models.Assets"/>
+		<mapping class="org.calminfotech.system.models.GlobalItemType"/>
+		<mapping class="org.calminfotech.system.models.GlobalItemCategoryVw" />
+		<mapping class="org.calminfotech.system.models.GetsettingsAssignmentProc" />
+		<mapping class="org.calminfotech.system.models.GetsettingsDeleteProc" />
+		<mapping class="org.calminfotech.system.models.SettingsAssignment" />
+		<mapping class="org.calminfotech.system.models.SettingsAssignment_log" />
+		<mapping class="org.calminfotech.system.models.Drugadmin_log" />
+		<mapping class="org.calminfotech.system.models.Drugdispense_log" />
+		
+		
+		
+			<mapping class="org.calminfotech.system.models.GlobalItemKind"/>
+		
+		
+		
+		<mapping class="org.calminfotech.utils.models.Lifestatus" />
+		<mapping class="org.calminfotech.utils.models.Occupation" />
+        <mapping class="org.calminfotech.utils.models.Bloodgenotype" />
+		<mapping class="org.calminfotech.utils.models.Bloodgroup" />
+		<mapping class="org.calminfotech.utils.models.Language" /> 
+		<mapping class="org.calminfotech.utils.models.Addresstype" /> 
+		<mapping class="org.calminfotech.utils.models.Phonetype" /> 
+		<mapping class="org.calminfotech.utils.models.Historytype" />
+		<mapping class="org.calminfotech.utils.models.Patientsearch" />
+		
+		<mapping class="org.calminfotech.utils.models.Bedstatus" /> 
+    <mapping class="org.calminfotech.utils.models.Staffstatus" /> 
+    <mapping class="org.calminfotech.utils.models.Invoicestatus" /> 
+     <mapping class="org.calminfotech.utils.models.Paymode" /> 
+   <mapping class="org.calminfotech.utils.models.Admissionperiodstatus" />
+    <mapping class="org.calminfotech.utils.models.Drugstatus" /> 
+    <mapping class="org.calminfotech.utils.models.Billschemestatus" />
+	<mapping class="org.calminfotech.utils.models.Allergywinsearch" /> 
+
+      <mapping class="org.calminfotech.utils.models.Patientwinsearch" /> 
+
+     <mapping class="org.calminfotech.utils.models.Personnelwinsearch" /> 
+     <mapping class="org.calminfotech.utils.models.Laboratorywinsearch" />
+      <mapping class="org.calminfotech.utils.models.NotificationEmail" />
+		<mapping class="org.calminfotech.utils.models.NotificationSMS" />
+		<mapping class="org.calminfotech.utils.models.Bank" />
+		<mapping class="org.calminfotech.utils.models.Country" />
+		<mapping class="org.calminfotech.utils.models.State" />
+		<mapping class="org.calminfotech.utils.models.LocalGovernmentArea" />
+		<mapping class="org.calminfotech.utils.models.InputType" />
+		
+			
+	<mapping class="org.calminfotech.utils.models.Prescribedstatus"/>
+			
+		<mapping class="org.calminfotech.utils.models.MaritalStatus" />
+		<mapping class="org.calminfotech.utils.models.Country" />
+		<mapping class="org.calminfotech.utils.models.Count" />
+		
+		<mapping class="org.calminfotech.utils.models.Symptom" />
+		<mapping class="org.calminfotech.utils.models.SurgicalProcedures" />
+		<mapping class="org.calminfotech.utils.models.Relationshiptype" />
+	   <mapping class="org.calminfotech.utils.models.Hmostatus" />
+	   <mapping class="org.calminfotech.utils.models.Period" />
+	    <mapping class="org.calminfotech.utils.models.Billingwinsearch" />
+	   
+    
+	   <mapping class="org.calminfotech.utils.models.Examinationwinsearch" />
+   <mapping class="org.calminfotech.utils.models.Diseaseswinsearch" />
+  <mapping class="org.calminfotech.utils.models.Surgerywinsearch" />
+    <mapping class="org.calminfotech.utils.models.Drugwinsearch" />
+ <mapping class="org.calminfotech.utils.models.Xraywinsearch" />
+  <mapping class="org.calminfotech.utils.models.Inventorywinsearch" />
+  
+  <mapping class="org.calminfotech.utils.models.Admissionwinsearch" />
+	  <mapping class="org.calminfotech.utils.models.Billingwinsearch" />
+		
+		<mapping class="org.calminfotech.system.models.ItemVw" />
+		<mapping class="org.calminfotech.system.models.OrganisationCompany" />
+	   <mapping class="org.calminfotech.system.models.Organisation" />
+		<mapping class="org.calminfotech.system.models.Title" />
+		<mapping class="org.calminfotech.system.models.Gender" />
+		<mapping class="org.calminfotech.system.models.Point"/>
+		<mapping class="org.calminfotech.system.models.GetUnitDetails"/>
+		<mapping class="org.calminfotech.system.models.GetPointDetails"/>
+		<mapping class="org.calminfotech.system.models.Diseases" />
+		<mapping class="org.calminfotech.system.models.DiseasesCategory" />
+		<mapping class="org.calminfotech.system.models.DiseasesType"/>
+		<mapping class="org.calminfotech.system.models.DiseasesCategoryVw"/>
+		<mapping class="org.calminfotech.system.models.DiseasesCategoryList" />
+		
+		<mapping class="org.calminfotech.system.models.Surgery" />
+		<mapping class="org.calminfotech.system.models.SurgeryCategory" />
+		<mapping class="org.calminfotech.system.models.SurgeryType"/>
+		<mapping class="org.calminfotech.system.models.SurgeryCategoryVw" />
+		<mapping class="org.calminfotech.system.models.SurgeryCategoryList" />
+		<!--
+		
+		  <mapping class="org.calminfotech.system.models.Drugs" /> 
+		<mapping class="org.calminfotech.system.models.DrugsCategory" />
+		<mapping class="org.calminfotech.system.models.DrugsType"/>
+		<mapping class="org.calminfotech.system.models.DrugsCategoryVw" />
+		<mapping class="org.calminfotech.system.models.DrugsCategoryList" />
+		-->
+		
+		 <mapping class="org.calminfotech.system.models.Bed" /> 
+		<mapping class="org.calminfotech.system.models.BedCategory" />
+		<mapping class="org.calminfotech.system.models.BedType"/>
+		<mapping class="org.calminfotech.system.models.BedCategoryVw" />
+		<mapping class="org.calminfotech.system.models.BedCategoryList" />
+		
+		<mapping class="org.calminfotech.system.models.Xray" />
+		<mapping class="org.calminfotech.system.models.XrayCategory" />
+		<mapping class="org.calminfotech.system.models.XrayType"/>
+		<mapping class="org.calminfotech.system.models.XrayCategoryVw" />
+		<mapping class="org.calminfotech.system.models.XrayCategoryList" />
+		
+		
+		
+		
+		<mapping class="org.calminfotech.system.models.Examination" />
+		<mapping class="org.calminfotech.system.models.ExaminationCategory" />
+		<mapping class="org.calminfotech.system.models.ExaminationType"/>
+		<mapping class="org.calminfotech.system.models.ExaminationCategoryVw" />
+		<mapping class="org.calminfotech.system.models.ExaminationCategoryList" />
+		<mapping class="org.calminfotech.system.models.ExaminationResultSetup" />
+		
+		<mapping class="org.calminfotech.system.models.Labtest" />
+		<mapping class="org.calminfotech.system.models.LabtestCategory" />
+		<mapping class="org.calminfotech.system.models.LabtestType"/>
+		<mapping class="org.calminfotech.system.models.LabtestCategoryVw" />
+		<mapping class="org.calminfotech.system.models.LabtestCategoryList" />
+		
+		
+	<!--  Laboratory
+	
+	   
+		<mapping class="org.calminfotech.laboratory.models.LabResultSetup"/>
+		<mapping class="org.calminfotech.laboratory.models.GetLaboratoryTestProc"/>
+		<mapping class="org.calminfotech.laboratory.models.LabResult"/>
+		<mapping class="org.calminfotech.laboratory.models.LabTestDocument"/>
+		<mapping class="org.calminfotech.laboratory.models.LabDeleteResult"/>
+	-->
+		<!-- Xray 
+		<mapping class="org.calminfotech.xray.models.XrayDocument"/>
+		<mapping class="org.calminfotech.xray.models.XrayPersonnel"/>
+		-->
+		
+	
+	
+		<!-- Surgery 
+		<mapping class="org.calminfotech.surgery.models.SurgeryDocument"/>
+		<mapping class="org.calminfotech.surgery.models.SurgeryPersonnel"/>
+		-->
+		
+		
+	
+		<!-- Views -->
+		
+	
+      
+		
+		<!-- User Model -->
+
+		<mapping class="org.calminfotech.user.models.Group" />
+		<mapping class="org.calminfotech.user.models.GroupFormField" />
+		<mapping class="org.calminfotech.user.models.GroupFormFieldMultiOption" />
+		
+		<mapping class="org.calminfotech.user.models.User" />
+	 	<mapping class="org.calminfotech.user.models.Role" />
+	 	<mapping class="org.calminfotech.user.models.RoleAssignment" />
+	 	<mapping class="org.calminfotech.user.models.UserAssignment" />
+	 		<mapping class="org.calminfotech.user.models.RoleAssignment_log" />
+	 	<mapping class="org.calminfotech.user.models.UserAssignment_log" />
+	 	<mapping class="org.calminfotech.user.models.Authorization" />
+		<mapping class="org.calminfotech.user.models.Permission" />
+		<mapping class="org.calminfotech.user.models.UserAction" />
+		<mapping class="org.calminfotech.user.models.UserProfile" />
+		<mapping class="org.calminfotech.user.models.UserActivation" />
+		<mapping class="org.calminfotech.user.models.SecurityQuestion" />
+		<mapping class="org.calminfotech.user.models.UserLoginSession" />
+		<mapping class="org.calminfotech.user.models.UserSecurityQuestions" />
+		<mapping class="org.calminfotech.user.models.UserType" />
+		
+		
+		<mapping class="org.calminfotech.user.models.OnlineUser" />
+        <mapping class="org.calminfotech.user.models.GetRoleAssignmentProc" />
+		<mapping class="org.calminfotech.user.models.GetUserAssignmentProc" />
+		
+		<mapping class="org.calminfotech.user.models.UserClockOut" />
+	
+		<!-- /.User Model -->
+		
+		
+	
+		<!-- Billing and Inventory
+		
+		<mapping class="org.calminfotech.billing.models.BillScheme" />
+		<mapping class="org.calminfotech.billing.models.BillSchemeItemPrice" />
+		<mapping class="org.calminfotech.billing.models.BillSchemeInvoice" />
+		<mapping class="org.calminfotech.billing.models.BillInvoice" />
+		<mapping class="org.calminfotech.billing.models.BillingInvoice" />
+			<mapping class="org.calminfotech.billing.models.BillInvoicePayment" />
+		<mapping class="org.calminfotech.billing.models.BillInvoiceChargedto" />
+		<mapping class="org.calminfotech.billing.models.BillSchemeItem" />
+		<mapping class="org.calminfotech.billing.models.BillSchemeMeasurePrice" />
+		<mapping class="org.calminfotech.billing.models.BillSchemeRankingPrice" />
+		
+		
+		<mapping class="org.calminfotech.billing.models.GetBillItem" />
+		
+		<mapping class="org.calminfotech.billing.models.GetCurrentDaterange" />
+		
+		<mapping class="org.calminfotech.billing.models.GetItemUnitmeasureHmo" />
+		
+		<mapping class="org.calminfotech.billing.models.GetPatientHmo" />
+		
+	
+		<mapping class="org.calminfotech.billing.models.GetBillAmount" />
+			<mapping class="org.calminfotech.billing.models.Invoice" />
+			<mapping class="org.calminfotech.billing.models.Chargeto" />
+		
+		<mapping class="org.calminfotech.inventory.models.LineItem" />
+		<mapping class="org.calminfotech.inventory.models.Common" />
+		<mapping class="org.calminfotech.inventory.models.Vendor" />
+		<mapping class="org.calminfotech.inventory.models.StockIn" />
+		<mapping class="org.calminfotech.inventory.models.StockInLine" />
+			<mapping class="org.calminfotech.inventory.models.Storeissue_log" />
+	
+			<mapping class="org.calminfotech.inventory.models.StockCurrentBalance" />
+			<mapping class="org.calminfotech.inventory.models.PointStockCurrentBalance" />
+		<mapping class="org.calminfotech.inventory.models.StockOpeningBalance" />
+		<mapping class="org.calminfotech.inventory.models.PointRequestLine" />
+		<mapping class="org.calminfotech.inventory.models.PointRequest" />
+		<mapping class="org.calminfotech.inventory.models.Order" />
+		<mapping class="org.calminfotech.inventory.models.OrderLine" />
+		<mapping class="org.calminfotech.inventory.models.PointStockIn" />
+		<mapping class="org.calminfotech.inventory.models.PointStockInLine"/>
+		<mapping class="org.calminfotech.inventory.models.PointStockOpeningBalance" />
+		
+	-->
+	
+		<!-- visit queue stuffs --> 
+		<mapping class="org.calminfotech.visitqueue.models.VisitClerkingStatus"/>
+		<mapping class="org.calminfotech.visitqueue.models.VisitStatus" />
+		<mapping class="org.calminfotech.visitqueue.models.PriorityStatus" />
+		
+	    <mapping class="org.calminfotech.visitqueue.models.AppointmentSchedule" />
+		<mapping class="org.calminfotech.visitqueue.models.Visit" />
+			<mapping class="org.calminfotech.visitqueue.models.PriorityStatus" />
+			
+		<mapping class="org.calminfotech.visitqueue.models.VisitTimeline" />
+		<mapping class="org.calminfotech.visitqueue.models.VisitWorkflowPoint" />
+	<!-- 
+		 <mapping class="org.calminfotech.vitals.models.Vitals" />
+		 <mapping class="org.calminfotech.vitals.models.Vitales" />
+		 
+		-->
+		
+		<!-- LEDGER--> 
+		 <mapping class="org.calminfotech.ledger.models.BalSheetCat" />
+		 <mapping class="org.calminfotech.ledger.models.CommonLedger" />
+		 <mapping class="org.calminfotech.ledger.models.GeneralLedger" />
+		 <mapping class="org.calminfotech.ledger.models.GenLedgBalance" />
+		 <mapping class="org.calminfotech.ledger.models.GLPosting" />
+		 <mapping class="org.calminfotech.ledger.models.LedgerType" />
+		 <mapping class="org.calminfotech.ledger.models.PostCode" />
+		 <mapping class="org.calminfotech.ledger.models.TotalingAccount" />
+		 <mapping class="org.calminfotech.ledger.models.GPermission" />
+	</session-factory>
+</hibernate-configuration>

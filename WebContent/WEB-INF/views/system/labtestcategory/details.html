@@ -1,0 +1,460 @@
+<div class="page-header">
+	<h1>
+		LABORATORY <small> <i
+			class="ace-icon fa fa-angle-double-right"></i> LABORATORY MANAGEMENT
+		</small>
+	</h1>
+</div>
+<div class="row">
+<div class="col-xs-12">
+
+
+										<ul class="nav nav-tabs" id="myTab">
+											<li class="active">
+												<a data-toggle="tab" href="#home">
+													<!-- <i class="green ace-icon fa fa-home bigger-120"></i> -->
+													Details
+												</a>
+											</li>
+
+											<li>
+												<a data-toggle="tab" href="#profile">
+													Lab Test
+													<!-- <span class="badge badge-danger">4</span> -->
+												</a>
+											</li>
+
+										</ul>
+
+										<div class="tab-content">
+											<div id="home" class="tab-pane in active">
+								
+											<div class="page-header">
+											
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		
+
+	</div>
+</div>
+
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<!-- User Profile -->
+		<div id="user-profile-2" class="user-profile">
+			<div class="tabbable">
+				
+				<div class="tab-content no-border padding-24">
+					<div id="home" class="tab-pane in active">
+						<div class="row">
+
+							<div class="col-xs-12 col-sm-9">
+							
+							<div class="">
+								<h1><i class="glyphicon glyphicon-list"></i>
+									Category Details <small> 
+										
+									</small>
+								</h1> 
+							</div>
+								
+								<div class="profile-info-row">
+									<div class="profile-info-name">Category ID</div>
+
+									<div class="profile-info-value">
+										<span th:text="${lab.id}">alexdoe</span>
+									</div>
+								</div>
+
+
+								
+									<div class="profile-info-row">
+										<div class="profile-info-name">Category Name</div>
+
+										<div class="profile-info-value">
+											<span th:text="${lab.categoryName}">alexdoe</span>
+										</div>
+									</div>
+									
+									<div class="profile-info-row">
+										<div class="profile-info-name">Description</div>
+
+										<div class="profile-info-value">
+											<span th:text="${lab.description}">alexdoe</span>
+										</div>
+									</div>
+
+								
+
+								<div class="hr hr-8 dotted"></div>
+							
+							<!-- /.col -->
+						</div> 
+						<!-- /.row -->
+
+						<div class="space-20"></div>
+					</div>
+					<!-- /#home -->
+				</div>
+			</div>
+		</div>
+
+		<!-- Profile Ends  -->
+		<!-- End View contents here -->
+	</div>
+</div>
+
+<!-- <div class="modal fade" id="modal-simple">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			
+		</div>
+	</div>
+</div> -->
+</div>
+											
+											</div>
+
+											<div id="profile" class="tab-pane">
+												<div class="page-header">
+	<h1>
+		Tests <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			Laboratory Test
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-list-alt"></i> System Dashboard</a>
+			<!-- 
+			<a class="btn btn-xs btn-info" th:href="@{/system/labtest/addtest}"><i
+			class="fa fa-list-alt"></i> Add Test</a> -->
+			<a href="#modal-simple" data-toggle="modal" class="btn btn-xs btn-info"> Add Test </a>
+			 <!-- <a class="btn btn-xs btn-info"
+			th:href="@{/consultations/visits/consultant}"><i
+			class="fa fa-list-alt"></i> Consultant Point</a> --><!-- <a
+			class="btn btn-xs btn-info" th:href="@{/consultations/visits/laboratory}"><i
+			class="fa fa-list-alt"></i> Lab Point</a> --> <!-- <a class="btn btn-xs btn-info"
+			th:href="@{/consultations/visits/pharmacy}"><i class="fa fa-home"></i>Pharmacy Point</a> -->
+	</div>
+</div>
+<div class="hr hr-18 dotted hr-double"></div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<div class="table-header"></div>
+											
+		<table id="dTable"
+			class="table table-striped table-bordered table-hover">
+			<!-- Table heading -->
+			<thead>
+				<tr>
+					<th>ID</th>
+<!-- 					<th>Category ID</th>
+ -->					<th>Test Name</th>
+					<th>Description</th>
+					<!-- <th>Created on</th>
+					<th>Created By</th> -->
+					<th>Edit<!-- <i class="glyphicon glyphicon-asterisk"></i> --></th>
+					<th>Manage<!-- <i class="glyphicon glyphicon-asterisk"></i>--></th>
+				</tr>
+			</thead>
+			<!-- // Table heading END -->
+			<!-- Table body -->
+			<tbody>
+				<tr th:each="c : ${labTest}">
+					<td th:text="${c.id}"></td>
+					<td th:text="${c.name}"></td>
+					<td th:text="${c.description}"></td>
+					<!-- <td th:text="${c.createdBy}"></td>
+					<td th:text="${c.createdDate}"></td> -->
+					<td><a class="btn btn-warning btn-xs"
+						title="edit"
+						th:href="@{/system/labtest/showeditlabtest/{id}(id=${c.id})}"> <i class="fa fa-edit"></i>
+					</a></td>
+					<td><a class="btn btn-xs btn-info" th:href="@{/system/labresult/resultdetail/{id}(id=${c.id})}"><i
+					class="fa fa-list-alt"></i></a></td>
+					<!--  <a class="btn btn-xs btn-warning tooltips"
+						title="edit visit details"
+						th:href="@{/consultations/visits/edit/{id}(id=${c.id}) }"> <i
+							class="fa fa-edit"></i>
+					</a> <a class="btn btn-xs btn-danger tooltips"
+						title="Delete visit details"
+						th:href="@{/consultations/visits/delete/{id}(id=${c.id}) }"> <i
+							class="fa fa-trash-o"></i>
+					</a></td> -->
+				<!-- 	 <td><a class="btn btn-xs btn-primary tooltips" th:id="${c.id}"
+						href="#modal-simple" data-toggle="modal"> <i
+							class="fa fa-eye"></i>
+					</a></td>  -->
+					 <!--  <td><a class="btn btn-xs btn-primary tooltips" th:id="${c.id}"
+						th:href="'#' + ${c.id}" data-toggle="modal"> <i
+							class="fa fa-eye"></i>
+					</a></td>  -->
+					
+					<!-- modal starts hereeeee -->
+		<!-- <div  th:id="${c.id}" class="modal fade" >
+	<div class="modal-dialog">
+		<div class="modal-content">
+			Form
+			<div class="form-group" th:text="QueueId"></div>
+			<div class="form-group" th:text="LabTest"></div>
+				<div class="form-group" th:each="lb : ${c.visitLabTest}" th:text="${c.code} + '&nbsp;' + ${lb.test.name} "></div>
+					
+			<div class="form-group" ></div>
+			<div class="form-group"></div>
+			<div class="form-group" ></div>
+			<div class="form-group" ></div>
+			<div class="form-group" ></div>
+			<div class="form-group"></div>
+			<div class="form-group"></div>
+			<div class="form-group"></div>
+			
+				
+				
+				
+				
+		</div>
+	</div>
+</div> -->
+					
+					
+					<!--  modal endddddddddddddd -->
+				</tr>
+			</tbody>
+			<!-- // Table body END -->
+		</table>
+		<!-- /. End view content here -->
+	</div>
+</div>
+
+	
+
+<script>
+	jQuery(function($) {
+		var oTable1 = $('#dTable').dataTable({
+			bAutoWidth : false,
+			"aoColumns" : [ {
+				"bSortable" : true
+			}, null, null, null, null, null, {
+				"bSortable" : false
+			} ]
+
+		//,
+		//"sScrollY": "200px",
+		//"bPaginate": false,
+
+		//"sScrollX": "100%",
+		//"sScrollXInner": "120%",
+		//"bScrollCollapse": true,
+		//Note: if you are applying horizontal scrolling (sScrollX) on a ".table-bordered"
+		//you may want to wrap the table inside a "div.dataTables_borderWrap" element
+
+		//"iDisplayLength": 50
+		});
+
+	});
+</script>
+											</div>
+
+										</div>
+									
+
+									<!-- /section:elements.tab.position -->
+</div>	
+</div>
+	
+
+<script>
+	jQuery(function($) {
+		var oTable1 = $('#dTable').dataTable({
+			bAutoWidth : false,
+			"aoColumns" : [ {
+				"bSortable" : true
+			}, null, null, null, null, {
+				"bSortable" : false
+			} ]
+
+		//,
+		//"sScrollY": "200px",
+		//"bPaginate": false,
+
+		//"sScrollX": "100%",
+		//"sScrollXInner": "120%",
+		//"bScrollCollapse": true,
+		//Note: if you are applying horizontal scrolling (sScrollX) on a ".table-bordered"
+		//you may want to wrap the table inside a "div.dataTables_borderWrap" element
+
+		//"iDisplayLength": 50
+		});
+
+	});
+</script>
+<div class="modal fade" id="modal-simple">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- Form -->
+					
+				
+					<form role="form" class="form-horizontal" method="POST"
+						th:action="@{/system/labtest/savetest}"
+									th:object="${labTestForm}">
+								
+				<!-- Modal heading -->
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title">New Laboratory Test</h4>
+				</div>
+				<!-- // Modal heading END -->
+				<!-- Modal body -->
+				<div class="modal-body">
+					
+	<input type="hidden" th:field="*{id}" />
+
+<div class="row">
+									 <div class="form-group">
+									<label for="name" class="col-sm-3 control-label no-padding-right">Category ID:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder=""
+						th:field="*{catId}" required="required" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('name')}"
+						th:errors="*{name}"></span>
+				</div>
+								</div>
+								<!-- <div class="form-group">
+							<label class="col-sm-2 control-label"> Test Category </label>
+							<div class="col-sm-4">
+								<select th:field = "*{catId}" class="form-control">
+										  <option value="0">select category</option>
+										  <option th:each = "p : ${list}" 
+										  		  th:value = "${p.id}"  
+										  		  th:text= "${p.categoryName}"> </option>										 										  
+									</select>
+							</div>
+
+						</div> -->
+
+</div>
+
+<div class="space-2"></div>
+		<div class="space-2"></div>
+
+							<div class="row">
+									<div class="form-group">
+									<label for="name" class="col-sm-3 control-label no-padding-right">Test:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder=""
+						th:field="*{name}" required="required" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('name')}"
+						th:errors="*{name}"></span>
+				</div>
+								</div>
+
+</div>
+	<div class="space-2"></div>
+		<div class="space-2"></div>
+		
+	<div class="row">
+									 <div class="form-group">
+									<label for="name" class="col-sm-3 control-label no-padding-right">Minimum Value</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder=""
+						th:field="*{minimumValue}" required="required" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('minimumValue')}"
+						th:errors="*{minimumValue}"></span>
+				</div>
+			</div>
+								
+</div>
+
+<div class="space-2"></div>
+		<div class="space-2"></div>
+		
+		<div class="row">
+									 <div class="form-group">
+									<label for="name" class="col-sm-3 control-label no-padding-right">Maximmum Value</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder=""
+						th:field="*{maximumValue}" required="required" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('maximumValue')}"
+						th:errors="*{maximumValue}"></span>
+				</div>
+			</div>
+								
+</div>
+		
+<div class="space-2"></div>
+		<div class="space-2"></div>
+		
+		
+		<div class="row">
+									 <div class="form-group">
+									<label for="name" class="col-sm-3 control-label no-padding-right">Lab Measure</label>
+				<div class="col-sm-9">
+					<!-- <input type="text" class="col-xs-10 col-sm-5" placeholder=""
+						th:field="*{resultName}" required="required" /> --> 
+						<select th:field = "*{labMeasure}" class="form-control">
+										  <option value="0">select</option>
+										  <option th:each = "u : ${unitM}" 
+										  		  th:value = "${u.unit_of_measure}"  
+										  		  th:text= "${u.unit_of_measure}"> </option>										 										  
+									</select><span
+						class="text-danger" th:if="${#fields.hasErrors('labMeasure')}"
+						th:errors="*{labMeasure}"></span>
+				</div>
+			</div>
+								
+</div>
+		
+				
+			
+					<div class="row">
+		<div class="form-group">
+									<label for="surname" class="col-sm-3 control-label no-padding-right">Description:</label>
+				<div class="col-sm-9">
+					<textarea rows="4" cols="45" placeholder="" id="form-field-11" th:field="*{description}" required="required">Enter text here...
+							</textarea><span
+						class="text-danger" th:if="${#fields.hasErrors('description')}"
+						th:errors="*{description}"></span>
+				</div>
+								</div>
+
+</div>
+		<div class="space-2"></div>
+			<div class="space-2"></div>
+			
+				</div>
+				<!-- // Modal body END -->
+
+				<!-- Modal footer -->
+				<div class="modal-footer">
+				
+				
+						
+						<input type="hidden" th:field="*{id}" />
+										<button class="btn btn-primary" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i> Add
+										</button>
+
+										<button class="btn btn-danger" type="reset">
+											<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+										</button>
+										
+										
+					
+				</div>
+				<!-- // Modal footer END -->
+			</form>
+			<!-- /.Form -->
+		</div>
+	</div>
+</div>

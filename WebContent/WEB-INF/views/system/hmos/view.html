@@ -1,0 +1,277 @@
+<div class="page-header">
+	<h1>
+	
+	
+		Examination View <small> <i
+			class="ace-icon fa fa-angle-double-right"></i> 
+		
+			<span
+		th:text="${exam.examinationName}"></span>
+									</small>
+	</h1>
+</div>
+<div class="row">
+	
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard</a> 
+		<a class="btn btn-xs btn-primary" th:href="@{/hmo/add}"><i
+			class="fa fa-plus-circle"></i> Add HMO </a>
+	<a class="btn btn-xs btn-primary" th:href="@{/hmo/index}"><i
+			class="fa fa-plus-circle"></i> View HMO List </a>
+			
+	
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<div class="tabbable">
+
+			<ul class="nav nav-tabs padding-18">
+				<li class="active"><a data-toggle="tab" href="#home"> <i 
+						class="green ace-icon fa fa-pencil-square-o bigger-120"></i>
+						HMO Details
+				</a></li>
+				
+				
+				<li class=""><a data-toggle="tab" href="#examrs"> <i
+						class="brown ace-icon fa fa-user bigger-120"> </i> HMO Package Setup
+				</a></li>
+				
+			</ul>
+			<div class="tab-content no-border padding-24">
+				<div id="home" class="tab-pane active">
+					<div class="row">
+						<div class="col-xs-12 col-sm-3 col-md-3 center">
+							<div class="space space-4"></div>
+							
+						</div>
+						<!-- /.col -->
+
+						<div class="col-xs-12 col-sm-9">
+								<div class="profile-info-row">
+								<div class="profile-info-name">HMO Name</div>
+
+								<div class="profile-info-value">
+									<span th:text="${hmo.name}"></span>
+								</div>
+							</div>
+
+							<div class="profile-info-row">
+								<div class="profile-info-name">Description</div>
+
+								<div class="profile-info-value">
+									<span th:text="${exam.description}"></span>
+								</div>
+							</div>
+							<div class="profile-info-row">
+									<div class="profile-info-name">Exam Category</div>
+
+									<div class="profile-info-value">
+										<span
+											th:text="${exam.examinationCategory.categoryName}">
+											</span>
+									</div>
+								</div>
+						
+							<div class="profile-user-info">
+								<div class="profile-info-row">
+									<div class="profile-info-name">Examination Type</div>
+
+									<div class="profile-info-value">
+										<span th:text="exam.examinationType.examinationtypename"></span>
+									</div>
+								</div>	
+							</div>
+
+							<div class="hr hr-8 dotted"></div>
+						</div>
+						<!-- /.col -->
+					</div>
+				</div>
+				<!-- item -->
+				
+			<div id="examrs" class="tab-pane">
+					<div class="row">
+						<div class="col-md-12">
+							<a class="btn btn-danger btn-xs" data-toggle="modal"
+								href="#examresultadd"> <i
+								class="ace-icon fa fa-plus bigger-110"></i> Add Examination Result Setup
+							</a>
+							<div class="hr hr-18 dotted hr-double"></div>
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="table-header">Setup	Detail</div>
+									<table id="dTableExam"
+										class="table table-striped table-bordered table-hover">
+										<thead>
+											<tr>
+												<th>Examination Name</th>
+												<th>Result Description</th>
+												
+
+												<th><i class="glyphicon glyphicon-asterisk"></i></th>
+											</tr>
+										</thead>
+										<tbody th:if="${exam.examinationResultSetup != null}">
+											<tr th:each="exam : ${exam.examinationResultSetup}">
+												<td th:text="${exam.Examination.examinationName}"></td>
+												<td th:text="${exam.description}"></td>
+												
+												<td>
+												<a class="btn btn-xs btn-warning tooltips"
+													title="Edit Patient Phone"
+													th:href="@{/system/examinationresultsetup/edit/{id} (id=${exam.id})}">
+														<i class="fa fa-edit"></i>
+												</a><a class="btn btn-xs btn-danger tooltips"
+													title="delete resultsetup"   th:id="${'examresultsetup' + exam.id}"  onclick="return Confirm(this.id)" 
+													th:href="@{/system/examinationresultsetup/delete/{id} (id=${exam.id})}">
+														<i class="fa fa-trash-o"></i>
+												</a>  
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+
+
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<!-- //.item -->
+			
+			
+						
+			
+			
+			
+			
+			
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	jQuery(function($) {
+		var oTable1 = $('#dTableExam').dataTable({
+			bAutoWidth : false,
+			"aoColumns" : [ { "bSortable" : true
+				
+			}, null, null ]
+		});
+
+	});
+</script>
+
+<div class="modal fade" id="examresultadd">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		
+			<!-- Modal heading -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title"> Examination Result Name</h4>
+			</div>
+			<!-- // Modal heading END -->
+			<!-- Modal body -->
+			<div class="modal-body">
+				<div class="row">
+					<!-- Dropzone -->
+					<div class="space space-4"></div>
+					<form role="form" class="form-horizontal" method="POST"
+						th:object="${examresultForm}"  th:action="@{/system/examinationresultsetup/save}">
+
+				<!-- 		<div class="form-group">
+							<label for="detail"
+								class="col-sm-3 control-label no-padding-right">Phone Type:
+								</label>
+							<div class="col-sm-9">
+								<select th:field="*{phonetypeId}" id="phonetypeId"
+									class="col-xs-10 col-sm-5">
+								 	<option value="0">Select</option>  
+									<option th:each="p : ${phonetypelist}" th:value="${p.phonetypeId}"
+										th:text="${p.name}"></option>
+								</select> <span class="text-danger"
+									th:if="${#fields.hasErrors('phonetypeId')}" th:errors="phonetypeId"></span>
+
+							</div>
+						</div> -->
+						<div class="form-group">
+							<label for="Tels"
+								class="col-sm-3 control-label no-padding-right">Result Name:</label>
+							<div class="col-sm-9">
+								<input class="col-xs-10 col-sm-8" 	placeholder="Result Name"
+									th:field="*{description}" required="required">  </input>
+					<!-- oninput="this.value = this.value.replace(/[^0-9]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"
+					 -->
+								<span class="text-danger"
+									th:if="${#fields.hasErrors('description')}"
+									th:errors="*{description}"></span>
+							</div>
+						</div>
+
+						
+
+						<div class="clearfix form-actions">
+							<div class="col-md-offset-3 col-md-9">
+								<input  type="hidden" th:field="*{examinationId}" />
+								<button class="btn btn-primary" type="submit">
+									<i class="ace-icon fa fa-check bigger-110"></i> Add
+								</button>
+
+								<button class="btn btn-danger" type="reset">
+									<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+								</button>
+							</div>
+						</div>
+
+
+
+
+
+
+					</form>
+					<!-- /.Dropzone -->
+					<!-- /.col -->
+				</div>
+			</div>
+		</div>
+	
+	
+	
+	</div>
+</div>
+
+
+
+
+
+<script type="text/javascript">
+	//height
+</script>
+
+<script>
+
+	
+	function Confirm(id)
+	{
+	
+		
+	    job=confirm("Are you sure to delete ?");
+	    if(job!=true)
+	    {
+	        return false;
+	    }
+		
+	};
+
+</script>
+

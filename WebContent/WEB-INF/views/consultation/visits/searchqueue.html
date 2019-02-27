@@ -1,0 +1,109 @@
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+
+		<form role="form" class="form-horizontal" method="POST"
+		th:action="@{/consultations/labqueue/searchqueueresult1}"
+			th:object="${searchQueueForm}">
+
+
+			<table align="center">
+				<tr>
+					<td colspan="5">&nbsp;</td>
+				</tr>
+				<tr>
+					<!-- #section:custom/checkbox -->
+
+					<td>
+
+
+						<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-3 no-padding-right"
+								for="manufacturedate">From</label>
+
+							<div class="col-xs-12 col-sm-9">
+								<div class="clearfix">
+
+									<input type="text" class="col-xs-12 col-sm-3 date-picker"
+										id="date-picker" th:field="*{from}"
+										data-date-format="yyyy-mm-dd" style = "width:150px" /> <span class="text-danger"
+										th:if="${#fields.hasErrors('from')}" th:errors="from"></span>
+
+
+								</div>
+							</div>
+						</div>
+					</td>
+
+					<td>
+						<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-3 no-padding-right"
+								for="manufacturedate">To</label>
+
+							<div class="col-xs-12 col-sm-9">
+								<div class="clearfix">
+
+									<input type="text" class="col-xs-12 col-sm-3 date-picker"
+										id="date-picker" th:field="*{to}"
+										data-date-format="yyyy-mm-dd" style = "width:150px" /> <span class="text-danger"
+										th:if="${#fields.hasErrors('to')}" th:errors="to"></span>
+
+
+								</div>
+							</div>
+						</div>
+					</td>
+					
+					
+					<td>
+						<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-3 no-padding-right"
+								for="manufacturedate">&nbsp;&nbsp;&nbsp;Status</label>
+
+							<div class="col-xs-12 col-sm-9">
+								<div class="clearfix">
+
+									<select th:field = "*{mstatus}" class="form-control">
+										  <!-- <option value="2">Open</option> -->
+										  <option th:each = "s : ${statusList}" 
+										  		  th:value = "${s.id}"  
+										  		  th:text= "${s.type}"> </option>										 										  
+									</select>
+
+								</div>
+							</div>
+						</div>
+					</td>
+					
+
+					<td>
+					<div class="checkbox">
+							<label> <input name="chkothers" type="checkbox" 
+								class="ace"  checked="checked" value="others" /> <span class="lbl">
+									others</span>	
+							</label>
+						</div>
+						
+					</td>
+
+					<td>
+						<div class="col-md-offset-3 col-md-9">
+							<!-- <input type="hidden" th:field="*{id}" /> -->
+							<button class="btn btn-primary" type="submit"
+								style="margin-left: auto; margin-right: auto; display: block; margin-top: 0%; margin-bottom: 0%">
+								<i class="ace-icon fa fa-check bigger-110"></i> Search
+							</button>
+						</div>
+					</td>
+
+				</tr>
+
+
+			</table>
+
+		</form>
+	</div>
+</div>
+
+

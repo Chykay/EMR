@@ -1,0 +1,191 @@
+<div class="page-header">
+	<h1>
+		Add <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			Add a Bed Room
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-primary" th:href="@{/system/bedcategory/index}"><i
+			class="fa fa-list"></i> Recent Bed Rooms</a>
+			<a
+			class="btn btn-xs btn-primary" th:href="@{/system/bedcategory/index/all}"><i
+			class="fa fa-list"></i>View All Bed Rooms</a>
+			
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+
+		<form role="form" class="form-horizontal" method="POST"
+			th:object="${bedCategoryForm}">
+			<legend>ROOM Form</legend>
+
+		 	<div class="form-group">
+				<label for="gender" class="col-sm-3 control-label no-padding-right"> Bed Room :</label>
+				<div class="col-sm-9">
+					<select th:field="*{categoryId}" class="col-xs-10 col-sm-5"  required="required" id="categoryId">
+			
+						<option value="">Select..</option>
+						<option th:each="g: ${bedroom}" th:value="${g.itemId}"
+							th:text="${g.GlobalitemName}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('categoryId')}"
+						th:errors="*{categoryId}"></span>
+				</div>
+			</div>
+
+
+			
+		 	<div class="form-group" hidden="hidden">
+				<label for="gender" class="col-sm-3 control-label no-padding-right"> Bed Room Type:</label>
+				<div class="col-sm-9">
+					<select th:field="*{bedTypeId}" class="col-xs-10 col-sm-5"  required="required" id="bedTypeId">
+						<option value="1">All</option>
+						<option value="">Select..</option>
+						<option th:each="g: ${bedtype}" th:value="${g.bedTypeId}"
+							th:text="${g.bedtypename}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('bedTypeId')}"
+						th:errors="*{bedTypeId}"></span>
+				</div>
+			</div>
+			
+
+
+
+			
+			
+			<div class="form-group" hidden="hidden">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Parent Room:</label>
+				<div class="col-sm-9">
+					<select type="text" class="col-xs-10 col-sm-5"
+						placeholder="Parent Category" th:field="*{parentCategoryId}" id="parentCategoryId"	 >
+						<option value="">Select..</option>
+						<option th:each="c: ${categories}" th:value="${c.categoryId}" th:text="${c.categoryName}"></option>
+					</select> <span class="text-danger"
+						th:if="${#fields.hasErrors('parentCategoryId')}"
+						th:errors="*{parentCategoryId}"></span>
+				</div>
+			</div>
+
+
+
+
+			<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Unit:</label>
+				<div class="col-sm-9">
+					<select type="text" class="col-xs-10 col-sm-5"
+						placeholder="Unit" th:field="*{hrunitcategoryId}" id="hrunitcategoryId"	 >
+						<option value="">Assign None..</option>
+						<option th:each="h: ${hrunitcategories}" th:value="${h.categoryId}" th:text="${h.categoryName}"></option>
+					</select> <span class="text-danger"
+						th:if="${#fields.hasErrors('hrunitcategoryId')}"
+						th:errors="*{parentCategoryId}"></span>
+				</div>
+			</div>
+
+
+			<div class="form-group">
+				<label for="height" class="col-sm-3 control-label no-padding-right">Max bed points:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder=""  oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"
+						th:field="*{bedpoints}" required="required"/> <span
+						class="text-danger" th:if="${#fields.hasErrors('bedpoints')}"
+						th:errors="*{bedpoints}"></span>
+				</div>
+			</div>
+			 
+
+
+
+							<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Comment:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" 
+						th:field="*{categoryDescription}"  /> <span
+						class="text-danger" th:if="${#fields.hasErrors('categoryDescription')}"
+						th:errors="*{categoryDescription}"></span>
+				</div>
+			</div>
+
+
+
+
+
+
+			<div class="clearfix form-actions">
+				<div class="col-md-offset-3 col-md-9">
+			
+					<button class="btn btn-primary" type="submit">
+						<i class="ace-icon fa fa-check bigger-110"></i> Add
+					</button>
+
+					<button class="btn btn-danger" type="reset">
+						<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<script> 
+
+$(function() {
+	/* Lga Selector*/
+	$('#bedTypeId').change(
+			function(event) {
+$.ajax({
+	type : "GET",
+
+	url : "/../' + window.location.pathname.split('/')[1] + '/system/bedcategory/fetchcategorybytype/"
+			+ $('#bedTypeId').val(),
+	beforeSend : function() {
+		$.gritter.add({
+			title : "Progress...",
+			text : "Fetching Categories of global type",
+			time : 3000
+		});
+	},
+	success : function(html) {
+		$('#parentCategoryId').html(html);
+		$.gritter.add({
+			title : "Success!",
+			text : "Categories fetched",
+			time : 4000
+		});
+	},
+	error : function() {
+		$.gritter.add({
+			title : "Error!",
+			text : "Error fetching Categories",
+			time : 4000
+		});
+	}
+
+});
+
+
+
+
+
+		});
+});
+
+
+
+
+$("#form").submit(function(){
+	var a = document.getElementById('categoryName}').value;
+    var b = document.getElementById('parentCategoryId').value; 
+    if(a == b) { return false; }
+    alert("Parent and Name must not match!!!");
+    return true;
+});
+</script>

@@ -1,0 +1,23 @@
+package org.calminfotech.hrunit.boInterface;
+
+import java.util.List;
+
+//import org.calminfotech.system.models.Allergy;
+import org.calminfotech.hrunit.forms.StaffRegForm;
+import org.calminfotech.hrunit.models.StaffRegistration;
+
+public interface StaffRegBoInterface {
+	
+	public List<StaffRegistration> fetchAllByOrganisation(int organisationId);
+	
+	public StaffRegistration getStaffById(int id);
+
+	public StaffRegistration save(StaffRegForm staffRegForm);
+
+	public void delete(StaffRegistration staffRegistration);
+	
+	public List<StaffRegistration> fetchStaffByUnitId(int unitId);
+
+	public void update(StaffRegForm staffRegForm);
+
+}

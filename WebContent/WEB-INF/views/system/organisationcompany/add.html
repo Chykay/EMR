@@ -1,0 +1,397 @@
+<div class="page-header">
+	<h1>
+		Add <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			Create an hospital
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/}"><i
+			class="fa fa-home"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-primary"
+			th:href="@{/system/organisations/index}"><i
+			class="fa fa-list"></i> Recent Hospitals</a>
+			<a
+			class="btn btn-xs btn-primary"
+			th:href="@{/system/organisations/index/all}"><i
+			class="fa fa-list"></i> View all Hospitals</a>
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+
+		<form role="form" class="form-horizontal" method="POST"
+			th:object="${oForm}">
+			<legend>Add Hospital Form</legend>
+			<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Name:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5"
+						placeholder="Name" th:field="*{name}" required="required" />
+					<span class="text-danger" th:if="${#fields.hasErrors('name')}"
+						th:errors="*{name}"></span>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="gender" class="col-sm-3 control-label no-padding-right"> Hospital  Type:</label>
+				<div class="col-sm-9">
+					<select th:field="*{organisationTypeId}" class="col-xs-10 col-sm-5"  required="required" id="organisationTypeId">
+						<option value="">Select..</option>
+						<option th:each="g: ${otype}" th:value="${g.organisationTypeId}"
+							th:text="${g.organisationtypename}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('organisationTypeId')}"
+						th:errors="*{organisationTypeId}"></span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="description"
+					class="col-sm-3 control-label no-padding-right">Description:</label>
+				<div class="col-sm-9">
+					<textarea class="col-xs-10 col-sm-5"
+						placeholder="Description" th:field="*{description}" required="required"></textarea>
+					<span class="text-danger"
+						th:if="${#fields.hasErrors('description')}"
+						th:errors="*{description}"></span>
+				</div>
+			</div>
+			
+			
+			<div class="form-group">
+				<label for="description"
+					class="col-sm-3 control-label no-padding-right">Contact Email:</label>
+				<div class="col-sm-9">
+					<input type="email" class="col-xs-10 col-sm-5"
+						placeholder="Email" th:field="*{email}" required="required" />
+					<span class="text-danger"
+						th:if="${#fields.hasErrors('email')}"
+						th:errors="*{email}"></span>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="description"
+					class="col-sm-3 control-label no-padding-right">Website Domain:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5"
+						 th:field="*{domain}" required="required" />
+					<span class="text-danger"
+						th:if="${#fields.hasErrors('domain')}"
+						th:errors="*{domain}"></span>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="description"
+					class="col-sm-3 control-label no-padding-right"> Phone No:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5"
+						placeholder="Phone No" th:field="*{phoneno}" required="required" />
+					<span class="text-danger"
+						th:if="${#fields.hasErrors('phoneno')}"
+						th:errors="*{phoneno}"></span>
+				</div>
+			</div>
+
+<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Parent Category:</label>
+				<div class="col-sm-9">
+					<select type="text" class="col-xs-10 col-sm-5"
+						placeholder="Parent Category" th:field="*{parentCategoryId}" id="parentCategoryId"	required="required"  >
+						<option value="">Select..</option>
+						<!--  <option th:each="c: ${categories}" th:value="${c.categoryId}" th:text="${c.categoryName}"></option> -->
+					</select> <span class="text-danger"
+						th:if="${#fields.hasErrors('parentCategoryId')}"
+						th:errors="*{parentCategoryId}"></span>
+				</div>
+			</div>
+
+
+			<div class="form-group">
+				<label for="description"
+					class="col-sm-3 control-label no-padding-right">Address:</label>
+				<div class="col-sm-9">
+				<textarea class="col-xs-10 col-sm-5" 
+						placeholder="Address" th:field="*{address}"  required="required"></textarea>
+					<!-- <input type="text" class="col-xs-10 col-sm-5"
+						placeholder="Address" th:field="*{address}" required="required" /> -->
+					<span class="text-danger"
+						th:if="${#fields.hasErrors('address')}"
+						th:errors="*{address}"></span>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="State" class="col-sm-3 control-label no-padding-right">Country:</label>
+				<div class="col-sm-9">
+					<select class="col-xs-10 col-sm-5" th:field="*{countryCode}" required="required">
+						<option value="">Select..</option>
+						<option th:each="s : ${countries}" th:value="${s.countryCode}"
+							th:text="${s.countryName}"></option>
+					</select> 
+					<span class="text-danger" th:if="${#fields.hasErrors('countryCode')}"
+						th:errors="*{countryCode}">
+					</span>
+				</div>
+			</div>
+
+   
+ 
+
+			<div class="form-group">
+				<label for="State" class="col-sm-3 control-label no-padding-right">State:</label>
+				<div class="col-sm-9">
+					<select class="col-xs-10 col-sm-5" th:field="*{stateCode}" required="required">
+						<option value="">Select..</option>
+					
+					<!-- 	<option th:each="s : ${states}" th:value="${s.stateCode}"
+							th:text="${s.stateName}"></option> -->
+					</select> 
+					<span class="text-danger" th:if="${#fields.hasErrors('stateCode')}"
+						th:errors="*{stateCode}">
+					</span>
+				</div>
+			</div>
+
+	
+
+			<div class="form-group">
+				<label for="LGA" class="col-sm-3 control-label no-padding-right">LGA:</label>
+				<div class="col-sm-9">
+							
+						<select th:field="*{lgaCode}"   class="col-xs-10 col-sm-5" required="required">
+										<option value="0">Select</option>
+									</select> <span class="text-danger" th:if="${#fields.hasErrors('lgaCode')}"
+										th:errors="lgaCode"></span>
+						
+				</div>
+			</div>
+			
+			<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-3 no-padding-right"
+								for="establishedYear">Established Date:</label>
+
+							<div class="col-xs-12 col-sm-9">
+								<div class="clearfix">
+
+									<input type="text" class="col-xs-12 col-sm-3 date-picker"
+										id="date-picker" th:field="*{establishedYear}" required="required" /> 
+										<span class="text-danger" th:if="${#fields.hasErrors('establishedYear')}" th:errors="establishedYear"  ></span>
+								</div>
+							</div>
+				</div>
+			
+			<!--  Username -->
+<!-- 
+			<legend>Hospital Admin details </legend>
+			<div class="form-group">
+				<label for="Email"
+					class="col-sm-3 control-label no-padding-right"> Username:</label>
+				<div class="col-sm-9">
+					<input type="email" class="col-xs-10 col-sm-5"
+						placeholder="Email" th:field="*{Email}" required="required" />
+					<span class="text-danger"
+						th:if="${#fields.hasErrors('Email')}"
+						th:errors="*{Email}"></span>
+				</div>
+			</div>
+	-->
+			<!-- 
+			<div class="form-group">
+				<label for="systemUserPassword"
+					class="col-sm-3 control-label no-padding-right">Password:</label>
+				<div class="col-sm-9">
+					<input type="password" class="col-xs-10 col-sm-5"
+						placeholder="password" th:field="*{systemUserPassword}" required="required" />
+					<span class="text-danger"
+						th:if="${#fields.hasErrors('systemUserPassword')}"
+						th:errors="*{systemUserPassword}"></span>
+				</div>
+			</div>-->
+
+			<div class="clearfix form-actions">
+				<div class="col-md-offset-3 col-md-9">
+					<input type="hidden" th:field="*{id}" />
+					<button class="btn btn-primary" type="submit">
+						<i class="ace-icon fa fa-check bigger-110"></i> Add
+					</button>
+
+					<button class="btn btn-danger" type="reset">
+						<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+<!-- 
+<script>
+	$(window).load(function(){
+		$("#Email").prop("readonly", true);
+	});
+</script>
+-->
+
+<script>
+$('.date-picker').datepicker({
+			autoclose : true,
+			format: 'yyyy-mm-dd',
+			todayHighlight : true
+		})//show datepicker when clicking on the icon
+		.next().on(ace.click_event, function() {
+			$(this).prev().focus();
+		});
+		
+	
+		$(".tooltips").tooltip({
+			animation : true
+		});
+	</script>
+
+<script type="text/javascript">
+	$("#Email").keyup(function(){
+		$("#Email").prop("readonly", false);
+	});
+</script>
+
+<!-- 
+<script type="text/javascript">
+	$("#systemUserPassword").keyup(function(){
+	var org = $('#Email').val();
+	var admin = $('#Email').val();
+		$.ajax({
+			url : '/../' + window.location.pathname.split('/')[1] + '/' + window.location.pathname.split('/')[1] + '/utilities/verifydomain/organisationForm/' + org +'/'+ admin+'/',
+			beforeSend : function() {
+				
+			},
+			success : function(msg) {
+				if(msg === false){//
+					alert('Mail not accepted.');
+					$("#Email").val("");
+				}
+			}//success
+		})//ajax
+	});
+</script>
+-->
+<script> 
+
+$(function() {
+	/* Lga Selector*/
+	$('#organisationTypeId').change(
+			function(event) {
+$.ajax({
+	type : "GET",
+
+	url : '/../'+ window.location.pathname.split('/')[1] + '/system/organisationcategory/fetchcategorybytype/"
+			+ $('#organisationTypeId').val(),
+	beforeSend : function() {
+		$.gritter.add({
+			title : "Progress...",
+			text : "Fetching Categories of Organisation type",
+			time : 3000
+		});
+	},
+	success : function(html) {
+		$('#parentCategoryId').html(html);
+		$.gritter.add({
+			title : "Success!",
+			text : "Categories fetched",
+			time : 4000
+		});
+	},
+	error : function() {
+		$.gritter.add({
+			title : "Error!",
+			text : "Error fetching Categories",
+			time : 4000
+		});
+	}
+
+ });
+
+ });
+});
+
+
+
+</script>
+<script>
+	//this is for GET
+	$(function() {
+		/* Lga Selector*/
+		$('#stateCode').change(
+				function(event) {
+					$.ajax({
+						type : "GET",
+						url: '/../' + window.location.pathname.split('/')[1] + '/utilities/statesandlgas/lgabystate/'
+								+ $('#stateCode').val(),
+						beforeSend : function() {
+							$.gritter.add({
+								title : "Progress...",
+								text : "Fetching LGAs",
+								time : 3000
+							});
+						},
+						success : function(html) {
+							$("#lgaCode").html(html);
+							$.gritter.add({
+								title : "Success!",
+								text : "LGAs fetched",
+								time : 4000
+							});
+						},
+						error : function() {
+							$.gritter.add({
+								title : "Error!",
+								text : "Error fetching LGAs",
+								time : 4000
+							});
+						}
+
+					});
+				});
+	
+	
+		$('#countryCode').change(
+				function(event) {
+					$.ajax({
+						type : "GET",
+						url: '/../' + window.location.pathname.split('/')[1] + '/utilities/statesandlgas/statebycountry/'
+								+ $('#countryCode').val(),
+						beforeSend : function() {
+							$.gritter.add({
+								title : "Progress...",
+								text : "Fetching States",
+								time : 3000
+							});
+						},
+						success : function(html) {
+							$("#stateCode").html(html);
+							$.gritter.add({
+								title : "Success!",
+								text : "States fetched",
+								time : 4000
+							});
+						},
+						error : function() {
+							$.gritter.add({
+								title : "Error!",
+								text : "Error fetching LGAs",
+								time : 4000
+							});
+						}
+
+					});
+				});
+		
+	
+	
+	});
+</script>

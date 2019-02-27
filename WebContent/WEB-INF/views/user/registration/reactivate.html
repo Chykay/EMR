@@ -1,0 +1,17 @@
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="content"
+	class="col-md-10">
+	<h1>Reactivate User</h1>
+	<p th:switch="${user.lock}">
+		You are about to <strong>reactivate</strong> this user: <strong
+			th:text="${ user.userProfile.lastName }">Name</strong> <strong
+			th:text="${ user.userProfile.otherNames }">Name</strong>. This action
+		will forcce the user to change their passwprd and security questions!
+		Are you sure?
+	</p>
+	<form role="form" method="POST" th:object="${userForm}"
+		th:action="@{/system/users/reactivated}">
+		<input type="hidden" th:field="*{userId}" /> <input type="submit"
+			th:name="@{'confirm'}" th:value="Yes" class="btn btn-danger btn-lg" />
+		<a class="btn btn-primary" th:href="@{/system/users}">No</a>
+	</form>
+</div>

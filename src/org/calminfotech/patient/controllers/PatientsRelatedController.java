@@ -1,0 +1,301 @@
+package org.calminfotech.patient.controllers;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.sql.Blob;
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+
+import org.apache.commons.io.IOUtils;
+
+import org.calminfotech.hmo.boInterface.HmoBo;
+import org.calminfotech.hmo.boInterface.HmoPackageBo;
+import org.calminfotech.hmo.models.Hmo;
+import org.calminfotech.hmo.models.HmoPackage;
+
+
+
+import org.calminfotech.patient.boInterface.PatientRelatedBo;
+import org.calminfotech.patient.boInterface.PatientBo;
+import org.calminfotech.patient.boInterface.PatientBo;
+import org.calminfotech.patient.boInterface.PatientDocumentBo;
+import org.calminfotech.patient.boInterface.PatientDocumentBo;
+import org.calminfotech.patient.boInterface.PatientHmoBo;
+import org.hibernate.SessionFactory;
+
+import org.calminfotech.patient.boInterface.PatientPaymentOptionBo;
+import org.calminfotech.patient.boInterface.PatientSearchBo;
+
+import org.calminfotech.patient.forms.PatientRelatedForm;
+import org.calminfotech.patient.forms.PatientDocumentForm;
+import org.calminfotech.patient.forms.PatientEmergencyForm;
+import org.calminfotech.patient.forms.PatientForm;
+import org.calminfotech.patient.forms.PatientHmoForm;
+import org.calminfotech.patient.forms.PatientImageForm;
+import org.calminfotech.patient.forms.PatientPaymentOptionForm;
+import org.calminfotech.patient.forms.PatientRelatedForm;
+import org.calminfotech.patient.forms.PatientSearchForm;
+import org.calminfotech.patient.models.Patient;
+import org.calminfotech.patient.models.PatientRelated;
+import org.calminfotech.patient.models.PatientRelated;
+
+import org.calminfotech.patient.models.PatientDocument;
+
+import org.calminfotech.patient.models.PatientHmo;
+
+import org.calminfotech.patient.models.PatientPaymentOption;
+
+import org.calminfotech.patient.utils.PatientCodeGenerator;
+
+import org.calminfotech.system.boInterface.GlobalItemBo;
+import org.calminfotech.system.boInterface.LanguageBo;
+import org.calminfotech.system.boInterface.TitleBo;
+import org.calminfotech.billing.boInterface.BillSchemeBo;
+import org.calminfotech.billing.boInterface.BillSchemeItemBo;
+
+import org.calminfotech.system.boInterface.PointBo;
+import org.calminfotech.patient.forms.PatientRelatedForm;
+
+import org.calminfotech.system.models.Diseases;
+import org.calminfotech.system.models.GlobalItem;
+
+import org.calminfotech.system.models.Title;
+
+import org.calminfotech.user.utils.UserIdentity;
+import org.calminfotech.utils.Alert;
+import org.calminfotech.utils.RelationshipTypeList;
+import org.calminfotech.utils.Auditor;
+import org.calminfotech.utils.BloodgenotypeList;
+import org.calminfotech.utils.BloodgroupList;
+import org.calminfotech.utils.DateUtils;
+import org.calminfotech.utils.GenderList;
+import org.calminfotech.utils.LifestatusList;
+import org.calminfotech.utils.LocalGovernmentAreaList;
+import org.calminfotech.utils.MaritalStatusList;
+import org.calminfotech.utils.OccupationList;
+import org.calminfotech.utils.SearchUtility;
+import org.calminfotech.utils.StatesList;
+import org.calminfotech.utils.SurgicalList;
+import org.calminfotech.utils.annotations.Layout;
+
+import org.calminfotech.utils.models.LocalGovernmentArea;
+import org.calminfotech.utils.models.MaritalStatus;
+import org.calminfotech.utils.models.Relationshiptype;
+import org.calminfotech.utils.models.State;
+import org.hibernate.Hibernate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import javax.servlet.http.HttpSession;
+@Controller
+@RequestMapping(value = "/patients")
+public class PatientsRelatedController {
+	
+	
+	
+	@Autowired
+	private PatientBo patientBo;
+
+	
+
+	@Autowired
+	private Alert alert;
+
+	@Autowired
+	private UserIdentity userIdentity;
+
+	@Autowired
+	private Auditor auditor;
+
+	@Autowired
+	private LocalGovernmentAreaList lgasList;
+
+	@Autowired
+	private MaritalStatusList MSList;
+
+	@Autowired
+	private OccupationList occuList;
+	
+	
+	@Autowired
+	private BloodgroupList groupList;
+	
+	@Autowired
+	private BloodgenotypeList genoList;
+	
+	@Autowired
+	private LifestatusList lifeList;
+	
+
+	@Autowired
+	private RelationshipTypeList  relationshipTypeBo;
+
+	
+	@Autowired
+	private StatesList stateList;
+	
+	@Autowired
+	private HmoBo hmoBo;
+	
+	/*@Autowired
+	private EhmoBo ehmoBo;*/
+
+//	@Autowired
+	//private SearchUtility patientrelatedBo;
+
+	@Autowired
+	private RelationshipTypeList relationshiptypeBo;
+
+
+	
+	@Autowired
+	private PatientPaymentOptionBo patientPaymentOptionBo;
+
+	@Autowired
+	private PatientSearchBo searchBo;
+
+	
+
+	
+	
+	@Autowired
+	private PatientCodeGenerator patientCodeGenerator;
+	
+	@Autowired
+	private PatientRelatedBo patientRelatedBo;
+	
+	@RequestMapping(value = "/related/save", method = RequestMethod.POST)
+	@Layout("layouts/datatable")
+	public String addRelated(
+			@ModelAttribute("relatedForm") PatientRelatedForm relatedForm,
+			BindingResult result, Model model, 
+			RedirectAttributes redirectAttributes) {
+	
+		PatientRelated  patientrelated = new PatientRelated();
+		
+		Patient patient= patientBo.getPatientById(relatedForm.getPatientId());
+		Patient relpatient =patientBo.getPatientById(relatedForm.getRelPatientId());
+		Relationshiptype   relationshiptype = relationshipTypeBo.getRelationshipTypeById(relatedForm.getRelationshiptypeId());
+		
+		
+		
+		patientrelated.setPatient(patient);
+		patientrelated.setRelPatient(relpatient);
+		patientrelated.setRelationshipType(relationshiptype);
+		patientrelated.setCreatedBy(userIdentity.getUsername());
+		patientrelated.setCreateDate(new GregorianCalendar().getTime());
+		
+		patientrelated.setOrganisation(userIdentity.getOrganisation());
+		
+		patientRelatedBo.save(patientrelated);
+		
+		
+		return "redirect:/patients/view/" + patientrelated.getPatient().getPatientId();
+	
+	}
+
+	@RequestMapping(value = "/related/edit/{id}", method = RequestMethod.GET)
+	@Layout("layouts/datatable")
+	public String geteditRelated(@PathVariable("id") Integer id,
+			@ModelAttribute("relatedForm") PatientRelatedForm relatedForm,
+			BindingResult result, Model model, 
+			RedirectAttributes redirectAttributes,HttpServletRequest request) {
+
+		PatientRelated  patientrelated = patientRelatedBo.getRelPatientById(id);
+		List<Relationshiptype> relationshiptype = relationshiptypeBo.fetchAll();
+		relatedForm.setId(patientrelated.getId());
+		relatedForm.setRelPatientId(patientrelated.getRelPatient().getPatientId());
+		relatedForm.setRelationshiptypeId(patientrelated.getRelationshipType().getRelationshiptypeId());
+		
+			
+		model.addAttribute("relatedname",patientrelated.getRelPatient().getSurname()+" " + patientrelated.getRelPatient().getFirstName());
+	
+		model.addAttribute("relationshiptypelist",relationshiptype);
+		this.auditor.before(request, "Patient Related", relatedForm);
+		return "customers/patientsrelated/edit";
+	
+	}
+
+	
+
+	@RequestMapping(value = "/related/edit/{id}", method = RequestMethod.POST)
+	@Layout("layouts/datatable")
+	public String posteditRelated( @PathVariable("id") Integer id,
+			@ModelAttribute("relatedForm") PatientRelatedForm relatedForm,
+			BindingResult result, Model model, 
+			RedirectAttributes redirectAttributes, HttpServletRequest request) {
+	
+		PatientRelated  patientrelated = patientRelatedBo.getRelPatientById(id);
+		
+	//	patientrelated.setPatient(patientBo.getPatientById(relatedForm.getPatientId());
+		//Relationshiptype   relationshiptype = relationshiptypeBo.getRelationshipTypeById(nokForm.getRelationshiptypeId());
+		
+	
+		patientrelated.setRelPatient( patientBo.getPatientById(relatedForm.getRelPatientId()));
+		patientrelated.setRelationshipType(relationshipTypeBo.getRelationshipTypeById(relatedForm.getRelationshiptypeId()));
+		
+		patientrelated.setModifiedBy(userIdentity.getUsername());
+		
+		patientrelated.setModifiedDate(new GregorianCalendar().getTime());
+		patientRelatedBo.update(patientrelated);
+				
+		alert.setAlert(redirectAttributes, Alert.SUCCESS,
+				"Success! Related  Updated");
+		this.auditor.after(request, "Patient Related", relatedForm,
+				this.userIdentity.getUsername(),id);
+		
+		return "redirect:/patients/view/" + patientrelated.getPatient().getPatientId();
+	
+	}
+
+	
+	
+	@RequestMapping(value = "/related/delete/{id}", method = RequestMethod.GET)
+	public String confirmDelete(@PathVariable("id") Integer id,
+	@ModelAttribute("relatedForm") PatientRelatedForm relatedForm,
+	RedirectAttributes redirectAttributes) {
+		
+		PatientRelated  patientrelated = patientRelatedBo.getRelPatientById(id);
+		
+		patientrelated.setModifiedBy(userIdentity.getUsername());
+		patientrelated.setModifiedDate(new GregorianCalendar().getTime());
+		patientrelated.setDeleted(true);
+		patientRelatedBo.update(patientrelated);
+		
+		alert.setAlert(redirectAttributes, Alert.SUCCESS,
+				"Success! Related  deleted");
+		return "redirect:/patients/view/" + patientrelated.getPatient().getPatientId();
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+}

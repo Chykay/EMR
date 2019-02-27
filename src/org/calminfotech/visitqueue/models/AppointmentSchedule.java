@@ -1,0 +1,222 @@
+package org.calminfotech.visitqueue.models;
+
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+//import org.calminfotech.consultation.models.VisitConsultation;
+import org.calminfotech.patient.models.Patient;
+import org.calminfotech.system.models.Organisation;
+import org.calminfotech.user.models.User;
+
+@Entity
+@org.hibernate.annotations.Entity(dynamicInsert = true)
+@Table(name = "appointment")
+public class AppointmentSchedule {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "event_id", unique = true, nullable = false)
+	private Integer eventId;
+
+//	@ManyToOne
+//	@JoinColumn(name = "consultation_id")
+//	private VisitConsultation visitConsultation;
+
+	@ManyToOne
+	@JoinColumn(name = "visit_id")
+	private Visit visit;
+
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private User user;
+
+	@ManyToOne
+	@JoinColumn(name = "patient_id")
+	private Patient patient;
+
+	@Column(name = "classname")
+	private String className;
+
+	@Column(name = "allday")
+	private Boolean allday;
+
+	@Column(name = "event_title")
+	private String eventTitle;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "start_day")
+	private Date startDay;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "end_day")
+	private Date endDay;
+
+	@Column(name = "description")
+	private String Description;
+
+	public Boolean getAllday() {
+		return allday;
+	}
+
+	public void setAllday(Boolean allday) {
+		this.allday = allday;
+	}
+
+	public Patient getPatient() {
+		return patient;
+	}
+
+	public void setPatient(Patient patient) {
+		this.patient = patient;
+	}
+
+	public String getDescription() {
+		return Description;
+	}
+
+	public void setDescription(String description) {
+		Description = description;
+	}
+
+	@ManyToOne
+	@JoinColumn(name = "organisation_id")
+	private Organisation organisation;
+
+	public Organisation getOrganisation() {
+		return organisation;
+	}
+
+	public void setOrganisation(Organisation organisation) {
+		this.organisation = organisation;
+	}
+
+	@Column(name = "create_date")
+	private Date createDate;
+
+	@Column(name = "created_by")
+	private String createdBy;
+
+	@Column(name = "is_deleted")
+	private int isDeleted;
+
+	@Column(name = "modified_date", nullable = true)
+	private Date modifiedDate;
+
+	@Column(name = "modified_by", nullable = true)
+	private String modifiedBy;
+
+	public Visit getVisit() {
+		return visit;
+	}
+
+	public void setVisit(Visit visit) {
+		this.visit = visit;
+	}
+
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+//	public VisitConsultation getVisitConsultation() {
+//		return visitConsultation;
+//	}
+//
+//	public void setVisitConsultation(VisitConsultation visitConsultation) {
+//		this.visitConsultation = visitConsultation;
+//	}
+
+	public int getIsDeleted() {
+		return isDeleted;
+	}
+
+	public void setIsDeleted(int isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+
+	public Date getModifiedDate() {
+		return modifiedDate;
+	}
+
+	public void setModifiedDate(Date modifiedDate) {
+		this.modifiedDate = modifiedDate;
+	}
+
+	public String getModifiedBy() {
+		return modifiedBy;
+	}
+
+	public void setModifiedBy(String modifiedBy) {
+		this.modifiedBy = modifiedBy;
+	}
+
+	public Integer getEventId() {
+		return eventId;
+	}
+
+	public void setEventId(Integer eventId) {
+		this.eventId = eventId;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public String getClassName() {
+		return className;
+	}
+
+	public void setClassName(String className) {
+		this.className = className;
+	}
+
+	public String getEventTitle() {
+		return eventTitle;
+	}
+
+	public void setEventTitle(String eventTitle) {
+		this.eventTitle = eventTitle;
+	}
+
+	public Date getStartDay() {
+		return startDay;
+	}
+
+	public void setStartDay(Date startDay) {
+		this.startDay = startDay;
+	}
+
+	public Date getEndDay() {
+		return endDay;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setEndDay(Date endDay) {
+		this.endDay = endDay;
+	}
+
+}

@@ -1,0 +1,112 @@
+package org.calminfotech.user.boInterface;
+
+import java.util.List;
+
+import org.calminfotech.system.boInterface.UnitBo;
+import org.calminfotech.system.daoInterface.UnitDao;
+
+import org.calminfotech.hrunit.models.HrunitCategory;
+import org.calminfotech.user.utils.UserIdentity;
+import org.calminfotech.visitqueue.boInterface.WorkflowPointBo;
+import org.calminfotech.visitqueue.daoInterface.WorkflowPointDao;
+import org.calminfotech.visitqueue.forms.WorkflowPointForm;
+import org.calminfotech.visitqueue.models.VisitWorkflowPoint;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+@Transactional
+public class WorkflowPointBoImpl implements WorkflowPointBo {
+
+	@Autowired
+	private UserIdentity userIdentity;
+	
+	@Autowired
+	private UnitBo unitBo;
+
+	@Autowired
+	private UnitDao unitDao;
+	
+	@Autowired
+	private WorkflowPointDao WorkflowPointDao;
+
+	@Override
+	public List<VisitWorkflowPoint> fetchAllByOrganisation() {
+		// TODO Auto-generated method stub
+
+		return this.WorkflowPointDao.fetchAll(this.userIdentity
+				.getOrganisation());
+	}
+
+	@Override
+	public VisitWorkflowPoint getWorkflowPointById(int id) {
+		// TODO Auto-generated method stub
+		return this.WorkflowPointDao.getWorkflowPointById(id);
+	}
+
+	@Override
+	public VisitWorkflowPoint save(WorkflowPointForm form) {
+		// TODO Auto-generated method stub
+		WorkflowPoint point = new WorkflowPoint();
+		HrunitCategory unit = this.unitBo.getUnitById(form.getUnitId());
+		//point.setUnit(unit);
+		point.setName(form.getPointName());
+	
+		
+		point.setOrganisation(this.userIdentity.getOrganisation());
+		point.setCreatedBy(this.userIdentity.getUsername()); 
+		point.setActive(true);
+		this.WorkflowPointDao.save(point);
+
+		return point;
+	}
+
+	@Override
+	public void delete(WorkflowPoint workflowPoint) {
+		// TODO Auto-generated method stub
+		this.WorkflowPointDao.delete(workflowPoint);
+	}
+
+	@Override
+	public void update(WorkflowPointForm form) {
+		// TODO Auto-generated method stub
+		WorkflowPoint point = this.WorkflowPointDao
+				.getWorkflowPointById(form.getId());
+		point.setName(form.getPointName());
+
+		this.WorkflowPointDao.update(point);
+	}
+
+	@Override
+	public VisitWorkflowPoint getWorkflowStartPoint() {
+		// TODO Auto-generated method stub
+		return this.WorkflowPointDao.getWorkflowStartPoint();
+	}
+
+	@Override
+	public VisitWorkflowPoint getWorkflowEndPoint() {
+		// TODO Auto-generated method stub
+		return this.WorkflowPointDao.getWorkflowEndPoint();
+	}
+
+	@Override
+	public VisitWorkflowPoint getPointByName(String string) {
+		// TODO Auto-generated method stub
+		return this.WorkflowPointDao.getPointByName(string);
+	}
+
+	@Override
+	public List<VisitWorkflowPoint> fetchFontDeskPoint(int section) {
+		// TODO Auto-generated method stub
+		int frontDeskId = 8; 
+		return this.WorkflowPointDao.fetchFontDeskPoint(frontDeskId, section);
+	}
+
+	@Override
+	public List<VisitWorkflowPoint> getvWorkflowPointByUnitId(int unit_id) {
+		HrunitCategory unit = unitBo.getUnitById(unit_id);
+		return WorkflowPointDao.getvWorkflowPointByUnitId(unit);
+	}
+
+}

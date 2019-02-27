@@ -1,0 +1,111 @@
+<div class="page-header">
+	<h1>
+		View <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			View a workflow point
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-primary"
+			th:href="@{/system/setting/visitworkflows}"><i class="fa fa-list"></i>
+			All workflow points</a> <a class="btn btn-xs btn-warning"
+			th:href="@{/system/setting/visitworkflows/edit/{id} (id=${point.id})}"><i
+			class="fa fa-edit"></i> Edit point</a> <a class="btn btn-xs btn-danger"
+			th:href="@{/system/setting/visitworkflows/delete/{id} (id=${point.id})}"><i
+			class="fa fa-trash-o"></i> Delete point</a>
+	
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<div class="row">
+			<div class="col-md-4 col-xs-12">
+				<div class="widget-box">
+					<div class="widget-header widget-header-flat">
+						<h4 class="widget-title smaller">
+							<i class="ace-icon fa fa-download smaller-80"></i> Workflow Point
+							Details
+						</h4>
+					</div>
+
+					<div class="widget-body">
+						<div class="widget-main">
+							<dl class="dl-horizontal">
+								<dt>Name:</dt>
+								<dd th:text="${point.name}"></dd>
+								<dt>Created date</dt>
+								<dd
+									th:text="${ #dates.format(point.createdDate, 'MMM dd, yyyy HH:mm')}"></dd>
+								<dt>Last modified date</dt>
+								<dd
+									th:text="${point.modifiedDate == null} ? 'Not modified yet!': ${ #dates.format(point.modifiedDate, 'MMM dd, yyyy HH:mm')}"></dd>
+							</dl>
+							<hr />
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-8 col-xs-12">
+				<div class="widget-box">
+					<div class="widget-header widget-header-flat">
+						<h4 class="widget-title smaller">Workflow Point Users</h4>
+						<div class="widget-toolbar">
+							<a href="#modal-wf-point" class="red tooltips"
+								title="Edit users on workflow point" data-toggle="modal"> <i
+								class="fa fa-edit"></i>
+							</a>
+						</div>
+					</div>
+
+					<div class="widget-body">
+						<div class="widget-main">
+
+							<div class="profile-activity clearfix"
+								th:each="u : ${ point.pointUsers }">
+								<div>
+									<img class="pull-left"
+										th:if="${u.userProfile.profileImage == null}"
+										th:src="@{/resources/img/nhis.png}" alt="Profile" />
+									<!-- If-else Img -->
+									<img class="pull-left"
+										th:if="${u.userProfile.profileImage != null}"
+										th:src="@{/system/umgt/users/image/{id}(id=${u.userId})}"
+										alt="Profile" />
+									<!-- Link -->
+									<a class="user"
+										th:href="@{/system/umgt/users/view/{id} (id=${u.userId})}"
+										th:inline="text"> [[${u.userProfile.title.acronym} + ' ' +
+										${u.userProfile.lastName} + ' ' +
+										${u.userProfile.otherNames}]]</a>
+
+									<div class="time" th:inline="text">
+										<i class="ace-icon fa fa-user bigger-110"></i>
+										[[${u.username}]]
+									</div>
+								</div>
+
+								<div class="tools action-buttons">
+									<a href="#" class="blue"> <i
+										class="ace-icon fa fa-pencil bigger-125"></i>
+									</a> <a href="#" class="red"> <i
+										class="ace-icon fa fa-times bigger-125"></i>
+									</a>
+								</div>
+							</div>
+							<hr />
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /.View contents here -->
+	</div>
+</div>

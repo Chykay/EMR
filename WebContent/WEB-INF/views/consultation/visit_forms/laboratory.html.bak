@@ -1,0 +1,382 @@
+<th:block th:if="${visit.rescheduledVisit} != null">
+	<div class="alert alert-block alert-info">
+		<i class="ace-icon fa fa-bullhorn"></i> <span
+			th:text="'This visit as been rescheduled for ' + ${ #dates.format(visit.rescheduledVisit.scheduledDate, 'dd-MMM-yyyy')}">Visit
+			has be rescheduled for 2015-05-20</span>
+	</div>
+</th:block>
+<div class="page-header">
+	<h1>
+		Visits <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			Laboratory
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-primary" th:href="@{/consultations/visits}"><i
+			class="fa fa-list-alt"></i> All Visits</a> <a
+			class="btn btn-xs btn-primary"
+			th:href="@{/consultations/visits/laboratory}"><i
+			class="fa fa-list-alt"></i> All Lab visits</a> <a
+			class="btn btn-xs btn-warning"
+			th:href="@{/consultations/visits/reschedule/{id}/laboratory (id=${visit.id})}"><i
+			class="fa fa-list-alt"></i> Reschedule</a> <a
+			class="btn btn-xs btn-danger"
+			th:href="@{/consultations/visits/close/{id} (id = ${visit.id})}"><i
+			class="fa fa-list-alt"></i> Close Visit</a>
+	</div>
+</div>
+<div class="hr hr-18 dotted hr-double"></div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Tabs to handle the various views -->
+		<!-- Show the workflow movements -->
+	</div>
+</div>
+<div class="row">
+	<div class="col-xs-12 col-md-9">
+
+		<!-- Patient and visit details -->
+		<div class="row">
+			<div class="col-xs-12 col-md-12">
+				<div class="row">
+					<div class="col-md-8">
+						<h4 th:inline="text">
+							[[${visit.patient.title.acronym} + ' ' + ${visit.patient.surname}
+							+ ' ' + ${visit.patient.othernames}]] <i
+								class="ace-icon fa fa-angle-double-right"></i> <small>[[${visit.patient.patient_id}]]</small>
+						</h4>
+					</div>
+					<div class="col-md-4">
+						<h4 th:inline="text">Visit Code: [[${visit.code}]]</h4>
+					</div>
+					<!-- <div class="col-md-4">
+						<h3 th:inline="text">
+							[[${visit.patient.title.acronym} + ' ' + ${visit.patient.surname}
+							+ ' ' + ${visit.patient.othernames}]] <small>[[${visit.patient.patient_id}]]</small>
+						</h3>
+					</div> -->
+				</div>
+			</div>
+		</div>
+		<!-- /.Patient and visit details -->
+		<!-- Tabs to handle the various views -->
+		<div class="row">
+			<div class="col-xs-12 col-md-7">
+				<div class="widget-box widget-color-blue">
+					<div class="widget-header">
+						<h4 class="widget-title lighter smaller">Recommended Tests</h4>
+					</div>
+
+					<div class="widget-body">
+						<div class="widget-main padding-8">
+							<th:block th:if="${not #lists.isEmpty(visit.labTests)}">
+								<ul class="list-unstyled spaced">
+									<li class="text-warning bigger-110 red"
+										th:each="t: ${visit.labTests}" th:inline="text"><i
+										class="ace-icon fa fa-exclamation-triangle"></i> <b>[[${t.test.name}]]</b>
+									</li>
+								</ul>
+							</th:block>
+						</div>
+					</div>
+				</div>
+				<hr />
+				<!-- Dform -->
+				<h3 th:inline="text">Laboratory Form</h3>
+				<hr />
+				<form method="post" th:object="${dForm}" id="doctor-form">
+					<input type="hidden" th:field="*{visitId}" />
+					<div class="form-group">
+						<label>Sample 1</label>
+						<div class="">
+							<input class="col-xs-10 col-sm-12" th:field="*{sampleField1}" />
+							<span class="text-danger"
+								th:if="${#fields.hasErrors('sampleField1')}"
+								th:errors="*{sampleField1}"></span>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label>Sample 2</label>
+						<div class="">
+							<input class="col-xs-10 col-sm-12" th:field="*{sampleField2}" />
+							<span class="text-danger"
+								th:if="${#fields.hasErrors('sampleField2')}"
+								th:errors="*{sampleField2}"></span>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label>Comments</label>
+						<div class="">
+							<textarea class="col-xs-10 col-sm-12" th:field="*{comments}"></textarea>
+							<span class="text-danger"
+								th:if="${#fields.hasErrors('comments')}" th:errors="*{comments}"></span>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<br />
+						<button type="submit" class="btn btn-primary btn-xs">
+							<i class=""></i> Save
+						</button>
+					</div>
+				</form>
+				<!-- /Dform -->
+			</div>
+			<div class="col-xs-12 col-md-4">
+				<!-- Patient profile details -->
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 center">
+						<span class="profile-picture"> <img
+							th:if="${visit.patient.image == null}" id="avatar2"
+							th:src="@{/resources/img/nhis.png}" alt="Profile"
+							class="img-responsive" /> <img
+							th:if="${visit.patient.image != null}" id="avatar2"
+							th:src="@{/customers/patients/image/{id}(id=${visit.patient.id})}"
+							alt="Profile" class="img-responsive" />
+						</span>
+
+						<div class="space space-4"></div>
+						<h4 th:inline="text">[[${visit.patient.title.acronym} + ' ' +
+							${visit.patient.surname} + ' ' + ${visit.patient.othernames}]]</h4>
+						<small th:inline="text">[[${visit.patient.patient_id}]]</small>
+					</div>
+				</div>
+				<div class="space space-4"></div>
+				<!-- Display Allergies -->
+				<div class="widget-box widget-color-red2">
+					<div class="widget-header">
+						<h4 class="widget-title lighter smaller">Patients Allergies</h4>
+					</div>
+
+					<div class="widget-body">
+						<div class="widget-main padding-8">
+							<!-- List all the allergies -->
+							<!-- List all the allergies -->
+							<th:block th:if="${#lists.isEmpty(visit.patient.allergies)}">
+								<!-- No Allergy -->
+								<ul class="list-unstyled spaced">
+									<li class="text-success bigger-110 red"><i
+										class="ace-icon fa fa-ok"></i> No Allergies</li>
+								</ul>
+							</th:block>
+							<th:block th:if="${not #lists.isEmpty(visit.patient.allergies)}">
+								<ul class="list-unstyled spaced">
+									<li class="text-warning bigger-110 red"
+										th:each="a: ${visit.patient.allergies}" th:inline="text"><i
+										class="ace-icon fa fa-exclamation-triangle"></i> <b>[[${a.allergy.name}]]</b>
+										([[ ${a.allergy.category.name} ]])</li>
+								</ul>
+							</th:block>
+
+						</div>
+					</div>
+				</div>
+				<!-- /.Display Allergies -->
+			</div>
+		</div>
+		<!-- /.Tabs to handle the various views -->
+	</div>
+	<div class="col-xs-12 col-md-3">
+		<a class="btn btn-danger btn-xs" data-toggle="modal"
+			href="#transfer-form-modal"> <i
+			class="ace-icon fa fa-share bigger-110"></i> Assign Patient
+		</a>
+		<!-- timeline sample -->
+		<div class="timeline-container timeline-style2">
+			<span class="timeline-label"> <b>Visit Timeline</b>
+			</span>
+			<!-- timeline-items -->
+			<div class="timeline-items">
+
+				<th:block th:each="t : ${visit.timeline}">
+
+					<div class="timeline-item clearfix">
+						<div class="timeline-info">
+							<span class="timeline-date"
+								th:text="${ #dates.format(t.createdDate, 'MMM dd, yyyy hh:mm a')}">11:15
+								pm</span> <i class="timeline-indicator btn btn-info no-hover"></i>
+						</div>
+
+						<div class="widget-box transparent">
+							<div class="widget-body">
+								<div class="widget-main no-padding">
+									<b><span class="bigger-110" th:text="${t.pointName}">
+											pointName </span></b> <br /> <i
+										class="ace-icon fa fa-user blue bigger-125"></i> <span
+										class="bigger-110" th:text="${t.pointUsername}">
+										point_username </span> <br /> <span th:text="${t.comment}">No
+										Comment</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</th:block>
+
+			</div>
+			<!-- /.timeline-items -->
+		</div>
+		<!-- /.timeline sample -->
+	</div>
+</div>
+
+
+<!-- Transfer form modal -->
+<div class="modal fade" id="transfer-form-modal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- Modal heading -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Transfer Patient</h4>
+			</div>
+			<!-- // Modal heading END -->
+			<!-- Modal body -->
+			<div class="modal-body">
+				<!-- Form -->
+				<form th:object="${wfForm}"
+					th:action="@{/consultations/visits/laboratory/assigntopoint}"
+					method="post">
+					<input type="hidden" th:field="*{visitId}" />
+					<div class="form-group">
+						<label>Select Point</label>
+						<div class="">
+							<select class="col-xs-10 col-sm-12" id="workflow-point"
+								th:field="*{workflowPointId}" required="true">
+								<option value="0">Select..</option>
+								<option th:each="p: ${points}" th:value="${p.id}"
+									th:text="${p.name}"></option>
+							</select> <span class="text-danger"
+								th:if="${#fields.hasErrors('workflowPointId')}"
+								th:errors="*{workflowPointId}"></span>
+						</div>
+					</div>
+					<!-- User Input -->
+					<div class="form-group">
+						<label>Select User</label>
+						<div class="">
+							<select class="col-xs-10 col-sm-12" th:field="*{userId}"
+								id="point-users" required="true">
+								<option value="">Select Point first</option>
+							</select> <span class="text-danger" th:if="${#fields.hasErrors('userId')}"
+								th:errors="*{userId}"></span>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label>Comment</label>
+						<div class="">
+							<textarea class="col-xs-10 col-sm-12" th:field="*{comment}"
+								placeholder="comments"></textarea>
+							<span class="text-danger" th:if="${#fields.hasErrors('comment')}"
+								th:errors="*{comment}"></span>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<br />
+						<button type="submit" class="btn btn-primary btn-xs">
+							<i class=""></i> Assign
+						</button>
+					</div>
+				</form>
+				<!-- /.Form -->
+			</div>
+			<!-- // Modal body END -->
+
+			<!-- Modal footer -->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-xs" data-dismiss="modal">Cancel</button>
+			</div>
+			<!-- // Modal footer END -->
+		</div>
+	</div>
+</div>
+<!-- /.Transfer form -->
+
+<script>
+
+	$('#doctor-form').submit(function(e){
+		e.preventDefault();
+		$.ajax({
+			method: "POST",
+			dataType: "JSON",
+			data: $(this).serialize(),
+			beforeSend: function(){
+				$.gritter.add({
+					// (string | mandatory) the heading of the notification
+					title: 'Processing!',
+					// (string | mandatory) the text inside the notification
+					text: 'Fetching users for selected point...'
+				});
+			},
+			success: function(msg){
+				if(msg.status){
+					$.gritter.add({
+						// (string | mandatory) the heading of the notification
+						title: 'Success!',
+						// (string | mandatory) the text inside the notification
+						text: 'Data saved',
+						class_name: 'gritter-success' 
+					});
+				}else{
+					$.gritter.add({
+						title: 'Error!',
+						text: msg.formErrors,
+						class_name: 'gritter-error'
+					});
+				}
+			},
+			error: function(){
+				$.gritter.add({
+					title: 'Error!',
+					text: 'Cannot submit data. Try again or contact admin',
+					class_name: 'gritter-error'
+				});
+
+			}
+		});
+	});
+
+	$('#workflow-point').change(function(){
+		$.ajax({
+			url: '../workflowusers/' + $(this).val(),
+			beforeSend: function(){
+				$.gritter.add({
+					// (string | mandatory) the heading of the notification
+					title: 'Processing!',
+					// (string | mandatory) the text inside the notification
+					text: 'Fetching users for selected point...'
+				});
+			},
+			success: function(msg){
+				$.gritter.add({
+					// (string | mandatory) the heading of the notification
+					title: 'Success!',
+					// (string | mandatory) the text inside the notification
+					text: 'Users fetched...',
+					class_name: 'gritter-success' 
+				});
+				$('#point-users').html(msg);
+			
+			},
+			error: function(){
+				$.gritter.add({
+					title: 'Error!',
+					text: 'Cannot fetch point users. Try again or contact admin',
+					class_name: 'gritter-error'
+				});
+
+			}
+		});
+	});
+</script>

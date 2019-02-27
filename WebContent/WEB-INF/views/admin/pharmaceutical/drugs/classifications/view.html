@@ -1,0 +1,43 @@
+<div class="page-header">
+	<h1>
+		View <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			View a Classification
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/admin}"><i
+			class="fa fa-home"></i> Admin Dashboard</a> <a
+			class="btn btn-xs btn-primary"
+			th:href="@{/admin/pharmaceutical/drugs/classifications}"><i
+			class="fa fa-list"></i> All Classifications</a> <a
+			class="btn btn-xs btn-warning"
+			th:href="@{/admin/pharmaceutical/drugs/classifications/edit/{id} (id=${classification.id})}"><i
+			class="fa fa-edit"></i> Edit ailment</a> <a class="btn btn-xs btn-danger"
+			th:href="@{/admin/pharmaceutical/drugs/classifications/delete/{id} (id=${classification.id})}"><i
+			class="fa fa-trash-o"></i> Delete ailment</a>
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<dl class="dl-horizontal">
+			<dt>Name:</dt>
+			<dd th:text="${classification.name}"></dd>
+			<dt>Description:</dt>
+			<dd
+				th:text="${classification.description == null || classification.description == ''} ? 'Not set': ${classification.description}"></dd>
+			<dt>Created date</dt>
+			<dd
+				th:text="${ #dates.format(classification.createdDate, 'MMM dd, yyyy HH:mm')}"></dd>
+			<dt>Last modified date</dt>
+			<dd
+				th:text="${classification.modifiedDate == null} ? 'Not modified yet!': ${ #dates.format(classification.modifiedDate, 'MMM dd, yyyy HH:mm')}"></dd>
+		</dl>
+	</div>
+</div>

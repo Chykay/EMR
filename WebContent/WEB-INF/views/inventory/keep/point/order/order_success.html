@@ -1,0 +1,93 @@
+
+<div class="page-header">
+	<h1>
+		INVENTORY OFFICE MANAGEMENT<small> <i
+			class="ace-icon fa fa-angle-double-right"></i> Make Order Request
+		</small>
+	</h1>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard </a> <a
+			class="btn btn-xs btn-primary"
+			th:href="@{/inventory/point/order/new}"> <i
+			class="fa fa-plus-circle"></i>Make A New Order
+		</a>
+	</div>
+</div>
+
+<p></p>
+
+<style>
+.table {
+	margin: auto
+}
+<!--
+-->
+</style>
+
+<div class="col-xs-12">
+	<!-- View contents here -->
+
+
+	<div class="well well-sm">
+		<ul>
+			<li>Order ID:&nbsp; <span class="text-danger"
+				th:text="${order.orderId}">Order ID:</span>
+			</li>
+
+			<li>Date Of Order:&nbsp; <span class="text-danger"
+				th:text="${order.dateOfOrder}">Order Date:</span>
+			</li>
+		</ul>
+	</div>
+	
+	<div class="col-xs-10">
+		<div>
+			<table class="table" th:with="result=0">
+				<thead>
+					<tr>
+						<th>Global Item:</th>
+						<th>Unit Of Measure:</th>
+						<th>Quantity Ordered:</th>
+						<th>Unit Price:</th>
+						<th>Total Price:</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<th:block th:if="${order !=null}">
+
+						<tr th:each="orderLine: ${order.orderLines}">
+							<td th:text=" ${orderLine.globalItem?.name}">Global Item</td>
+							<td th:text=" ${orderLine.globalUnitofMeasure?.searchname}">Unit
+								Of Measure</td>
+							<td th:text=" ${orderLine.quantity}">Quantity Ordered</td>
+							<td th:text=" ${orderLine.unitPrice}">Unit Price</td>
+							<td th:text=" ${orderLine.quantity * orderLine.unitPrice}">Total
+								Price</td>
+							<td><span th:text="${orderLine.status}" class="text-danger">Status</span></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td>Total Gross Price</td>
+							<td th:text=" ${order.totalPrice}">Total Gross Price</td>
+							<td></td>
+						</tr>
+					</th:block>
+
+				</tbody>
+			</table>
+		</div>
+
+
+	</div>
+</div>
+
+
+
+

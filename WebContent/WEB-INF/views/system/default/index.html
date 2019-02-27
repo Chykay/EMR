@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">-->
+<!-- <link
+	href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css"
+	rel="stylesheet"/> -->
+
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/resources/js/jquery-min.js"></script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div th:fragment="content" class="col-md-10">
+		<div class="row">
+			<div class="col-md-12">
+				<h1>System Dashboard</h1>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<a class="btn btn-primary btn-lg" th:href="@{/system/patients}">Patients</a>
+				<a class="btn btn-primary btn-lg" th:href="@{/system/doctors}">Doctors</a>
+				<a class="btn btn-warning btn-lg" th:href="@{/system/audits}">Audits</a>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

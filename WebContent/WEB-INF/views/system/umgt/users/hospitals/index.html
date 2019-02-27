@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<!-- <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">-->
+<!-- <link
+	href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css"
+	rel="stylesheet"/> -->
+
+</head>
+<body>
+	<div th:fragment="content" class="col-md-10">
+		<div class="row" style="margin-bottom: 5px;">
+			<div class="col-md-12">
+				<h1>All Users</h1>
+
+				<a class="btn btn-xs btn-info" th:href="@{/system}">System
+					Dashboard</a> <a class="btn btn-xs btn-primary"
+					th:href="@{/system/users/add}">Create User</a>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div th:switch="${#lists.isEmpty(users)}">
+					<div th:case="true">
+						<h2>No User listed yet!</h2>
+					</div>
+					<div th:case="false">
+						<!-- <c:set var="count" value="${0}" /> -->
+						<table class="table table-stripped table-hover table-bordered">
+							<tr>
+								<th>#</th>
+								<th>Username</th>
+								<th>Status</th>
+								<th>Lock</th>
+								<th><i class="glyphicon glyphicon-asterisk"></i></th>
+							</tr>
+							<tr th:each="user,rowStat : ${ users }">
+								<td th:text="${rowStat.count}">1</td>
+								<td th:text="${user.email}">username</td>
+								<td th:switch="${user.status}"><span th:case="true">Active</span>
+									<span th:case="false">Not Active</span></td>
+								<td th:switch="${user.lock}"><span th:case="true"><i
+										class="fa fa-unlock"></i> Unlocked</span> <span th:case="false"><i
+										class="fa fa-lock"></i> Locked</span></td>
+								<td><a class="btn btn-xs btn-primary"
+									th:href="@{/system/users/view/{id}(id=${user.userId}) }"> <i
+										class="glyphicon glyphicon-eye-open"></i> View
+								</a> <a class="btn btn-xs btn-danger"
+									th:href="@{/system/users/confirmdelete/{id}(id=${user.userId}) }">
+										<i class="glyphicon glyphicon-trash"></i> Delete
+								</a></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

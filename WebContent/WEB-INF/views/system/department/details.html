@@ -1,0 +1,347 @@
+<div class="page-header">
+	<h1>
+		DEPARTMENT<small> <i
+			class="ace-icon fa fa-angle-double-right"></i> DEPARTMENT MANAGEMENT
+		</small>
+	</h1>
+</div>
+<div class="row">
+<div class="col-xs-12">
+
+
+										<ul class="nav nav-tabs" id="myTab">
+											<li class="active">
+												<a data-toggle="tab" href="#home">
+													<!-- <i class="green ace-icon fa fa-home bigger-120"></i> -->
+													Details
+												</a>
+											</li>
+
+											<li>
+												<a data-toggle="tab" href="#profile">
+													Unit
+													<!-- <span class="badge badge-danger">4</span> -->
+												</a>
+											</li>
+
+										</ul>
+
+										<div class="tab-content">
+											<div id="home" class="tab-pane in active">
+								
+											<div class="page-header">
+											
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		
+
+	</div>
+</div>
+
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<!-- User Profile -->
+		<div id="user-profile-2" class="user-profile">
+			<div class="tabbable">
+				
+				<div class="tab-content no-border padding-24">
+					<div id="home" class="tab-pane in active">
+						<div class="row">
+
+							<div class="col-xs-12 col-sm-9">
+							
+							<div class="">
+								<h1><i class="glyphicon glyphicon-list"></i>
+									Department Details <small> 
+										
+									</small>
+								</h1> 
+							</div>
+								
+								<div class="profile-info-row">
+									<div class="profile-info-name">Department ID</div>
+
+									<div class="profile-info-value">
+										<span th:text="${dept.id}">alexdoe</span>
+									</div>
+								</div>
+
+
+								
+									<div class="profile-info-row">
+										<div class="profile-info-name">Department Name</div>
+
+										<div class="profile-info-value">
+											<span th:text="${dept.departmentName}">alexdoe</span>
+										</div>
+									</div>
+									
+								
+								<div class="hr hr-8 dotted"></div>
+							
+							<!-- /.col -->
+						</div> 
+						<!-- /.row -->
+
+						<div class="space-20"></div>
+					</div>
+					<!-- /#home -->
+				</div>
+			</div>
+		</div>
+
+		<!-- Profile Ends  -->
+		<!-- End View contents here -->
+	</div>
+</div>
+
+<!-- <div class="modal fade" id="modal-simple">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			
+		</div>
+	</div>
+</div> -->
+</div>
+											
+											</div>
+
+											<div id="profile" class="tab-pane">
+												<div class="page-header">
+	<h1>
+		Unit <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			units
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-list-alt"></i> System Dashboard</a>
+			<!-- 
+			<a class="btn btn-xs btn-info" th:href="@{/system/labtest/addtest}"><i
+			class="fa fa-list-alt"></i> Add Test</a> -->
+			<a href="#modal-simple" data-toggle="modal" class="btn btn-xs btn-info"> Add Unit </a>
+			 <!-- <a class="btn btn-xs btn-info"
+			th:href="@{/consultations/visits/consultant}"><i
+			class="fa fa-list-alt"></i> Consultant Point</a> --><!-- <a
+			class="btn btn-xs btn-info" th:href="@{/consultations/visits/laboratory}"><i
+			class="fa fa-list-alt"></i> Lab Point</a> --> <!-- <a class="btn btn-xs btn-info"
+			th:href="@{/consultations/visits/pharmacy}"><i class="fa fa-home"></i>Pharmacy Point</a> -->
+	</div>
+</div>
+<div class="hr hr-18 dotted hr-double"></div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<div class="table-header"></div>
+											
+		<table id="dTableA"
+			class="table table-striped table-bordered table-hover">
+			<!-- Table heading -->
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Department ID</th>
+ 					<th>Unit Name</th>
+					<th>Created By</th>
+					<th>Created On</th>
+					<th>Edit<!-- <i class="glyphicon glyphicon-asterisk"></i> --></th>
+					<th>Manage</th>
+				</tr>
+			</thead>
+			<!-- // Table heading END -->
+			<!-- Table body -->
+			<tbody>
+				<tr th:each="c : ${unit}">
+					<td th:text="${c.id}"></td>
+					<td th:text="${c.dept.id}"></td>
+					<td th:text="${c.unitName}"></td>
+					<td th:text="${c.createdBy}"></td>
+					<td th:text="${c.createdDate}"></td>
+					<td><a class="btn btn-warning btn-xs"
+						title="edit"
+						th:href="@{/system/unit/edit/{id}(id=${c.id})}"> <i class="fa fa-edit"></i>
+					</a>
+					</td>
+					<td><a class="btn btn-xs btn-info" th:href="@{/system/unit/detail/{id}(id=${c.id})}"><i
+			class="fa fa-list-alt"></i></a></td>
+				<!-- 	 <td><a class="btn btn-xs btn-primary tooltips" th:id="${c.id}"
+						href="#modal-simple" data-toggle="modal"> <i
+							class="fa fa-eye"></i>
+					</a></td>  -->
+					 <!--  <td><a class="btn btn-xs btn-primary tooltips" th:id="${c.id}"
+						th:href="'#' + ${c.id}" data-toggle="modal"> <i
+							class="fa fa-eye"></i>
+					</a></td>  -->
+					
+					<!-- modal starts hereeeee -->
+		<!-- <div  th:id="${c.id}" class="modal fade" >
+	<div class="modal-dialog">
+		<div class="modal-content">
+			Form
+			<div class="form-group" th:text="QueueId"></div>
+			<div class="form-group" th:text="LabTest"></div>
+				<div class="form-group" th:each="lb : ${c.visitLabTest}" th:text="${c.code} + '&nbsp;' + ${lb.test.name} "></div>
+					
+			<div class="form-group" ></div>
+			<div class="form-group"></div>
+			<div class="form-group" ></div>
+			<div class="form-group" ></div>
+			<div class="form-group" ></div>
+			<div class="form-group"></div>
+			<div class="form-group"></div>
+			<div class="form-group"></div>
+			
+				
+				
+				
+				
+		</div>
+	</div>
+</div> -->
+					
+					
+					<!--  modal endddddddddddddd -->
+				</tr>
+			</tbody>
+			<!-- // Table body END -->
+		</table>
+		<!-- /. End view content here -->
+	</div>
+</div>
+
+											</div>
+
+										</div>
+									
+
+									<!-- /section:elements.tab.position -->
+</div>	
+</div>
+	
+<script>
+	jQuery(function($) {
+		var oTable1 = $('#dTableA').dataTable({
+			bAutoWidth : false,
+			"aoColumns" : [ {
+				"bSortable" : true
+			}, null, null, null, null, null, {
+				"bSortable" : false
+			} ]
+
+		//,
+		//"sScrollY": "200px",
+		//"bPaginate": false,
+
+		//"sScrollX": "100%",
+		//"sScrollXInner": "120%",
+		//"bScrollCollapse": true,
+		//Note: if you are applying horizontal scrolling (sScrollX) on a ".table-bordered"
+		//you may want to wrap the table inside a "div.dataTables_borderWrap" element
+
+		//"iDisplayLength": 50
+		});
+
+	});
+</script>
+
+<div class="modal fade" id="modal-simple">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- Form -->
+					
+				
+					<form role="form" class="form-horizontal" method="POST"
+						th:action="@{/system/unit/saveunit}"
+									th:object="${unitForm}">
+								
+				<!-- Modal heading -->
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title">New Unit</h4>
+				</div>
+				<!-- // Modal heading END -->
+				<!-- Modal body -->
+				<div class="modal-body">
+					
+	<input type="hidden" th:field="*{id}" />
+
+<div class="row">
+									 <div class="form-group">
+									<label for="name" class="col-sm-3 control-label no-padding-right">Department ID:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder=""
+						th:field="*{departmentId}" required="required" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('departmentId')}"
+						th:errors="*{departmentId}"></span>
+				</div>
+								</div>
+								<!-- <div class="form-group">
+							<label class="col-sm-2 control-label"> Test Category </label>
+							<div class="col-sm-4">
+								<select th:field = "*{catId}" class="form-control">
+										  <option value="0">select category</option>
+										  <option th:each = "p : ${list}" 
+										  		  th:value = "${p.id}"  
+										  		  th:text= "${p.categoryName}"> </option>										 										  
+									</select>
+							</div>
+
+						</div> -->
+
+</div>
+
+<div class="space-2"></div>
+		<div class="space-2"></div>
+
+							<div class="row">
+									<div class="form-group">
+									<label for="name" class="col-sm-3 control-label no-padding-right">Unit:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder=""
+						th:field="*{unitName}" required="required" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('unitName')}"
+						th:errors="*{unitName}"></span>
+				</div>
+								</div>
+
+</div>
+	<div class="space-2"></div>
+		<div class="space-2"></div>
+		
+			
+				</div>
+				<!-- // Modal body END -->
+
+				<!-- Modal footer -->
+				<div class="modal-footer">
+				
+				
+						
+						<input type="hidden" th:field="*{id}" />
+										<button class="btn btn-primary" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i> Add
+										</button>
+
+										<button class="btn btn-danger" type="reset">
+											<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+										</button>
+										
+										
+					
+				</div>
+				<!-- // Modal footer END -->
+			</form>
+			<!-- /.Form -->
+		</div>
+	</div>
+</div>

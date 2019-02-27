@@ -1,0 +1,66 @@
+<div class="page-header">
+	<h1>
+		Add <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			Add a drug
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-primary"
+			th:href="@{/system/pharmaceutical/drugs}"><i
+			class="fa fa-list"></i> All Drugs</a>
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+
+		<form role="form" class="form-horizontal" method="POST"
+			th:object="${dForm}">
+			<legend>Drug Form</legend>
+			<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Name:</label>
+				<div class="col-sm-9">
+					<select th:field="*{drugId}" class="col-xs-10 col-sm-5">
+						<option value="0">Select..</option>
+						<option th:each="c: ${drugs}" th:value="${c.id}"
+							th:text="${c.name}"></option>
+					</select>
+					<span class="text-danger" th:if="${#fields.hasErrors('drugId')}"
+						th:errors="*{drugId}"></span>
+				</div>
+			</div>
+			
+			
+			<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Price:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5"
+						placeholder="price" th:field="*{price}" required="required" />
+					<span class="text-danger" th:if="${#fields.hasErrors('price')}"
+						th:errors="*{price}"></span>
+				</div>
+			</div>
+
+			<div class="clearfix form-actions">
+				<div class="col-md-offset-3 col-md-9">
+					<input type="hidden" th:field="*{id}" />
+					<button class="btn btn-primary" type="submit">
+						<i class="ace-icon fa fa-check bigger-110"></i> Add
+					</button>
+
+					<button class="btn btn-danger" type="reset">
+						<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>

@@ -1,0 +1,50 @@
+<th:block th:if="${msg != null}">
+	<div class="row">
+		<div th:replace="layouts/commonviews/alert">Alert Block</div>
+	</div>
+</th:block>
+<div id="login-box" class="login-box visible widget-box no-border">
+
+	<div class="widget-body">
+		<div class="widget-main">
+			<h4 class="header blue lighter bigger">
+				<i class="ace-icon fa fa-coffee green"></i> Please Enter Your
+				Information
+			</h4>
+
+			<div class="space-6"></div>
+
+			<form role="form" th:action="@{/user/session/answer}"
+				th:object="${userQuestionForm}" th:method="post">
+				<label class="block clearfix"> <span class="help-block">Security
+						Question:</span> <span th:text="*{question}">Question Text</span>
+				</label>
+				<!-- Password -->
+				<label class="block clearfix"> <span
+					class="block input-icon input-icon-right"> <input
+						type="password" class="form-control" th:field="*{answer}"
+						placeholder="Answer" /> <i class="ace-icon fa fa-lock"></i> <span
+						class="text-danger" th:if="${#fields.hasErrors('answer')}"
+						th:errors="*{answer}"></span>
+				</span>
+				</label>
+
+				<div class="space"></div>
+
+				<div class="clearfix">
+					<!-- <label class="inline"> <input type="checkbox" class="ace" />
+						<span class="lbl"> Remember Me</span>
+					</label> --> <input type="hidden" th:field="*{questionNum}" />
+					<button type="submit"
+						class="width-35 pull-right btn btn-sm btn-primary">
+						<i class="ace-icon fa fa-key"></i> <span class="bigger-110">Confirm</span>
+					</button>
+				</div>
+			</form>
+		</div>
+		<!-- /.form div -->
+
+	</div>
+	<!-- /.widget-body -->
+</div>
+<!-- /.login-box -->

@@ -1,0 +1,176 @@
+<div class="page-header">
+	<h1>
+		EDIT<small> <i class="ace-icon fa fa-angle-double-right"></i>
+			 USER POINT
+		</small>
+	</h1>
+</div>
+
+<!-- <div class="row">
+	<div class="col-xs-12">
+		Button for view
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-list-alt"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-info" th:href="@{/system/department/list}"><i
+			class="fa fa-list-alt"></i> All Departments</a> <a class="btn btn-xs btn-info"
+			th:href="@{/consultations/visits/consultant}"><i
+			class="fa fa-list-alt"></i> Consultant Point</a> --><!-- <a
+			class="btn btn-xs btn-info" th:href="@{/consultations/visits/laboratory}"><i
+			class="fa fa-list-alt"></i> Lab Point</a> <a class="btn btn-xs btn-info"
+			th:href="@{/consultations/visits/pharmacy}"><i class="fa fa-home"></i>Pharmacy Point</a>
+	</div>
+</div> -->
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+
+		<form role="form" class="form-horizontal" method="POST"
+			th:action="@{/system/clock_management/updateuserpoint}" th:object="${hrPointForm}">
+			<!-- <legend>Lab Test Form</legend> -->
+
+
+
+<input type="hidden" class="col-xs-12 col-sm-6"	th:field="*{id}" /> 
+<input type="hidden" class="col-xs-10 col-sm-5" th:field="*{userId}" />
+<input type="hidden" class="col-xs-10 col-sm-5" th:field="*{organisationId}" />
+<input type="hidden" class="col-xs-10 col-sm-5" th:field="*{createdBy}" />
+<input type="hidden" class="col-xs-10 col-sm-5" th:field="*{createdDate}" />
+<input type="hidden" class="col-xs-10 col-sm-5" th:field="*{modifiedBy}" />
+<input type="hidden" class="col-xs-10 col-sm-5" th:field="*{modifiedDate}" />
+
+			<!-- <div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">ID</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder="" readonly = "readonly"
+						th:field="*{id}" required="required" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('id')}"
+						th:errors="*{id}"></span>
+				</div>
+			</div> -->
+	
+			<!-- <div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">User ID:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder="" readonly = "readonly"
+						th:field="*{userId}" required="required" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('userId')}"
+						th:errors="*{userId}"></span>
+				</div>
+			</div> -->
+			
+			<div class="form-group">
+				<label for="SectionId" class="col-sm-3 control-label no-padding-right">Point</label>
+				<div class="col-sm-9">
+					<select class="col-sm-5" id="login-section"
+						th:field="*{pointId}" required="true">
+						<!-- <option value="0">Select..</option> -->
+						<option th:each="s: ${point}" th:value="${s.id}"
+							th:text="${s.pointName}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('pointId')}"
+						th:errors="*{pointId}"></span>
+				</div>
+			</div>	
+			
+			
+			<!-- <div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Organisation ID</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder=""
+						th:field="*{organisationId}" required="required" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('organisationId')}"
+						th:errors="*{organisationId}"></span>
+				</div>
+			</div>	 -->
+			
+				<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Comment</label>
+				<div class="col-sm-9">
+				<textarea rows="4" cols="45" placeholder="" id="form-field-11" th:field="*{comment}" required="required">Enter text here...
+							</textarea>
+					<!-- <input type="text" class="col-xs-10 col-sm-5" placeholder=""
+						th:field="*{comment}" required="required" /> --> <span
+						class="text-danger" th:if="${#fields.hasErrors('comment')}"
+						th:errors="*{comment}"></span>
+				</div>
+			</div>	
+				
+				<!-- 	<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">created by</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder="" readonly = "readonly"
+						th:field="*{createdBy}" required="required" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('createdBy')}"
+						th:errors="*{createdBy}"></span>
+				</div>
+			</div> -->
+			
+			<!-- <div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Date Created</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder="" readonly = "readonly"
+						th:field="*{createdDate}" required="required" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('createdDate')}"
+						th:errors="*{createdDate}"></span>
+				</div>
+			</div> -->
+			
+			<!-- <div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Modified By</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder="" readonly = "readonly"
+						th:field="*{modifiedBy}" required="required" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('modifiedBy')}"
+						th:errors="*{modifiedBy}"></span>
+				</div>
+			</div> -->
+			
+			
+			<!-- <div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Last Modified On</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder="" readonly = "readonly"
+						th:field="*{modifiedDate}" required="required" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('modifiedDate')}"
+						th:errors="*{modifiedDate}"></span>
+				</div>
+			</div> -->
+			
+			
+			<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Status</label>
+				<div class="col-sm-9">
+					<select class="col-sm-5" id=""
+						th:field="*{status}" required="true">
+						<option value="active">active</option>
+						<option value="inactive">inactive</option>
+					</select>
+					<!-- <input type="text" class="col-xs-10 col-sm-5"
+						th:field="*{status}" required="required" /> --> <span
+						class="text-danger" th:if="${#fields.hasErrors('status')}"
+						th:errors="*{status}"></span>
+				</div>
+			</div>
+			
+			
+			<div class="clearfix form-actions">
+				<div class="col-md-offset-3 col-md-9">
+					<input type="hidden" th:field="*{id}" />
+					<button class="btn btn-primary" type="submit">
+						<i class="ace-icon fa fa-check bigger-110"></i> update
+					</button>
+
+					<!-- <button class="btn btn-danger" type="reset">
+						<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+					</button> -->
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript">
+	//height
+</script>
+

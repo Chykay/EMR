@@ -1,0 +1,224 @@
+<div class="page-header">
+	<h1>
+		New <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			Add HMO
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/admin/insurances}"
+			th:if="${@userIdentity.renderLink(28)}"><i
+			class="fa fa-home"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-primary" th:href="@{/admin/insurances/hmos}"
+			th:if="${@userIdentity.renderLink(25)}"><i
+			class="fa fa-list"></i> All HMOs</a>
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+
+		<form role="form" class="form-horizontal" method="POST"
+			th:object="${hForm}">
+			<legend>HMO Form</legend>
+			<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Name:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5"
+						placeholder="HMO Name" th:field="*{name}" required="required" />
+					<span class="text-danger" th:if="${#fields.hasErrors('name')}"
+						th:errors="*{name}"></span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="description"
+					class="col-sm-3 control-label no-padding-right">Address:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder="Address"
+						th:field="*{address}" required="required" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('address')}"
+						th:errors="*{address}"></span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="State" class="col-sm-3 control-label no-padding-right">State:</label>
+				<div class="col-sm-9">
+					<select class="col-xs-10 col-sm-5" th:field="*{stateId}" id="st">
+						<option value="0">Select..</option>
+						<option th:each="s : ${states}" th:value="${s.stateId}"
+							th:text="${s.stateName}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('stateId')}"
+						th:errors="*{stateId}"></span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="LGA" class="col-sm-3 control-label no-padding-right">LGA:</label>
+				<div class="col-sm-9">
+					<select class="col-xs-10 col-sm-5" th:field="*{lgaId}" id="lg">
+						<option value="0">Select..</option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('lgaId')}"
+						th:errors="*{lgaId}"></span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="description"
+					class="col-sm-3 control-label no-padding-right">Email:</label>
+				<div class="col-sm-9">
+					<input type="email" class="col-xs-10 col-sm-5" placeholder="Email"
+						th:field="*{email}" required="required" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('email')}"
+						th:errors="*{email}"></span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="phoneNumber"
+					class="col-sm-3 control-label no-padding-right">Phone
+					Number:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5"
+						placeholder="Phone number" th:field="*{phoneNumber}"
+						required="required" /> <span class="text-danger"
+						th:if="${#fields.hasErrors('phoneNumber')}"
+						th:errors="*{phoneNumber}"></span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="postalNumber"
+					class="col-sm-3 control-label no-padding-right">Postal
+					Number:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5"
+						placeholder="Postal number" th:field="*{postalNumber}"
+						required="required" /> <span class="text-danger"
+						th:if="${#fields.hasErrors('postalNumber')}"
+						th:errors="*{postalNumber}"></span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="Bank" class="col-sm-3 control-label no-padding-right">Bank:</label>
+				<div class="col-sm-9">
+					<select class="col-xs-10 col-sm-5" th:field="*{bankId}">
+						<option value="0">Select..</option>
+						<option th:each="b : ${banks}" th:value="${b.id}"
+							th:text="${b.name}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('bankId')}"
+						th:errors="*{bankId}"></span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="bankAccount"
+					class="col-sm-3 control-label no-padding-right">Bank
+					Account:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5"
+						placeholder="Bank account" th:field="*{bankAccount}"
+						required="required" /> <span class="text-danger"
+						th:if="${#fields.hasErrors('bankAccount')}"
+						th:errors="*{bankAccount}"></span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="adminName"
+					class="col-sm-3 control-label no-padding-right">Admin Name:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5"
+						placeholder="Admin name" th:field="*{adminName}"
+						required="required" /> <span class="text-danger"
+						th:if="${#fields.hasErrors('adminName')}" th:errors="*{adminName}"></span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="adminEmail"
+					class="col-sm-3 control-label no-padding-right">Admin
+					Email:</label>
+				<div class="col-sm-9">
+					<input type="email" class="col-xs-10 col-sm-5"
+						placeholder="Admin email" th:field="*{adminEmail}"
+						required="required" /> <span class="text-danger"
+						th:if="${#fields.hasErrors('adminEmail')}"
+						th:errors="*{adminEmail}"></span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="adminPhone"
+					class="col-sm-3 control-label no-padding-right">Admin
+					Phone:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5"
+						placeholder="Admin Phone" th:field="*{adminPhone}"
+						required="required" /> <span class="text-danger"
+						th:if="${#fields.hasErrors('adminPhone')}"
+						th:errors="*{adminPhone}"></span>
+				</div>
+			</div>
+
+			<div class="clearfix form-actions">
+				<div class="col-md-offset-3 col-md-9">
+					<input type="hidden" th:field="*{id}" />
+					<button class="btn btn-primary" type="submit">
+						<i class="ace-icon fa fa-check bigger-110"></i> Add
+					</button>
+
+					<button class="btn btn-danger" type="reset">
+						<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+
+<script>
+	//this is for GET
+	$(function() {
+		/* Lga Selector*/
+		$('#st').change(
+				function(event) {
+					$.ajax({
+						type : "GET",
+						url : "/HMS/utilities/statesandlgas/lgabystate/"
+							+ $('#st').val(),
+						beforeSend : function() {
+							/* $.gritter.add({
+								title : "Progress...",
+								text : "Fetching LGAs",
+								time : 3000
+							}); */
+						},
+						success : function(html) {
+							$("#lg").html(html);
+							/* $.gritter.add({
+								title : "Success!",
+								text : "LGAs fetched",
+								time : 4000
+							}); */
+						},
+						error : function() {
+						/* 	$.gritter.add({
+								title : "Error!",
+								text : "Error fetching LGAs",
+								time : 4000
+							}); */
+						}
+
+					});
+				});
+	});
+</script>

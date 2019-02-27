@@ -1,0 +1,64 @@
+<div class="page-header">
+	<h1>
+		Profile <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			Profile Information
+		</small>
+	</h1>
+</div>
+<div class="row">
+
+	<div class="col-xs-12 col-sm-9">
+		<h4 class="blue">
+			<span class="middle"
+				th:text="${staffRegistration.firstName} + ' ' + ${staffRegistration.lastName}">Alex
+				M. Doe</span>
+		</h4>
+
+		<div class="profile-info-row">
+			<div class="profile-info-name">Staff Code</div>
+
+			<div class="profile-info-value">
+				<span th:text="${staffRegistration.staffCode}">alexdoe</span>
+			</div>
+		</div>
+
+		<div class="profile-info-row">
+			<div class="profile-info-name">DOB</div>
+
+			<div class="profile-info-value">
+				<span th:text="${staffRegistration.dob}">alexdoe</span>
+			</div>
+		</div>
+
+
+		<div class="profile-user-info">
+				<div class="profile-info-name">Email Address</div>
+
+				<div class="profile-info-value">
+					<span th:text="${staffRegistration.email}">alexdoe</span>
+				</div>
+			</div>
+
+
+			<div class="profile-user-info">
+					<div class="profile-info-name">Unit</div>
+
+					<div class="profile-info-value">
+						<span th:text="${staffRegistration.unit}">alexdoe</span>
+					</div>
+				</div>
+
+				<div class="profile-info-row">
+					<div class="profile-info-name">Home Address</div>
+
+					<div class="profile-info-value">
+						<i class="fa fa-map-marker light-orange bigger-110"></i> <span
+							th:text="${staffRegistration.address == null}? 'Not set' : ${staffRegistration.address}">2010/06/20</span>
+					</div>
+				</div>
+
+			</div>
+
+			<div class="hr hr-8 dotted"></div>
+		</div>
+		<!-- /.col -->

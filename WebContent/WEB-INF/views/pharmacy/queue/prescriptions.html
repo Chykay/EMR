@@ -1,0 +1,163 @@
+
+<div class="page-header">
+	<h1>
+		PHARMACY OFFICE MANAGEMENT<small> <i
+			class="ace-icon fa fa-angle-double-right"></i> QUEUE MANAGEMENT
+			MODULE
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard </a> <a
+			class="btn btn-xs btn-primary" th:href="@{/pharmacy/queue }"> <i
+			class="fa fa-plus-circle"></i>Queue
+		</a> <a class="btn btn-xs btn-purple"
+			th:href="@{/consultations/visits/configure/{id}(id=${visit.id}) }"><i
+			class="fa fa-list"></i> Billings</a>
+		<!--<a class="btn btn-xs btn-warning"
+			th:href="@{/consultations/visits}"><i class="fa fa-list"></i>
+			Create Visit </a>  -->
+	</div>
+</div>
+
+<div class="space-4"></div>
+
+<style>
+.table {
+	margin: auto;
+}
+
+ul.req-stat-ul li {
+	list-style-type: none;
+	float: left;
+	margin-right: 10px;
+}
+
+ul.req-stat-ul li:first {
+	margin-right: 30px;
+	font-weight: bold;
+}
+<!--
+-->
+</style>
+
+<div class="col-xs-12">
+	<!-- View contents here -->
+
+	<div class="well well-sm">
+		<ul>
+			<li>Visit ID:&nbsp;<span class="text-danger"
+				th:text="${visit.code}">Visit ID</span>
+			</li>
+			<li>Patient FullName:&nbsp; <span class="text-danger"
+				th:text="${visit.patient?.surname} + ' ' + ${visit.patient?.firstName} + ' ' + ${visit.patient?.othernames}">Patient</span>
+			</li>
+			<li>Date Of Visit: &nbsp; <span class="text-danger"
+				th:text="${visit.createDate}">Date Of Visit</span>
+			</li>
+			<li>Visit Status:&nbsp; <span class="text-danger"
+				th:text="${visit.status?.type}"> Status</span>
+			</li>
+			<li><span class=""> Visit Point:&nbsp;<span
+					class="text-danger" th:text="${visit.point?.name}">Visit
+						Point</span>
+			</span></li>
+
+			<li><span class=""> Visit Unit:&nbsp;<span
+					class="text-danger" th:text="${visit.unit?.unitName}">Visit
+						Unit</span>
+			</span></li>
+			
+			<li><span class=""> Department:&nbsp;<span
+					class="text-danger" th:text="${visit.department?.departmentName}">Visit
+						Department</span>
+			</span></li>
+		</ul>
+	</div>
+
+	<div class="col-md-offset-0 col-xs-11">
+
+		<table class="table" id="container">
+			<thead>
+				<tr>
+					<th>S/No:</th>
+					<th>Drug:</th>
+					<th>Start Dose:</th>
+					<th>Dosage Qty:</th>
+					<th>Frequency(times):</th>
+					<th>Period:</th>
+					<th>Duration:</th>
+					<th>Quantity:</th>
+					<th></th>
+				</tr>
+			</thead>
+
+			<tbody>
+
+				<th:block th:if="${visit !=null}">
+
+					<tr th:each="prescription,iterStat : ${visit.prescribedDrugs}">
+						<td th:text="${iterStat.count}">S/No</td>
+						<td class="" th:text="${prescription.drugs?.name}">GlobalItem</td>
+						<td class="" th:text="${prescription.startDose}">Start Dose</td>
+						<td class="" th:text="${prescription.dosageQuantity}">Dosage
+							Qty</td>
+						<td class="" th:text="${prescription.frequency}">Frequency(times)</td>
+						<td class="" th:text="${prescription.cycle}">Period:</td>
+						<td class="" th:text="${prescription.how_long}">Duration</td>
+						<td class="" th:text="${prescription.quantity}">Quantity</td>
+						<td>
+							<div class="hidden-sm hidden-xs action-buttons">
+								<a class="btn btn-xs btn-primary tooltip-info"
+									data-rel="tooltip"
+									th:href="@{/pharmacy/prescriptions/process/{id}(id=${prescription.id}) }"><i
+									class="fa fa-plus-circle"></i>Process</a> <a
+									class="btn btn-xs btn-primary tooltip-info" data-rel="tooltip"
+									th:href="@{/pharmacy/prescriptions/delete/{id}(id=${prescription.id}) }"><i
+									class="fa fa-plus-circle"></i>Delete </a>
+							</div>
+						</td>
+					</tr>
+				</th:block>
+			</tbody>
+		</table>
+		<div class="hr hr-18 dotted hr-double"></div>
+
+		<!--  
+		<div class="clearfix form-actions">
+			<div class="col-md-offset-4 col-md-9">
+				<button class="btn btn-primary" type="submit">
+					<i class="ace-icon fa fa-check bigger-110"></i> Submit
+				</button>
+				<a class="btn btn-danger" th:href="@{/inventory/order_request }">
+					<i class="fa fa-plus-circle bigger-110"></i>Cancel
+				</a>
+			</div>
+		</div>-->
+	</div>
+
+
+
+
+
+
+
+
+</div>
+
+
+<script>
+	$(document).ready(function() {
+
+		/*	$('.input-qty-approved').change(function(event) {
+				$this = $(this);
+				alert($this.attr('name') + "/" + $this.val())
+			});*/
+
+	});
+</script>
+

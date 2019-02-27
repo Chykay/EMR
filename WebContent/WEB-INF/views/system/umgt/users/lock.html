@@ -1,0 +1,19 @@
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="content"
+	class="col-md-10">
+	<div th:switch="${user.lock}">
+		<h1 th:case="true">Unlock User</h1>
+		<h1 th:case="false">Lock User</h1>
+	</div>
+	<p th:switch="${user.lock}">
+		You are about to <strong th:case="true">unlock</strong> <strong
+			th:case="false">lock</strong> this user: <strong
+			th:text="${ user.userProfile.lastName }">Name</strong> <strong
+			th:text="${ user.userProfile.otherNames }">Name</strong> . Are you sure?
+	</p>
+	<form role="form" method="POST" th:object="${userForm}"
+		th:action="@{/system/umgt/users/lock/toggle}">
+		<input type="hidden" th:field="*{userId}" /> <input type="submit"
+			th:name="@{'confirm'}" th:value="Yes" class="btn btn-danger btn-lg" />
+		<a class="btn btn-primary" th:href="@{/system/umgt/users}">No</a>
+	</form>
+</div>

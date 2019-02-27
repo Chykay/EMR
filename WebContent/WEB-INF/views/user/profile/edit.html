@@ -1,0 +1,167 @@
+<div class="page-header">
+	<h1>
+		Edit Profile <small> <i
+			class="ace-icon fa fa-angle-double-right"></i> Edit your account
+			profile
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-primary" th:href="@{/user/profile }"> <i
+			class="glyphicon glyphicon-eye-open"></i> View
+		</a>
+	</div>
+</div>
+
+
+<div class="hr hr-18 dotted hr-double"></div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<!-- User Profile -->
+		<div class="tabbable">
+			<ul class="nav nav-tabs padding-18">
+				<li class="active"><a href="#account-details" data-toggle="tab"><i
+						class="fa fa-user"></i> Basic Details</a></li>
+				<li><a th:href="@{/user/profile/password}"><i
+						class="fa fa-key"></i> Change Password</a></li>
+				<li><a th:href="@{/user/profile/questions}"><i
+						class="fa fa-lock"></i> Change Security Questions</a></li>
+			</ul>
+
+			<div class="tab-content no-border padding-24">
+				<div id="account-details" class="tab-pane in active">
+					<div class="row">
+						<div class="col-md-12">
+							<form class="form-horizontal" th:object="${profileForm}"
+								method="POST" th:action="@{/user/profile/update}">
+								<!-- Elements -->
+
+								<div class="row">
+
+									<!-- Column -->
+									<div class="col-md-6">
+
+<!-- 
+										<div class="form-group margin-none innerB">
+											<label class="col-md-3 control-label">Title</label>
+											<div class="col-md-9">
+												<div class="input-group">
+													<select th:field="*{titleId}" class="form-control">
+														<option value="0">Select</option>
+														<option th:each="title : ${titles}" th:value="${title.id}"
+															th:text="${title.acronym}"></option>
+													</select> <span class="input-group-addon" data-toggle="tooltip"
+														data-container="body" data-placement="top"
+														data-original-title="Title is mandatory"><i
+														class="fa fa-question-circle"></i></span>
+												</div>
+												<span class="text-danger"
+													th:if="${#fields.hasErrors('titleId')}"
+													th:errors="*{titleId}"></span>
+											</div>
+										</div> -->
+	
+										<!-- Group -->
+										<div class="form-group margin-none innerB">
+											<label class="col-md-3 control-label">Last name</label>
+											<div class="col-md-9">
+												<div class="input-group">
+													<input type="text" th:field="*{lastName}"
+														class="form-control" /> <span class="input-group-addon"
+														data-toggle="tooltip" data-container="body"
+														data-placement="top"
+														data-original-title="Last name is mandatory"><i
+														class="fa fa-question-circle"></i></span>
+												</div>
+												<span class="text-danger"
+													th:if="${#fields.hasErrors('lastName')}"
+													th:errors="*{lastName}"></span>
+											</div>
+										</div>
+										<!-- // Group END -->
+
+										<!-- Group -->
+										<div class="form-group margin-none innerB">
+											<label class="col-md-3 control-label">Other names</label>
+											<div class="col-md-9">
+												<div class="input-group">
+													<input type="text" th:field="*{otherNames}"
+														class="form-control" readonly="readonly" /> <span class="input-group-addon"
+														data-toggle="tooltip" data-container="body"
+														data-placement="top"
+														data-original-title="Other names is mandatory"><i
+														class="fa fa-question-circle"></i></span>
+												</div>
+												<span class="text-danger"
+													th:if="${#fields.hasErrors('otherNames')}"
+													th:errors="*{otherNames}"></span>
+											</div>
+										</div>
+										<!-- // Group END -->
+
+									</div>
+									<!-- // Column END -->
+
+									<!-- Column -->
+									<div class="col-md-6">
+
+										<!-- Group -->
+										<div class="form-group margin-none innerB">
+											<label class="col-md-3 control-label">Gender</label>
+											<div class="col-md-9">
+												<select class="form-control" th:field="*{genderId}">
+													<option value="0">Select</option>
+													<option th:each="gender : ${genders}"
+														th:value="${gender.id}" th:text="${gender.type}"></option>
+												</select> <span class="text-danger"
+													th:if="${#fields.hasErrors('genderId')}"
+													th:errors="*{genderId}"></span>
+											</div>
+										</div>
+										<!-- // Group END -->
+
+										<!-- Group -->
+										<div class="form-group margin-none innerB">
+											<label class="col-md-3 control-label">Address</label>
+											<div class="col-md-9">
+												<input type="text" th:field="*{address}"
+													class="form-control" /> <span class="text-danger"
+													th:if="${#fields.hasErrors('address')}"
+													th:errors="*{address}"></span>
+											</div>
+										</div>
+										<!-- // Group END -->
+
+									</div>
+									<!-- // Column END -->
+
+								</div>
+								<!-- // Row END -->
+
+								<!-- Form actions -->
+								<div class="form-actions center">
+									<button type="submit" class="btn btn-primary">
+										<i class="fa fa-fw fa-check-square-o"></i> Save changes
+									</button>
+									<a th:href="@{/user/profile}" class="btn btn-default">
+										<i class="fa fa-fw fa-times"></i> Cancel
+									</a>
+								</div>
+								<!-- // Form actions END -->
+								<!-- /.Elements -->
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /.User Profile -->
+	</div>
+</div>

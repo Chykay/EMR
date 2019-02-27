@@ -1,0 +1,80 @@
+<div class="page-header">
+	<h1>
+		Create <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			Create a new User
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-primary" th:href="@{/system/umgt/users}"><i
+			class="glyphicon glyphicon-list"></i> All users</a>
+	</div>
+</div>
+<div class="hr hr-18 dotted hr-double"></div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+
+		<form role="form" class="form-horizontal" method="POST"
+			th:object="${subServiceItemForm}">
+			<legend class="scheduler-border">Item Assignment Form</legend>
+
+			<div class="form-group">
+				<label for="title" class="col-sm-3 control-label no-padding-right">Title:</label>
+				<div class="col-sm-9">
+					<select th:field="*{itemName}" class="col-xs-10 col-sm-5">
+						<option value="0">Select</option>
+						<option th:each="item : ${items}" th:value="${item.itemId}"
+							th:text="${item.itemName}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('itemName')}"
+						th:errors="*{itemName}"></span>
+				</div>
+			</div>
+
+			<div class="clearfix form-actions">
+				<div class="col-md-offset-3 col-md-9">
+					<input class="btn btn-primary" type="submit" value="Create User" />
+					<button class="btn btn-danger" type="reset" onclick="return saveAlert();">
+						<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<script>
+	function saveAlert() {
+	    var confirmAction = confirm('Are you sure you want to save your last action?.');
+	    alert(confirmAction);
+	    if(confirmAction == true){
+	    	return true;
+	    }else{
+	    	return false;
+	    }
+	}
+</script>
+<script>
+	$(function() { 
+		$('#userRole').change(function(event) {
+			var email = $('#email').val();
+			$.ajax({
+				type : "GET",
+				url : '../../../utilities/verifydomain/userForm/' + email +'/',
+				beforeSend : function() {alert('I am working')},
+				success : function(html) {
+					if(msg === false){//
+						alert('Mail not accepted.');
+						$("#email").val("");
+					}
+				},
+				error : function() {}
+			});
+		});
+	});
+</script>

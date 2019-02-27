@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta charset="utf-8" />
+<title th:text="${siteTitle}">NHIS Template</title>
+
+<meta name="description" content="" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+<!-- bootstrap & fontawesome -->
+<link rel="stylesheet"
+	th:href="@{/resources/assets/css/bootstrap.min.css}" />
+<link rel="stylesheet"
+	th:href="@{/resources/assets/css/font-awesome.min.css}" />
+
+<link rel="stylesheet"
+	th:href="@{/resources/vendors/gritter/assets/lib/css/jquery.gritter.css}" />
+
+<!-- page specific plugin styles -->
+
+<!-- text fonts -->
+<link rel="stylesheet" th:href="@{/resources/assets/css/ace-fonts.css}" />
+
+<!-- ace styles -->
+<link rel="stylesheet" th:href="@{/resources/assets/css/ace.min.css}" />
+
+<!--[if lte IE 9]>
+                <link rel="stylesheet" href="../assets/css/ace-part2.min.css" />
+        <![endif]-->
+<link rel="stylesheet"
+	th:href="@{/resources/assets/css/ace-skins.min.css}" />
+<link rel="stylesheet"
+	th:href="@{/resources/assets/css/ace-rtl.min.css}" />
+
+<!--[if lte IE 9]>
+          <link rel="stylesheet" href="../assets/css/ace-ie.min.css" />
+        <![endif]-->
+
+<!-- inline styles related to this page -->
+
+<!-- ace settings handler -->
+<script th:src="@{/resources/assets/js/ace-extra.min.js}"></script>
+
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+<!--[if lte IE 8]>
+        <script th:src="@{/resources/assets/js/html5shiv.js}"></script>
+        <script th:src="@{/resources/assets/js/respond.min.js}"></script>
+        <![endif]-->
+
+
+
+<!--[if !IE]> -->
+<script type="text/javascript"
+	th:src="@{/resources/assets/js/jquery.min.js}"></script>
+
+<!-- <![endif]-->
+
+<!-- basic scripts -->
+<script th:src="@{/resources/assets/js/bootstrap.min.js}"></script>
+
+<!-- page specific plugin scripts -->
+<script
+	th:src="@{/resources/vendors/gritter/assets/lib/js/jquery.gritter.min.js}"></script>
+
+
+<script th:src="@{/resources/assets/js/jquery-ui.custom.min.js}"></script>
+<script th:src="@{/resources/assets/js/jquery.ui.touch-punch.min.js}"></script>
+<script th:src="@{/resources/assets/js/bootbox.min.js}"></script>
+<script th:src="@{/resources/assets/js/fuelux/fuelux.spinner.min.js}"></script>
+
+</head>
+
+<body class="skin-3">
+	<!-- #section:basics/navbar.layout -->
+	<div id="navbar" class="navbar navbar-default">
+		<script type="text/javascript">
+			try {
+				ace.settings.check('navbar', 'fixed')
+			} catch (e) {
+			}
+		</script>
+
+		<!-- Header that contains the navbar -->
+		<div th:replace="layouts/commonviews/header :: header">Header</div>
+		<!-- /.navbar-container -->
+	</div>
+
+	<!-- /section:basics/navbar.layout -->
+	<div class="main-container" id="main-container">
+		<script type="text/javascript">
+			try {
+				ace.settings.check('main-container', 'fixed')
+			} catch (e) {
+			}
+		</script>
+
+		<!-- #section:basics/sidebar -->
+
+		<div th:replace="layouts/commonviews/sidebar">Sidebar</div>
+
+		<!-- /section:basics/sidebar -->
+		<div class="main-content">
+			<!-- #section:basics/content.breadcrumbs -->
+
+			<div th:replace="layouts/commonviews/breadcrumbs :: breadcrumbs">Breadcrumbs</div>
+
+			<!-- /section:basics/content.breadcrumbs -->
+			<div class="page-content">
+				<div class="row">
+					<div class="col-xs-12">
+						<!-- PAGE CONTENT BEGINS -->
+						<!-- Alert Bar here -->
+
+						<!-- End Alert bar here -->
+						<th:block th:if="${msg != null}">
+							<div class="row">
+								<div th:replace="layouts/commonviews/alert">Alert Block</div>
+							</div>
+						</th:block>
+
+						<div class="row">
+							<div class="space-6"></div>
+							<!-- Content Fragments -->
+							<div th:replace="${view}">Content</div>
+							<!-- End content fragments -->
+						</div>
+
+						<!-- PAGE CONTENT ENDS -->
+					</div>
+					<!-- /.col -->
+				</div>
+				<!-- /.row -->
+			</div>
+			<!-- /.page-content -->
+		</div>
+		<!-- /.main-content -->
+
+		<div class="row" th:replace="layouts/commonviews/footer :: footer">Footer</div>
+
+		<a href="#" id="btn-scroll-up"
+			class="btn-scroll-up btn btn-sm btn-inverse"> <i
+			class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+		</a>
+	</div>
+	<!-- /.main-container -->
+
+	<!-- ace scripts -->
+	<script th:src="@{/resources/assets/js/ace-elements.min.js}"></script>
+	<script th:src="@{/resources/assets/js/ace.min.js}"></script>
+
+	<script>
+		$(".tooltips").tooltip({
+			animation : true
+		});
+	</script>
+
+	<script type="text/javascript">
+		ace.vars['base'] = '..';
+	</script>
+</body>
+</html>

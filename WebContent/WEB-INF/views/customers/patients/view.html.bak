@@ -1,0 +1,1545 @@
+<div class="page-header">
+	<h1>
+		Patient Profile <small> <i
+			class="ace-icon fa fa-angle-double-right"></i> 
+		
+			<span
+		th:text="${patient.title != null ? patient.title.acronym + ' ' : '' }  +  ${patient.surname} + ' ' + ${patient.othernames}"></span>
+									</small>
+	</h1>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/}"><i
+			class="fa fa-home"></i> Customer Dashboard</a> <a
+			class="btn btn-xs btn-success" th:href="@{/patients/index/all }"> <i
+			class="glyphicon glyphicon-list"></i> All patients
+		</a>
+		
+		
+			 <a
+			class="btn btn-xs btn-success" th:href="@{/patients/index}"> <i
+			class="glyphicon glyphicon-list"></i> Top 50 Patients</a>
+			
+		
+		 <a class="btn btn-xs btn-primary"
+			th:href="@{/patients/edit/{id} (id = ${patient.patientId})}"> <i
+			class="fa fa-edit"></i> Edit profile
+		</a>
+		<!--  <a class="btn btn-xs btn-danger"
+			th:href="@{/patients/delete/{id} (id = ${patient.patientId})}"> <i
+			class="fa fa-trash-o"></i> Delete profile
+		</a> -->
+		<a class="btn btn-xs btn-warning"
+			th:href="@{/patients/documents/{id} (id = ${patient.patientId})}">
+			<i class="fa fa-file"></i> Documents
+		</a> <a class="btn btn-teal"
+			th:href="@{/visits/configure/{id} (id = ${patient.patientId})}">
+			CREATE VISIT </a>
+
+	</div>
+</div>
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<div class="tabbable">
+
+			<ul class="nav nav-tabs padding-18">
+				<li class="active"><a data-toggle="tab" href="#home"> <i 
+						class="green ace-icon fa fa-pencil-square-o bigger-120"></i>
+						Profile
+				</a></li>
+				
+				
+				<li class=""><a data-toggle="tab" href="#telephone"> <i
+						class="brown ace-icon fa fa-file bigger-120"> </i> Telephone
+				</a></li>
+				 
+				<li class=""><a data-toggle="tab" href="#address"> <i
+						class="brown ace-icon fa fa-file bigger-120"> </i> Address
+				</a></li>
+								  
+				<li class=""><a data-toggle="tab" href="#history"> <i
+						class="brown ace-icon fa fa-file bigger-120"> </i> Patient History
+				</a></li>
+				
+				 
+				<li class=""><a data-toggle="tab" href="#familyhistory"> <i
+						class="brown ace-icon fa fa-file bigger-120"></i> Family History
+				</a></li>
+				 
+				<li class=""><a data-toggle="tab" href="#nok"> <i
+						class="brown ace-icon fa fa-user bigger-120"></i> Next of Kin
+				</a></li>
+				
+				
+
+				<li class=""><a data-toggle="tab" href="#allergy"> <i
+						class="brown ace-icon fa fa-file bigger-120"></i> Allergy
+				</a></li>
+				
+			
+				
+				<li class=""><a data-toggle="tab" href="#related"> <i
+						class="brown ace-icon fa fa-user bigger-120"></i> Related Patient
+						
+				</a></li>
+				
+				
+				<li class=""><a data-toggle="tab" href="#hmo"> <i
+						class="brown ace-icon fa fa-ambulance bigger-120"></i> HMO Package
+				</a></li>
+				
+			</ul>
+			<div class="tab-content no-border padding-24">
+				<div id="home" class="tab-pane active">
+					<div class="row">
+						<div class="col-xs-12 col-sm-3 col-md-3 center">
+							<span class="profile-picture"> <img
+								th:if="${patient.image == null}" id="avatar2"
+								style="max-width: 120px" th:src="@{/resources/img/logo.jpg}"
+								alt="Profile" class="img-responsive" /> <img
+								th:if="${patient.image != null}" id="avatar2"
+								style="max-width: 120px"
+								th:src="@{/patients/image/{id}(id=${patient.patientId})}"
+								alt="Profile" class="img-responsive" />
+							</span>
+							<div class="space space-4"></div>
+							<a class="btn btn-sm btn-block btn-success" href="#imageupload"
+								data-toggle="modal"> <i class="glyphicon glyphicon-picture"></i>
+								Change Image
+							</a>
+
+						</div>
+						<!-- /.col -->
+
+						<div class="col-xs-12 col-sm-9">
+							<h4 class="blue">
+								<span class="middle"
+									th:text="${patient.title != null ? patient.title.acronym + ' ' : '' }  +  ${patient.surname} + ' ' + ${patient.othernames}">
+									</span>
+							</h4>
+								<div class="profile-info-row">
+								<div class="profile-info-name">Patient ID</div>
+
+								<div class="profile-info-value">
+									<span th:text="${patient.patientId}"></span>
+								</div>
+							</div>
+
+							<div class="profile-info-row">
+								<div class="profile-info-name">Patient Code</div>
+
+								<div class="profile-info-value">
+									<span th:text="${patient.patientCode != null} ? ${patient.patientCode}"></span>
+								</div>
+							</div>
+							<div class="profile-info-row">
+									<div class="profile-info-name">Gender</div>
+
+									<div class="profile-info-value">
+										<span
+											th:text="${patient.gender != null} ? ${patient.gender.type}">
+											</span>
+									</div>
+								</div>
+						
+							<div class="profile-user-info">
+								<div class="profile-info-row">
+									<div class="profile-info-name">Email Address</div>
+
+									<div class="profile-info-value">
+										<span th:text="${patient.email != null} ? ${patient.email}"></span>
+									</div>
+								</div>
+
+								
+								<div class="profile-info-row">
+									<div class="profile-info-name">Marital Status</div>
+
+									<div class="profile-info-value">
+										<span
+											th:text="${patient.maritalStatus == null} ? '' : ${patient.maritalStatus.status}"></span>
+									</div>
+								</div>
+								<div class="profile-info-row">
+									<div class="profile-info-name">Preffered Lang</div>
+
+									<div class="profile-info-value">
+										<span
+											th:text="${patient.language == null}? '' : ${patient.language.name}"></span>
+									</div>
+								</div>
+			
+								<div class="profile-info-row">
+									<div class="profile-info-name">LGA</div>
+
+									<div class="profile-info-value">
+										<span
+											th:text="${patient.lga == null} ? '' : ${patient.lga.localGovernmentAreasName}">
+											</span>
+									</div>
+								</div>
+
+								<div class="profile-info-row">
+									<div class="profile-info-name">State</div>
+
+									<div class="profile-info-value">
+										<span
+											th:text="${patient.state == null} ? '' : ${patient.state.stateName}">
+										</span>
+									</div>
+								</div>
+
+
+
+							</div>
+
+							<div class="hr hr-8 dotted"></div>
+						</div>
+						<!-- /.col -->
+					</div>
+				</div>
+				
+				<!-- item -->
+				
+			<div id="telephone" class="tab-pane">
+					<div class="row">
+						<div class="col-md-12">
+							<a class="btn btn-danger btn-xs" data-toggle="modal"
+								href="#telephoneadd"> <i
+								class="ace-icon fa fa-plus bigger-110"></i> Add Telephone No
+							</a>
+							<div class="hr hr-18 dotted hr-double"></div>
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="table-header">Telephone	Detail</div>
+									<table id="dTableTel"
+										class="table table-striped table-bordered table-hover">
+										<thead>
+											<tr>
+												<th>Phone Type</th>
+												<th>Tel. Number</th>
+												
+
+												<th><i class="glyphicon glyphicon-asterisk"></i></th>
+											</tr>
+										</thead>
+										<tbody th:if="${patient.patientTelephone != null}">
+											<tr th:each="telephone : ${patient.patientTelephone}">
+												<td th:text="${telephone.phoneType.name}"></td>
+												<td th:text="${telephone.telnumber}"></td>
+												
+												<td>
+												<a class="btn btn-xs btn-warning tooltips"
+													title="Edit Patient Phone"
+													th:href="@{/patients/telephone/edit/{id} (id=${telephone.id})}">
+														<i class="fa fa-edit"></i>
+												</a><a class="btn btn-xs btn-danger tooltips"
+													title="delete telephone"   th:id="${'telephone' + telephone.id}"  onclick="return Confirm(this.id)" 
+													th:href="@{/patients/telephone/delete/{id} (id=${telephone.id})}">
+														<i class="fa fa-trash-o"></i>
+												</a>  
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+
+
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<!-- //.item -->
+			
+			
+			
+			<div id="address" class="tab-pane">
+					<div class="row">
+						<div class="col-md-12">
+							<a class="btn btn-danger btn-xs" data-toggle="modal"
+								href="#addressadd"> <i
+								class="ace-icon fa fa-plus bigger-110"></i> Add Address
+							</a>
+							<div class="hr hr-18 dotted hr-double"></div>
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="table-header">Address Detail</div>
+									<table id="dTableAddr"
+										class="table table-striped table-bordered table-hover">
+										<thead>
+											<tr>
+												<th>Address Type</th>
+												<th>Address Details</th>
+												
+
+												<th><i class="glyphicon glyphicon-asterisk"></i></th>
+											</tr>
+										</thead>
+										<tbody  th:if="${patient.patientAddress != null}" >
+											<tr th:each="address : ${patient.patientAddress}">
+												<td th:text="${address.addressType.name}"></td>
+												<td th:text="${address.address}"></td>
+												
+												<td>
+												<a class="btn btn-xs btn-warning tooltips"
+													title="Edit Patient Address"
+													th:href="@{/patients/address/edit/{id} (id=${address.id})}">
+														<i class="fa fa-edit"></i>
+												</a><a class="btn btn-xs btn-danger tooltips"
+													title="delete address"   th:id="${'address' + address.id}"  onclick="return Confirm(this.id)" 
+													th:href="@{/patients/address/delete/{id} (id=${address.id})}">
+														<i class="fa fa-trash-o"></i>
+												</a>  
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+
+
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<!-- //.item -->
+			
+			
+				<div id="history" class="tab-pane">
+					<div class="row">
+						<div class="col-md-12">
+							<a class="btn btn-danger btn-xs" data-toggle="modal"
+								href="#historyadd"> <i
+								class="ace-icon fa fa-plus bigger-110"></i> Add History
+							</a>
+							<div class="hr hr-18 dotted hr-double"></div>
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="table-header">History Detail</div>
+									<table id="dTableHist"
+										class="table table-striped table-bordered table-hover">
+										<thead>
+											<tr>
+												<th>History Type</th>
+												<th>History Details</th>
+												<th><i class="glyphicon glyphicon-asterisk"></i></th>
+											</tr>
+										</thead>
+										<tbody  th:if="${patient.patientHistory != null}" >
+											<tr th:each="history : ${patient.patientHistory}">
+												<td th:text="${history.historyType.name}"></td>
+												<td th:text="${history.history}"></td>
+												
+												<td>
+												<a class="btn btn-xs btn-warning tooltips"
+													title="Edit Patient History"
+													th:href="@{/patients/history/edit/{id} (id=${history.id})}">
+														<i class="fa fa-edit"></i>
+												</a><a class="btn btn-xs btn-danger tooltips"
+													title="delete history"   th:id="${'history' + history.id}"  onclick="return Confirm(this.id)" 
+													th:href="@{/patients/history/delete/{id} (id=${history.id})}">
+														<i class="fa fa-trash-o"></i>
+												</a>  
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+
+
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<!-- //.item -->
+			
+			
+			
+				<div id="familyhistory" class="tab-pane">
+					<div class="row">
+						<div class="col-md-12">
+							<a class="btn btn-danger btn-xs" data-toggle="modal"
+								href="#familyhistoryadd"> <i
+								class="ace-icon fa fa-plus bigger-110"></i> Add Family History
+							</a>
+							<div class="hr hr-18 dotted hr-double"></div>
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="table-header">Family History Detail</div>
+									<table id="dTableFamHist"
+										class="table table-striped table-bordered table-hover">
+										<thead>
+											<tr>
+												<th>History Type</th>
+												<th>History Details</th>
+												<th><i class="glyphicon glyphicon-asterisk"></i></th>
+											</tr>
+										</thead>
+										<tbody  th:if="${patient.patientFamilyHistory != null}" >
+											<tr th:each="familyhistory : ${patient.patientFamilyHistory}">
+												<td th:text="${familyhistory.historyType.name}"></td>
+												<td th:text="${familyhistory.history}"></td>
+												
+												<td>
+												<a class="btn btn-xs btn-warning tooltips"
+													title="Edit Patient Family History"
+													th:href="@{/patients/familyhistory/edit/{id} (id=${familyhistory.id})}">
+														<i class="fa fa-edit"></i>
+												</a><a class="btn btn-xs btn-danger tooltips"
+													title="delete Family history"   th:id="${'familyhistory' + familyhistory.id}"  onclick="return Confirm(this.id)" 
+													th:href="@{/patients/familyhistory/delete/{id} (id=${familyhistory.id})}">
+														<i class="fa fa-trash-o"></i>
+												</a>  
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+
+
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<!-- //.item -->
+			
+			
+			
+
+				<div id="nok" class="tab-pane">
+					<div class="row">
+						<div class="col-md-12">
+							<a class="btn btn-danger btn-xs" data-toggle="modal"
+								href="#nokadd"> <i
+								class="ace-icon fa fa-plus bigger-110"></i> Add Next of Kin
+							</a>
+							<div class="hr hr-18 dotted hr-double"></div>
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="table-header">Next of Kin</div>
+									<table id="dTableNok"
+										class="table table-striped table-bordered table-hover">
+										<thead>
+											<tr>
+												
+												<th>Name</th>
+												<th>Relationship Type</th>
+												<th>Email</th>
+												<th>Telephone</th>
+												<th>Address</th>
+												<th><i class="glyphicon glyphicon-asterisk"></i></th>
+											</tr>
+										</thead>
+										<tbody  th:if="${patient.patientNok != null}" >
+											<tr th:each="nok : ${patient.patientNok}">
+													<td th:text="${nok.fullname}"></td>
+												<td th:text="${nok.relationshipType.name}"></td>
+											<td th:text="${nok.email}"></td>
+												<td th:text="${nok.telephone}"></td>
+												<td th:text="${nok.address}"></td>
+												<td>
+												<a class="btn btn-xs btn-warning tooltips"
+													title="Edit Patient Next Of Kin"
+													th:href="@{/patients/nok/edit/{id} (id=${nok.id})}">
+														<i class="fa fa-edit"></i>
+												</a><a class="btn btn-xs btn-danger tooltips"
+													title="delete"   th:id="${'nok' + nok.id}"  onclick="return Confirm(this.id)" 
+													th:href="@{/patients/nok/delete/{id} (id=${nok.id})}">
+														<i class="fa fa-trash-o"></i>
+												</a>  
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+
+
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<!-- //.item -->
+			
+			
+			
+			
+			
+				<div id="allergy" class="tab-pane">
+					<div class="row">
+						<div class="col-md-12">
+							<a class="btn btn-danger btn-xs" data-toggle="modal"
+								href="#allergyadd"> <i
+								class="ace-icon fa fa-plus bigger-110"></i> Add Allergy
+							</a>
+							<div class="hr hr-18 dotted hr-double"></div>
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="table-header">Allergy Detail</div>
+									<table id="dTableallergy"
+										class="table table-striped table-bordered table-hover">
+										<thead>
+											<tr>
+												<th>Allergy Item</th>
+												<th>Reaction Details</th>
+												<th><i class="glyphicon glyphicon-asterisk"></i></th>
+											</tr>
+										</thead>
+										<tbody  th:if="${patient.patientAllergy != null}" >
+											<tr th:each="allergy: ${patient.patientAllergy}">
+												<td th:text="${allergy.name}"></td>
+												<td th:text="${allergy.reaction}"></td>
+												
+												<td>
+												<a class="btn btn-xs btn-warning tooltips"
+													title="Edit Patient Allergy"
+													th:href="@{/patients/allergy/edit/{id} (id=${allergy.id})}">
+														<i class="fa fa-edit"></i>
+												</a><a class="btn btn-xs btn-danger tooltips"
+													title="delete Allergy"   th:id="${'allgy' + allergy.id}"  onclick="return Confirm(this.id)" 
+													th:href="@{/patients/allergy/delete/{id} (id=${allergy.id})}">
+														<i class="fa fa-trash-o"></i>
+												</a>  
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+
+
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<!-- //.item -->
+			
+			
+			
+			
+			
+				<div id="related" class="tab-pane">
+					<div class="row">
+						<div class="col-md-12">
+							<a class="btn btn-danger btn-xs" data-toggle="modal"
+								href="#relatedadd"> <i
+								class="ace-icon fa fa-plus bigger-110"></i> Add Related
+							</a>
+							<div class="hr hr-18 dotted hr-double"></div>
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="table-header">Related Patient Detail</div>
+									<table id="dTablerel"
+										class="table table-striped table-bordered table-hover">
+										<thead>
+											<tr>
+												<th>Related Patient</th>
+												<th>Relationship</th>
+												<th><i class="glyphicon glyphicon-asterisk"></i></th>
+											</tr>
+										</thead>
+										<tbody  th:if="${patient.patientRelated != null}" >
+											<tr th:each="related: ${patient.patientRelated}">
+												<td th:text="${related.relPatient.surname + ' ' + related.relPatient.firstName + ' ' + related.relPatient.othernames}"></td>
+												<td th:text="${related.relationshipType.name}"></td>
+												
+												<td>
+												<a class="btn btn-xs btn-warning tooltips"
+													title="Edit Related Patient"
+													th:href="@{/patients/related/edit/{id} (id=${related.id})}">
+														<i class="fa fa-edit"></i>
+												</a><a class="btn btn-xs btn-danger tooltips"
+													title="delete Allergy"   th:id="${'rel' + related.id}"  onclick="return Confirm(this.id)" 
+													th:href="@{/patients/related/delete/{id} (id=${related.id})}">
+														<i class="fa fa-trash-o"></i>
+												</a>  
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+
+
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<!-- //.item -->
+			
+			<!-- item -->
+				
+			<div id="hmo" class="tab-pane">
+					<div class="row">
+						<div class="col-md-12">
+							<a class="btn btn-danger btn-xs" data-toggle="modal"
+								href="#hmoadd"> <i
+								class="ace-icon fa fa-plus bigger-110"></i> Add HMO
+							</a>
+							<div class="hr hr-18 dotted hr-double"></div>
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="table-header">HMO Detail</div>
+									<table id="dTablehmo"
+										class="table table-striped table-bordered table-hover">
+										
+										<thead>
+											<tr>
+												<th>HMO Company</th>
+												<th>HMO Package</th>
+												<th>From</th>
+												<th>To</th>
+												<th>Status</th>
+												
+
+												<th><i class="glyphicon glyphicon-asterisk"></i></th>
+											</tr>
+										</thead>
+										<tbody th:if="${patient.patientHmo != null}" >
+											<tr th:each="hmopack : ${patient.patientHmo}">
+												<td th:text="${hmopack.hmoPackage.hmo.name}"></td>
+												<td th:text="${hmopack.hmoPackage.name}"></td>
+												<td th:text="${hmopack.fromdat}"></td>
+												<td th:text="${hmopack.todat}"></td>
+												<td th:text="${hmopack.hmostatus.name}"></td>
+												<td>
+												<!-- 
+												<a class="btn btn-xs btn-warning tooltips"
+													title="Edit Patient HMO Package"
+													th:href="@{/patients/hmo/edit/{id} (id=${hmopack.id})}">
+														<i class="fa fa-edit"></i>
+												</a>
+												
+												<a class="btn btn-xs btn-danger tooltips"
+													title="delete hmo package"   th:id="${'hmo' + hmopack.id}"  onclick="return Confirm(this.id)" 
+													th:href="@{/patients/hmo/delete/{id} (id=${hmopack.id})}">
+														<i class="fa fa-trash-o"></i>
+												</a>
+												
+												   -->
+												<a class="btn btn-xs btn-warning tooltips"
+													title="Disable Patient HMO Package"
+													th:href="@{/patients/hmo/disable/{id} (id=${hmopack.id})}">
+														<i class="fa fa-edit"></i>
+												</a>
+												
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+
+
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<!-- //.item -->
+			
+			
+			
+			
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	jQuery(function($) {
+		var oTable1 = $('#dTableTel').dataTable({
+			bAutoWidth : false,
+			"aoColumns" : [ {
+				"bSortable" : false
+			}, null, null ]
+		});
+
+	});
+</script>
+
+<script>
+	jQuery(function($) {
+		var oTable1 = $('#dTableAddr').dataTable({
+			bAutoWidth : false,
+			"aoColumns" : [ {
+				"bSortable" : false
+			}, null,  null ]
+
+		});
+
+	});
+</script>
+
+
+<script>
+	jQuery(function($) {
+		var oTable1 = $('#dTableHist').dataTable({
+			bAutoWidth : false,
+			"aoColumns" : [ {
+				"bSortable" : false
+			}, null,  null ]
+
+		});
+
+	});
+</script>
+
+
+<script>
+	jQuery(function($) {
+		var oTable1 = $('#dTableFamHist').dataTable({
+			bAutoWidth : false,
+			"aoColumns" : [ {
+				"bSortable" : false
+			}, null,  null ]
+
+		});
+
+	});
+</script>
+
+
+
+<script>
+	jQuery(function($) {
+		var oTable1 = $('#dTableNok').dataTable({
+			bAutoWidth : false,
+			"aoColumns" : [ {
+				"bSortable" : false
+			}, null,  null, null,  null,null ]
+
+		});
+
+	});
+</script>
+
+
+
+<script>
+	jQuery(function($) {
+		var oTable1 = $('#dTableallergy').dataTable({
+			bAutoWidth : false,
+			"aoColumns" : [ {
+				"bSortable" : false
+			}, null,  null ]
+
+		});
+
+	});
+</script>
+
+
+<script>
+	jQuery(function($) {
+		var oTable1 = $('#dTablerel').dataTable({
+			bAutoWidth : false,
+			"aoColumns" : [ {
+				"bSortable" : false
+			}, null,  null ]
+
+		});
+
+	});
+</script>
+
+
+
+<script>
+	jQuery(function($) {
+		var oTable1 = $('#dTablehmo').dataTable({
+			bAutoWidth : false,
+			"aoColumns" : [ {
+				"bSortable" : false
+			}, null,  null,null,null,null ]
+
+		});
+
+	});
+</script>
+<!--image-->
+
+<div class="modal fade" id="imageupload">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- Form -->
+			<form th:action="@{/patients/imageUpload}" th:object="${imageForm}"
+				method="post" enctype="multipart/form-data">
+				<!-- Modal heading -->
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title">Change Image</h4>
+				</div>
+				<!-- 	// Modal heading END -->
+				<!-- Modal body -->
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="lastName"
+							class="col-sm-3 control-label no-padding-right">Image:</label>
+						<div class="col-sm-9">
+							<input type="file" th:field="*{imageFile}" placeholder="image" /><span
+								class="text-danger" th:if="${#fields.hasErrors('imageFile')}"
+								th:errors="*{imageFile}"></span>
+						</div>
+					</div>
+				</div>
+				<!-- // Modal body END -->
+
+				<!-- Modal footer -->
+				<div class="modal-footer">
+					<input type="hidden" th:field="*{id}" />
+					<button class="btn btn-primary btn-xs" type="submit"
+						id="save-changes">Upload image</button>
+					<button type="button" class="btn btn-xs" data-dismiss="modal">Cancel</button>
+				</div>
+				<!-- // Modal footer END -->
+			</form>
+			<!-- /.Form -->
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="telephoneadd">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		
+			<!-- Modal heading -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Patient Telephone Numbers</h4>
+			</div>
+			<!-- // Modal heading END -->
+			<!-- Modal body -->
+			<div class="modal-body">
+				<div class="row">
+					<!-- Dropzone -->
+					<div class="space space-4"></div>
+					<form role="form" class="form-horizontal" method="POST"
+						th:object="${teleForm}"  th:action="@{/patients/telephone/save}">
+
+						<div class="form-group">
+							<label for="detail"
+								class="col-sm-3 control-label no-padding-right">Phone Type:
+								</label>
+							<div class="col-sm-9">
+								<select th:field="*{phonetypeId}" id="phonetypeId"
+									class="col-xs-10 col-sm-5">
+								<!-- 	<option value="0">Select</option>  -->
+									<option th:each="p : ${phonetypelist}" th:value="${p.phonetypeId}"
+										th:text="${p.name}"></option>
+								</select> <span class="text-danger"
+									th:if="${#fields.hasErrors('phonetypeId')}" th:errors="phonetypeId"></span>
+
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="Tels"
+								class="col-sm-3 control-label no-padding-right">Telephone Number:</label>
+							<div class="col-sm-9">
+								<input class="col-xs-10 col-sm-8" oninput="this.value = this.value.replace(/[^0-9]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"
+									placeholder="Tel Number"
+									th:field="*{telnumber}" required="required">  </input>
+								<span class="text-danger"
+									th:if="${#fields.hasErrors('telnumber')}"
+									th:errors="*{telnumber}"></span>
+							</div>
+						</div>
+
+						
+
+						<div class="clearfix form-actions">
+							<div class="col-md-offset-3 col-md-9">
+								<input  type="hidden" th:field="*{patientId}" />
+								<button class="btn btn-primary" type="submit">
+									<i class="ace-icon fa fa-check bigger-110"></i> Add
+								</button>
+
+								<button class="btn btn-danger" type="reset">
+									<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+								</button>
+							</div>
+						</div>
+					</form>
+					<!-- /.Dropzone -->
+					<!-- /.col -->
+				</div>
+			</div>
+		</div>
+	
+	
+	
+	</div>
+</div>
+
+<div class="modal fade" id="addressadd">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		
+			<!-- Modal heading -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Patient Address</h4>
+			</div>
+			<!-- // Modal heading END -->
+			<!-- Modal body -->
+			<div class="modal-body">
+				<div class="row">
+					<!-- Dropzone -->
+					<div class="space space-4"></div>
+					<form role="form" class="form-horizontal" method="POST"
+						th:object="${addrForm}"  th:action="@{/patients/address/save}">
+
+						<div class="form-group">
+							<label for="detail"
+								class="col-sm-3 control-label no-padding-right">Address Type:
+								</label>
+							<div class="col-sm-9">
+								<select th:field="*{addresstypeId}" id="addresstypeId"
+									class="col-xs-10 col-sm-5">
+								<!-- 	<option value="0">Select</option>  -->
+									<option th:each="p : ${addresstypelist}" th:value="${p.addresstypeId}"
+										th:text="${p.name}"></option>
+								</select> <span class="text-danger"
+									th:if="${#fields.hasErrors('addresstypeId')}" th:errors="addresstypeId"></span>
+
+							</div> 
+						</div>
+						<div class="form-group">
+							<label for="Tels"
+								class="col-sm-3 control-label no-padding-right">Address Details:</label>
+							<div class="col-sm-9">
+								<textarea class="col-xs-10 col-sm-10" 	placeholder="Address" 
+									th:field="*{address}" required="required">  </textarea>
+								<span class="text-danger"
+									th:if="${#fields.hasErrors('address')}"
+									th:errors="*{address}"></span>
+							</div>
+						</div>
+
+						
+
+						<div class="clearfix form-actions">
+							<div class="col-md-offset-3 col-md-9">
+								<input  type="hidden" th:field="*{patientId}" />
+								<button class="btn btn-primary" type="submit">
+									<i class="ace-icon fa fa-check bigger-110"></i> Add
+								</button>
+
+								<button class="btn btn-danger" type="reset">
+									<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+								</button>
+							</div>
+						</div>
+					</form>
+					<!-- /.Dropzone -->
+					<!-- /.col -->
+				</div>
+			</div>
+		</div>
+	
+	
+	
+	</div>
+</div>
+
+
+<div class="modal fade" id="historyadd">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		
+			<!-- Modal heading -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Patient History</h4>
+			</div>
+			<!-- // Modal heading END -->
+			<!-- Modal body -->
+			<div class="modal-body">
+				<div class="row">
+					<!-- Dropzone -->
+					<div class="space space-4"></div>
+					<form role="form" class="form-horizontal" method="POST"
+						th:object="${histForm}"  th:action="@{/patients/history/save}">
+
+						<div class="form-group">
+							<label for="detail"
+								class="col-sm-3 control-label no-padding-right">History Type:
+								</label>
+							<div class="col-sm-9">
+								<select th:field="*{historytypeId}" id="historytypeId"
+									class="col-xs-10 col-sm-5">
+								<!-- 	<option value="0">Select</option>  -->
+									<option th:each="p : ${historytypelist}" th:value="${p.historytypeId}"
+										th:text="${p.name}"></option>
+								</select> <span class="text-danger"
+									th:if="${#fields.hasErrors('historytypeId')}" th:errors="historytypeId"></span>
+
+							</div> 
+						</div>
+						<div class="form-group">
+							<label for="Tels"
+								class="col-sm-3 control-label no-padding-right">History Details:</label>
+							<div class="col-sm-9">
+								<textarea class="col-xs-10 col-sm-10" 	placeholder="History" 
+									th:field="*{history}" required="required">  </textarea>
+								<span class="text-danger"
+									th:if="${#fields.hasErrors('history')}"
+									th:errors="*{history}"></span>
+							</div>
+						</div>
+
+						
+
+						<div class="clearfix form-actions">
+							<div class="col-md-offset-3 col-md-9">
+								<input  type="hidden" th:field="*{patientId}" />
+								<button class="btn btn-primary" type="submit">
+									<i class="ace-icon fa fa-check bigger-110"></i> Add
+								</button>
+
+								<button class="btn btn-danger" type="reset">
+									<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+								</button>
+							</div>
+						</div>
+					</form>
+					<!-- /.Dropzone -->
+					<!-- /.col -->
+				</div>
+			</div>
+		</div>
+	
+	
+	
+	</div>
+</div>
+
+<div class="modal fade" id="familyhistoryadd">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		
+			<!-- Modal heading -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Patient Family History</h4>
+			</div>
+			<!-- // Modal heading END -->
+			<!-- Modal body -->
+			<div class="modal-body">
+				<div class="row">
+					<!-- Dropzone -->
+					<div class="space space-4"></div>
+					<form role="form" class="form-horizontal" method="POST"
+						th:object="${famhistForm}"  th:action="@{/patients/familyhistory/save}">
+
+						<div class="form-group">
+							<label for="detail"
+								class="col-sm-3 control-label no-padding-right">History Type:
+								</label>
+							<div class="col-sm-9">
+								<select th:field="*{historytypeId}" id="historytypeId"
+									class="col-xs-10 col-sm-5">
+								<!-- 	<option value="0">Select</option>  -->
+									<option th:each="p : ${historytypelist}" th:value="${p.historytypeId}"
+										th:text="${p.name}"></option>
+								</select> <span class="text-danger"
+									th:if="${#fields.hasErrors('historytypeId')}" th:errors="historytypeId"></span>
+
+							</div> 
+						</div>
+						<div class="form-group">
+							<label for="Tels"
+								class="col-sm-3 control-label no-padding-right">History Details:</label>
+							<div class="col-sm-9">
+								<textarea class="col-xs-10 col-sm-10" 	placeholder="Family History" 
+									th:field="*{familyhistory}" required="required">  </textarea>
+								<span class="text-danger"
+									th:if="${#fields.hasErrors('familyhistory')}"
+									th:errors="*{familyhistory}"></span>
+							</div>
+						</div>
+
+						
+
+						<div class="clearfix form-actions">
+							<div class="col-md-offset-3 col-md-9">
+								<input  type="hidden" th:field="*{patientId}" />
+								<button class="btn btn-primary" type="submit">
+									<i class="ace-icon fa fa-check bigger-110"></i> Add
+								</button>
+
+								<button class="btn btn-danger" type="reset">
+									<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+								</button>
+							</div>
+						</div>
+					</form>
+					<!-- /.Dropzone -->
+					<!-- /.col -->
+				</div>
+			</div>
+		</div>
+	
+	
+	
+	</div>
+</div>
+
+
+
+<div class="modal fade" id="nokadd">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		
+			<!-- Modal heading -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Patient Next of Kin</h4>
+			</div>
+			<!-- // Modal heading END -->
+			<!-- Modal body -->
+			<div class="modal-body">
+				<div class="row">
+					<!-- Dropzone -->
+					<div class="space space-4"></div>
+					<form role="form" class="form-horizontal" method="POST"
+						th:object="${nokForm}"  th:action="@{/patients/nok/save}">
+
+		<div class="form-group">
+				<label for="fullname" class="col-sm-3 control-label no-padding-right">Full Name:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-10" placeholder="Full Name"
+						th:field="*{fullname}" required="required" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('fullname')}"
+						th:errors="*{fullname}"></span>
+				</div>
+			</div>
+			
+
+						<div class="form-group">
+							<label for="detail"
+								class="col-sm-3 control-label no-padding-right">Relationship Type:
+								</label>
+							<div class="col-sm-9">
+								<select th:field="*{relationshiptypeId}" id="relationshiptypeId"
+									class="col-xs-10 col-sm-5">
+								<!-- 	<option value="0">Select</option>  -->
+									<option th:each="p : ${relationshiptypelist}" th:value="${p.relationshiptypeId}"
+										th:text="${p.name}"></option>
+								</select> <span class="text-danger"
+									th:if="${#fields.hasErrors('relationshiptypeId')}" th:errors="relationshiptypeId"></span>
+
+							</div> 
+						</div>
+						
+									<div class="form-group">
+				<label for="email" class="col-sm-3 control-label no-padding-right">Email Address:</label>
+				<div class="col-sm-9">    
+					<input type="text" class="col-xs-10 col-sm-5" placeholder="Email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+						th:field="*{email}" /> <span class="text-danger"
+						th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+				</div>
+			</div>
+					
+			
+				<div class="form-group">
+							<label for="Tels"
+								class="col-sm-3 control-label no-padding-right">Telephone Number:</label>
+							<div class="col-sm-9">
+								<input type="text" class="col-xs-10 col-sm-5" oninput="this.value = this.value.replace(/[^0-9]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"
+									placeholder="Tel Number"
+									th:field="*{telephone}" required="required" />  
+								<span class="text-danger"
+									th:if="${#fields.hasErrors('telephone')}"
+									th:errors="*{telephone}"></span>
+							</div>
+						</div>
+				
+						
+
+		<div class="form-group">
+				<label for="address" class="col-sm-3 control-label no-padding-right">Full Address:</label>
+				<div class="col-sm-9">
+					<textarea type="text" class="col-xs-10 col-sm-10" placeholder="Full Address"
+						th:field="*{address}" required="required" >  </textarea><span
+						class="text-danger" th:if="${#fields.hasErrors('address')}"
+						th:errors="*{address}"></span>
+				</div>
+			</div>
+						
+
+						<div class="clearfix form-actions">
+							<div class="col-md-offset-3 col-md-9">
+								<input  type="hidden" th:field="*{patientId}" />
+								<button class="btn btn-primary" type="submit">
+									<i class="ace-icon fa fa-check bigger-110"></i> Add
+								</button>
+
+								<button class="btn btn-danger" type="reset">
+									<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+								</button>
+							</div>
+						</div>
+					</form>
+					<!-- /.Dropzone -->
+					<!-- /.col -->
+				</div>
+			</div>
+		</div>
+	
+	
+	
+	</div>
+</div>
+
+
+<div class="modal fade" id="allergyadd">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		
+			<!-- Modal heading -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Patient Allergy</h4>
+			</div>
+			<!-- // Modal heading END -->
+			<!-- Modal body -->
+			<div class="modal-body">
+				<div class="row">
+					<!-- Dropzone -->
+					<div class="space space-4"></div>
+					<form role="form" class="form-horizontal" method="POST"
+						th:object="${allergyForm}"  th:action="@{/patients/allergy/save}" onsubmit="return myallergy()" >
+
+						<div class="form-group">
+							<label for="detail"
+								class="col-sm-3 control-label no-padding-right">Allergy Item:
+								</label>
+							<div class="col-sm-9">
+							<input type="text" class="col-xs-10 col-sm-8"  	placeholder="Allergy Name" 
+									 required="required" readonly="readonly"  id="allergyname" data-required="true"/>  
+								
+								<input type="text" class="col-xs-5 col-sm-5"  hidden="hidden"	placeholder="Allergy Item" 
+									th:field="*{allergyId}" required="required"   readonly="readonly"/>  
+							 
+			<a	class="btn btn-xs btn-success" onclick ="myOpenallergywin()"> <i	class="glyphicon glyphicon-list"></i> Search</a>
+								
+								<!--  </div>   -->	
+								 <span class="text-danger"
+									th:if="${#fields.hasErrors('allergyId')}" th:errors="allergyId"></span>
+
+							</div> 
+						</div>
+						<div class="form-group">
+							<label for="Tels"
+								class="col-sm-3 control-label no-padding-right">Reactions:</label>
+							<div class="col-sm-9">
+								<textarea class="col-xs-10 col-sm-8" 	placeholder="Reactions" 
+									th:field="*{reaction}" required="required">  </textarea>
+								<span class="text-danger"
+									th:if="${#fields.hasErrors('reaction')}"
+									th:errors="*{reaction}"></span>
+							</div>
+						</div>
+
+						
+
+						<div class="clearfix form-actions">
+							<div class="col-md-offset-3 col-md-9">
+								<input  type="hidden" th:field="*{patientId}"  />
+								<button class="btn btn-primary" type="submit">
+									<i class="ace-icon fa fa-check bigger-110"></i> Add
+								</button>
+
+								<button class="btn btn-danger" type="reset">
+									<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+								</button>
+							</div>
+						</div>
+					</form>
+					<!-- /.Dropzone -->
+					<!-- /.col -->
+				</div>
+			</div>
+		</div>
+	
+	
+	
+	</div>
+</div>
+
+
+
+
+<div class="modal fade" id="relatedadd">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		
+			<!-- Modal heading -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Related Patient</h4>
+			</div>
+			<!-- // Modal heading END -->
+			<!-- Modal body -->
+			<div class="modal-body">
+				<div class="row">
+					<!-- Dropzone -->
+					<div class="space space-4"></div>
+					<form role="form" class="form-horizontal" method="POST"
+						th:object="${relatedForm}"  th:action="@{/patients/related/save}" onsubmit="return myrelated()">
+
+						<div class="form-group">
+							<label for="detail"
+								class="col-sm-3 control-label no-padding-right">Related Patient:
+								</label>
+							<div class="col-sm-9">
+							<input type="text" class="col-xs-10 col-sm-8"  	placeholder="Related Name" 
+									  id="relatedname"   required="required" disabled="disabled" />  
+									  
+								<input type="text" class="col-xs-5 col-sm-5"  placeholder="Related Item" 
+									th:field="*{relPatientId}"  hidden="hidden" />  
+							 
+			<a	class="btn btn-xs btn-success" onclick ="myOpenrelatedwin()"> <i	class="glyphicon glyphicon-list"></i> Search</a>
+								
+								<!--  </div>   -->	
+								 <span class="text-danger"
+									th:if="${#fields.hasErrors('relPatientId')}" th:errors="relPatientId"></span>
+
+							</div> 
+						</div>
+						<div class="form-group">
+							<label for="detail"
+								class="col-sm-3 control-label no-padding-right">Relationship Type:
+								</label>
+							<div class="col-sm-9">
+								<select th:field="*{relationshiptypeId}" id="relationshiptypeId"
+									class="col-xs-10 col-sm-5">
+								<!-- 	<option value="0">Select</option>  -->
+									<option th:each="p : ${relationshiptypelist}" th:value="${p.relationshiptypeId}"
+										th:text="${p.name}"></option>
+								</select> <span class="text-danger"
+									th:if="${#fields.hasErrors('relationshiptypeId')}" th:errors="relationshiptypeId"></span>
+
+							</div> 
+						</div>
+						
+
+						<div class="clearfix form-actions">
+							<div class="col-md-offset-3 col-md-9">
+								<input  type="hidden" th:field="*{patientId}" />
+								<button class="btn btn-primary" type="submit">
+									<i class="ace-icon fa fa-check bigger-110"></i> Add
+								</button>
+
+								<button class="btn btn-danger" type="reset">
+									<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+								</button>
+							</div>
+						</div>
+					</form>
+					<!-- /.Dropzone -->
+					<!-- /.col -->
+				</div>
+			</div>
+		</div>
+	
+	
+	
+	</div>
+</div>
+
+
+<div class="modal fade" id="hmoadd">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		
+			<!-- Modal heading -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Patient HMO</h4>
+			</div>
+			<!-- // Modal heading END -->
+			<!-- Modal body -->
+			<div class="modal-body">
+				<div class="row">
+					<!-- Dropzone -->
+					<div class="space space-4"></div>
+					<form role="form" class="form-horizontal" method="POST"
+						th:object="${hmoForm}"  th:action="@{/patients/hmo/save}">
+
+						<div class="form-group">
+							<label for="detail"
+								class="col-sm-3 control-label no-padding-right">HMO Package:
+								</label>
+							<div class="col-sm-9">
+								<select th:field="*{packageId}" id="hmoId"
+									class="col-xs-10 col-sm-5" required="required">
+								 	<option value="">Select</option>
+									<option th:each="p : ${hmolist}" th:value="${p.id}"
+										th:text="${p.hmo.name + ' - ' + p.name}"></option>
+								</select> <span class="text-danger"
+									th:if="${#fields.hasErrors('id')}" th:errors="id"></span>
+
+							</div>
+						</div>
+						
+
+
+				<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-3 no-padding-right"
+								for="date-picker">From:</label>
+
+							<div class="col-xs-12 col-sm-9">
+								<div class="clearfix">
+
+									<input type="text" class="col-xs-12 col-sm-3 date-picker"
+										id="date-picker" th:field="*{fromdat}"
+										data-date-format="yyyy-mm-dd" required="required" /> <span class="text-danger"
+										th:if="${#fields.hasErrors('fromdat')}" th:errors="fromdat"></span>
+
+								</div>
+							</div>
+				</div>
+
+
+<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-3 no-padding-right"
+								for="date-picker2">To:</label>
+
+							<div class="col-xs-12 col-sm-9">
+								<div class="clearfix">
+
+									<input type="text" class="col-xs-12 col-sm-3 date-picker"
+										id="date-picker2" th:field="*{todat}"
+										data-date-format="yyyy-mm-dd"  required="required"/> <span class="text-danger"
+										th:if="${#fields.hasErrors('todat')}" th:errors="todat" ></span>
+
+								</div>
+							</div>
+				</div>
+
+
+
+
+						
+						
+<div class="form-group">
+				<label for="hmoStatus" class="col-sm-3 control-label no-padding-right">Hmo Status:</label>
+				<div class="col-sm-9">
+				<select th:field="*{hmostatusId}" class="col-xs-10 col-sm-5">
+						<!-- <option value="0">Select..</option>  -->
+						<option th:each="hs: ${hmostatus}" th:value="${hs.hmostatus_id}"
+							th:text="${hs.name}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('hmostatusId')}"
+						th:errors="*{hmostatusId}"></span>
+				</div>
+			</div>
+
+						<div class="clearfix form-actions">
+							<div class="col-md-offset-3 col-md-9">
+								<input  type="hidden" th:field="*{patientId}" />
+								<button class="btn btn-primary" type="submit">
+									<i class="ace-icon fa fa-check bigger-110"></i> Add
+								</button>
+
+								<button class="btn btn-danger" type="reset">
+									<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+								</button>
+							</div>
+						</div>
+					</form>
+					<!-- /.Dropzone -->
+					<!-- /.col -->
+				</div>
+			</div>
+		</div>
+	
+	
+	
+	</div>
+</div>
+
+
+
+<script>
+
+	
+	function Confirm(id)
+	{
+	
+		
+	    job=confirm("Are you sure to delete ?");
+	    if(job!=true)
+	    {
+	        return false;
+	    }
+		
+	};
+	
+
+	function myOpenallergywin() {
+	   var myWindow = window.open("/EMR/search/allergysearchwin", "MsgWindow", "width=550, height=600");
+	  //  myWindow.document.write("<p>This window's name is: " + myWindow.name + "</p>");
+	    myWindow.focus();
+	    return false
+	  
+	}
+
+	
+	
+	function myOpenrelatedwin() {
+		   var myWindow = window.open("/EMR/search/patientsearchwin", "MsgWindow", "width=550, height=600");
+		  //  myWindow.document.write("<p>This window's name is: " + myWindow.name + "</p>");
+		    myWindow.focus();
+		    return false
+		  
+		}
+	
+	function myrelated()
+	{
+		
+		if ( $('#relatedname').val()=='' )
+			
+			{
+			
+			alert("Related Name cannot be empty");
+			return false;	
+			}
+		
+		
+		
+	}
+	
+
+	function myallergy()
+	{
+		
+		if ( $('#allergyname').val()=='' )
+			
+			{
+			
+			alert("Allergy Name cannot be empty");
+			return false;	
+			}
+		
+		
+		
+	}
+</script>
+

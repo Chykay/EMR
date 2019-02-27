@@ -1,0 +1,266 @@
+<div class="page-header">
+	<h1>
+		Visits <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			Configure a visit
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-primary" th:href="@{/consultations/visits}"><i
+			class="fa fa-list-alt"></i> All Visits</a>
+	</div>
+</div>
+<div class="hr hr-18 dotted hr-double"></div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<!-- User Profile -->
+		<div id="user-profile-2" class="user-profile">
+			<div class="tabbable">
+				<ul class="nav nav-tabs padding-18">
+					<li class="active"><a data-toggle="tab" href="#configure">
+							<i class="green ace-icon fa fa-ban bigger-120"></i> Configure
+							Visit
+					</a></li>
+					<li class="">
+					<a th:href="@{/consultations/visits/configurebill/{id} (id = ${pid})}">
+							<i class="brown ace-icon fa fa-ban bigger-120"></i> Billing Scheme
+					</a></li> 
+				</ul>
+				<div class="tab-content no-border padding-24">
+					<div id="configure" class="tab-pane in active">
+
+						<!-- /.row -->
+						<div class="row">
+							<div class="col-xs-12">
+
+								<!-- View contents here -->
+								<div class="row">
+
+									<div class="col-md-6">
+									<h3 th:inline="text">
+											Visit ID: [[${visit2.id}]] <!-- <small> <a
+												th:href="@{/consultations/visits/view/{id} (id=${vst.id})}">view
+													consultation</a></small> -->
+										</h3> 
+										<h3 th:inline="text">
+											Visit Code: [[${visit2.code}]] <!-- <small> <a
+												th:href="@{/consultations/visits/view/{id} (id=${vst.id})}">view
+													consultation</a></small> -->
+										</h3> 
+										
+										<h3 th:inline="text">
+											Point ID: [[${visit2.point.id}]] <!-- <small> <a
+												th:href="@{/consultations/visits/view/{id} (id=${vst.id})}">view
+													consultation</a></small> -->
+										</h3> 
+										
+										<h3 th:inline="text">
+											Point Name: [[${visit2.point.name}]] <!-- <small> <a
+												th:href="@{/consultations/visits/view/{id} (id=${vst.id})}">view
+													consultation</a></small> -->
+										</h3> 
+									 		<form role ="form" class="form-horizontal" method="post" th:object="${vForm}">
+						
+						<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Visit ID</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder="" 
+					width = "20px" readonly = "readonly" th:field = "*{id}" /> 
+				</div>
+				</div>
+				
+				<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Visit Code</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder="" 
+					width = "20px" readonly = "readonly" th:field = "*{code}" /> 
+				</div>
+				</div>
+				
+				<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Point ID</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder="" 
+					width = "20px" readonly = "readonly" th:field = "*{point_id}" /> 
+				</div>
+				</div>
+				
+				<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Point Name</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder="" 
+					width = "20px" readonly = "readonly" th:field = "*{point_name}" /> 
+				</div>
+				</div>
+				
+				</form>
+										<hr />
+										<div class="col-md-8">
+											<!-- Dform -->
+											<h3 th:inline="text">Assign Patient</h3>
+											<hr />
+											<form th:object="${dForm}"
+												th:action="@{/consultations/visits/assign}" method="post">
+												<input type="hidden" th:field="*{visitId}" />
+												<!-- section/arm -->
+												<div class="form-group">
+													<label>Select Section | Arm</label>
+													<div class="">
+														<select class="col-xs-10 col-sm-12" id="login-section"
+															th:field="*{section}" required="true">
+															<option value="0">Select..</option>
+															<option th:each="s: ${sections}" th:value="${s.id}"
+																th:text="${s.session_name}"></option>
+														</select> <span class="text-danger"
+															th:if="${#fields.hasErrors('section')}"
+															th:errors="*{section}"></span>
+													</div>
+												</div>
+												<!-- Point -->
+												<div class="form-group">
+													<label>Select Point</label>
+													<div class="">
+														<select class="col-xs-10 col-sm-12" id="workflow-point"
+															th:field="*{workflowPointId}" required="true">
+															<option value="0">Select Section|Arm first</option>
+														</select> <span class="text-danger"
+															th:if="${#fields.hasErrors('workflowPointId')}"
+															th:errors="*{workflowPointId}"></span>
+													</div>
+												</div>
+												<!-- User Input -->
+												<div class="form-group">
+													<label>Select User</label>
+													<div class="">
+														<select class="col-xs-10 col-sm-12" th:field="*{userId}"
+															id="point-users" required="true">
+															<option value="">Select Point first</option>
+														</select> <span class="text-danger"
+															th:if="${#fields.hasErrors('userId')}"
+															th:errors="*{userId}"></span>
+													</div>
+												</div>
+												<div class="form-group">
+													<label>Comment</label>
+													<div class="">
+														<textarea class="col-xs-10 col-sm-12"
+															th:field="*{comment}"></textarea>
+														<span class="text-danger"
+															th:if="${#fields.hasErrors('comment')}"
+															th:errors="*{comment}"></span>
+													</div>
+												</div>
+												<div class="clearfix form-actions">
+													<br />
+													<button type="submit" class="btn btn-primary btn-xs">
+														<i class=""></i> Assign
+													</button>
+												</div>
+											</form>
+											<!-- /Dform -->
+										</div>
+									</div>
+									<!-- /.View contents here -->
+									<div class="col-md-5 center">
+										<!-- Holder for Patient Detail -->
+										<h4 th:inline="text">[[${visit2.patient.title.acronym} + '
+											' + ${visit2.patient.surname} + ' ' +
+											${visit2.patient.othernames}]]</h4>
+										<small th:inline="text">[[${visit2.patient.patient_id}]]</small>
+
+										<div class="space space-4"></div>
+
+										 <span class="profile-picture"> <img 
+											th:if="${visit2.patient.image == null}" id="avatar2" style="max-width: 50px"
+											th:src="@{/resources/img/nhis.png}" alt="Profile"
+											class="img-responsive" /> <img
+											th:if="${visit2.patient.image != null}" id="avatar2" style="max-width: 50px"
+											th:src="@{/patients/image/{id}(id=${visit2.patient.id})}"
+											alt="Profile" class="img-responsive" />
+										</span>
+										<!-- /.Holder for Patient Detail -->
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="space-20"></div>
+				</div>
+				<!-- /#home -->
+			</div>
+		</div>
+	</div>
+	<!-- Profile Ends  -->
+	<!-- End View contents here -->
+</div>
+
+<script>
+	$('#hmo-package')
+			.change(
+					function() {
+						$.ajax({
+									url : '../../../utilities/payment/itembyscheme/'
+											+ $(this).val(),
+									beforeSend : function() {
+										$.gritter
+												.add({
+													// (string | mandatory) the heading of the notification
+													title : 'Processing!',
+													// (string | mandatory) the text inside the notification
+													text : 'Fetching items for selected scheme...'
+												});
+									},
+									success : function(msg) {
+										$.gritter.add({
+											// (string | mandatory) the heading of the notification
+											title : 'Success!',
+											// (string | mandatory) the text inside the notification
+											text : 'Items fetched...',
+											class_name : 'gritter-success'
+										});
+										$('#hmo-package-services').html(msg);
+									},
+									error : function() {
+										$.gritter
+												.add({
+													title : 'Error!',
+													text : 'Cannot fetch billing scheme. Try again or contact admin',
+													class_name : 'gritter-error'
+												});
+									}
+								});
+					});
+
+	$('#login-section').change(function() {
+		$.ajax({
+			url : '/../' + window.location.pathname.split('/')[1] + '/consultations/visits/request/point/' + $(this).val(),
+			beforeSend : function() {
+			},
+			success : function(msg) {
+				$("#workflow-point").html(msg);
+			},
+			error : function() {
+			}
+		});//ajax
+	});
+
+	$('#workflow-point').change(function() {
+		$.ajax({
+			url : '/../' + window.location.pathname.split('/')[1] + '/consultations/visits/request/user/' + $(this).val(),
+			beforeSend : function() {
+			},
+			success : function(msg) {
+				$('#point-users').html(msg);
+			},
+			error : function() {
+			}
+		});
+	});
+</script>

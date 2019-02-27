@@ -1,0 +1,74 @@
+<div class="page-header">
+	<h1>
+		Add <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			Add a HMO SubService Package
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-primary" th:href="@{/hmosubservice/add}"><i
+			class="fa fa-list"></i> All HMO SubService Packages</a>
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+
+		<form role="form" class="form-horizontal" method="POST"
+			th:object="${hmoPckSubServiceForm}">
+			<legend>HMO SubService Form</legend>			
+
+			<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Service Name:</label>
+				<div class="col-sm-9">
+					<select th:field="*{hmoPckService}" class="col-xs-10 col-sm-5">
+						<option value="0">Select..</option>
+						<option th:each="c: ${hmoPckServ}" th:value="${c.serviceId}"
+							th:text="${c.serviceName}"></option>
+					</select>
+					<span class="text-danger" th:if="${#fields.hasErrors('hmoPckService')}"
+						th:errors="*{hmoPckService}"></span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">SubService Name:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5"
+						placeholder="SubService Name" th:field="*{subserviceName}" required="required" />
+					<span class="text-danger" th:if="${#fields.hasErrors('subserviceName')}"
+						th:errors="*{subserviceName}"></span>
+				</div>
+			</div>
+			
+			
+
+			<div class="clearfix form-actions">
+				<div class="col-md-offset-3 col-md-9">
+					 <!-- <input type="hidden" th:field="*{id}" />  -->
+					<button class="btn btn-primary" type="submit">
+						<i class="ace-icon fa fa-check bigger-110"></i> Add
+					</button>
+
+					<button class="btn btn-danger" type="reset">
+						<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+
+
+
+
+
+

@@ -1,0 +1,65 @@
+<div class="page-header">
+	<h1>
+		Eidt <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			Edit an Item
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-primary" th:href="@{/system/globalitem/index}"><i
+			class="fa fa-list"></i> Top 50 Global Items </a>
+			<a
+			class="btn btn-xs btn-primary" th:href="@{/system/globalitem/index/all}"><i
+			class="fa fa-list"></i>View All Global Item </a>
+			
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+
+		<form role="form" class="form-horizontal" method="POST"
+						th:object="${globalitemrankingform}" >
+		                 
+			
+			<div class="form-group">
+				<label for="title" class="col-sm-3 control-label no-padding-right">Ranking:</label>
+				<div class="col-sm-9">
+					<select th:field="*{ranking_id}" class="col-xs-10 col-sm-5">
+					
+						<option th:each="gr: ${staffranking}" th:value="${gr.id}"
+							th:text="${gr.staffgroup.name + ' - ' + gr.name}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('ranking_id')}"
+						th:errors="*{ranking_id}"></span>
+				</div>  
+			</div>
+						
+						<div class="clearfix form-actions">
+							<div class="col-md-offset-3 col-md-9">
+								<input  type="hidden" th:field="*{globalitem_id}" />
+								<button class="btn btn-primary" type="submit">
+									<i class="ace-icon fa fa-check bigger-110"></i> Update
+								</button>
+
+								<button class="btn btn-danger" type="reset">
+									<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+								</button>
+							</div>
+						</div>
+
+
+
+
+
+
+					</form>
+	</div>
+</div>
+

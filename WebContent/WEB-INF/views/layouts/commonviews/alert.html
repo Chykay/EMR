@@ -1,0 +1,20 @@
+<!-- <div xmlns:th="http://www.thymeleaf.org" th:fragment="alert"
+	class="alert alert-dismissable" th:classappend="'alert-' + ${type}">
+
+	<button type="button" class="close" data-dismiss="alert"
+		aria-hidden="true">&times;</button>
+
+	<i class="fa" th:classappend="${icon}"></i> 
+	<span th:text="${message}">Test</span>
+</div> -->
+
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="alert"
+	class="alert alert-block"  th:classappend="'alert-' + ${type}">
+
+	<button type="button" class="close" data-dismiss="alert">
+		<i class="ace-icon fa fa-times"></i>
+	</button>
+
+	<i class="ace-icon fa" th:classappend="${icon}"></i> <span
+		th:text="${message}">Test</span>
+</div>

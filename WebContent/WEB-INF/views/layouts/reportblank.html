@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta charset="utf-8" />
+<title th:text="${siteTitle}">NHIS Template</title>
+
+<meta name="description" content="" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+
+<link rel="stylesheet" type="text/css" 	th:href="@{/resources/assets/report/bootstrap.min.css}" />
+ 
+
+<script type="text/javascript" 	th:src="@{/resources/assets/report/jquery.min.js}"></script>
+
+<script type="text/javascript" 	th:src="@{/resources/assets/report/bootstrap.min.js}"></script>
+
+<script type="text/javascript" 	th:src="@{/resources/assets/report/excellentexport.js}"></script>
+
+<script type="text/javascript" 	th:src="@{/resources/assets/report/excellentprint.js}"></script>
+
+<script th:inline="javascript">
+/*
+$(function(){
+		// Check for notifications every 10 sec
+		var timer = setInterval(function(){
+			$.ajax({
+				dataType : 'html',
+				url: [[ @{/consultations/visits/notifications/fetch} ]],
+				success: function(msg){
+					$("#navbar-notifications").html(msg);
+				},
+				error: function(){
+					$.gritter.add({
+						title: 'Error!',
+						text: 'Cannot fetch notifications. Try again or contact admin',
+						class_name: 'gritter-error'
+					});
+				}	
+			});
+			
+		}, (10000 * 3));
+	});
+*/
+	</script>
+
+</head>
+
+<body class="skin-3">
+	<!-- #section:basics/navbar.layout -->
+	
+
+	<!-- /section:basics/navbar.layout -->
+	<div class="main-container" id="main-container">
+			
+		<!-- /section:basics/sidebar -->
+		<div >
+			<!-- #section:basics/content.breadcrumbs -->
+
+			
+
+			<!-- /section:basics/content.breadcrumbs -->
+			<div class="page-content">
+				<div class="row">
+					<div class="col-xs-12">
+						<!-- PAGE CONTENT BEGINS -->
+						<!-- Alert Bar here -->
+
+						<!-- End Alert bar here -->
+						<th:block th:if="${msg != null}">
+							<div class="row">
+								<div th:replace="layouts/commonviews/alert">Alert Block</div>
+							</div>
+						</th:block>
+
+						<div class="row">
+							
+							<!-- Content Fragments -->
+							<div th:replace="${view}">Content</div>
+							<!-- End content fragments -->
+						</div>
+
+						<!-- PAGE CONTENT ENDS -->
+					</div>
+					<!-- /.col -->
+				</div>
+				<!-- /.row -->
+			</div>
+			<!-- /.page-content -->
+		</div>
+		<!-- /.main-content -->
+
+		
+	</div>
+
+	
+
+
+</body>
+</html>

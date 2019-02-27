@@ -1,0 +1,43 @@
+<div class="page-header">
+	<h1>
+		View <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			View an Hospital
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/admin}"><i
+			class="fa fa-home"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-primary"
+			th:href="@{/admin/organisations}"><i
+			class="fa fa-list"></i> All Hospitals</a> <a
+			class="btn btn-xs btn-warning"
+			th:href="@{/admin/organisations/edit/{id} (id=${organisation.id})}"><i
+			class="fa fa-edit"></i> Edit Hospital</a> <a class="btn btn-xs btn-danger"
+			th:href="@{/admin/organisations/delete/{id} (id=${organisation.id})}"><i
+			class="fa fa-trash-o"></i> Delete hospital</a>
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<dl class="dl-horizontal">
+			<dt>Name:</dt>
+			<dd th:text="${organisation.name}"></dd>
+			<dt>Description:</dt>
+			<dd
+				th:text="${organisation.description == null || organisation.description == ''} ? 'Not set': ${organisation.description}"></dd>
+			<dt>Created date</dt>
+			<dd
+				th:text="${ #dates.format(organisation.createdDate, 'MMM dd, yyyy HH:mm')}"></dd>
+			<dt>Last modified date</dt>
+			<dd
+				th:text="${organisation.modifiedDate == null} ? 'Not modified yet!': ${ #dates.format(organisation.modifiedDate, 'MMM dd, yyyy HH:mm')}"></dd>
+		</dl>
+	</div>
+</div>

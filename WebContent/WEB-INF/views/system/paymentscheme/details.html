@@ -1,0 +1,36 @@
+<div class="page-header">
+	<h1>
+		View <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			Payment Scheme Details
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/admin/insurances}"
+			th:if="${@userIdentity.renderLink('/admin/insurances')}"><i
+			class="fa fa-home"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-primary" onclick="window.history.back();"><i
+			class="fa fa-list"></i> Go Back</a>
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<dl class="dl-horizontal">
+			<dt>Name:</dt>
+			<dd th:text="${hmo.name}"></dd>
+			<dt>Name:</dt>
+			<dd th:text="${hmo.address}"></dd>
+			
+			<dt>Created date</dt>
+			<dd
+				th:text="${ #dates.format(hmo.createdDate, 'MMM dd, yyyy HH:mm')}"></dd>
+			
+		</dl>
+	</div>
+</div>

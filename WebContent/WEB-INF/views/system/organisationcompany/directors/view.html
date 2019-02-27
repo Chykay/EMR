@@ -1,0 +1,215 @@
+<div class="page-header">
+	<h1>
+		View <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			View an Organisation Director
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/admin}"><i
+			class="fa fa-home"></i> System Dashboard
+		</a>
+		<a class="btn btn-xs btn-primary"
+			th:href="@{/admin/organisations}"><i
+			class="fa fa-list"></i> All Organisations
+		</a>
+	
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+	
+		<div id="user-profile-2" class="user-profile">
+			<div class="tabbable">
+				<ul class="nav nav-tabs padding-18"> 
+					<li class="">
+						<!-- <a data-toggle="tab" href="#home"> --> 						
+						<a th:href="@{/admin/organisations/view/{hId}(hId=${director.organisation.id})}" >
+						
+						<i class="green ace-icon fa fa-user bigger-120"></i> Profile
+						</a>
+					</li>
+					<li class="active">
+						<!-- <a th:href="@{/admin/organisations/director/{hId}(hId=${director.directorId})}"> -->
+						<a href="#">
+							<i class="brown ace-icon fa fa-leaf bigger-120"></i>All Directors
+						</a>						
+					</li>
+					
+					<li class="">
+						<a th:href="@{/admin/organisations/{hId}/documents (hId=${director.organisation.id})}">
+							<i class="purple ace-icon fa fa-leaf bigger-120"></i> Documents
+						</a>
+					</li>
+						
+				</ul>
+
+				<div class="tab-content no-border padding-24">
+					<div id="home" class="tab-pane in active">
+					
+					<a class="btn btn-danger btn-xs" th:href="@{/admin/organisations/director/{hId}(hId=${director.organisation.id})}"> <i
+							class="ace-icon fa fa-plus bigger-110"></i> All Directors
+					</a>
+					
+						<div class="row">
+							<div class="col-xs-12 col-sm-6 left">
+								<h4 class="blue">
+									<!-- <span class="middle" th:text="${organisation.name}"></span> -->Director's View
+								</h4>
+
+							<div class="profile-user-info">
+									<div class="profile-info-row">
+										<div class="profile-info-name">Last Name:</div>
+
+										<div class="profile-info-value">
+											<span th:text="${director.directorLastName}"></span>
+										</div>
+									</div>
+
+							</div>   
+
+							<div class="profile-user-info">
+										<div class="profile-info-name">First Name:</div>
+
+										<div class="profile-info-value">
+											<span th:text="${director.directorFirstName}"></span>
+										</div>
+							</div>							
+							
+							<div class="profile-user-info">
+									<div class="profile-info-row">
+										<div class="profile-info-name">Email:</div>
+
+										<div class="profile-info-value">
+											<span th:text="${director.directorEmail}"></span>
+										</div>
+									</div>
+
+							</div>
+							
+							<div class="profile-user-info">
+									<div class="profile-info-row">
+										<div class="profile-info-name">Phone Number:</div>
+
+										<div class="profile-info-value">
+											<span th:text="${director.directorPhone}"></span>
+										</div>
+									</div>
+
+							</div>							
+							
+
+								<div class="hr hr-8 dotted"></div>
+							</div>
+							<!-- /.col -->
+							<div class="col-xs-12 col-sm-6 right">
+								<span class="profile-picture"> <img
+									th:if="${director.directorAvatar == null}" id="avatar2"
+									th:src="@{/resources/img/nhis.png}" alt="Profile"
+									class="img-responsive" /> <img
+									th:if="${director.directorAvatar != null}" id="avatar2"
+									th:src="@{/admin/organisations/directors/image/{id}(id=${director.directorId})}"
+									alt="Profile" class="img-responsive" />
+								</span>
+
+								<div class="space space-4"></div>
+								<a class="btn btn-sm btn-block btn-success" href="#modal-simple"
+									data-toggle="modal"> <i class="glyphicon glyphicon-picture"></i>
+									Change Image
+								</a>
+								
+								<div class="modal fade" id="modal-simple">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- Form -->
+			<form th:action="@{/admin/organisations/directors/imageUpload}"
+				th:object="${imageForm}" method="post" enctype="multipart/form-data">
+				<!-- Modal heading -->
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title">Change Image</h4>
+				</div>
+				<!-- // Modal heading END -->
+				<!-- Modal body -->
+				<div class="modal-body">
+				
+				
+					<div class="form-group">
+						<label for="lastName"
+							class="col-sm-3 control-label no-padding-right">Image:</label>
+						<div class="col-sm-9">
+							<input type="file" th:field="*{imageFile}" placeholder="image" /><span
+								class="text-danger" th:if="${#fields.hasErrors('imageFile')}"
+								th:errors="*{imageFile}"></span>
+						</div>
+					</div>
+				</div>
+				<!-- // Modal body END -->
+
+				<!-- Modal footer -->
+				<div class="modal-footer">
+					<input type="hidden" th:field="*{director_Id}" />
+					<button class="btn btn-primary btn-xs" type="submit"
+						id="save-changes">Upload image</button>
+					<button type="button" class="btn btn-xs" data-dismiss="modal">Cancel</button>
+				</div>
+				<!-- // Modal footer END -->
+			</form>
+			<!-- /.Form -->
+		</div>
+	</div>
+</div>
+
+							</div>
+						</div>
+						<!-- /.row -->
+
+						<div class="space-20"></div>
+					</div>
+					<!-- /#home -->
+					
+					
+				</div>
+			</div>
+		</div>
+		
+
+		
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		<!-- View contents here -->
+		<!-- <dl class="dl-horizontal">
+			<dt>Last Name:</dt>
+			<dd th:text="${directorForm.directorLastName}"></dd>
+			
+			<dt>First Name:</dt>
+			<dd th:text="${directorForm.directorFirstName}"></dd>
+			
+			<dt>Email:</dt>
+			<dd th:text="${directorForm.directorEmail}"></dd>
+			
+			<dt>Phone Number:</dt>
+			<dd th:text="${directorForm.directorPhone}"></dd>
+		</dl> -->
+		
+		<!-- <input type="text" th:field="*{directorForm.directorId}" />	 -->
+		
+	</div>
+</div>

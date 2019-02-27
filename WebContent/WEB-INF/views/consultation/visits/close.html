@@ -1,0 +1,48 @@
+
+<div class="page-header">
+	<h1>Close a visit</h1>
+</div>
+<div class="row">
+	<div class="col-xs-12 col-md-6">
+		<p>
+			You are about to end a visit: <strong th:text="${visit.code}">Code</strong>.
+			Are you sure?
+		</p>
+
+		<form role="form" method="POST" th:object="${dForm}">
+			<input type="text" th:field="*{visitId}" /> <input type="hidden"
+				th:field="*{consultationId}" />
+
+			<div class="form-group">
+				<label>Select Consultation Status</label>
+				<div class="">
+					<select class="col-xs-10 col-sm-12"
+						th:field="*{consultationStatus}" required="true">
+						<option value="0">Select..</option>
+						<option th:each="s: ${cStatuses}" th:value="${s.id}"
+							th:text="${s.type}"></option>
+					</select> <span class="text-danger"
+						th:if="${#fields.hasErrors('consultationStatus')}"
+						th:errors="*{consultationStatus}"></span>
+				</div>
+			</div>
+
+
+			<div class="form-group">
+				<label>Comments</label>
+				<div class="">
+					<textarea class="col-xs-10 col-sm-12" th:field="*{comment}"></textarea>
+					<span class="text-danger" th:if="${#fields.hasErrors('comment')}"
+						th:errors="*{comment}"></span>
+				</div>
+			</div>
+
+			<div class="clearfix form-actions">
+				<button class="btn btn-danger" type="submit">
+					<i class="ace-icon fa fa-check bigger-110"></i> Yes
+				</button>
+				<a class="btn btn-primary" onclick="window.history.back();">No</a>
+			</div>
+		</form>
+	</div>
+</div>

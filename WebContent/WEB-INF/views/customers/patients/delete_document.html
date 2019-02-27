@@ -1,0 +1,21 @@
+
+<div class="page-header">
+	<h1>Delete a File</h1>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+		<p>
+			You are about to delete a document: <strong
+				th:text="${document.name}">name</strong>. Are you sure?
+		</p>
+
+		<form role="form" method="POST" th:object="${pForm}">
+			<input type="hidden" th:field="*{PatientDocumentId}" />
+			<button class="btn btn-danger" type="submit">
+				<i class="ace-icon fa fa-check bigger-110"></i> Yes
+			</button>
+			<a class="btn btn-primary"
+				th:href="@{/customers/patients/documents/{id} (id = ${document.patient.patientId})}">No</a>
+		</form>
+	</div>
+</div>

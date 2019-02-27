@@ -1,0 +1,219 @@
+<div class="page-header">
+	<h1>
+		Clocking In / Out Module <small> <i
+			class="ace-icon fa fa-angle-double-right"></i> Clocking In / Out  Details
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-list-alt"></i> System Dashboard</a> 
+			
+			<a
+			class="btn btn-xs btn-info" th:href="@{/user/clocking}"><i
+			class="fa fa-list-alt"></i> Clock In</a> 
+					<div class="row">
+							<!--  Dropzone -->
+
+
+
+				
+				<a href="#modal-simple" data-toggle="modal" class="btn btn-danger"> Click to Clock In </a>
+
+								<div class="space space-4"></div>
+								
+								<div class="space space-4"></div>
+
+
+						</div>
+	
+	</div>
+</div>
+<div class="hr hr-18 dotted hr-double"></div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<div class="table-header">Result for Login / Logout Session</div>
+		<table id="dTable"
+			class="table table-striped table-bordered table-hover">
+			<!-- Table heading -->
+			<thead>
+				<tr>
+					<th>User Name</th>
+					<th>Clock In Time</th>
+					<th>Clock Out Time</th>
+					<th>Login Section</th>
+					<th>Login Point</th>
+				
+			
+					
+					
+					
+					<th><i class="glyphicon glyphicon-asterisk"></i></th>
+				</tr>
+			</thead>
+			<!-- // Table heading END -->
+			<!-- Table body -->
+			<tbody>
+				<tr th:each="c : ${ clockingtable }">
+					<td th:text="${c.username}">Consultation code</td>
+						<td
+						th:text="${ #dates.format(c.clock_in_time, 'MMM dd, yyyy HH:mm a')}">Listed
+						Date</td>
+						<td
+						th:text="${ #dates.format(c.clock_out_time, 'MMM dd, yyyy HH:mm a')}">Listed
+						Date</td>
+									
+					<td th:text="${c.loginSection.session_name}">Section Name</td>
+								<td th:text="${c.loginSection.session_name}">Section Name</td>
+					
+				
+					<td>
+					
+
+					
+				
+					
+			<!-- 			<a class="btn btn-xs btn-success tooltips" 
+						title="view visit details"
+						th:href="@{/consultations/visits/vitals/{id}(id=${c.id}) }">
+						
+							<i class="fa fa-trash-o"></i> View
+					</a> 
+					
+					<a class="btn btn-xs btn-purple tooltips"  
+						title="attend to visit"
+						th:href="@{/consultations/visits/vitals/{id}(id=${c.id}) }">
+							<i class="fa fa-trash-o"></i> Consult
+					</a> -->
+					
+					
+					</td>
+				</tr>
+			</tbody>
+			<!-- // Table body END -->
+		</table>
+		<!-- /. End view content here -->
+	</div>
+</div>
+<script>
+	jQuery(function($) {
+		var oTable1 = $('#dTable').dataTable({
+			bAutoWidth : false,
+			"aoColumns" : [ {
+				"bSortable" : true
+			}, null, null, null, null, null, {
+				"bSortable" : false
+			} ]
+
+		//,
+		//"sScrollY": "200px",
+		//"bPaginate": false,
+
+		//"sScrollX": "100%",
+		//"sScrollXInner": "120%",
+		//"bScrollCollapse": true,
+		//Note: if you are applying horizontal scrolling (sScrollX) on a ".table-bordered"
+		//you may want to wrap the table inside a "div.dataTables_borderWrap" element
+
+		//"iDisplayLength": 50
+		});
+
+	});
+</script>
+
+
+
+
+
+<div class="modal fade" id="modal-simple">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- Form -->
+					
+				
+					<form role="form" class="form-horizontal" method="POST"
+								th:object="${clockingForm}">
+								
+				<!-- Modal heading -->
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title">Add your clockin detail</h4>
+				</div>
+				<!-- // Modal heading END -->
+				<!-- Modal body -->
+				<div class="modal-body">
+					
+	<!-- <input type="hidden" th:field="*{patientId}" /> -->
+
+
+
+
+	<div class="row">
+		<div class="form-group">
+									<label for="stop_year"
+										class="col-sm-3 control-label no-padding-right">Login UserName:</label>
+									<div class="col-sm-9">
+										<input type="text" class="col-xs-10 col-sm-5" placeholder="username"
+						th:field="*{username}" required="required" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('username')}"
+						th:errors="*{username}"></span>
+									</div>
+								</div>
+
+</div>
+		<div class="space-2"></div>
+			<div class="space-2"></div>
+			
+		
+		
+<div class="row">
+		<div class="form-group">
+									<label for="stop_year"
+										class="col-sm-3 control-label no-padding-right">Expected Logout Time:</label>
+									<div class="col-sm-9">
+															<input type="text" class="form-control col-xs-12 col-sm-3 date-timepicker1"
+										id="date-timepicker1" placeholder="Select clock out time" th:field="*{clock_out_time}"
+										 /> <span class="input-group-addon"
+										th:if="${#fields.hasErrors('clock_out_time')}" th:errors="clock_out_time">	
+										<i class="fa fa-clock-o bigger-110"></i></span>
+									</div>
+								</div>
+
+</div>
+		<div class="space-2"></div>
+			<div class="space-2"></div>
+			
+		
+	
+				</div>
+				<!-- // Modal body END -->
+
+				<!-- Modal footer -->
+				<div class="modal-footer">
+				
+				
+						
+						<input type="hidden" th:field="*{id}" />
+										<button class="btn btn-primary" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i> Add
+										</button>
+
+										<button class="btn btn-danger" type="reset">
+											<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+										</button>
+										
+										
+					
+				</div>
+				<!-- // Modal footer END -->
+			</form>
+			<!-- /.Form -->
+		</div>
+	</div>
+</div>

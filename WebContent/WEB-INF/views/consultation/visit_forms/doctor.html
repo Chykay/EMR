@@ -1,0 +1,872 @@
+<th:block th:if="${visit.rescheduledVisit} != null">
+	<div class="alert alert-block alert-info">
+		<i class="ace-icon fa fa-bullhorn"></i> <span th:text="'This visit as been rescheduled for ' + ${ #dates.format(visit.rescheduledVisit.scheduledDate, 'dd-MMM-yyyy')}">Visit has be
+			rescheduled for 2015-05-20</span>
+	</div>
+</th:block>
+	<div class="page-header">
+		<h1>
+			Visits <small> <i class="ace-icon fa fa-angle-double-right"></i>
+				Consultant
+			</small>
+		</h1>
+	</div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard</a>  <a
+			class="btn btn-xs btn-info" th:href="@{/consultations/visits/consultant}"><i
+			class="fa fa-list-alt"></i> All Doctor's Queue</a> 
+			
+					<a
+			class="btn btn-xs btn-info" th:href="@{/consultations/visits/queue/doctor}"><i
+			class="fa fa-list-alt"></i> My Consultation Queue</a>  <a
+			class="btn btn-xs btn-warning"
+			th:href="@{/consultations/visits/reschedule/{id}/consultant (id=${visit.id})}"><i
+			class="fa fa-list-alt"></i> Reschedule</a> <a
+			class="btn btn-xs btn-danger"
+			th:href="@{/consultations/visits/close/{id} (id = ${visit.id})}"><i
+			class="fa fa-list-alt"></i> Close Visit</a> 
+			
+		<!-- 	<a href="#drug-form-modal"
+			data-toggle="modal" class="btn btn-primary btn-xs"><i
+			class="fa fa-bolt"></i> Prescribe Drugs</a>  -->
+			
+			<a
+			class="btn btn-xs btn-warning"
+			th:href="@{/consultations/visits/consultant/prescribedrug/{id} (id = ${visit.id})}"><i
+			class="fa fa-list-alt"></i> Prescribe Drug / Injection</a> 
+		
+				<a
+			class="btn btn-xs btn-purple"
+			th:href="@{/consultations/visits/consultant/labtest/{id} (id = ${visit.id})}"><i
+			class="fa fa-list-alt"></i> Laboratory Test</a> 
+			<!-- <a href="#lab-form-modal"
+			data-toggle="modal" class="btn btn-primary btn-xs"><i
+			class="fa fa-bolt"></i> Recommend Lab test</a> -->
+			
+		
+			
+				<a class="btn btn-xs btn-danger"  
+						title="stop attending to patient"
+						th:href="@{/consultations/visits/consultant/unclerk/{id}(id=${visit.id}) }">
+							<i class="fa fa-trash-o"></i>  Stop Clerking
+				</a>
+	</div>
+</div>
+<div class="hr hr-18 dotted hr-double"></div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Tabs to handle the various views -->
+		<!-- Show the workflow movements -->
+	</div>
+</div>
+<div class="row">
+	<div class="col-xs-12 col-md-12">
+
+	
+
+					<!-- tab comes here -->
+					
+						<div id="user-profile-2" class="user-profile">
+			<div class="tabbable">
+				<ul class="nav nav-tabs padding-18">
+					<li class="active"><a data-toggle="tab" href="#home"> <i
+							class="green ace-icon fa fa-user bigger-120"></i> Vital Signs / Assign
+					</a></li>
+					
+					
+					<li class=""><a
+						th:href="@{/consultations/visits/consultant/complaint/{id} (id = ${visit.id})}">
+							<i class="brown ace-icon fa fa-ban bigger-120"></i> Presenting Complaint
+					</a></li>
+					
+					<li class=""><a
+						th:href="@{/consultations/visits/consultant/medhistory/{id} (id = ${visit.id})}">
+							<i class="brown ace-icon fa fa-ban bigger-120"></i> Medical History
+					</a></li>
+										
+					<li class=""><a
+						th:href="@{/consultations/visits/consultant/surgicalhistory/{id} (id = ${visit.id})}">
+							<i class="brown ace-icon fa fa-ban bigger-120"></i> Surgical History
+					</a></li>
+
+					<li class=""><a
+						th:href="@{/consultations/visits/consultant/familyhistory/{id} (id = ${visit.id})}">
+							<i class="brown ace-icon fa fa-ban bigger-120"></i> Family History
+					</a></li>
+										
+					<li class=""><a
+						th:href="@{/consultations/visits/consultant/socialhistory/{id} (id = ${visit.id})}">
+							<i class="brown ace-icon fa fa-ban bigger-120"></i> Social History
+					</a></li>
+	
+						<li class=""><a
+						th:href="@{/consultations/visits/consultant/labtest/{id} (id = ${visit.id})}">
+							<i class="brown ace-icon fa fa-ban bigger-120"></i> Laboratory Test
+					</a></li>
+					
+					<li class=""><a
+						th:href="@{/consultations/visits/consultant/prescribedrug/{id} (id = ${visit.id})}">
+							<i class="brown ace-icon fa fa-ban bigger-120"></i> Prescribe Drug / Injection
+					</a></li>
+					
+						<li class=""><a
+						th:href="@{/consultations/visits/consultant/examination/{id} (id = ${visit.id})}">
+							<i class="brown ace-icon fa fa-ban bigger-120"></i> Physical / Systemic Examination
+					</a></li>
+
+				</ul>
+
+				<div class="tab-content no-border padding-24">
+					<div id="home" class="tab-pane in active">
+						<div class="row">
+						
+				
+						
+						
+						
+						
+						
+						
+							<!-- /.col -->
+
+							<div class="col-xs-12 col-sm-12">
+
+
+
+								
+	<!-- Tabs to handle the various views -->
+		<div class="row">
+	
+			<div class="col-xs-12 col-md-2">
+				<!-- Patient profile details -->
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 center">
+						<span class="profile-picture"> <img
+							th:if="${visit.patient.image == null}" id="avatar2"
+							th:src="@{/resources/img/nhis.png}" alt="Profile"
+							class="img-responsive" /> <img
+							th:if="${visit.patient.image != null}" id="avatar2"
+							th:src="@{/customers/patients/image/{id}(id=${visit.patient.id})}"
+							alt="Profile" class="img-responsive" />
+						</span>
+
+						<div class="space space-4"></div>
+						<h4 th:inline="text">[[${visit.patient.title.acronym} + ' ' +
+							${visit.patient.surname} + ' ' + ${visit.patient.othernames}]]</h4>
+						<small th:inline="text">[[${visit.patient.patient_id}]]</small>
+					</div>
+				</div>
+				<div class="space space-4"></div>
+				
+			</div>
+			
+			
+			<!-- the second column -->
+			
+				<div class="col-xs-12 col-md-6">
+				<!-- Patient profile details -->
+				<div class="row">
+				
+			
+					<div class="col-xs-12 col-md-12">
+				<div class="row">
+				
+				
+				
+					<div class="col-md-8">
+					<h3 th:inline="text">Patient Clerking</h3>
+						<h3 th:inline="text">Visit Code: [[${visit.code}]]</h3>
+						
+						
+						<th:block th:if="${visit.vitalVisit} != null">
+					<div class="row">
+						<div class="col-md-12">
+							<!--  Vitals should be displayed if present-->
+							<h3>Vital Signs as @ this visit	</h3>
+							<hr />
+							<dl class="dl-horizontal">
+								<dt>Temperature</dt>
+								<dd th:inline="text">[[${visit.vitalVisit.temperature}]]°C </dd>
+								<dt>Blood Pressure</dt>
+								<dd th:inline="text">[[${visit.vitalVisit.bloodPressure}]]mm/Hg</dd>
+								<dt>Heart Rate</dt>
+								<dd th:inline="text">[[${visit.vitalVisit.heartRate}]]bpm</dd>
+								<dt>Respiration</dt>
+								<dd th:inline="text">[[${visit.vitalVisit.respiration}]]</dd>
+								<dt>Others</dt>
+								<dd th:inline="text">[[${visit.vitalVisit.others}]]</dd>
+							</dl>
+							<!-- Display Allergies -->
+				<div class="widget-box widget-color-red2">
+					<div class="widget-header">
+						<h4 class="widget-title lighter smaller">Patients Allergies</h4>
+					</div>
+
+					<div class="widget-body">
+						<div class="widget-main padding-8">
+							<!-- List all the allergies -->
+							<th:block th:if="${#lists.isEmpty(visit.patient.allergies)}">
+								<!-- No Allergy -->
+								<ul class="list-unstyled spaced">
+									<li class="text-success bigger-110 red"><i
+										class="ace-icon fa fa-ok"></i> No Allergies</li>
+								</ul>
+							</th:block>
+							<th:block th:if="${not #lists.isEmpty(visit.patient.allergies)}">
+								<ul class="list-unstyled spaced">
+									<li class="text-warning bigger-110 red"
+										th:each="a: ${visit.patient.allergies}" th:inline="text"><i
+										class="ace-icon fa fa-exclamation-triangle"></i> <b>[[${a.allergy.name}]]</b>
+										([[ ${a.allergy.category.name} ]])</li>
+								</ul>
+							</th:block>
+						</div>
+					</div>
+				</div>
+				<!-- /.Display Allergies -->
+						</div>
+					</div>
+				</th:block>
+			
+					</div>
+				</div>
+			</div>
+				
+					
+				</div>
+			
+	
+			</div>
+			
+			<!-- it ends here -->
+			
+			
+			
+			<!-- the 3rd column -->
+			 <div class="col-xs-12 col-md-4">
+			 
+			 	
+		<a class="btn btn-danger btn-xs" data-toggle="modal"
+			href="#transfer-form-modal"> <i
+			class="ace-icon fa fa-share bigger-110"></i> Assign Patient
+		</a>
+	
+		<div class="timeline-container timeline-style2">
+			<span class="timeline-label"> <b>Visit Timeline</b>
+			</span>
+			
+			<div class="timeline-items">
+
+				<th:block th:each="t : ${visit.timeline}">
+
+					<div class="timeline-item clearfix">
+						<div class="timeline-info">
+							<span class="timeline-date"
+								th:text="${ #dates.format(t.createdDate, 'MMM dd, yyyy hh:mm a')}">11:15
+								pm</span> <i class="timeline-indicator btn btn-info no-hover"></i>
+						</div>
+
+						<div class="widget-box transparent">
+							<div class="widget-body">
+								<div class="widget-main no-padding">
+									<b><span class="bigger-110" th:text="${t.pointName}">
+											pointName </span></b> <br /> <i
+										class="ace-icon fa fa-user blue bigger-125"></i> <span
+										class="bigger-110" th:text="${t.pointUsername}">
+										point_username </span> <br /> <span th:text="${t.comment}">No
+										Comment</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</th:block>
+
+			</div>
+		
+		</div>
+	
+	</div>
+	
+			
+			
+			<!-- it ends here -->
+			
+			
+			
+					</div>
+
+
+
+							
+
+
+
+								</div>
+
+								<div class="hr hr-8 dotted"></div>
+							</div>
+							<!-- /.col -->
+						</div>
+						<!-- /.row -->
+
+						<div class="space-20"></div>
+					</div>
+					<!-- /#home -->
+				</div>
+			</div>
+	
+					
+					
+					
+					
+					
+					<!-- yab comes here -->	
+					
+				</div>
+		<!-- Tabs to handle the various views -->
+		<div class="row">
+	
+	
+		
+	</div>
+	
+
+
+
+<!-- Transfer form modal -->
+<div class="modal fade" id="transfer-form-modal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- Modal heading -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Transfer Patient</h4>
+			</div>
+			<!-- // Modal heading END -->
+			<!-- Modal body -->
+			<div class="modal-body">
+				<!-- Form -->
+				<form th:object="${wfForm}"
+					th:action="@{/consultations/visits/consultant/assigntopoint}"
+					method="post">
+					<input type="text" th:field="*{visitId}" />
+					<div class="form-group">
+						<label>Select Point</label>
+						<div class="">
+							<select class="col-xs-10 col-sm-12" 
+								th:field="*{workflowPointId}" required="true">
+								<option value="0">Select..</option>
+								<option th:each="p: ${points}" th:value="${p.id}"
+									th:text="${p.workflowPoint.name}"></option>
+							</select> <span class="text-danger"
+								th:if="${#fields.hasErrors('workflowPointId')}"
+								th:errors="*{workflowPointId}"></span>
+						</div>
+					</div>
+					<!-- User Input -->
+					<div class="form-group">
+						<label>Select User</label>
+						<div class="">
+							<select class="col-xs-10 col-sm-12" th:field="*{userId}"
+								id="point-users" required="true">
+								<option value="">Select Point first</option>
+							</select> <span class="text-danger" th:if="${#fields.hasErrors('userId')}"
+								th:errors="*{userId}"></span>
+						</div>
+					</div>
+					
+					
+		
+					
+
+					<div class="form-group">
+						<label>Comment</label>
+						<div class="">
+							<textarea class="col-xs-10 col-sm-12" th:field="*{comment}"
+								placeholder="comments"></textarea>
+							<span class="text-danger" th:if="${#fields.hasErrors('comment')}"
+								th:errors="*{comment}"></span>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<br />
+						<button type="submit" class="btn btn-primary btn-xs">
+							<i class=""></i> Assign
+						</button>
+					</div>
+				</form>
+				<!-- /.Form -->
+			</div>
+			<!-- // Modal body END -->
+
+			<!-- Modal footer -->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-xs" data-dismiss="modal">Cancel</button>
+			</div>
+			<!-- // Modal footer END -->
+		</div>
+	</div>
+</div>
+<!-- /.Transfer form -->
+
+
+<!-- Lab form modal -->
+<div class="modal fade" id="lab-form-modal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- Modal heading -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Recommend Lab test</h4>
+			</div>
+			<!-- // Modal heading END -->
+			<!-- Modal body -->
+			<div class="modal-body">
+				<!-- Form -->
+				<form th:object="${lForm}" id="lab-form"
+					th:action="@{/consultations/visits/consultant/laboratory}"
+					method="post">
+					<input type="hidden" th:field="*{visitId}" />
+					<div class="form-group">
+						<label>Select Tests</label>
+						<div class="">
+							<select class="col-xs-10 col-sm-12" id="lab-items"
+								multiple="multiple" th:field="*{labItems}" required="true">
+								<option value="0">Select..</option>
+								<option th:each="l: ${labItemList}" th:value="${l.id}"
+									th:text="${l.name}"></option>
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<br />
+						<button type="submit" class="btn btn-primary btn-xs">
+							<i class=""></i> Recommend
+						</button>
+					</div>
+				</form>
+				<!-- /.Form -->
+			</div>
+			<!-- // Modal body END -->
+		</div>
+	</div>
+</div>
+<!-- /.Lab form -->
+
+
+<!-- drug form modal -->
+<div class="modal fade" id="drug-form-modal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- Modal heading -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Prescribe Drugs</h4>
+			</div>
+			<!-- // Modal heading END -->
+			<!-- Modal body -->
+			<div class="modal-body">
+				<!-- Form -->
+				<form th:object="${drugForm}" id="drug-form"
+					th:action="@{/consultations/visits/consultant/prescription}"
+					method="post">
+					<input type="hidden" th:field="*{visitId}" />
+					<div class="form-group">
+						<label>Select Drugs</label>
+						<div class="">
+							<select class="col-xs-10 col-sm-12" id="drug-items"
+								multiple="multiple" th:field="*{drugs}" required="true">
+								<option value="0">Select..</option>
+								<option th:each="l: ${drugs}" th:value="${l.id}"
+									th:text="${l.name}"></option>
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<br />
+						<button type="submit" class="btn btn-primary btn-xs">
+							<i class=""></i> Prescribe Drugs
+						</button>
+					</div>
+				</form>
+				<!-- /.Form -->
+			</div>
+			<!-- // Modal body END -->
+		</div>
+	</div>
+</div>
+<!-- /.Lab form -->
+
+
+
+
+
+<!-- presenting complaints form modal -->
+<!-- <div class="modal fade" id="complaint-form-modal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			Modal heading
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Prescribe Drugs</h4>
+			</div>
+			// Modal heading END
+			Modal body
+			<div class="modal-body">
+				Form
+				<form th:object="${drugForm}" id="drug-form"
+					th:action="@{/consultations/visits/consultant/prescription}"
+					method="post">
+					<input type="hidden" th:field="*{visitId}" />
+					<div class="form-group">
+						<label>Select Symptoms</label>
+						<div class="">
+							<select class="col-xs-10 col-sm-12" id="drug-items"
+								multiple="multiple" th:field="*{drugs}" required="true">
+								<option value="0">Select..</option>
+								<option th:each="l: ${drugs}" th:value="${l.id}"
+									th:text="${l.name}"></option>
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<br />
+						<button type="submit" class="btn btn-primary btn-xs">
+							<i class=""></i> Prescribe Drugs
+						</button>
+					</div>
+				</form>
+				/.Form
+			</div>
+			// Modal body END
+		</div>
+	</div>
+</div> -->
+<!-- /.Lab form -->
+
+
+</div>
+
+
+
+
+
+
+
+
+<script th:inline="javascript">
+
+// Chosen
+
+//resize the chosen on window resize
+	$('#drug-items').ajaxChosen({
+        dataType: 'json',
+        type: 'GET',
+        url: [[@{/utilities/drugs/search}]]
+    });
+	$('#lab-items').chosen();
+	$('#complaint-items').chosen();
+	
+	$('#drug-form-modal').on('shown.bs.modal', function () {
+		$(this).find('#drug_items_chosen').css('width', '210px');
+		$(this).find('#drug_items_chosen').each(function(){
+			$(this).find('a:first-child').css('width' , '210px');
+			$(this).find('.chosen-drop').css('width' , '210px');
+			$(this).find('.chosen-search input').css('width' , '200px');
+		});
+	});
+	
+	$('#lab-form-modal').on('shown.bs.modal', function () {
+		$(this).find('#lab_items_chosen').css('width', '210px');
+		$(this).find('#lab_items_chosen').each(function(){
+			$(this).find('a:first-child').css('width' , '210px');
+			$(this).find('.chosen-drop').css('width' , '210px');
+			$(this).find('.chosen-search input').css('width' , '200px');
+		});
+	});
+
+	
+
+	
+	
+	// drug test
+	$('#drug-form').submit(function(e){
+		e.preventDefault();
+		$.ajax({
+			url: $(this).attr('action'),
+			method: "POST",
+			dataType: "JSON",
+			data: $(this).serialize(),
+			beforeSend: function(){
+				$.gritter.add({
+					// (string | mandatory) the heading of the notification
+					title: 'Processing!',
+					// (string | mandatory) the text inside the notification
+					text: 'Sending data...'
+				});
+			},
+			success: function(msg){
+				if(msg.status){
+					$.gritter.add({
+						// (string | mandatory) the heading of the notification
+						title: 'Success!',
+						// (string | mandatory) the text inside the notification
+						text: 'Data saved',
+						class_name: 'gritter-success' 
+					});
+				}else{
+					$.gritter.add({
+						title: 'Error!',
+						text: msg.formErrors,
+						class_name: 'gritter-error'
+					});
+				}
+			},
+			error: function(){
+				$.gritter.add({
+					title: 'Error!',
+					text: 'Cannot submit data. Try again or contact admin',
+					class_name: 'gritter-error'
+				});
+
+			}
+		});
+	});
+
+	// Lab test
+	$('#lab-form').submit(function(e){
+		e.preventDefault();
+		$.ajax({
+			url: $(this).attr('action'),
+			method: "POST",
+			dataType: "JSON",
+			data: $(this).serialize(),
+			beforeSend: function(){
+				$.gritter.add({
+					// (string | mandatory) the heading of the notification
+					title: 'Processing!',
+					// (string | mandatory) the text inside the notification
+					text: 'Sending data...'
+				});
+			},
+			success: function(msg){
+				if(msg.status){
+					$.gritter.add({
+						// (string | mandatory) the heading of the notification
+						title: 'Success!',
+						// (string | mandatory) the text inside the notification
+						text: 'Data saved',
+						class_name: 'gritter-success' 
+					});
+				}else{
+					$.gritter.add({
+						title: 'Error!',
+						text: msg.formErrors,
+						class_name: 'gritter-error'
+					});
+				}
+			},
+			error: function(){
+				$.gritter.add({
+					title: 'Error!',
+					text: 'Cannot submit data. Try again or contact admin',
+					class_name: 'gritter-error'
+				});
+
+			}
+		});
+	});
+
+	
+	
+	
+
+	/* $('#doctor-form').submit(function(e){
+		e.preventDefault();
+		$.ajax({
+			method: "POST",
+			dataType: "JSON",
+			data: $(this).serialize(),
+			beforeSend: function(){
+				$.gritter.add({
+					// (string | mandatory) the heading of the notification
+					title: 'Processing!',
+					// (string | mandatory) the text inside the notification
+					text: 'Fetching users for selected point...'
+				});
+			},
+			success: function(msg){
+				if(msg.status){
+					$.gritter.add({
+						// (string | mandatory) the heading of the notification
+						title: 'Success!',
+						// (string | mandatory) the text inside the notification
+						text: 'Data saved',
+						class_name: 'gritter-success' 
+					});
+				}else{
+					$.gritter.add({
+						title: 'Error!',
+						text: msg.formErrors,
+						class_name: 'gritter-error'
+					});
+				}
+			},
+			error: function(){
+				$.gritter.add({
+					title: 'Error!',
+					text: 'Cannot submit data. Try again or contact admin',
+					class_name: 'gritter-error'
+				});
+
+			}
+		});
+	}); */
+
+	/* $('#workflow-point').change(function(){
+		$.ajax({
+			url : "../../utilities/onlineuser/onlineuserbypoint/"
+				+ $('#workflowPointId').val(),
+			beforeSend: function(){
+				$.gritter.add({
+					// (string | mandatory) the heading of the notification
+					title: 'Processing!',
+					// (string | mandatory) the text inside the notification
+					text: 'Fetching users for selected point...'
+				});
+			},
+			success: function(msg){
+				$.gritter.add({
+					// (string | mandatory) the heading of the notification
+					title: 'Success!',
+					// (string | mandatory) the text inside the notification
+					text: 'Users fetched...',
+					class_name: 'gritter-success' 
+				});
+				$('#point-users').html(msg);
+			
+			},
+			error: function(){
+				$.gritter.add({
+					title: 'Error!',
+					text: 'Cannot fetch point users. Try again or contact admin',
+					class_name: 'gritter-error'
+				});
+
+			}
+		});
+	}  */
+	
+	);
+</script>
+
+
+
+<script>
+	//this is for GET
+	$(function() {
+		/* Lga Selector*/
+		$('#allergyCategoryId').change(
+				function(event) {
+					$.ajax({
+						type : "GET",
+						url: "/../" + window.location.pathname.split('/')[1] + "/utilities/allergies/allergiesbycategory/"
+								+ $('#allergyCategoryId').val(),
+						beforeSend : function() {
+							$.gritter.add({
+								title : "Progress...",
+								text : "Fetching allegries based on category",
+								time : 3000
+							});
+						},
+						success : function(html) {
+							$("#allergies").html(html);
+							$.gritter.add({
+								title : "Success!",
+								text : "Allergy List fetched",
+								time : 4000,
+								class_name: 'gritter-success' 
+							});
+						},
+						error : function() {
+							$.gritter.add({
+								title : "Error!",
+								text : "Error fetching Allergy List",
+								time : 4000,
+								class_name: 'gritter-error'
+							});
+						}
+
+					});
+				});
+	});
+</script>
+
+
+
+<script>
+	//this is for GET
+	$(function() {
+		/* Lga Selector*/
+		$('#workflowPointId').change(
+				function(event) {
+					$.ajax({
+						type : "GET",
+						url : "/../../EMRNEWNEW/utilities/onlineuser/onlineuserbypoint/"
+								+ $('#workflowPointId').val(),
+						beforeSend : function() {
+							$.gritter.add({
+								title : "Progress...",
+								text : "Fetching Online Users",
+								time : 3000
+							});
+						},
+						success : function(html) {
+							$("#point-users").html(html);
+							$.gritter.add({
+								title : "Success!",
+								text : "Online Users fetched",
+								time : 4000
+							});
+						},
+						error : function() {
+							$.gritter.add({
+								title : "Error!",
+								text : "Error fetching Online Users",
+								time : 4000
+							});
+						}
+
+					});
+				});
+	});
+</script>
+
+
+
+<script>
+	jQuery(function($) {
+		var oTable1 = $('#dTable').dataTable({
+			bAutoWidth : false,
+			"aoColumns" : [ {
+				"bSortable" : true
+			}, null, null, null, null, null, {
+				"bSortable" : false
+			} ]
+
+		});
+
+	});
+	</script>

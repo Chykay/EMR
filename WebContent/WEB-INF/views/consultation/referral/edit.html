@@ -1,0 +1,250 @@
+<div class="page-header">
+	<h1>
+		Edit <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			UPDATE REFERRAL INVESTIGATION
+		</small>
+	</h1>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/visitreferral/listing/{cid}(cid=${con.id})}"
+			><i
+			class="fa fa-home"></i> Manage Referral List</a> 
+			<!-- <a
+			class="btn btn-xs btn-primary" th:href="@{/visits/queue/2}"
+			><i
+			class="fa fa-list"></i>Presenting Complaints Queue</a>-->
+	</div>
+</div>
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<form role="form" class="form-horizontal" method="POST"   onsubmit="return myreferral()"
+			th:object="${referral}">
+			<legend>REFFERAL Form</legend>
+	
+		<!-- 
+	<div class="form-group">
+							<label for="detail"
+								class="col-sm-3 control-label no-padding-right">Referral:
+								</label>
+							<div class="col-sm-8">
+							
+							<input type="text" class="col-xs-10 col-sm-8"  
+									  id="referralname"   required="required" disabled="disabled" th:attr="value = ${referralname}" />  
+									  
+								<input type="text" class="col-xs-5 col-sm-5"   
+									th:field="*{referral_id}"   th:id="referralId" onclick="myFunction()"  hidden="hidden"/>  
+							
+			<a	class="btn btn-xs btn-success" onclick ="myOpenreferralwin()"> <i	class="glyphicon glyphicon-list"></i> Search</a>
+								
+						
+								 <span class="text-danger"
+									th:if="${#fields.hasErrors('referral_id')}" th:errors="referral_id"></span>
+
+							</div> 
+						</div> -->
+	
+	<!-- 
+	<div class="form-group">
+						<label for="userId" class="col-sm-3 control-label no-padding-left">Select Result:</label>
+						<div class="col-sm-8">
+							<select class="col-xs-10 col-sm-12" th:field="*{result_id}"
+								th:id="result_id" required="true">
+								
+							</select> <span class="text-danger" th:if="${#fields.hasErrors('result_id')}"
+								th:errors="*{result_id}"></span>
+						</div>
+					</div> 	
+	
+	-->
+	
+	
+	<div class="form-group">
+	<label for="date-timepicker1" class="col-sm-3 control-label no-padding-right">Due Date / Time </label>
+
+													
+	<div class="col-sm-5">
+	
+	<div class="input-group">
+	<input id="datetimepicker1" type="text" class="form-control" th:field="*{duedate}" required="required"/>
+	
+	<span class="input-group-addon">
+	<i class="fa fa-clock-o bigger-110"></i>
+	</span>
+	
+	</div>
+	
+	
+	<span class="text-danger" th:if="${#fields.hasErrors('duedate')}" th:errors="duedate"></span>
+	</div>
+
+		</div>
+	
+	
+	
+		
+<div class="form-group">
+							<label for="Hospital"
+								class="col-sm-3 control-label no-padding-right">Hospital:
+								</label>
+							<div class="col-sm-8">
+							
+							<input type="text" class="col-xs-10 col-sm-8"  
+									  th:field="*{hospital_name}"   required="required"  />  
+ 								
+							
+								 <span class="text-danger"
+									th:if="${#fields.hasErrors('hospital_name')}" th:errors="hospital_name"></span>
+
+							</div> 
+						</div>  
+	
+	
+
+	
+<div class="form-group">
+							<label for="Doctor"
+								class="col-sm-3 control-label no-padding-right">Doctor:
+								</label>
+							<div class="col-sm-8">
+							
+							<input type="text" class="col-xs-10 col-sm-8"  
+									  th:field="*{doctor_name}"   />  
+ 								
+							
+								 <span class="text-danger"
+									th:if="${#fields.hasErrors('doctor_name')}" th:errors="doctor_name"></span>
+
+							</div> 
+						</div>  
+	
+	
+	
+	
+	
+					<div class="form-group">
+				<label for="description" class="col-sm-3 control-label no-padding-right">Other Detail:</label>
+			<div class="col-sm-8">
+			<textarea  class="col-xs-10 col-sm-8" rows="8" cols="50" id="od"
+					 placeholder="" th:field="*{other_detail}"  required="required"> </textarea>
+			
+							<span class="text-danger"
+								th:if="${#fields.hasErrors('other_detail')}"
+								th:errors="*{other_detail}"></span>
+								
+						</div>
+						
+					</div>
+
+
+	
+
+			<div class="clearfix form-actions">
+				<div class="col-md-offset-3 col-md-9">
+					 <!-- <input type="hidden" th:field="*{visit_id}" /> -->
+					<button class="btn btn-primary" type="submit">
+						<i class="ace-icon fa fa-check bigger-110"></i> Update
+					</button>
+
+					<button class="btn btn-danger" type="reset">
+						<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+					</button> 
+				</div>
+			</div> 
+			
+			
+
+
+		</form>
+	</div>
+</div>
+
+
+<script>
+//this is for GET
+/*
+function myFunction()
+	{
+	            	
+					$.ajax({
+						type : "GET",
+						url : '/../'+ window.location.pathname.split('/')[1] + '/visits/fetchexamresult/'	+ $('#referralId').val(),
+						beforeSend : function() {
+							 $.gritter.add({
+								title : "Progress...",
+								text : "Fetching Exam Result",
+								time : 3000
+							}); 
+						},
+						success : function(html) {
+							$("#result_id").html(html);
+							 $.gritter.add({
+								title : "Success!",
+								text : "Exam Result Fetched",
+								time : 4000
+							}); 
+						},
+						error : function() {
+							$.gritter.add({
+								title : "Error!",
+								text : "Error fetching Exam Result",
+								time : 4000
+							});
+
+						}
+				});
+			
+		}
+		
+
+	
+	/*
+	$(function() {
+		$('#od').change(
+				
+				function(event) {
+	                 	alert("Oooo");
+		
+		
+				
+	});
+	});
+*/
+	function myOpenreferralwin() {
+		   var myWindow = window.open("/EMR/search/referralsearchwin", "_blank", "width=600, height=700");
+		  //  myWindow.document.write("<p>This window's name is: " + myWindow.name + "</p>");
+		    myWindow.resizeTo(600,700);
+		    myWindow.focus();
+		    return false
+		  
+		}
+	
+	function myreferral()
+	{
+		
+		if ( $('#referralname').val()=='' )
+			
+			{
+			
+			alert("Referral Name cannot be empty");
+			return false;	
+			}
+		
+		
+		
+	}
+
+	
+</script> 
+<script type="text/javascript">
+     $(function () {
+         $('#datetimepicker1').datetimepicker({
+			autoclose : true,
+			format: 'YYYY-MM-DD HH:mm',
+			todayHighlight : true
+		});
+     });
+ </script>

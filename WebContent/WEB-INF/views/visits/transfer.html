@@ -1,0 +1,257 @@
+<div class="page-header">
+	<h1>
+		Visits for Today<small> <i
+			class="ace-icon fa fa-angle-double-right"></i>
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard</a> 
+			<a
+			class="btn btn-danger btn-xs" th:href="@{/patients/index/all}"><i
+			class="fa fa-list-alt"></i> Create Visit</a>
+	</div>
+</div>
+<div class="hr hr-18 dotted hr-double"></div>
+<!-- 
+<div class="row">
+	<div class="col-xs-12">
+		<h3 th:inline="text">
+			Visit Code: [[${visit.code}]] <small> <a
+				th:href="@{/consultations/view/{id} (id=${visit.id})}">view
+					consultation</a></small>
+		</h3>
+		<hr />
+		<h4>
+			Patient Details <small> <a
+				th:href="@{/customers/patients/view/{id} (id=${visit.patient.patientId})}">view
+			</a></small>
+		</h4>
+		<dl class="dl-horizontal">
+			<dt>Name:</dt>
+			<dd th:inline="text">[[${visit.patient.title.acronym} + '
+				' + ${visit.patient.surname} + ' ' +
+				${visit.patient.othernames}]]</dd>
+			<dt>Code:</dt>
+			<dd th:inline="text">[[${visit.patient.patientId}]]</dd>
+		</dl>
+		<hr />
+	</div>
+</div>
+<div class="row">
+	<div class="col-xs-12 col-md-9">
+		
+		
+	
+		<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 center">
+						<span class="profile-picture"><img
+						th:if="${visit.patient.image == null}"
+								 id="avatar2" style="max-width: 150px"
+							th:src="@{/resources/img/nhis.png}" alt="Profile"
+							class="img-responsive" /><img
+							th:if="${visit.patient.image != null}"
+							 id="avatar2" style="max-width: 150px"
+							th:src="@{/patients/image/{id}(id=${visit.patient.patientId})}"
+							alt="Profile" class="img-responsive" />
+						</span>
+
+					</div>
+				</div>
+		
+	</div>
+
+	
+	
+		 <div class="col-xs-12 col-md-3">
+		<a class="btn btn-danger btn-xs" data-toggle="modal"
+			href="#transfer-form-modal"> <i
+			class="ace-icon fa fa-share bigger-110"></i> Re-Assign Patient
+		</a>
+	
+		<div class="timeline-container timeline-style2">
+			<span class="timeline-label"> <b>Visit Timeline</b>
+			</span>
+			
+	
+	</div>
+</div>
+	-->
+
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<div class="table-header">Lists of Today's Visit </div>
+		<table id="dTable"
+			class="table table-striped table-bordered table-hover">
+			<!-- Table heading -->
+			<thead>
+				<tr>
+					<!-- <th>Item name</th> -->
+					<th>Visit Id</th>
+					<th>Visit Code</th>
+					
+					<th>Unit</th>
+					
+			         <th>Point</th>
+					
+					<th><i class="glyphicon glyphicon-asterisk"></i></th>
+				</tr>
+			</thead>
+			<!-- // Table heading END -->
+			<!-- Table body -->
+			<tbody>
+				<tr th:each="v : ${visittoday}">
+				    	<td th:text="${v.effectiveDate}"> </td>
+				
+				
+					<td th:text="${v.code}"></td>
+					<td th:text="${v.patientCode}"></td>
+					
+					<td th:text="${v.patient.surname} + ' ' + ${v.patient.firstName}  + ' ' + ${v.patient.othernames}"></td>
+					
+					<td th:text="${v.point.name}"> </td> 
+					<td th:text="${v.unit.categoryName}"> </td>
+						
+					 <td th:text="${v.user.name}"> </td> 
+					 <td th:text="${v.status.type}"> </td> 
+					 
+					
+					<td>
+				 <a
+			class="btn btn-warning btn-xs" th:href="@{/visits/transfer}"><i
+			class="fa fa-list-alt"></i> Transfer</a> 
+				<!--		 <a class="btn btn-xs btn-warning tooltips"
+						title="Edit Item details"
+						th:href="@{/hrunit/hrunit/edit/{id}(id=${g.hrunitId}) }"> <i
+							class="fa fa-edit"></i>
+					</a> <a class="btn btn-xs btn-danger tooltips" 
+						title="Delete Item details" th:id="${'hr' + c.hrunitId}"  onclick="return Confirm(this.id)"
+						th:href="@{/hrunit/hrunit/delete/{id}(id=${g.hrunitId}) }"> <i
+							class="fa fa-trash-o"></i>
+					</a>-->
+					</td>
+				</tr>
+			</tbody>
+			<!-- // Table body END -->
+		</table>
+		<!-- /. End view content here -->
+	</div>
+</div>
+
+
+
+<!-- Transfer form modal -->
+<div class="modal fade" id="transfer-form-modal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- Modal heading -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Transfer Patient</h4>
+			</div>
+			<!-- // Modal heading END -->
+			<!-- Modal body -->
+			<div class="modal-body">
+				<!-- Form -->
+				<form th:object="${vForm}"
+					th:action="@{/consultations/visits/assignforswitch}" method="post">
+					<input type="hidden" th:field="*{visitId}" />
+					<div class="form-group">
+						<label>Select Point</label>
+						<div class="">
+							<select class="col-xs-10 col-sm-12" id="workflow-point"
+								th:field="*{workflowPointId}" required="true">
+								<option value="0">Select..</option>
+								<option th:each="p: ${points}" th:value="${p.id}"
+									th:text="${p.name}"></option>
+							</select> <span class="text-danger"
+								th:if="${#fields.hasErrors('workflowPointId')}"
+								th:errors="*{workflowPointId}"></span>
+						</div>
+					</div>
+					<!-- User Input -->
+					<div class="form-group">
+						<label>Select User</label>
+						<div class="">
+							<select class="col-xs-10 col-sm-12" th:field="*{userId}"
+								id="point-users" required="true">
+								<option value="">Select Point first</option>
+							</select> <span class="text-danger" th:if="${#fields.hasErrors('userId')}"
+								th:errors="*{userId}"></span>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label>Comment</label>
+						<div class="">
+							<textarea class="col-xs-10 col-sm-12" th:field="*{comment}"></textarea>
+							<span class="text-danger" th:if="${#fields.hasErrors('comment')}"
+								th:errors="*{comment}"></span>
+						</div>
+					</div>
+
+					<div class="clearfix form-actions">
+						<br />
+						<button type="submit" class="btn btn-primary btn-xs">
+							<i class=""></i> Assign
+						</button>
+					</div>
+				</form>
+				<!-- /Dform -->
+			</div>
+			<!-- // Modal body END -->
+
+			<!-- Modal footer -->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-xs" data-dismiss="modal">Cancel</button>
+			</div>
+			<!-- // Modal footer END -->
+		</div>
+	</div>
+</div>
+<!-- /.Transfer form -->
+
+
+<script>
+
+	$('#workflow-point').change(function(){
+		$.ajax({
+			url: '/../' + window.location.pathname.split('/')[1] + '/workflowusers/' + $(this).val(),
+			beforeSend: function(){
+				$.gritter.add({
+					// (string | mandatory) the heading of the notification
+					title: 'Processing!',
+					// (string | mandatory) the text inside the notification
+					text: 'Fetching users for selected point...'
+				});
+			},
+			success: function(msg){
+				$.gritter.add({
+					// (string | mandatory) the heading of the notification
+					title: 'Success!',
+					// (string | mandatory) the text inside the notification
+					text: 'Users fetched...',
+					class_name: 'gritter-success' 
+				});
+				$('#point-users').html(msg);
+			
+			},
+			error: function(){
+				$.gritter.add({
+					title: 'Error!',
+					text: 'Cannot fetch point users. Try again or contact admin',
+					class_name: 'gritter-error'
+				});
+
+			}
+		});
+	});
+
+</script>

@@ -1,0 +1,77 @@
+<div class="page-header">
+	<h1>
+		Consultations <small> <i
+			class="ace-icon fa fa-angle-double-right"></i> View a consultation
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-primary" th:href="@{/consultations}"><i
+			class="fa fa-list-alt"></i> All Consultations</a>
+	</div>
+</div>
+<div class="hr hr-18 dotted hr-double"></div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<h3 th:inline="text">
+			Consultation Code: [[${consultation.code}]] <small> <span
+				class="label label-danger arrowed"
+				th:text="${consultation.status.type}"></span></small>
+		</h3>
+		<hr />
+		<h4>
+			Patient Details <small> <a
+				th:href="@{/customers/patients/view/{id} (id=${consultation.patient.id})}">view
+			</a></small>
+		</h4>
+		<dl class="dl-horizontal">
+			<dt>Name:</dt>
+			<dd th:inline="text">[[${consultation.patient.title.acronym} + '
+				' + ${consultation.patient.surname} + ' ' +
+				${consultation.patient.othernames}]]</dd>
+			<dt>Code:</dt>
+			<dd th:inline="text">[[${consultation.patient.patient_id}]]</dd>
+		</dl>
+		<hr />
+	</div>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<div class="table-header">Result for visits</div>
+		<table id="dTable"
+			class="table table-striped table-bordered table-hover">
+			<!-- Table heading -->
+			<thead>
+				<tr>
+					<th>Code</th>
+					<th>Status</th>
+					<th>Point</th>
+					<th>Listed date</th>
+					<th><i class="glyphicon glyphicon-asterisk"></i></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="v : ${ consultation.visits }">
+					<td th:text="${v.code}"></td>
+					<td th:text="${v.status.type}"></td>
+					<td th:text="${v.point.name}"></td>
+					
+					<td
+						th:text="${ #dates.format(v.createDate, 'MMM dd, yyyy HH:mm')}"></td>
+					<td><a
+						th:href="@{/consultations/visits/view/{id} (id=${v.id})}"
+						title="view visit details" class="btn btn-primary btn-xs tooltips">
+							<i class="fa fa-eye"></i>
+					</a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

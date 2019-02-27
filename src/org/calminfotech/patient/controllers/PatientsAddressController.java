@@ -1,0 +1,300 @@
+package org.calminfotech.patient.controllers;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.sql.Blob;
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+
+import org.apache.commons.io.IOUtils;
+
+import org.calminfotech.hmo.boInterface.HmoBo;
+
+import org.calminfotech.hmo.models.Hmo;
+import org.calminfotech.hmo.models.HmoPackage;
+
+
+
+import org.calminfotech.patient.boInterface.PatientBo;
+import org.calminfotech.patient.boInterface.PatientBo;
+import org.calminfotech.patient.boInterface.PatientDocumentBo;
+import org.calminfotech.patient.boInterface.PatientDocumentBo;
+
+import org.calminfotech.patient.boInterface.PatientFamilyHistoryBo;
+import org.calminfotech.patient.boInterface.PatientHmoBo;
+import org.calminfotech.patient.boInterface.PatientAddressBo;
+import org.hibernate.SessionFactory;
+
+import org.calminfotech.patient.boInterface.PatientHistoryBo;
+import org.calminfotech.patient.boInterface.PatientPaymentOptionBo;
+import org.calminfotech.patient.boInterface.PatientSearchBo;
+
+import org.calminfotech.patient.forms.PatientAllergyForm;
+import org.calminfotech.patient.forms.PatientDocumentForm;
+import org.calminfotech.patient.forms.PatientEmergencyForm;
+import org.calminfotech.patient.forms.PatientFamilyHistoryForm;
+import org.calminfotech.patient.forms.PatientForm;
+import org.calminfotech.patient.forms.PatientHmoForm;
+import org.calminfotech.patient.forms.PatientImageForm;
+import org.calminfotech.patient.forms.PatientMedicalHistoryForm;
+import org.calminfotech.patient.forms.PatientPaymentOptionForm;
+import org.calminfotech.patient.forms.PatientSocialHistoryForm;
+import org.calminfotech.patient.forms.PatientSurgicalHistoryForm;
+import org.calminfotech.patient.forms.PatientAddressForm;
+import org.calminfotech.patient.forms.PatientSearchForm;
+import org.calminfotech.patient.models.Patient;
+import org.calminfotech.patient.models.PatientAllergy;
+
+import org.calminfotech.patient.models.PatientDocument;
+
+import org.calminfotech.patient.models.PatientFamilyHistory;
+import org.calminfotech.patient.models.PatientHmo;
+import org.calminfotech.patient.models.PatientAddress;
+
+import org.calminfotech.patient.models.PatientPaymentOption;
+
+import org.calminfotech.patient.utils.PatientCodeGenerator;
+
+import org.calminfotech.system.boInterface.LanguageBo;
+import org.calminfotech.system.boInterface.TitleBo;
+import org.calminfotech.billing.boInterface.BillSchemeBo;
+import org.calminfotech.billing.boInterface.BillSchemeItemBo;
+
+import org.calminfotech.system.boInterface.PointBo;
+import org.calminfotech.system.forms.AllergyForm;
+
+import org.calminfotech.system.models.Diseases;
+
+import org.calminfotech.system.models.Title;
+
+import org.calminfotech.user.utils.UserIdentity;
+import org.calminfotech.utils.Alert;
+import org.calminfotech.utils.Auditor;
+import org.calminfotech.utils.BloodgenotypeList;
+import org.calminfotech.utils.BloodgroupList;
+import org.calminfotech.utils.DateUtils;
+import org.calminfotech.utils.GenderList;
+import org.calminfotech.utils.LifestatusList;
+import org.calminfotech.utils.LocalGovernmentAreaList;
+import org.calminfotech.utils.MaritalStatusList;
+import org.calminfotech.utils.OccupationList;
+import org.calminfotech.utils.AddressTypeList;
+import org.calminfotech.utils.models.Addresstype;
+import org.calminfotech.utils.StatesList;
+import org.calminfotech.utils.SurgicalList;
+import org.calminfotech.utils.annotations.Layout;
+import org.calminfotech.utils.models.LocalGovernmentArea;
+import org.calminfotech.utils.models.MaritalStatus;
+import org.calminfotech.utils.models.Addresstype;
+import org.calminfotech.utils.models.State;
+import org.hibernate.Hibernate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import javax.servlet.http.HttpSession;
+@Controller
+@RequestMapping(value = "/patients")
+public class PatientsAddressController {
+	
+	
+	
+	@Autowired
+	private PatientBo patientBo;
+
+	
+
+	@Autowired
+	private Alert alert;
+
+	@Autowired
+	private UserIdentity userIdentity;
+
+	@Autowired
+	private Auditor auditor;
+
+	@Autowired
+	private LocalGovernmentAreaList lgasList;
+
+	@Autowired
+	private MaritalStatusList MSList;
+
+	@Autowired
+	private OccupationList occuList;
+	
+	
+	@Autowired
+	private BloodgroupList groupList;
+	
+	@Autowired
+	private BloodgenotypeList genoList;
+	
+	@Autowired
+	private LifestatusList lifeList;
+	
+
+	
+
+	
+	@Autowired
+	private StatesList stateList;
+	
+	@Autowired
+	private HmoBo hmoBo;
+	
+	/*@Autowired
+	private EhmoBo ehmoBo;*/
+
+	@Autowired
+	private AddressTypeList addresstypeBo;
+
+
+
+
+	
+	@Autowired
+	private PatientPaymentOptionBo patientPaymentOptionBo;
+
+	@Autowired
+	private PatientSearchBo searchBo;
+
+	
+
+	
+	
+	@Autowired
+	private PatientCodeGenerator patientCodeGenerator;
+	
+	@Autowired
+	private PatientAddressBo patientAddressBo;
+	
+	@RequestMapping(value = "/address/save", method = RequestMethod.POST)
+	@Layout("layouts/datatable")
+	public String addAddress(
+			@ModelAttribute("addrForm") PatientAddressForm addressForm,
+			BindingResult result, Model model, 
+			RedirectAttributes redirectAttributes) {
+	
+		PatientAddress  patientaddr = new PatientAddress();
+		Patient patient= patientBo.getPatientById(addressForm.getPatientId());
+		
+		Addresstype  addresstype = addresstypeBo.getAddressTypeById(addressForm.getAddresstypeId());
+		
+	
+		patientaddr.setPatient(patient);
+		patientaddr.setAddress(addressForm.getAddress());
+		patientaddr.setAddressType(addresstype);
+		
+		
+		patientaddr.setCreatedBy(userIdentity.getUsername());
+		patientaddr.setCreateDate(new GregorianCalendar().getTime());
+		
+		patientaddr.setOrganisation(userIdentity.getOrganisation());
+		
+		patientAddressBo.save(patientaddr);
+		
+		
+		return "redirect:/patients/view/" + patientaddr.getPatient().getPatientId();
+	
+	}
+
+	@RequestMapping(value = "/address/edit/{id}", method = RequestMethod.GET)
+	@Layout("layouts/datatable")
+	public String geteditAddress(@PathVariable("id") Integer id,
+			@ModelAttribute("addrForm") PatientAddressForm addressForm,
+			BindingResult result, Model model, 
+			RedirectAttributes redirectAttributes,HttpServletRequest request) {
+
+		PatientAddress  patientaddr = patientAddressBo.getPatientAddressById(id);
+		List<Addresstype> addresstype = addresstypeBo.fetchAll();
+		
+		addressForm.setId(patientaddr.getId());
+		addressForm.setAddresstypeId(patientaddr.getAddressType().getAddresstypeId());
+		addressForm.setAddress(patientaddr.getAddress());
+		
+		
+		model.addAttribute("addresstypelist",addresstype);
+	
+		this.auditor.before(request, "Patient Address", addressForm);
+		return "customers/patientsaddress/edit";
+	
+	}
+
+	
+
+	@RequestMapping(value = "/address/edit/{id}", method = RequestMethod.POST)
+	@Layout("layouts/datatable")
+	public String posteditAddress( @PathVariable("id") Integer id,
+			@ModelAttribute("addrForm") PatientAddressForm addressForm,
+			BindingResult result, Model model, 
+			RedirectAttributes redirectAttributes, HttpServletRequest request) {
+	
+		PatientAddress  patientaddr = patientAddressBo.getPatientAddressById(id);
+		
+		
+		patientaddr.setAddress(addressForm.getAddress());
+		patientaddr.setAddressType(addresstypeBo.getAddressTypeById(addressForm.getAddresstypeId()));
+		patientaddr.setModifiedBy(userIdentity.getUsername());
+		
+		patientaddr.setModifiedDate(new GregorianCalendar().getTime());
+		patientAddressBo.update(patientaddr);
+				
+		alert.setAlert(redirectAttributes, Alert.SUCCESS,
+				"Success! Address  Updated");
+		this.auditor.after(request, "Patient Address", addressForm,
+				this.userIdentity.getUsername(),id);
+		
+		return "redirect:/patients/view/" + patientaddr.getPatient().getPatientId();
+	
+	}
+
+	
+	
+	@RequestMapping(value = "/address/delete/{id}", method = RequestMethod.GET)
+	public String confirmDelete(@PathVariable("id") Integer id,
+	@ModelAttribute("addrForm") PatientAddressForm addressForm,
+	RedirectAttributes redirectAttributes) {
+		
+		PatientAddress  patientaddr = patientAddressBo.getPatientAddressById(id);
+		
+		patientaddr.setModifiedBy(userIdentity.getUsername());
+		patientaddr.setModifiedDate(new GregorianCalendar().getTime());
+		patientaddr.setDeleted(true);
+		patientAddressBo.update(patientaddr);
+		
+		alert.setAlert(redirectAttributes, Alert.SUCCESS,
+				"Success! Address  deleted");
+		return "redirect:/patients/view/" + patientaddr.getPatient().getPatientId();
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+}

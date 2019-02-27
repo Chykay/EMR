@@ -1,0 +1,91 @@
+<div class="page-header">
+	<h1>
+		Titles <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			List of titles
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-primary" th:href="@{/system/users}"><i
+			class="fa fa-users"></i> All Users</a>
+	</div>
+</div>
+<div class="hr hr-18 dotted hr-double"></div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<form th:object="${titleForm}" method="post">
+			<div class="col-sm-2">
+				<label for="title" class="control-label no-padding-right">Create
+					Title:</label>
+			</div>
+			<div class="col-xs-10 col-sm-3">
+			<label for="title" class="col-sm-3 control-label no-padding-right">
+					Title:</label>
+				<input type="text" class="col-sm-9" placeholder="Title" th:field="*{title}"
+					required="required" /> <span class="text-danger"
+					th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
+			</div>
+			<div class="col-xs-10 col-sm-4">
+			<label for="title" class="col-sm-3 control-label no-padding-right">
+					Acronym:</label>
+				<input type="text" class="col-sm-9" placeholder="Acronym"
+					th:field="*{acronym}" required="required" /> <span
+					class="text-danger" th:if="${#fields.hasErrors('acronym')}"
+					th:errors="*{acronym}"></span>
+			</div>
+			<div class="col-xs-10 col-sm-3">
+				<button class="btn btn-primary btn-sm" type="submit">
+					<i class="ace-icon fa fa-check bigger-110"></i> Save
+				</button>
+			</div>
+			<span class="text-danger" th:if="${#fields.hasErrors('title')}"
+				th:errors="*{title}"></span>
+		</form>
+	</div>
+</div>
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<div class="table-header">Results for titles</div>
+		<table class="table table-striped table-bordered table-hover">
+			<!-- Table heading -->
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Name</th>
+					<th>Acronym</th>
+					<th>Created</th>
+					<th><i class="glyphicon glyphicon-asterisk"></i></th>
+				</tr>
+			</thead>
+			<!-- // Table heading END -->
+			<!-- Table body -->
+			<tbody>
+				<tr th:each="title, rowStat : ${ titles }">
+					<td th:text="${rowStat.count}">1</td>
+					<td th:text="${title.name}">name</td>
+					<td th:text="${title.acronym}">name</td>
+					<td
+						th:text="${ #dates.format(title.createdDate, 'MMM dd, yyyy HH:mm')}"></td>
+					<td><a class="btn btn-xs btn-warning tooltips"
+						title="Edit title"
+						th:href="@{/system/users/titles/edit/{id}(id=${title.id}) }">
+							<i class="fa fa-edit"></i> Edit title
+					</a> <a class="btn btn-xs btn-danger tooltips" title="Delete title"
+						th:href="@{/system/users/titles/delete/{id}(id=${title.id}) }">
+							<i class="fa fa-trash-o"></i> Delete title
+					</a></td>
+				</tr>
+			</tbody>
+			<!-- // Table body END -->
+		</table>
+		<!-- /. End view content here -->
+	</div>
+</div>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta charset="utf-8" />
+<title th:text="${siteTitle}">NHIS Template</title>
+
+<meta name="description" content="" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+<!-- bootstrap & fontawesome -->
+<link rel="stylesheet"
+	th:href="@{/resources/assets/css/bootstrap.min.css}" />
+<link rel="stylesheet"
+	th:href="@{/resources/assets/css/font-awesome.min.css}" />
+	
+<link rel="stylesheet" th:href="@{/resources/assets/css/chosen.css}" />
+
+<!-- page specific plugin styles -->
+
+<link rel="stylesheet"
+	th:href="@{/resources/vendors/gritter/assets/lib/css/jquery.gritter.css}" />
+<!-- text fonts -->
+<link rel="stylesheet" th:href="@{/resources/assets/css/ace-fonts.css}" />
+
+<!-- ace styles -->
+<link rel="stylesheet" th:href="@{/resources/assets/css/ace.min.css}" />
+
+
+<link rel="stylesheet" th:href="@{/resources/assets/css/datepicker.css}" /> 
+<link rel="stylesheet"
+	th:href="@{/resources/assets/css/bootstrap-timepicker.css}" />
+<link rel="stylesheet"
+	th:href="@{/resources/assets/css/daterangepicker.css}" />
+<link rel="stylesheet"
+	th:href="@{/resources/assets/css/bootstrap-datetimepicker.css}" />
+	
+<!--[if lte IE 9]>
+                <link rel="stylesheet" href="@{/resources/assets/ace-part2.min.css}" />
+        <![endif]-->
+        
+        
+        
+<link rel="stylesheet"
+	th:href="@{/resources/assets/css/ace-skins.min.css}" />
+<link rel="stylesheet"
+	th:href="@{/resources/assets/css/ace-rtl.min.css}" />
+
+<!--[if lte IE 9]>
+          <link rel="stylesheet" href="@{/resources/assets/css/ace-ie.min.css}" />
+        <![endif]-->
+
+<!-- inline styles related to this page -->
+
+<!-- ace settings handler -->
+<script th:src="@{/resources/assets/js/ace-extra.min.js}"></script>
+
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+<!--[if lte IE 8]>
+        <script th:src="@{/resources/assets/js/html5shiv.js}"></script>
+        <script th:src="@{/resources/assets/js/respond.min.js}"></script>
+     <![endif]-->
+
+
+<script type="text/javascript"
+	th:src="@{/resources/assets/js/jquery.min.js}"></script>
+
+
+
+
+
+<!--[if IE]> 
+<script type="text/javascript"
+	th:src="@{/resources/assets/js/jquery1x.min.js}"></script>
+
+ <![endif]-->
+
+
+
+<!-- basic scripts -->
+<script th:src="@{/resources/assets/js/bootstrap.min.js}"></script>
+
+
+
+
+
+<!-- page specific plugin scripts -->
+<script th:src="@{/resources/assets/js/chosen.jquery.min.js}"></script>
+
+<script th:src="@{/resources/assets/js/chosen.ajaxaddition.jquery.js}"></script>
+
+
+<script th:src="@{/resources/assets/js/date-time/moment.min.js}"></script>
+
+
+<script
+	th:src="@{/resources/assets/js/date-time/daterangepicker.min.js}"></script>
+<script
+	th:src="@{/resources/assets/js/date-time/bootstrap-datepicker.min.js}"></script>
+<script
+	th:src="@{/resources/assets/js/date-time/bootstrap-timepicker.min.js}"></script>
+	<script
+	th:src="@{/resources/assets/js/date-time/bootstrap-datetimepicker.min.js}"></script>
+
+	
+
+<script
+	th:src="@{/resources/vendors/gritter/assets/lib/js/jquery.gritter.min.js}"></script>
+<script th:src="@{/resources/assets/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/resources/assets/js/jquery.dataTables.bootstrap.js}"></script>
+
+<script th:inline="javascript">
+	$(function(){
+		// Check for notifications every 10 sec
+		/* var timer = setInterval(function(){
+			$.ajax({
+				dataType : 'html',
+				url: [[ @{/consultations/visits/notifications/fetch} ]],
+				success: function(msg){
+					$("#navbar-notifications").html(msg);
+				},
+				error: function(){
+					$.gritter.add({
+						title: 'Error!',
+						text: 'Cannot fetch notifications. Try again or contact admin',
+						class_name: 'gritter-error'
+					});
+				}	
+			});
+		}, (10000 * 3)); */
+	});
+</script>
+</head>
+
+<body class="skin-3">
+	<!-- #section:basics/navbar.layout -->
+	
+
+	<!-- /section:basics/navbar.layout -->
+	<div class="main-container" id="main-container">
+		<script type="text/javascript">
+			try {
+				ace.settings.check('main-container', 'fixed')
+			} catch (e) {
+			}
+		</script>
+
+		<!-- #section:basics/sidebar -->
+
+		
+		<!-- /section:basics/sidebar -->
+		<div >
+			<!-- #section:basics/content.breadcrumbs -->
+
+			
+
+			<!-- /section:basics/content.breadcrumbs -->
+			<div class="page-content">
+				<div class="row">
+					<div class="col-xs-12">
+						<!-- PAGE CONTENT BEGINS -->
+						<!-- Alert Bar here -->
+
+						<!-- End Alert bar here -->
+						<th:block th:if="${msg != null}">
+							<div class="row">
+								<div th:replace="layouts/commonviews/alert">Alert Block</div>
+							</div>
+						</th:block>
+
+						<div class="row">
+							
+							<!-- Content Fragments -->
+							<div th:replace="${view}">Content</div>
+							<!-- End content fragments -->
+						</div>
+
+						<!-- PAGE CONTENT ENDS -->
+					</div>
+					<!-- /.col -->
+				</div>
+				<!-- /.row -->
+			</div>
+			<!-- /.page-content -->
+		</div>
+		<!-- /.main-content -->
+
+		
+		<a href="#" id="btn-scroll-up"
+			class="btn-scroll-up btn btn-sm btn-inverse"> <i
+			class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+		</a>
+	</div>
+	<!-- /.main-container -->
+
+	<!-- ace scripts -->
+	<script th:src="@{/resources/assets/js/ace-elements.min.js}"></script>
+	<script th:src="@{/resources/assets/js/ace.min.js}"></script>
+	<script>
+	/*
+	$(function(){
+		
+		$('.date-picker').datepicker({
+			autoclose : true,
+			format: 'yyyy-mm-dd',
+			todayHighlight : true
+		})
+		.next().on(ace.click_event, function() {
+			$(this).prev().focus();
+		});
+		
+	
+		$(".tooltips").tooltip({
+			animation : true
+		});
+	}); */
+	</script>
+
+	<script type="text/javascript">
+		ace.vars['base'] = '..';
+	</script>
+	<script>
+		$(".tooltips").tooltip({
+			animation : true
+		});
+	</script>
+</body>
+</html>

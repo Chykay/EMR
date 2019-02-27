@@ -1,0 +1,110 @@
+<div class="page-header">
+	<h1>
+		Category Item <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			Assign Unit
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-primary" th:href="@{/system/categoryitem}"><i
+			class="fa fa-list"></i> All Items</a>
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+
+		<form role="form" class="form-horizontal" method="POST"
+			th:object="${unitToItemForm}">
+			<legend>Global-Item/Unit ( Assigment ) Form</legend>		
+
+			<div class="form-group">
+				<label for="itemId" class="col-sm-3 control-label no-padding-right">Global Item:</label>
+				<div class="col-sm-9">
+					<select class="col-xs-10 col-sm-5" th:field="*{itemId}">
+						<option value="0">Select..</option>
+						<option th:each="item : ${itemList}" th:value="${item.id}"
+							th:text="${item.item_name}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('itemId')}"
+						th:errors="*{itemId}"></span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="unitId" class="col-sm-3 control-label no-padding-right">Unit of Measure:</label>
+				<div class="col-sm-9">
+					<select class="col-xs-10 col-sm-5" th:field="*{unitId}">
+						<option value="0">Select..</option>
+						<option th:each="unit : ${unitList}" th:value="${unit.id}"
+							th:text="${unit.unit_of_measure}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('unitId')}"
+						th:errors="*{unitId}"></span>
+				</div>
+			</div>			
+			
+			<div class="clearfix form-actions">
+				<div class="col-md-offset-3 col-md-9">
+					<button class="btn btn-primary" type="submit">
+						<i class="ace-icon fa fa-check bigger-110"></i> Add
+					</button>
+
+					<button class="btn btn-danger" type="reset">
+						<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+
+
+
+
+<script>
+	//this is for GET
+	$(function() {
+		/* Lga Selector*/
+		$('#categoryTypeId').change(
+				function(event) {
+					$.ajax({
+						type : "GET", 
+						url : "../../utilities/globalitemandcategory/categorybyglobalitem/"
+						+ $('#categoryTypeId').val(),						
+						beforeSend : function() {
+							/* $.gritter.add({
+								title : "Progress...",
+								text : "Fetching Categories",
+								time : 3000
+							}); */
+						},
+						success : function(html) {
+							$("#lg").html(html);
+							/* $.gritter.add({
+								title : "Success!",
+								text : "Categories fetched",
+								time : 4000
+							}); */
+						},
+						error : function() {
+							/* $.gritter.add({
+								title : "Error!",
+								text : "Error fetching Category",
+								time : 4000
+							}); */
+						}
+
+					});
+				});
+	});
+</script>
+
+
+

@@ -1,0 +1,273 @@
+<div class="page-header">
+	<h1>
+		Edit <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			 VITALS
+		</small>
+	</h1>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/}"
+			><i
+			class="fa fa-home"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-primary" th:href="@{/visits/queue/2}"
+			><i
+			class="fa fa-list"></i>Vitals Queue</a>
+	</div>
+</div>
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<form role="form" class="form-horizontal" method="POST" 
+			th:object="${vitals}">
+			<legend>VITALS Form</legend>
+	
+					<div class="form-group">
+				<label for="temperature" class="col-sm-3 control-label no-padding-right">Temperature:</label>
+			<div class="col-sm-5">
+			<input type="text" class="col-xs-10 col-sm-5"
+					 placeholder="" th:field="*{temperature}" required="required"  oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"/>
+			
+							<span class="text-danger"
+								th:if="${#fields.hasErrors('temperature')}"
+								th:errors="*{temperature}"></span>
+								
+								<select th:field="*{temperaturemeasure}" class="col-xs-10 col-sm-3" required="required"  >
+						<option value="°C">°C</option>
+						<option value="°F">°F</option>
+					</select> 
+						</div>
+						
+					</div>
+
+
+					<div class="form-group">
+				<label for="systolicpressure" class="col-sm-3 control-label no-padding-right">Systolic Pressure:</label>
+			<div class="col-sm-5">
+			<input type="text" class="col-xs-10 col-sm-5"
+					 placeholder="" th:field="*{systolicpressure}" required="required"  oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"/>
+			
+							<span class="text-danger"
+								th:if="${#fields.hasErrors('systolicpressure')}"
+								th:errors="*{systolicpressure}"></span>
+								
+								<select th:field="*{systolicpressuremeasure}" class="col-xs-10 col-sm-3" required="required"  >
+						<option value="mm/hg">mm/hg</option></select>
+						</div>
+						
+					</div>
+
+			
+	<div class="form-group">
+				<label for="diastolicpressure" class="col-sm-3 control-label no-padding-right">Diastolic Pressure:</label>
+			<div class="col-sm-5">
+			<input type="text" class="col-xs-10 col-sm-5"
+					 placeholder="" th:field="*{diastolicpressure}" required="required" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"/>
+			
+							<span class="text-danger"
+								th:if="${#fields.hasErrors('diastolicpressure')}"
+								th:errors="*{diastolicpressure}"></span>
+								
+							
+								<select th:field="*{diastolicpressuremeasure}" class="col-xs-10 col-sm-3" required="required"  >
+						<option value="mm/hg">mm/hg</option></select>	
+						</div>
+						
+					</div>
+	
+	
+	
+	
+	<div class="form-group">
+				<label for="weight" class="col-sm-3 control-label no-padding-right">Weight:</label>
+			<div class="col-sm-5">
+			<input type="text" class="col-xs-10 col-sm-5"
+					 placeholder="" th:field="*{weight}"   oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" />
+			
+							<span class="text-danger"
+								th:if="${#fields.hasErrors('weight')}"
+								th:errors="*{weight}"></span>
+								
+								<select th:field="*{weightmeasure}" class="col-xs-10 col-sm-3"  >
+						<option value="Kg">Kg</option>
+						<option value="Ounce">Ounce</option>
+						
+					</select> 
+						</div>
+						</div>
+	
+	
+	<div class="form-group">
+				<label for="height" class="col-sm-3 control-label no-padding-right">Height:</label>
+			<div class="col-sm-5">
+			<input type="text" class="col-xs-10 col-sm-5"
+					 placeholder="Height" th:field="*{height}"  oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" />
+			
+							<span class="text-danger"
+								th:if="${#fields.hasErrors('height')}"
+								th:errors="*{height}"></span>
+								
+								<select th:field="*{heightmeasure}" class="col-xs-10 col-sm-3" >
+						<option value="Feet">Feet</option>
+						<option value="Centimeter">Centimeter</option>
+					</select> 
+						</div>
+					</div>	
+						
+			<div class="form-group">
+				<label for="breathingrate" class="col-sm-3 control-label no-padding-right">Breathing Rate:</label>
+			<div class="col-sm-5">
+			<input type="text" class="col-xs-10 col-sm-5"
+					 placeholder="" th:field="*{breathingrate}" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" />
+			
+							<span class="text-danger"
+								th:if="${#fields.hasErrors('breathingrate')}"
+								th:errors="*{breathingrate}"></span>
+								
+								<select th:field="*{breathingratemeasure}" class="col-xs-10 col-sm-3" >
+						<option value="Pulse">Pulse</option>
+						
+					</select> 
+						</div>
+						
+						</div>
+						
+		<div class="form-group">
+				<label for="heartrate" class="col-sm-3 control-label no-padding-right">Heart Rate:</label>
+			<div class="col-sm-5">
+			<input type="text" class="col-xs-10 col-sm-5"
+					 placeholder="" th:field="*{heartrate}" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" />
+			
+							<span class="text-danger"
+								th:if="${#fields.hasErrors('heartrate')}"
+								th:errors="*{heartrate}"></span>
+								
+								<select th:field="*{heartratemeasure}" class="col-xs-10 col-sm-3"  >
+						<option value="PerSec">Per Minute</option>
+						
+					</select> 
+						</div>
+					</div>	
+	
+
+
+
+
+	<div class="form-group">
+				<label for="urinaryprotein" class="col-sm-3 control-label no-padding-right">Urinary Protein:</label>
+			<div class="col-sm-5">
+			<!-- <input type="text" class="col-xs-10 col-sm-5"
+					 placeholder="" th:field="*{urinaryprotein}" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" />
+			-->
+			<select th:field="*{urinaryprotein}" class="col-xs-10 col-sm-3"  >
+						<option value="+">+ (1+)</option>
+						<option value="++">++ (2+)</option>
+						<option value="++++">+++ (3+)</option>
+						<option value="-">- (Negative)</option>
+						
+					</select> 
+			
+							<span class="text-danger"
+								th:if="${#fields.hasErrors('urinaryprotein')}"
+								th:errors="*{urinaryprotein}"></span>
+								
+								<select th:field="*{urinaryprotein}" class="col-xs-10 col-sm-3"  >
+						<option value="Value">Value</option>
+						
+					</select> 
+						</div>
+					</div>	
+					
+					
+					
+	
+	<div class="form-group">
+				<label for="urinarysugar" class="col-sm-3 control-label no-padding-right">Urinary Sugar:</label>
+			<div class="col-sm-5">
+			<!-- <input type="text" class="col-xs-10 col-sm-5"
+					 placeholder="" th:field="*{urinarysugar}" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" />
+			-->
+			<select th:field="*{urinarysugar}" class="col-xs-10 col-sm-3"  >
+						<option value="+">+ (1+)</option>
+						<option value="++">++ (2+)</option>
+						<option value="++++">+++ (3+)</option>
+						<option value="-">- (Negative)</option>
+						
+					</select> 
+			
+			
+							<span class="text-danger"
+								th:if="${#fields.hasErrors('urinarysugar')}"
+								th:errors="*{urinarysugar}"></span>
+								
+								<select th:field="*{urinarysugar}" class="col-xs-10 col-sm-3"  >
+						<option value="Value">Value</option>
+						
+					</select> 
+						</div>
+					</div>	
+					
+					
+
+
+			<div class="clearfix form-actions">
+				<div class="col-md-offset-3 col-md-9">
+					 <input type="hidden" th:field="*{visit_id}" /> 
+					<button class="btn btn-primary" type="submit">
+						<i class="ace-icon fa fa-check bigger-110"></i> Update
+					</button>
+
+					<button class="btn btn-danger" type="reset">
+						<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+					</button> 
+				</div>
+			</div> 
+			
+			
+
+
+		</form>
+	</div>
+</div>
+
+
+<!-- 
+<script>
+	//this is for GET
+	$(function() {
+		/* Lga Selector*/
+		$('#st').change(
+				function(event) {
+					$.ajax({
+						type : "GET",
+						url : "/EMR/utilities/statesandlgas/lgabystate/"
+							+ $('#st').val(),
+						beforeSend : function() {
+							/* $.gritter.add({
+								title : "Progress...",
+								text : "Fetching LGAs",
+								time : 3000
+							}); */
+						},
+						success : function(html) {
+							$("#lg").html(html);
+							/* $.gritter.add({
+								title : "Success!",
+								text : "LGAs fetched",
+								time : 4000
+							}); */
+						},
+						error : function() {
+						/* 	$.gritter.add({
+								title : "Error!",
+								text : "Error fetching LGAs",
+								time : 4000
+							}); */
+						}
+
+					});
+				});
+	});
+</script> -->

@@ -1,0 +1,427 @@
+<div class="page-header">
+	<h1>
+		Edit <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			Edit Staff
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-primary" th:href="@{/hrunit/staffreg/index/all}"><i
+			class="glyphicon glyphicon-list"></i> All Staff</a>
+	</div>
+</div>
+<div class="hr hr-18 dotted hr-double"></div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+
+		<form role="form" class="form-horizontal" 
+			th:object="${staffRegForm}"  method="POST">
+			<legend class="scheduler-border">EDIT Staff Registration Form</legend>
+			
+			
+			<div class="form-group">
+				<label for="staffcode"
+					class="col-sm-3 control-label no-padding-right">Staff Code:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5"
+						placeholder="Staffcode" th:field="*{staffCode}" required="required" />
+					<span class="text-danger" th:if="${#fields.hasErrors('staffCode')}"
+						th:errors="*{staffCode}"></span>
+				</div>
+			</div>
+			
+			
+			
+			<div class="form-group">
+				<label for="lastName"
+					class="col-sm-3 control-label no-padding-right">Last Name:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5"
+						placeholder="Last Name" th:field="*{lastName}" required="required" />
+					<span class="text-danger" th:if="${#fields.hasErrors('lastName')}"
+						th:errors="*{lastName}"></span>
+				</div>
+			</div>
+			
+			
+			<div class="form-group">
+				<label for="firstName"
+					class="col-sm-3 control-label no-padding-right">First Name:</label>
+				<div class="col-sm-9">
+
+					<input type="text" class="col-xs-10 col-sm-5"
+						placeholder="First Name" th:field="*{firstName}"
+						required="required" /> <span class="text-danger"
+						th:if="${#fields.hasErrors('firstName')}"
+						th:errors="*{firstName}"></span>
+				</div>
+			</div>
+			
+			
+			
+			<div class="form-group">
+				<label for="otherName"
+					class="col-sm-3 control-label no-padding-right">Other Name:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5"
+						placeholder="Other Name" th:field="*{otherName}"  />
+					<span class="text-danger" th:if="${#fields.hasErrors('otherName')}"
+						th:errors="*{otherName}"></span>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="gender_id" class="col-sm-3 control-label no-padding-right">Gender:</label>
+				<div class="col-sm-9">
+					<select th:field="*{gender_id}" class="col-xs-10 col-sm-5" required="required">
+						<option value="">Select..</option>
+						<option th:each="g: ${genders}" th:value="${g.id}"
+							th:text="${g.type}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('gender_id')}"
+						th:errors="*{gender_id}"></span>
+				</div>
+			</div>
+			
+			
+			
+		<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-3 no-padding-right"
+								for="dob">Date of Birth:</label>
+
+							<div class="col-xs-12 col-sm-9">
+								<div class="clearfix">
+
+									<input type="text" class="col-xs-12 col-sm-3 date-picker"
+										id="date-picker" th:field="*{dob}"
+										data-date-format="yyyy-mm-dd"  required="required"/> <span class="text-danger"
+										th:if="${#fields.hasErrors('dob')}" th:errors="dob"></span>
+
+								</div>
+							</div>
+				</div>
+
+			<div class="form-group">
+				<label for="maritalstatus_id"
+					class="col-sm-3 control-label no-padding-right">Marital Status:</label>
+				<div class="col-sm-9">
+					<select th:field="*{maritalstatus_id}" class="col-xs-10 col-sm-5" required="required">
+						<option value="0">Select</option>
+						<option th:each="ms : ${maritalstatus}" th:value="${ms.id}"
+							th:text="${ms.status}"></option>
+					</select> <span class="text-danger"
+						th:if="${#fields.hasErrors('maritalstatus_id')}" th:errors="*{maritalstatus_id}"></span>
+				</div>
+			</div>
+			
+		<div class="form-group">
+				<label for="email" class="col-sm-3 control-label no-padding-right">Email Address:</label>
+				<div class="col-sm-9">    
+					<input type="text" readonly="readonly" class="col-xs-10 col-sm-5" placeholder="Email" 
+					pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" 
+			th:field="*{email}" /> <span class="text-danger"
+						th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+				</div>
+			</div>
+
+			
+			
+			<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-3 no-padding-right"
+								for="doe">Date of Employment:</label>
+
+							<div class="col-xs-12 col-sm-9">
+								<div class="clearfix">
+
+									<input type="text" class="col-xs-12 col-sm-3 date-picker"
+										id="date-picker" th:field="*{doe}"
+										data-date-format="yyyy-mm-dd" required="required" /> <span class="text-danger"
+										th:if="${#fields.hasErrors('doe')}" th:errors="doe"></span>
+
+								</div>
+							</div>
+				</div>
+			
+			
+			
+			<div class="form-group">
+				<label for="Address"
+					class="col-sm-3 control-label no-padding-right">Address</label>
+				<div class="col-sm-9">
+					<textarea class="col-xs-10 col-sm-5"
+						placeholder="" th:field="*{address}"></textarea>
+					<span class="text-danger"
+						th:if="${#fields.hasErrors('address')}"
+						th:errors="*{address}"></span>
+				</div>
+			</div>
+			
+			
+			
+			
+			<div class="form-group">
+				<label for="telephone"
+					class="col-sm-3 control-label no-padding-right">Telephone</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5"
+						placeholder="" th:field="*{telephone}"/>
+					<span class="text-danger"
+						th:if="${#fields.hasErrors('telephone')}"
+						th:errors="*{telephone}"></span>
+				</div>
+			</div>
+			
+			
+			
+			<div class="form-group">
+				<label for="qualifications"
+					class="col-sm-3 control-label no-padding-right">Qualifications:</label>
+				<div class="col-sm-9">
+					<textarea class="col-xs-10 col-sm-5"
+						placeholder="" th:field="*{qualifications}"></textarea>
+					<span class="text-danger"
+						th:if="${#fields.hasErrors('qualifications')}"
+						th:errors="*{qualifications}"></span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="unit"
+					class="col-sm-3 control-label no-padding-right">Unit:</label>
+				<div class="col-sm-9">
+					<select th:field="*{staffunit_id}" class="col-xs-10 col-sm-5">
+						<option value="0">Select</option>
+						<option th:each="unit : ${staffunit}" th:value="${unit.categoryId}"
+							th:text="${unit.categoryName}"></option>
+					</select> <span class="text-danger"
+						th:if="${#fields.hasErrors('staffunit_id')}" th:errors="*{staffunit_id}"></span>
+				</div>
+			</div>
+			
+			
+			<div class="form-group">
+				<label for="Practising"
+					class="col-sm-3 control-label no-padding-right">Practising No:</label>
+				<div class="col-sm-9">
+					<textarea class="col-xs-10 col-sm-5"
+						placeholder="" th:field="*{practno}"></textarea>
+					<span class="text-danger"
+						th:if="${#fields.hasErrors('practno')}"
+						th:errors="*{practno}"></span>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="verifymode"
+					class="col-sm-3 control-label no-padding-right">Verify Mode:</label>
+				<div class="col-sm-9">
+					<textarea class="col-xs-10 col-sm-5"
+						placeholder="" th:field="*{verifymode}"></textarea>
+					<span class="text-danger"
+						th:if="${#fields.hasErrors('verifymode')}"
+						th:errors="*{verifymode}"></span>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="staffunit_id"
+					class="col-sm-3 control-label no-padding-right">Designation:</label>
+				<div class="col-sm-9">
+					<select th:field="*{staffdesignation_id}" class="col-xs-10 col-sm-5" >
+						<option value="0">Select</option>
+						<option th:each="d : ${staffdesignation}" th:value="${d.designationId}"
+							th:text="${d.designationName}"></option>
+					</select> <span class="text-danger"
+						th:if="${#fields.hasErrors('staffdesignation_id')}" th:errors="*{staffdesignation_id}"></span>
+				</div>
+			</div>
+			
+			
+			<div class="form-group">
+				<label for="staffunit_id"
+					class="col-sm-3 control-label no-padding-right">Medical Group:</label>
+				<div class="col-sm-9">
+					<select th:field="*{staffgroup_id}" class="col-xs-10 col-sm-5" >
+						<option value="0">Select</option>
+						<option th:each="g : ${staffgroup}" th:value="${g.id}"
+							th:text="${g.name}"></option>
+					</select> <span class="text-danger"
+						th:if="${#fields.hasErrors('staffgroup_id')}" th:errors="*{staffgroup_id}"></span>
+				</div>
+			</div>
+			
+			
+			<div class="form-group">
+				<label for="staffranking_id"
+					class="col-sm-3 control-label no-padding-right">Medical Ranking:</label>
+				<div class="col-sm-9">
+					<select th:field="*{staffranking_id}" class="col-xs-10 col-sm-5">
+				 	<option value="0">Select..</option>
+						<option th:each="sr : ${staffranking}" th:value="${sr.id}"
+							th:text="${sr.name}"></option> 
+					</select> <span class="text-danger"
+						th:if="${#fields.hasErrors('staffranking_id')}" th:errors="*{staffranking_id}"></span>
+				</div>
+			</div>
+			
+			
+			
+			<div class="form-group">
+				<label for="staffspecialization_id"
+					class="col-sm-3 control-label no-padding-right">Specialization:</label>
+				<div class="col-sm-9">
+					 <select th:field="*{staffspecialization_id}" class="col-xs-10 col-sm-5">
+					 	<option value="0">Select..</option>
+						<option th:each="ss : ${staffspecialization}" th:value="${ss.id}"
+							th:text="${ss.name}"></option>
+					</select> <span class="text-danger"
+						th:if="${#fields.hasErrors('staffspecialization_id')}" th:errors="*{staffspecialization_id}"></span>
+				</div>
+			</div>
+			
+			
+			
+
+
+		<div class="form-group">
+				<label for="staffemploymentmode_id" class="col-sm-3 control-label no-padding-right">Staff Mode:</label>
+				<div class="col-sm-9">
+				<select th:field="*{staffmode_id}" class="col-xs-10 col-sm-5">
+				<!-- 		 <option value="0">Select..</option>  -->
+						<option th:each="ss: ${staffmode}" th:value="${ss.id}"
+							th:text="${ss.name}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('staffmode_id')}"
+						th:errors="*{staffmode_id}"></span>
+				</div>
+			</div>
+			
+
+
+
+		<div class="form-group">
+				<label for="staffstatus_id" class="col-sm-3 control-label no-padding-right">Staff Status:</label>
+				<div class="col-sm-9">
+				<select th:field="*{staffstatus_id}" class="col-xs-10 col-sm-5">
+						<option value="0">Select..</option>  
+						<option th:each="ss: ${staffstatus}" th:value="${ss.staffstatus_id}"
+							th:text="${ss.name}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('staffstatus_id')}"
+						th:errors="*{staffstatus_id}"></span>
+				</div>
+			</div>
+			
+		
+
+
+
+
+
+				<div class="form-group">
+								<label class="control-label col-xs-12 col-sm-3 no-padding-right"
+								for="statusdate">Status Date:</label>
+
+							<div class="col-xs-12 col-sm-9">
+								<div class="clearfix">
+
+									<input type="text" class="col-xs-12 col-sm-3 date-picker"
+										id="date-picker" th:field="*{statusdate}"
+										data-date-format="yyyy-mm-dd" />
+										
+										<span class="text-danger"
+										th:if="${#fields.hasErrors('statusdate')}" th:errors="statusdate"></span>
+
+								</div>
+							</div>
+				</div>
+
+
+
+
+
+			<div class="clearfix form-actions">
+				<div class="col-md-offset-3 col-md-9">
+					<!-- <input class="btn btn-primary" type="submit" value="Create User" onclick="return saveAlert();" /> -->
+					<input class="btn btn-primary" type="submit" value="Update"/>
+					<button class="btn btn-danger" type="reset" >
+						<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+  
+<script>
+
+$(function(){
+	/* DatePicker*/
+	$('.date-picker').datepicker({
+		autoclose : true,
+		format: 'yyyy-mm-dd',
+		todayHighlight : true
+	})//show datepicker when clicking on the icon
+	.next().on(ace.click_event, function() {
+		$(this).prev().focus();
+	});
+	
+
+	$(".tooltips").tooltip({
+		animation : true
+	});
+});
+
+
+
+	//this is for GET
+	$(function() {
+		/* Lga Selector*/
+		$('#staffgroup_id').change(
+				function(event) {
+					$.ajax({
+						type : "GET",
+						url : "/../EMR/utilities/staffgroup/"
+								+ $('#staffgroup_id').val(),
+						beforeSend : function() {
+							$.gritter.add({
+								title : "Progress...",
+								text : "Fetching Specialization and Ranking",
+								time : 3000
+							});
+						},
+						success : function(html) {
+							
+							var s = html.split("##");
+							
+							$("#staffranking_id").html(s[0]);
+							
+							$("#staffspecialization_id").html(s[1]);
+							
+							
+							
+							$.gritter.add({
+								title : "Success!",
+								text : "Rank and Sepcialization fetched",
+								time : 4000
+							});
+						},
+						error : function() {
+							$.gritter.add({
+								title : "Error!",
+								text : "Error fetching Rank and Sepcialization",
+								time : 4000
+							});
+							 $("#staffranking_id").html('<option value="0">Select</option>');
+								
+								$("#staffspecialization_id").html('<option value="0">Select</option>');
+						}
+
+					});
+				});
+	});
+</script>

@@ -1,0 +1,385 @@
+<div class="page-header">
+	<h1>
+		Invoice <span th:text="${v.code + ' - ' + v.patient.surname + v.patient.firstName + v.patient.othernames}"> </span>
+		<small> <i class="ace-icon fa fa-angle-double-right"></i>
+		Invoice No:	<span th:text="${v.code}"> </span>
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-primary" th:href="@{/invoice/invoicelist/{id}(id=${v.id})}"><i
+			class="fa fa-list"></i> Invoice List</a>
+			<a
+			class="btn btn-xs btn-primary" th:href="@{/invocie/accountlist}"><i
+			class="fa fa-list"></i>Visit List</a>
+			
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+
+		<form role="form" class="form-horizontal" method="POST" 
+			th:object="${invoiceForm}"  th:action="@{/invoice/add}">
+			
+			<legend>Invoice </legend>
+			
+			
+			<div class="form-group">
+				<label for="gender" class="col-sm-3 control-label no-padding-right"> Bill Item</label>
+				<div class="col-sm-9">
+					<select th:field="*{globalItemId}" class="col-xs-10 col-sm-5"  onchange="myFunction()" required="required" id="globalItemId">
+			
+						<option value="">Select..</option>
+						<option th:each="h: ${billitemlist}" th:value="${h.reference_id + '##' + h.code + '##' +  h.itemmeasureid +'##' + h.qty + '##' + h.amt + '##' + h.itemid + '##' +  h.unitid }"
+							th:text="${  h.qty  + ' ' + h.measurename + ' of ' + h.itemname}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('globalItemId')}"
+						th:errors="*{globalItemId}"></span>
+				</div>
+			</div>
+		
+			
+			
+			
+
+		 	<div class="form-group">
+				<label for="gender" class="col-sm-3 control-label no-padding-right"> Billing Sheme</label>
+				<div class="col-sm-9">
+					<select th:field="*{patienthmopackageid}" class="col-xs-10 col-sm-5" onchange="myFunction()" required="required" id="patienthmopackageId">
+			
+						<option value="">Select...</option>
+						<option th:each="h: ${patienthmolist}" th:value="${h.patienthmopackageid +'##' + h.billschemeid}"
+							th:text="${h.hmoname + ' - ' + h.hpname + ' ' + 'Bill Scheme - ' + h.billschemename}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('patienthmopackageid')}"
+						th:errors="*{patienthmopackageid}"></span>
+				</div>
+			</div>
+			
+			
+			
+			
+			<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Unit:</label>
+				<div class="col-sm-9">
+					<select type="text" class="col-xs-10 col-sm-5" required="required"
+						placeholder="Unit" th:field="*{hrunitid}" id="unitid"	 >
+						<option value="">Select....</option>
+						<option th:each="h: ${hrunitcategories}" th:value="${h.categoryId}" th:text="${h.categoryName}"></option>
+					</select> <span class="text-danger"
+						th:if="${#fields.hasErrors('*{hrunitid}')}"
+						th:errors="*{hrunitid}"></span>
+				</div>
+			</div>
+			
+
+								<div class="form-group">
+							<label for="Tels"
+								class="col-sm-3 control-label no-padding-right">Description:</label>
+							<div class="col-sm-9">
+								<input  type="text" class="col-xs-10 col-sm-5" 	  
+									th:field="*{description}"  ></input>
+								<span class="text-danger"
+									th:if="${#fields.hasErrors('description')}"
+									th:errors="description"></span>
+							</div>
+						</div>
+						
+
+								<div class="form-group">
+							<label for="Tels"
+								class="col-sm-3 control-label no-padding-right">Bill Amount:</label>
+							<div class="col-sm-9">
+								<input type="text" class="col-xs-10 col-sm-5" 	
+									th:field="*{billamount}" required="required"   id="billamount" readonly="readonly"
+					oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"
+					></input>
+								<span class="text-danger"
+									th:if="${#fields.hasErrors('billamount')}"
+									th:errors="billamount"></span>
+							</div>
+						</div>
+
+	
+
+
+
+
+								<div class="form-group">
+							<label for="Tels"  
+								class="col-sm-3 control-label no-padding-right">Discount:</label>
+							<div class="col-sm-9">
+								<input type="text" class="col-xs-10 col-sm-5" 	  onkeyup="calculate()" id="discountamount"
+									th:field="*{discountamount}" 
+					oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"
+					></input>
+								<span class="text-danger"
+									th:if="${#fields.hasErrors('discountamount')}"
+									th:errors="discountamount"></span>
+							</div>
+						</div>
+						
+
+								<div class="form-group">
+							<label for="Tels"
+								class="col-sm-3 control-label no-padding-right">Add Amt:</label>
+							<div class="col-sm-9">
+								<input  type="text" class="col-xs-10 col-sm-5" 	
+									th:field="*{adjustamount}"   onkeyup="calculate()" id="adjustamount"
+					oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"
+					></input>
+								<span class="text-danger"
+									th:if="${#fields.hasErrors('adjustamount')}"
+									th:errors="adjustamount"></span>
+							</div>
+						</div>
+						
+						
+						
+								<div class="form-group">
+							<label for="Tels"
+								class="col-sm-3 control-label no-padding-right">Net Bill Amount:</label>
+							<div class="col-sm-9">
+								<input type="text" class="col-xs-10 col-sm-5" 	 
+									th:field="*{netamount}" required="required"  id="netamount" readonly="readonly"
+					oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"
+					></input>
+								<span class="text-danger"
+									th:if="${#fields.hasErrors('netamount')}"
+									th:errors="netamount"></span>
+							</div>
+						</div>
+						
+						
+
+
+
+						
+
+
+			<div class="clearfix form-actions">
+				<div class="col-md-offset-3 col-md-9">
+			
+			 <input  th:field="*{visitId}" /> 
+			 
+			 <input  th:field="*{referenceid}" /> 
+			
+			 
+			 <input  th:field="*{code}" /> 
+			 
+			 
+			 <input  th:field="*{itemmeasureid}" /> 
+			 
+			 
+			 
+			 <input  th:field="*{qty}" /> 
+			 
+			 
+			 <input  th:field="*{itemid}" /> 
+			 
+			 
+			 
+			 
+			 <input  th:field="*{patienthmopackageid}" />
+			  
+			 
+			 <input  th:field="*{billSchemeId}" /> 
+			 
+			 
+			 
+		
+			
+					<button class="btn btn-primary" type="submit">
+						<i class="ace-icon fa fa-check bigger-110"></i> Add
+					</button>
+
+					<button class="btn btn-danger" type="reset">
+						<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+
+<script> 
+//<![CDATA[
+function myFunction()
+	{
+
+	 $('#referenceid').val("");
+	 $('#code').val("");
+	 $('#itemmeasureid').val("");
+ 	 $('#billamount').val("");
+ 	 
+ 	 $('#qty').val("");
+	 $('#itemid').val("");
+	 $('#unitid').val("");
+	 
+	 $('patienthmopackageid').val("");
+	 $('#billSchemeId').val("");
+
+var   a=$('#globalItemId').val().split("##");
+var   b=$('#patienthmopackageId').val().split("##");
+	
+var p1 = $('#globalItemId');  
+var p2 = $('#patienthmopackageId'); 
+	
+//  if (txt.val() != null && txt.val() != '') 
+		  
+if ( p1.val() !=''  && p2.val() !='')
+	{
+$.ajax({
+	type : "GET",
+
+url : '/../'+ window.location.pathname.split('/')[1] + '/invoice/getamount/' + $('#visitId').val() +"/"+ a[0] + "/" + a[1]+ "/" +a[2]+ "/" + encodeURIComponent(a[3]) + "/" + encodeURIComponent(a[4]) + "/" + encodeURIComponent(a[5]) + "/" + encodeURIComponent(a[6]) + "/" + b[0]+ "/" + b[1] ,
+//	url : '/../'+ window.location.pathname.split('/')[1] + '/invoice/getamount/" + a[0] + "/" 2/3/4/2/5" ,
+	
+	beforeSend : function() {
+		$.gritter.add({
+			title : "Progress...",
+			text : "Fetching Amount",
+			time : 3000
+		});
+	},
+	success : function(html) {
+
+		// return referenceid + "##" + code + "##" + itemmeasureid + "##" + URLDecoder.decode(qty) + "##" + amt + "##" + itemid + "##" + unitid +"##"  + "##" + billschemeid ;
+		 
+		 
+	//alert (html);
+
+		 stuffstr=html.split("##");
+		 
+		 $('#referenceid').val(stuffstr[0]);
+		 $('#code').val(stuffstr[1]);
+		
+		 if (stuffstr[2]=='null'){
+			
+			 $('#itemmeasureid').val("0");
+		 }
+			 else
+			{	 
+		 $('#itemmeasureid').val(stuffstr[2]);
+			}
+		 
+		 $('#qty').val(stuffstr[3]);
+		 
+		 $('#billamount').val(stuffstr[4]);
+		
+		 $('#itemid').val(stuffstr[5]);
+		 
+		
+		
+		//alert("**");
+		//alert(stuffstr[6]);
+		if (stuffstr[6]=='null'){
+			$('#unitid').val('');
+			
+		//	$("#unitid").attr("readonly", false);
+			//alert("jj");
+			$('#unitid option:not(:selected)').attr('disabled', false);
+			
+		}
+		else
+			{
+			$('#unitid').val(stuffstr[6]);
+			
+			//$("#unitid").attr("readonly", "readonly");
+			$('#unitid option:not(:selected)').attr('disabled', true);
+			
+			//$('#fieldName').attr("disabled","disabled") 
+			//$('#fieldName').attr("disabled", true) 
+			//$('#fieldName').attr("readonly", true) 
+			
+			}
+		$('#patienthmopackageid').val(stuffstr[7]);
+
+		$('#billSchemeId').val(stuffstr[8]);
+		
+		
+		$.gritter.add({
+			title : "Success!",
+			text : "Amount fetched",
+			time : 4000
+		});
+	},
+	error : function() {
+		$.gritter.add({
+			title : "Error!",
+			text : "Error fetching Amount",
+			time : 4000
+		});
+
+	}
+});
+
+}
+	}
+	
+	
+	
+function calculate()
+{
+
+	var ba = Number($('#billamount').val());
+	var am = Number( $('#adjustamount').val());
+	var da = Number($('#discountamount').val());
+	   var d = parseFloat('0' + ba)+ parseFloat('0' + am) - parseFloat('0' + da);
+
+if (d<0) 
+	{
+	
+	d=0;
+	}
+	$('#netamount').val(d);
+		
+	
+}
+
+
+
+function clear()
+{
+
+$('#referenceid').val("");
+$('#code').val("");
+$('#itemmeasureid').val("");
+ $('#billamount').val("");
+$('#qty').val("");
+$('#itemid').val("");
+$('#unitid').val("");
+
+$('#billSchemeId').val("");
+
+$('#globalItemId').val("");
+$('#patienthmopackageId').val("");
+}
+
+$(document).ready(function() {
+     
+	$('#referenceid').val("");
+	$('#code').val("");
+	$('#itemmeasureid').val("");
+	 $('#billamount').val("");
+	$('#qty').val("");
+	$('#itemid').val("");
+	$('#unitid').val("");
+
+	$('#billSchemeId').val("");
+
+	$('#globalItemId').val("");
+	$('#patienthmopackageId').val("");
+	$('#description').val("");
+     
+});
+
+//]]>
+</script>

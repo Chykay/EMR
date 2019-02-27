@@ -1,0 +1,442 @@
+<div class="page-header">
+	<h1>
+		View <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			View an HMO
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-primary" th:href="@{/system/hmos}"><i
+			class="fa fa-list"></i> All HMOs</a> <a class="btn btn-xs btn-warning"
+			th:href="@{/system/hmos/edit/{id} (id=${hmoPackage.id})}"><i
+			class="fa fa-edit"></i> Edit hmo</a> <a class="btn btn-xs btn-danger"
+			th:href="@{/system/system/delete/{id} (id=${hmoPackage.id})}"><i
+			class="fa fa-trash-o"></i> Delete hmo</a>
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<dl class="dl-horizontal">
+			<dt>HMO:</dt>
+			<dd>
+				<span th:text="${hmoPackage.hmo.name}"></span> <small><a
+					th:href="@{/system/hmo/details/{id} (id=${hmoPackage.hmo.id})}">view
+						details</a></small>
+			</dd>
+			<dt>Name:</dt>
+			<dd th:text="${hmoPackage.name}"></dd>
+			<dt>Created date</dt>
+			<dd
+				th:text="${ #dates.format(hmoPackage.createdDate, 'MMM dd, yyyy HH:mm a')}"></dd>
+		</dl>
+	</div>
+</div>
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<div class="tabbable">
+			<ul class="nav nav-tabs padding-18">
+				<li><a data-toggle="tab" href="#services"> <i
+						class="green ace-icon fa fa-user bigger-120"></i> Services
+				</a></li>
+				<li class="active"><a data-toggle="tab" href="#treatments">
+						<i class="green ace-icon fa fa-user bigger-120"></i> Treatments
+				</a></li>
+				<li><a data-toggle="tab" href="#drugs"> <i
+						class="green ace-icon fa fa-user bigger-120"></i> Drugs
+				</a></li>
+			</ul>
+			
+			<div class="tab-content no-border padding-24">
+			
+			<div id="services" class="tab-pane">
+					<a href="#services-form-modal" data-toggle="modal" 					
+						class="btn btn-danger btn-xs"> <i class="fa fa-plus-circle"></i>
+						Add Services
+					</a>
+					<div class="space space-4"></div>
+
+					<!-- Services -->
+					<div class="table-header">Results for Service package prices</div>
+					<table id="s-treatments"
+						class="table table-striped table-bordered table-hover">
+						<thead>
+							<tr>								
+								<td>Hmo Add PackageServices</td>
+								<th>Period</th>
+								<th>Spending Limit</th>
+								<!-- <th>Listed date</th> -->
+								<th><i class="glyphicon glyphicon-asterisk"></i></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="s : ${hmoPackage.hmoAddPackageServices}">
+								<td th:text="${s.hmoPckSubservice.subserviceName}"></td>
+								<td th:text="${s.period}"></td>
+								<td th:text="${s.spendingLimit}"></td>
+							<!-- <td
+									th:text="${ #dates.format(s.createdDate, 'MMM dd, yyyy HH:mm a')}"></td> -->
+								<td></td>
+							</tr>
+						</tbody>
+					</table>
+					<!-- /.Services -->
+				</div>			
+				
+				
+				<div id="treatments" class="tab-pane in active">
+					<!-- Treatments -->
+
+					<a href="" class="btn btn-danger btn-xs"> <i
+						class="fa fa-plus-circle"></i> Add treatment
+					</a>
+					<div class="space space-4"></div>
+
+					<div class="table-header">Results for package ailment prices</div>
+					<table id="t-treatments"
+						class="table table-striped table-bordered table-hover">
+						<thead>
+							<tr>
+								<th>Ailment</th>
+								<th>Price</th>
+								<th>Listed date</th>
+								<th><i class="glyphicon glyphicon-asterisk"></i></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="a : ${hmoPackage.packageAilments}">
+								<td th:text="${a.ailment.name}"></td>
+								<td th:text="${a.price}"></td>
+								<td
+									th:text="${ #dates.format(a.createdDate, 'MMM dd, yyyy HH:mm a')}"></td>
+								<td></td>
+							</tr>
+						</tbody>
+					</table>
+					<!-- /.Treatments -->
+				</div>
+				
+				
+				<div id="drugs" class="tab-pane">
+					<a href="#drugs-form-modal" data-toggle="modal" 					
+						class="btn btn-danger btn-xs"> <i class="fa fa-plus-circle"></i>
+						Add drug
+					</a>
+					<div class="space space-4"></div>
+
+					<!-- Drugs -->
+					<div class="table-header">Results for package drug prices</div>
+					<table id="t-drugs"
+						class="table table-striped table-bordered table-hover">
+						<thead>
+							<tr>
+								<th>Drug</th>
+								<th>Price</th>
+								<th>Listed date</th>
+								<th><i class="glyphicon glyphicon-asterisk"></i></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="d : ${hmoPackage.packageDrugs}">
+								<td th:text="${d.drug.name}"></td>
+								<td th:text="${d.price}"></td>
+								<td th:text="${ #dates.format(d.createdDate, 'MMM dd, yyyy HH:mm')}"></td>
+								<td></td>
+							</tr>
+						</tbody>
+					</table>
+					<!-- /.Drugs -->
+				</div>
+				
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<!-- Modal Form for Services -->
+
+<!-- Transfer form modal -->
+<div class="modal fade" id="services-form-modal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- Modal heading -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Add Services to Package</h4>
+			</div>
+			<!-- // Modal heading END -->
+			<!-- Modal body -->
+			<div class="modal-body">
+				<!-- Form -->
+				<form role="form" class="form-horizontal" method="POST"
+					th:action="@{/hmoaddpackageservice/add}" th:object="${hmoAddPackageServicesForm}">
+					<legend>Service Form</legend>
+					<div class="form-group">
+						<label for="hmoPckService" class="col-sm-3 control-label no-padding-right">Service Name:</label>
+						<div class="col-sm-9">
+							<select th:field="*{hmoPckService}" class="col-xs-10 col-sm-5" >
+								<option value="0">Select..</option>
+								<option th:each="c: ${hmoPckService}" th:value="${c.serviceId}"
+									th:text="${c.serviceName}"></option>
+							</select> 
+							<span class="text-danger" th:if="${#fields.hasErrors('hmoPckService')}"
+								th:errors="*{hmoPckService}"></span>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label for="hmoPckSubservice" class="col-sm-3 control-label no-padding-right">Hmo Subservice:</label>
+							<div class="col-sm-9">
+							
+								<select th:field="*{hmoPckSubservice}" id="sub" class="col-xs-10 col-sm-5">
+										<option value="0">Select</option>
+									</select> <span class="text-danger" th:if="${#fields.hasErrors('hmoPckSubservice')}"
+										th:errors="hmoPckSubservice"></span>
+						
+							</div>
+					</div>
+
+					<div class="form-group">
+						<label for="spendingLimit" class="col-sm-3 control-label no-padding-right">Spending Limit:</label>
+						<div class="col-sm-9">
+							<input type="text" class="col-xs-10 col-sm-5" placeholder="Spending Limit"
+								th:field="*{spendingLimit}" required="required" /> <span
+								class="text-danger" th:if="${#fields.hasErrors('spendingLimit')}"
+								th:errors="*{spendingLimit}"></span>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label for="cycle" class="col-sm-3 control-label no-padding-right">Cycle:</label>
+						<div class="col-sm-9">
+							<input type="text" class="col-xs-10 col-sm-5" placeholder="Cycle"
+								th:field="*{cycle}" required="required" /> <span
+								class="text-danger" th:if="${#fields.hasErrors('cycle')}"
+								th:errors="*{cycle}"></span>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label for="cycle" class="col-sm-3 control-label no-padding-right">Period:</label>
+						<div class="col-sm-9">
+							<input type="text" class="col-xs-10 col-sm-5" placeholder="Period"
+								th:field="*{period}" required="required" /> <span
+								class="text-danger" th:if="${#fields.hasErrors('period')}"
+								th:errors="*{period}"></span>
+						</div>
+					</div>
+					
+					
+					
+					
+
+					<div class="clearfix form-actions">
+						<div class="col-md-offset-3 col-md-9">
+						<input type="hidden" th:field="*{organisationHmoPackage}" />
+							<!-- <input type="hidden" th:field="*{packageId}" /> -->
+							<button class="btn btn-primary" type="submit">
+								<i class="ace-icon fa fa-check bigger-110"></i> Add
+							</button>
+
+							<button class="btn btn-danger" type="reset">
+								<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- /.Modal Form for Services -->
+
+
+
+
+
+
+
+
+
+<!-- Modal Form for drugs -->
+
+<!-- Transfer form modal -->
+<div class="modal fade" id="drugs-form-modal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- Modal heading -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Add Drug</h4>
+			</div>
+			<!-- // Modal heading END -->
+			<!-- Modal body -->
+			<div class="modal-body">
+				<!-- Form -->
+				<form role="form" class="form-horizontal" method="POST"
+					th:action="@{/system/hmos/savedrug}" th:object="${dForm}">
+					<legend>Drug Form</legend>
+					
+					<div class="form-group">
+						<label for="name" class="col-sm-3 control-label no-padding-right">Drug:</label>
+						<div class="col-sm-9">
+							<select th:field="*{itemId}" class="col-xs-10 col-sm-5">
+								<option value="0">Select..</option>
+								<option th:each="c: ${drugs}" th:value="${c.id}"
+									th:text="${c.name}"></option>
+							</select> <span class="text-danger" th:if="${#fields.hasErrors('itemId')}"
+								th:errors="*{itemId}"></span>
+						</div>
+					</div>
+
+
+					<div class="form-group">
+						<label for="name" class="col-sm-3 control-label no-padding-right">Price:</label>
+						<div class="col-sm-9">
+							<input type="text" class="col-xs-10 col-sm-5" placeholder="price"
+								th:field="*{price}" required="required" /> <span
+								class="text-danger" th:if="${#fields.hasErrors('price')}"
+								th:errors="*{price}"></span>
+						</div>
+					</div>
+
+					<div class="clearfix form-actions">
+						<div class="col-md-offset-3 col-md-9">
+							<input type="hidden" th:field="*{packageId}" />
+							<button class="btn btn-primary" type="submit">
+								<i class="ace-icon fa fa-check bigger-110"></i> Add
+							</button>
+
+							<button class="btn btn-danger" type="reset">
+								<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- /.Modal Form for drugs -->
+
+
+<script th:inline="javascript">
+	//this is for GET
+	$(function() {
+		/* Lga Selector*/
+		$('#hmoPckService').change(
+				function(event) {
+					$.ajax({
+						type : "GET",
+						url : [[@{/utilities/servciesandsubservices/servicebysubservice/}]]
+								+ $('#hmoPckService').val(),
+						beforeSend : function() {
+							$.gritter.add({
+								title : "Progress...",
+								text : "Fetching allegries based on category",
+								time : 3000
+							});
+						},
+						success : function(html) {
+							$("#sub").html(html);
+							$.gritter.add({
+								title : "Success!",
+								text : "Allergy List fetched",
+								time : 4000,
+								class_name: 'gritter-success' 
+							});
+						},
+						error : function() {
+							$.gritter.add({
+								title : "Error!",
+								text : "Error fetching Allergy List",
+								time : 4000,
+								class_name: 'gritter-error'
+							});
+						}
+
+					});
+				});
+	});
+</script>
+
+
+<script>
+	jQuery(function($) {
+		var oTable1 = $('#t-treatments').dataTable({
+			bAutoWidth : false,
+			"aoColumns" : [ {
+				"bSortable" : true
+			}, null, null, {
+				"bSortable" : false
+			} ]
+
+		//,
+		//"sScrollY": "200px",
+		//"bPaginate": false,
+
+		//"sScrollX": "100%",
+		//"sScrollXInner": "120%",
+		//"bScrollCollapse": true,
+		//Note: if you are applying horizontal scrolling (sScrollX) on a ".table-bordered"
+		//you may want to wrap the table inside a "div.dataTables_borderWrap" element
+
+		//"iDisplayLength": 50
+		});
+
+	var oTable2 = $('#t-drugs').dataTable({
+		bAutoWidth : false,
+		"aoColumns" : [ {
+			"bSortable" : true
+		}, null, null, {
+			"bSortable" : false
+		} ]
+
+	//,
+	//"sScrollY": "200px",
+	//"bPaginate": false,
+
+	//"sScrollX": "100%",
+	//"sScrollXInner": "120%",
+	//"bScrollCollapse": true,
+	//Note: if you are applying horizontal scrolling (sScrollX) on a ".table-bordered"
+	//you may want to wrap the table inside a "div.dataTables_borderWrap" element
+
+	//"iDisplayLength": 50
+	});
+
+	var oTable3 = $('#s-treatments').dataTable({
+		bAutoWidth : false,
+		"aoColumns" : [ {
+			"bSortable" : true
+		}, null, null, {
+			"bSortable" : false
+		} ]
+
+	//,
+	//"sScrollY": "200px",
+	//"bPaginate": false,
+
+	//"sScrollX": "100%",
+	//"sScrollXInner": "120%",
+	//"bScrollCollapse": true,
+	//Note: if you are applying horizontal scrolling (sScrollX) on a ".table-bordered"
+	//you may want to wrap the table inside a "div.dataTables_borderWrap" element
+
+	//"iDisplayLength": 50
+	});
+
+});
+</script>

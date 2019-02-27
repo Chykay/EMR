@@ -1,0 +1,65 @@
+<div class="page-header">
+	<h1>
+		Edit <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			Edit an disease
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/admin}"><i
+			class="fa fa-home"></i> Admin Dashboard</a> <a class="btn btn-xs btn-primary"
+			th:href="@{/admin/medical/components/diseases}"><i class="fa fa-list"></i> All
+			Diseases</a> 
+			<a class="btn btn-xs btn-warning"
+			th:href="@{/admin/medical/components/diseases/view/{id} (id=${disease.id})}"><i class="fa fa-eye"></i> View disease</a>
+			<a class="btn btn-xs btn-danger"
+			th:href="@{/admin/medical/components/diseases/delete/{id} (id=${disease.id})}"><i class="fa fa-trash-o"></i> Delete disease</a>
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+
+		<form role="form" class="form-horizontal" method="POST"
+			th:object="${dForm}">
+			<legend>Disease Form</legend>
+			<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Name:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder="Disease Name"
+						th:field="*{name}" required="required" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('name')}"
+						th:errors="*{name}"></span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="description" class="col-sm-3 control-label no-padding-right">Description:</label>
+				<div class="col-sm-9">
+					<textarea class="col-xs-10 col-sm-5" placeholder="Disease Description"
+						th:field="*{description}"></textarea> <span
+						class="text-danger" th:if="${#fields.hasErrors('description')}"
+						th:errors="*{description}"></span>
+				</div>
+			</div>
+
+			<div class="clearfix form-actions">
+				<div class="col-md-offset-3 col-md-9">
+					<input type="hidden" th:field="*{id}" />
+					<button class="btn btn-primary" type="submit">
+						<i class="ace-icon fa fa-check bigger-110"></i> Update
+					</button>
+
+					<button class="btn btn-danger" type="reset">
+						<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>

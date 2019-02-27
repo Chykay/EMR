@@ -1,0 +1,496 @@
+<div class="page-header">
+	<h1>
+		Add <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			Edit a patient profile
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-primary" th:href="@{/patients/index/all}"><i
+			class="fa fa-list"></i> All Patients</a>
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+
+		<form role="form" class="form-horizontal" method="POST"
+			th:object="${pForm}">
+			<legend>Patient Profile Form</legend>
+
+			
+			<div class="form-group">
+				<label for="patient code" class="col-sm-3 control-label no-padding-right">Patient Code:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder="" readonly="readonly"
+						th:field="*{patientcode}"  /> <span
+						class="text-danger" th:if="${#fields.hasErrors('patientcode')}"
+						th:errors="*{patientcode}"></span>
+				</div>
+			</div> 
+
+
+
+
+			<div class="form-group">
+				<label for="patient code" class="col-sm-3 control-label no-padding-right">File No:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder=""
+						th:field="*{patientfileno}"  /> <span
+						class="text-danger" th:if="${#fields.hasErrors('patientfileno')}"
+						th:errors="*{patientfileno}"></span>
+				</div>
+			</div> 
+			
+	
+			<div class="form-group">
+				<label for="patient code" class="col-sm-3 control-label no-padding-right">BVN Id:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder=""
+						th:field="*{patientbvn}"  /> <span
+						class="text-danger" th:if="${#fields.hasErrors('patientbvn')}"
+						th:errors="*{patientbvn}"></span>
+				</div>
+			</div> 
+				
+			<div class="form-group">
+				<label for="patient code" class="col-sm-3 control-label no-padding-right">National Id:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder=""
+						th:field="*{patientnid}"  /> <span
+						class="text-danger" th:if="${#fields.hasErrors('patientnid')}"
+						th:errors="*{patientnid}"></span>
+				</div>
+			</div> 
+				
+			<div class="form-group">
+				<label for="patient code" class="col-sm-3 control-label no-padding-right">Passport No:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder=""
+						th:field="*{patientpid}"  /> <span
+						class="text-danger" th:if="${#fields.hasErrors('patientpid')}"
+						th:errors="*{patientpid}"></span>
+				</div>
+			</div> 
+			
+
+			<div class="form-group">
+				<label for="title" class="col-sm-3 control-label no-padding-right">Title:</label>
+				<div class="col-sm-9">
+					<select th:field="*{titleId}" class="col-xs-10 col-sm-5">
+						<option value="0">Select..</option>
+						<option th:each="t: ${titles}" th:value="${t.id}"
+							th:text="${t.acronym}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('titleId')}"
+						th:errors="*{titleId}"></span>
+				</div>
+			</div>
+
+			<!-- <div class="form-group">
+				<label for="patient code" class="col-sm-3 control-label no-padding-right">Patient Code:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder=""
+						th:field="*{patient_code}" readonly = "readonly" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('patient_code')}"
+						th:errors="*{patient_code}"></span>
+				</div>
+			</div> -->
+			<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-3 no-padding-right"
+								for="date-picker">Start Date:</label>
+
+							<div class="col-xs-12 col-sm-9">
+								<div class="clearfix">
+
+									<input type="text" class="col-xs-12 col-sm-3 date-picker"
+										id="date-picker" th:field="*{startdate}"
+										data-date-format="yyyy-mm-dd" />
+										
+										<span class="text-danger"
+										th:if="${#fields.hasErrors('startdate')}" th:errors="startdate"></span>
+
+								</div>
+							</div>
+				</div>
+			
+			<div class="form-group">
+				<label for="surname" class="col-sm-3 control-label no-padding-right">Last Name:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder="Surname"
+						th:field="*{surname}" required="required" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('surname')}"
+						th:errors="*{surname}"></span>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="firstName" class="col-sm-3 control-label no-padding-right">First Name:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder="First Name"
+						th:field="*{firstName}" required="required" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('firstName')}"
+						th:errors="*{firstName}"></span>
+				</div>
+			</div>	
+
+			<div class="form-group">
+				<label for="othernames"
+					class="col-sm-3 control-label no-padding-right">Other Names:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5"
+						placeholder="Othernames" th:field="*{othernames}"
+						 /> <span class="text-danger"
+						th:if="${#fields.hasErrors('othernames')}"
+						th:errors="*{othernames}"></span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="gender" class="col-sm-3 control-label no-padding-right">Gender:</label>
+				<div class="col-sm-9">
+					<select th:field="*{genderId}" class="col-xs-10 col-sm-5">
+						<option value="0">Select..</option>
+						<option th:each="g: ${genders}" th:value="${g.id}"
+							th:text="${g.type}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('genderId')}"
+						th:errors="*{genderId}"></span>
+				</div>
+			</div>
+
+		<div class="form-group">
+				<label for="maritalstatus" class="col-sm-3 control-label no-padding-right">Marital Status</label>
+				<div class="col-sm-9">
+					<select th:field="*{maritalstatusId}" class="col-xs-10 col-sm-5">
+						<option value="0">Select..</option>
+						<option th:each="m: ${maritalstat}" th:value="${m.id}"
+							th:text="${m.status}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('maritalstatusId')}"
+						th:errors="*{maritalstatusId}"></span>
+				</div>
+			</div>
+			
+			
+			<div class="form-group">
+				<label for="language" class="col-sm-3 control-label no-padding-right">Preferred Language:</label>
+				<div class="col-sm-9">
+					<select th:field="*{languageId}" class="col-xs-10 col-sm-5">
+						<option value="0">Select..</option>
+						<option th:each="l: ${language}" th:value="${l.language_id}"
+							th:text="${l.name}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('languageId')}"
+						th:errors="*{languageId}"></span>
+				</div>
+			</div>
+			
+			
+	 
+
+
+
+				<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-3 no-padding-right"
+								for="manufacturedate">Date of Birth:</label>
+
+							<div class="col-xs-12 col-sm-9">
+								<div class="clearfix">
+
+									<input type="text" class="col-xs-12 col-sm-3 date-picker"
+										id="date-picker" th:field="*{dob}"
+										data-date-format="yyyy-mm-dd" /> <span class="text-danger"
+										th:if="${#fields.hasErrors('dob')}" th:errors="dob"></span>
+
+								</div>
+							</div>
+				</div>
+
+				
+			<div class="form-group">
+				<label for="occupation" class="col-sm-3 control-label no-padding-right">Occupation:</label>
+				<div class="col-sm-9">
+					<select th:field="*{occupationId}" class="col-xs-10 col-sm-5">
+						<option value="0">Select..</option>
+						<option th:each="o: ${occupation}" th:value="${o.occupation_id}"
+							th:text="${o.name}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('occupationId')}"
+						th:errors="*{occupationId}"></span>
+				</div>
+			</div>
+
+
+			<div class="form-group">
+				<label for="email" class="col-sm-3 control-label no-padding-right">Email Address:</label>
+				<div class="col-sm-9">    
+					<input type="text" class="col-xs-10 col-sm-5" placeholder="Email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+						th:field="*{email}" /> <span class="text-danger"
+						th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+				</div>
+			</div>
+
+ 
+
+<!-- 
+			<div class="form-group">
+				<label for="address" class="col-sm-3 control-label no-padding-right">Home Address:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder="Address"
+						th:field="*{address}" /> <span class="text-danger"
+						th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></span>
+				</div>
+			</div>
+ -->
+ 
+   
+			<div class="form-group">
+				<label for="State" class="col-sm-3 control-label no-padding-right">Country:</label>
+				<div class="col-sm-9">
+					<select class="col-xs-10 col-sm-5" th:field="*{countryCode}" required="required">
+						<option value="">Select..</option>
+						<option th:each="s : ${countries}" th:value="${s.countryCode}"
+							th:text="${s.countryName}"></option>
+					</select> 
+					<span class="text-danger" th:if="${#fields.hasErrors('countryCode')}"
+						th:errors="*{countryCode}">
+					</span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="State" class="col-sm-3 control-label no-padding-right">State:</label>
+				<div class="col-sm-9">
+					<select class="col-xs-10 col-sm-5" th:field="*{stateCode}">
+						<option value="0">Select..</option>
+						<option th:each="s : ${states}" th:value="${s.stateCode}"
+							th:text="${s.stateName}"></option>
+					</select> 
+					<span class="text-danger" th:if="${#fields.hasErrors('stateCode')}"
+						th:errors="*{stateCode}">
+					</span>
+				</div>
+			</div>
+
+	
+
+			<div class="form-group">
+				<label for="LGA" class="col-sm-3 control-label no-padding-right">LGA:</label>
+					<div class="col-sm-9">
+						<select th:field="*{lgaCode}"  class="col-xs-10 col-sm-5">
+										<option value="0">Select</option>
+										
+											<option th:each="l : ${lgas}" th:value="${l.localGovernmentAreasCode}"
+							th:text="${l.localGovernmentAreasName}"></option>
+									</select> <span class="text-danger" th:if="${#fields.hasErrors('lgaCode')}"
+										th:errors="lgaCode"></span>
+										
+										
+				</div>
+			</div>
+
+         <!-- 
+			<div class="form-group">
+				<label for="homeNumber"
+					class="col-sm-3 control-label no-padding-right">Mobile Number 1
+					:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5"
+						placeholder="Home Number" th:field="*{homeNumber}" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('homeNumber')}"
+						th:errors="*{homeNumber}"></span>
+				</div>
+			</div>  -->
+
+			<!-- <div class="form-group">
+				<label for="phoneNumber"
+					class="col-sm-3 control-label no-padding-right">Mobile Number 2:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5"
+						placeholder="Phone Number" th:field="*{phoneNumber}" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('phoneNumber')}"
+						th:errors="*{phoneNumber}"></span>
+				</div>
+			</div> -->
+			
+			
+
+			<div class="form-group">
+				<label for="height" class="col-sm-3 control-label no-padding-right">Height(in feet):</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder=""  oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"
+						th:field="*{height}" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('height')}"
+						th:errors="*{height}"></span>
+				</div>
+			</div>
+			 
+			<div class="form-group">
+				<label for="bldgrp" class="col-sm-3 control-label no-padding-right">Select Blood Group:</label>
+				<div class="col-sm-9">
+					<select th:field="*{bldgrpId}" class="col-xs-10 col-sm-5">
+						<option value="0">Select...</option>
+						<option th:each="bg: ${bloodgroup}" th:value="${bg.bloodgroup_id}"
+							th:text="${bg.name}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('bldgrpId')}"
+			th:errors="*{bldgrpId}"></span>
+				</div>
+			</div>
+			
+			
+				<div class="form-group">
+				<label for="genotype" class="col-sm-3 control-label no-padding-right">Select Genotype:</label>
+				<div class="col-sm-9">
+					<select th:field="*{genotypeId}" class="col-xs-10 col-sm-5">
+						<option value="0">Select...</option>
+						<option th:each="gen: ${bloodgenotype}" th:value="${gen.bloodgenotype_id}"
+							th:text="${gen.name}"></option>
+					</select><span class="text-danger" th:if="${#fields.hasErrors('genotypeId')}"
+			th:errors="*{genotypeId}"></span>
+				</div>
+			</div>
+			
+<div class="form-group">
+				<label for="lifeStatus" class="col-sm-3 control-label no-padding-right">Life Status:</label>
+				<div class="col-sm-9">
+				<select th:field="*{lifestatusId}" class="col-xs-10 col-sm-5">
+						<!-- <option value="0">Select..</option>  -->
+						<option th:each="ls: ${lifestatus}" th:value="${ls.lifestatus_id}"
+							th:text="${ls.name}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('lifestatusId')}"
+						th:errors="*{lifestatusId}"></span>
+				</div>
+			</div>
+
+
+				<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-3 no-padding-right"
+								for="date-picker">Status Date:</label>
+
+							<div class="col-xs-12 col-sm-9">
+								<div class="clearfix">
+
+									<input type="text" class="col-xs-12 col-sm-3 date-picker"
+										id="date-picker" th:field="*{statusdate}"
+										data-date-format="yyyy-mm-dd" />
+										
+										<span class="text-danger"
+										th:if="${#fields.hasErrors('statusdate')}" th:errors="statusdate"></span>
+
+								</div>
+							</div>
+				</div>
+			
+			
+			
+
+
+			<div class="clearfix form-actions">
+				<div class="col-md-offset-3 col-md-9">
+					<input type="hidden" th:field="*{patientId}" />
+					<button class="btn btn-primary" type="submit">
+						<i class="ace-icon fa fa-check bigger-110"></i> Update
+					</button>
+
+					<button class="btn btn-danger" type="reset">
+						<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script>
+	$(function(){
+		/* DatePicker*/
+		$('.date-picker').datepicker({
+			autoclose : true,
+			format: 'yyyy-mm-dd',
+			todayHighlight : true
+		})//show datepicker when clicking on the icon
+		.next().on(ace.click_event, function() {
+			$(this).prev().focus();
+		});
+		
+	
+		$(".tooltips").tooltip({
+			animation : true
+		});
+	});
+	</script>
+<script>
+	//this is for GET
+	$(function() {
+		/* Lga Selector*/
+		$('#stateCode').change(
+				function(event) {
+					$.ajax({
+						type : "GET",
+						url: '/../' + window.location.pathname.split('/')[1] + '/utilities/statesandlgas/lgabystate/'
+								+ $('#stateCode').val(),
+						beforeSend : function() {
+							$.gritter.add({
+								title : "Progress...",
+								text : "Fetching LGAs",
+								time : 3000
+							});
+						},
+						success : function(html) {
+							$("#lgaCode").html(html);
+							$.gritter.add({
+								title : "Success!",
+								text : "LGAs fetched",
+								time : 4000
+							});
+						},
+						error : function() {
+							$.gritter.add({
+								title : "Error!",
+								text : "Error fetching LGAs",
+								time : 4000
+								
+							});
+						}
+
+					});
+				});
+	
+	
+		$('#countryCode').change(
+				function(event) {
+					$.ajax({
+						type : "GET",
+						url: '/../' + window.location.pathname.split('/')[1] + '/utilities/statesandlgas/statebycountry/'
+								+ $('#countryCode').val(),
+						beforeSend : function() {
+							$.gritter.add({
+								title : "Progress...",
+								text : "Fetching States",
+								time : 3000
+							});
+						},
+						success : function(html) {
+							$("#stateCode").html(html);
+							$.gritter.add({
+								title : "Success!",
+								text : "States fetched",
+								time : 4000
+							});
+						},
+						error : function() {
+							$.gritter.add({
+								title : "Error!",
+								text : "Error fetching LGAs",
+								time : 4000
+							});
+						}
+
+					});
+				});
+		
+	
+	
+	});
+</script>

@@ -1,0 +1,53 @@
+
+<div class="container">
+
+
+ <!--<button onclick="printDiv()">Print</button>-->
+
+  <a href="#" onclick="printDiv();">Print</a>
+
+   <a download="report.csv" href="#" onclick="return ExcellentExport.csv(this, 'printtable');">Export to CSV</a>
+    <br/>
+</div>
+
+
+
+<div class="container" id="printableArea">
+
+<div>
+  <span style="float: left;"> <img src="sw" alt="Company logo" height="100" width="100"></img> </span>
+<div style="padding-top: 25px">  <span style="float: left;">  <h3>DIVINE MEDICAL CENTER REPORT </h3>  </span></div>
+
+</div>
+<br></br>
+<br></br>
+
+<p><h3>Patient List from January 2018 to March 2018</h3></p>
+
+  <table class="table table-condensed" id="printtable">
+    <thead>
+      <tr>
+        <th>Firstname</th>
+        <th>Lastname</th>
+        <th>Email</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>John</td>
+        <td>Doe</td>
+        <td>john@example.com</td>
+      </tr>
+      <tr>
+        <td>Mary</td>
+        <td>Moe</td>
+        <td>mary@example.com</td>
+      </tr>
+      <tr>
+        <td>July</td>
+        <td>Dooley</td>
+        <td>july@example.com</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

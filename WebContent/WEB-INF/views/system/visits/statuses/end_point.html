@@ -1,0 +1,20 @@
+
+<div class="page-header">
+	<h1>Consultation End point</h1>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+		<p>
+			You are about to make <strong th:text="${status.type}">type</strong> a visit <strong>end point</strong>.
+			Are you sure?
+		</p>
+
+		<form role="form" method="POST" th:object="${dForm}">
+			<input type="hidden" th:field="*{id}" />
+			<button class="btn btn-danger" type="submit">
+				<i class="ace-icon fa fa-check bigger-110"></i> Yes
+			</button>
+			<a class="btn btn-primary" th:href="@{/system/visits/statuses}">No</a>
+		</form>
+	</div>
+</div>

@@ -1,0 +1,127 @@
+
+<div class="page-header">
+	<h1>
+		INVENTORY MANAGEMENT<small> <i
+			class="ace-icon fa fa-angle-double-right"></i> Order Confirmation
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard </a>
+	</div>
+</div>
+<p></p>
+
+<style>
+.table {
+	margin: auto;
+}
+
+#add_request {
+	display: inline-block;
+	margin-top: 5px;
+}
+
+#clone-globalItem {
+	display: none;
+}
+<!--
+-->
+</style>
+	<div class="well well-sm">
+		<ul>
+
+			<li>Date Of Order:&nbsp; <span class="text-danger"
+				th:text="${order_date}">Date Of Order</span>
+			</li>
+		</ul>
+	</div>
+
+
+<div class="modal-content">
+	<div class="modal-header no-padding">
+		<div class="table-header">
+			<button type="button" class="close" data-dismiss="modal"
+				aria-hidden="true">
+				<span class="white">&times;</span>
+			</button>
+			Order Details
+		</div>
+	</div>
+	<form role="form" th:action="@{/inventory/point/order/confirm_order}"
+		class="form-horizontal" method="POST">
+
+		<div class="modal-body no-padding">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Global Item:</th>
+						<th>Unit Of Measure:</th>
+						<th>Quantity Ordered:</th>
+						<th>Unit Price:</th>
+						<th>Total Price:</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<th:block th:if="${order!=null}">
+
+						<tr th:each="orderLine: ${order.orderLines}">
+							<td th:text=" ${orderLine.globalItem?.name}">Global Item</td>
+							<td th:text=" ${orderLine.globalUnitofMeasure?.searchname}">Unit
+								Of Measure</td>
+							<td th:text=" ${orderLine.quantity}">Quantity Ordered</td>
+							<td th:text=" ${orderLine.unitPrice}">Unit Price</td>
+							<td th:text=" ${orderLine.quantity * orderLine.unitPrice}">Total
+								Price</td>
+							<td><span th:text="${orderLine.status}" class="text-danger">Status</span></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td>Total Gross Price</td>
+							<td th:text=" ${order.totalPrice}">Total Gross Price</td>
+							<td></td>
+						</tr>
+					</th:block>
+
+				</tbody>
+			</table>
+		</div>
+
+		<div class="clearfix form-actions">
+			<div class="col-md-offset-3 col-md-9">
+				<button class="btn btn-primary" type="submit">
+					<i class="ace-icon fa fa-check bigger-110"></i> Confirm Order
+				</button>
+				<a class="btn btn-primary" data-rel="tooltip"
+					th:href="@{/inventory/point/order/edit}"><i
+					class="ace-icon fa fa-check bigger-110"></i>Edit Order</a> <a
+					class="btn btn-danger" data-rel="tooltip"
+					th:href="@{/inventory/point/order/new}"><i
+					class="ace-icon fa fa-check bigger-110"></i>Cancel Order</a>
+			</div>
+		</div>
+	</form>
+</div>
+<!-- /.modal-content -->
+
+<a id="modal_view" href="#modal-table" role="button" class="green"
+	data-toggle="modal"> </a>
+<script type="text/javascript">
+	//height
+	jQuery(function($) {
+		//$('#modal_view').click();
+	});
+</script>
+
+
+
+
+
+

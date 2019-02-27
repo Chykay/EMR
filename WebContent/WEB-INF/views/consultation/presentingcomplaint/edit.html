@@ -1,0 +1,138 @@
+<div class="page-header">
+	<h1>
+		Update <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			Edit CONSULTATION PRESENTING COMPLAINTS
+		</small>
+	</h1>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/presenting/listing/{cid}(cid=${con.id})}"
+			><i
+			class="fa fa-home"></i> Manage Presenting Complaints List</a> 
+			<!-- <a
+			class="btn btn-xs btn-primary" th:href="@{/visits/queue/2}"
+			><i
+			class="fa fa-list"></i>Presenting Complaints Queue</a>-->
+	</div>
+</div>
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<form role="form" class="form-horizontal" method="POST" 
+			th:object="${presentingcomplaint}">
+			<legend>PRESENTING COMPLAINTS Form</legend>
+	
+	
+	
+	<div class="form-group">
+	
+	<label for="date-timepicker1" class="col-sm-3 control-label no-padding-right">Complaint Date / Time </label>
+
+													
+	<div class="col-sm-5">
+	
+	<div class="input-group" >
+	<input  type="text" id="datetimepicker1" class="form-control" th:field="*{duedate}"  required="required"/>
+	
+	<span class="input-group-addon">
+	<i class="fa fa-clock-o bigger-110"></i>
+	</span>
+	
+	</div>
+	
+	
+	<span class="text-danger" th:if="${#fields.hasErrors('duedate')}" th:errors="duedate"></span>
+	</div>
+
+		</div>
+	
+	
+	
+					<div class="form-group">
+				<label for="description" class="col-sm-3 control-label no-padding-right">Description:</label>
+			<div class="col-sm-8">
+			<textarea  class="col-xs-10 col-sm-8"
+ 					 placeholder="" th:field="*{description}" required="required" rows="8" cols="50"> </textarea>
+			
+							<span class="text-danger"
+								th:if="${#fields.hasErrors('description')}"
+								th:errors="*{description}"></span>
+								
+						</div>
+						
+					</div>
+
+
+	
+
+			<div class="clearfix form-actions">
+				<div class="col-md-offset-3 col-md-9">
+					 <!-- <input type="hidden" th:field="*{visit_id}" /> -->
+					<button class="btn btn-primary" type="submit">
+						<i class="ace-icon fa fa-check bigger-110"></i> Update
+					</button>
+
+					<button class="btn btn-danger" type="reset">
+						<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+					</button> 
+				</div>
+			</div> 
+			
+			
+
+
+		</form>
+	</div>
+</div>
+
+
+<!-- 
+<script>
+	//this is for GET
+	$(function() {
+		/* Lga Selector*/
+		$('#st').change(
+				function(event) {
+					$.ajax({
+						type : "GET",
+						url : "/EMR/utilities/statesandlgas/lgabystate/"
+							+ $('#st').val(),
+						beforeSend : function() {
+							/* $.gritter.add({
+								title : "Progress...",
+								text : "Fetching LGAs",
+								time : 3000
+							}); */
+						},
+						success : function(html) {
+							$("#lg").html(html);
+							/* $.gritter.add({
+								title : "Success!",
+								text : "LGAs fetched",
+								time : 4000
+							}); */
+						},
+						error : function() {
+						/* 	$.gritter.add({
+								title : "Error!",
+								text : "Error fetching LGAs",
+								time : 4000
+							}); */
+						}
+
+					});
+				});
+	});
+</script> -->
+<script type="text/javascript">
+     $(function () {
+         $('#datetimepicker1').datetimepicker({
+			autoclose : true,
+			format: 'YYYY-MM-DD HH:mm',
+			todayHighlight : true
+		});
+     });
+ </script>

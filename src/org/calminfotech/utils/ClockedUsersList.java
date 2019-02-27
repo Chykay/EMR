@@ -1,0 +1,71 @@
+package org.calminfotech.utils;
+
+import java.util.Date;
+import java.util.List;
+
+import org.calminfotech.hrunit.models.ClockAssignment;
+import org.calminfotech.user.utils.UserIdentity;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+@Transactional
+public class ClockedUsersList {
+
+	@Autowired
+	private SessionFactory sessionFactory;
+
+	@Autowired
+	private UserIdentity userIdentity;
+
+	public List<ClockAssignment> fetchAll() {
+		List list = this.sessionFactory.getCurrentSession()
+				.createQuery("FROM ClockAssignment where organisation_id=?")
+				.setParameter(0, userIdentity.getOrganisation().getId()).list();
+		return list;
+	}
+
+	public List<ClockAssignment> fetchAllByUnit(int unitid) {
+		Date dt = new Date(System.currentTimeMillis());
+		List list = this.sessionFactory
+				.getCurrentSession()
+				.createQuery(
+						"FROM ClockAssignment where organisation_id=? and hrunit.categoryId = ? and clockInTime <= ? and expClockOutTime >= ?")
+				.setParameter(0, userIdentity.getOrganisation().getId())
+				.setParameter(1, unitid).setParameter(2, dt)
+				.setParameter(3, dt).list();
+		System.out.print("9999");
+		System.out.print(list.size());
+		System.out.print("9999");
+
+		return list;
+	}
+
+	public List<ClockAssignment> fetchAllByPoint(int pointid) {
+		List list = this.sessionFactory
+				.getCurrentSession()
+				.createQuery(
+						"FROM ClockAssignment as c where organisation_id=? and c.hrunit.point.id = ? and user_id =? ")
+				.setParameter(0, userIdentity.getOrganisation().getId())
+				.setParameter(1, pointid)
+				.setParameter(2, userIdentity.getUserId()).list();
+		System.out.print("new9999");
+		System.out.print(list.size());
+		System.out.print("new9999");
+
+		return list;
+	}
+
+	public ClockAssignment getUserAssignmentById(int id) {
+		List list = this.sessionFactory.getCurrentSession()
+				.createQuery("FROM ClockAssignment WHERE id = ?")
+				.setParameter(0, id).list();
+
+		if (list.size() > 0)
+			return (ClockAssignment) list.get(0);
+		return null;
+	}
+
+}

@@ -1,0 +1,169 @@
+<div class="page-header">
+	<h1>
+		Add <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			Create a patient profile
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-primary" th:href="@{/customers/patients}"><i
+			class="fa fa-list"></i> All Patients</a>
+	</div>
+</div>
+<!-- 
+<div id="login-box" class="login-box visible widget-box no-border">
+	<div class="widget-body">
+		<div class="widget-main">
+			<h4 class="header blue lighter bigger">
+				<i class="ace-icon fa fa-coffee green"></i> Please Clock-In
+			</h4>
+
+			<div class="space-6"></div> -->
+			
+			<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+			
+			
+			<form role="form" 
+				th:object="${clockingForm}" th:method="post">
+				
+				
+						<legend> Please Clock In</legend>
+				
+				<div class="form-group">
+				<label for="title" class="col-sm-3 control-label no-padding-right">UserName:</label>
+				<div class="col-sm-9">
+					<input
+							type="email" class="form-control" th:field="*{username}"
+							placeholder="Enter Username" /> <i class="ace-icon fa fa-user"></i>
+							<span class="text-danger" th:if="${#fields.hasErrors('username')}"
+							th:errors="*{username}"></span>
+				</div>
+			</div>
+			
+
+					
+					<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-3 no-padding-right"
+								for="manufacturedate">Clock-Out Time:</label>
+
+							<div class="col-xs-12 col-sm-9">
+								<div class="clearfix">
+						<input type="text" class="form-control col-xs-12 col-sm-3 date-timepicker1"
+										id="date-timepicker1" placeholder="Select clock out time" th:field="*{clock_out_time}"
+										 /> <span class="input-group-addon"
+										th:if="${#fields.hasErrors('clock_out_time')}" th:errors="clock_out_time">	<i class="fa fa-clock-o bigger-110"></i></span>
+				
+					<!-- /.username ends -->
+					</div></div>
+					
+					
+					<div class="form-group">
+				<label for="title" class="control-label col-xs-12 col-sm-3 no-padding-right">Clock-In Section:</label>
+				<div class="col-xs-12 col-sm-9">
+					<select th:field="*{loginSectionId}" class="col-xs-10 col-sm-5">
+						<option value="0">Select..</option>
+						<option th:each="t: ${section}" th:value="${t.id}"
+							th:text="${t.session_name}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('loginSectionId')}"
+						th:errors="*{loginSectionId}"></span>
+				</div>
+			</div>
+					
+					<div class="form-group">
+				<label for="LGA" class="col-sm-3 control-label no-padding-right">Login Point:</label>
+				<div class="col-sm-9">
+							
+						<select th:field="*{loginSectionPointId}" id="lp" class="col-xs-10 col-sm-5">
+										<option value="0">Select</option>
+									</select> <span class="text-danger" th:if="${#fields.hasErrors('loginSectionPointId')}"
+										th:errors="loginSectionPointId"></span>
+						
+				</div>
+			</div>
+					
+					
+					
+					</div>
+				
+					
+					<div class="space"></div>
+
+					<div class="clearfix">
+						
+
+						<button type="submit"
+							class="width-35 pull-right btn btn-sm btn-primary">
+							<i class="ace-icon fa fa-key"></i> <span class="bigger-110">Clock-In</span>
+						</button>
+					</div>
+
+					<div class="space-4"></div>
+				
+			</form>
+
+			
+		</div>
+		<!-- /.widget-main -->
+
+
+
+	</div>
+	<!-- /.widget-body -->
+
+
+
+<script type="text/javascript">
+	$(function($) {
+		$(document).on('click', '.toolbar a[data-target]', function(e) {
+			e.preventDefault();
+			var target = $(this).data('target');
+			$('.widget-box.visible').removeClass('visible');//hide others
+			$(target).addClass('visible');//show target
+		});
+	});
+</script>
+
+
+
+<script>
+	//this is for GET
+	$(function() {
+		/* Lga Selector*/
+		$('#loginSectionId').change(
+				function(event) {
+					$.ajax({
+						type : "GET",
+						url : "../../utilities/section/pointbysection/"
+								+ $('#loginSectionId').val(),
+						beforeSend : function() {
+							$.gritter.add({
+								title : "Progress...",
+								text : "Fetching Login Points",
+								time : 3000
+							});
+						},
+						success : function(html) {
+							$("#lp").html(html);
+							$.gritter.add({
+								title : "Success!",
+								text : "Login Points fetched",
+								time : 4000
+							});
+						},
+						error : function() {
+							$.gritter.add({
+								title : "Error!",
+								text : "Error fetching Login Points",
+								time : 4000
+							});
+						}
+
+					});
+				});
+	});
+</script>

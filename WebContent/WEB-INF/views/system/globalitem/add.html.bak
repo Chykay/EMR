@@ -1,0 +1,191 @@
+<div class="page-header">
+	<h1>
+		Add <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			Add an Item
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-primary" th:href="@{/system/globalitem/index}"><i
+			class="fa fa-list"></i> Recent Global Items </a>
+			<a
+			class="btn btn-xs btn-primary" th:href="@{/system/globalitem/index/all}"><i
+			class="fa fa-list"></i>View All Global Item </a>
+			
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+
+		<form role="form" class="form-horizontal" method="POST"
+			th:object="${GlobalItemForm}">
+			<legend>Global Item  Form</legend>
+
+
+			
+			
+		 	<div class="form-group">
+				<label for="gender" class="col-sm-3 control-label no-padding-right"> Item Type:</label>
+				<div class="col-sm-9">
+					<select th:field="*{globaltypeId}" class="col-xs-10 col-sm-5"  required="required" id="typeId">
+						<option value="">Select..</option>
+						<option th:each="g: ${globalItemType}" th:value="${g.globalitemTypeId}"
+							th:text="${g.globalitemtypename}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('globaltypeId')}"
+						th:errors="*{globaltypeId}"></span>
+				</div>
+			</div>
+			
+			
+		
+			
+			
+			
+			<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Item Kind:</label>
+				<div class="col-sm-9">
+					<select type="text" class="col-xs-10 col-sm-5"
+						placeholder="Item Kind" th:field="*{globalitemkindcode}" id="itemKindId"	required="required" >
+						<option value="">Select..</option>
+						
+					<!-- 	<option th:each="c: ${categories}" th:value="${c.categoryId}" th:text="${c.categoryName}"></option>-->
+					</select> 
+					<span class="text-danger"
+						th:if="${#fields.hasErrors('globalitemkindcode')}"
+						th:errors="*{globalitemkindcode}"></span>
+				</div>
+			</div>
+			
+			
+			<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Item Category:</label>
+				<div class="col-sm-9">
+					<select type="text" class="col-xs-10 col-sm-5"
+						placeholder="Parent Category" th:field="*{itemCategoryId}" id="itemCategoryId"	required="required" >
+						<option value="">Select..</option>
+						
+					<!-- 	<option th:each="c: ${categories}" th:value="${c.categoryId}" th:text="${c.categoryName}"></option>-->
+					</select> 
+					<span class="text-danger"
+						th:if="${#fields.hasErrors('itemCategoryId')}"
+						th:errors="*{itemCategoryId}"></span>
+				</div>
+			</div>
+			
+			
+				<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Item Name:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" 
+						th:field="*{GlobalitemName}" required="required" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('GlobalitemName')}"
+						th:errors="*{GlobalitemName}"></span>
+				</div>
+			</div>
+			
+				<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Item Code (Bar Code):</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" 
+						th:field="*{globalitemcode}"  /> <span
+						class="text-danger" th:if="${#fields.hasErrors('globalitemcode')}"
+						th:errors="*{globalitemcode}"></span>
+				</div>
+			</div>
+			
+			
+			<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">License No:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" 
+						th:field="*{licenseno}"  /> <span
+						class="text-danger" th:if="${#fields.hasErrors('licenseno')}"
+						th:errors="*{licenseno}"></span>
+				</div>
+			</div>
+			
+							<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Description:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" 
+						th:field="*{GlobalitemDescription}"  /> <span
+						class="text-danger" th:if="${#fields.hasErrors('GlobalitemDescription')}"
+						th:errors="*{GlobalitemDescription}"></span>
+				</div>
+			</div>
+
+	
+			<div class="clearfix form-actions">
+				<div class="col-md-offset-3 col-md-9">
+			
+					<button class="btn btn-primary" type="submit">
+						<i class="ace-icon fa fa-check bigger-110"></i> Add
+					</button>
+
+					<button class="btn btn-danger" type="reset">
+						<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<script> 
+
+$(function() {
+	/* Lga Selector*/
+	$('#typeId').change(
+			function(event) {
+//alert('change');
+				$.ajax({
+	type : "GET",
+
+	url : "/../' + window.location.pathname.split('/')[1] + '/system/globalitemcategory/fetchcategorybytype/"
+			+ $('#typeId').val(),
+	beforeSend : function() {
+		$.gritter.add({
+			title : "Progress...",
+			text : "Fetching Categories of global type",
+			time : 3000
+		});
+	},
+	success : function(html) {
+		
+		var  h= html.split("##");
+		
+		$('#itemCategoryId').html(h[0]);
+		$('#itemKindId').html(h[1]);
+		$.gritter.add({
+			title : "Success!",
+			text : "Categories fetched",
+			time : 4000
+		});
+	},
+	error : function() {
+		$.gritter.add({
+			title : "Error!",
+			text : "Error fetching Categories",
+			time : 4000
+		});
+	}
+
+});
+
+
+
+
+
+		});
+});
+
+
+
+</script>

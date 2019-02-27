@@ -1,0 +1,166 @@
+<div class="page-header">
+	<h1>
+		Edit <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			Edit a Bed Space
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-primary" th:href="@{/system/bed/index}"><i
+			class="fa fa-list"></i> Recent Bed  </a>
+			<a
+			class="btn btn-xs btn-primary" th:href="@{/system/bed/index/all}"><i
+			class="fa fa-list"></i>View All Bed  </a>
+			
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+
+		<form role="form" class="form-horizontal" method="POST"
+			th:object="${bedForm}">
+			<h2 th:inline="text">EDIT Bed  Form - [[${bed.beditem.GlobalitemName}]]</h2>
+
+
+			<!-- 
+			<div class="form-group" hidden="hidden">
+				<label for="gender" class="col-sm-3 control-label no-padding-right"> Bed  Space:</label>
+				<div class="col-sm-9">
+					<select th:field="*{bedroomId}" class="col-xs-10 col-sm-5"  required="required" id="bedroomId">
+			
+						<option value="">Select..</option>
+						<option th:each="g: ${bedroom}" th:value="${g.itemId}"
+							th:text="${g.GlobalitemName}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('bedroomId')}"
+						th:errors="*{bedroomId}"></span>
+				</div>
+			</div>
+			
+			 -->
+
+<div class="form-group" hidden="hidden">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Bed Name:</label>
+				<div class="col-sm-9">
+					<select type="text" class="col-xs-10 col-sm-5" 
+						placeholder="Bed Name" th:field="*{bedId}" id="parentCategoryId"	 >
+						<option value="">No Bed</option>
+						<option th:each="c: ${beds}" th:value="${c.itemId}" th:text="${c.GlobalitemName}"></option>
+					</select> <span class="text-dasnger"
+						th:if="${#fields.hasErrors('bedId')}"
+						th:errors="*{bedId}"></span>
+				</div>
+			</div>
+			
+			
+			<div class="form-group">
+				<label for="gender" class="col-sm-3 control-label no-padding-right"> Bed Room :</label>
+				<div class="col-sm-9">
+					<select th:field="*{parentCategoryId}" class="col-xs-10 col-sm-5"   id="categoryId">
+			
+						
+						<option value="">Select..</option>
+						<option th:each="g: ${bedroom}" th:value="${g.categoryId}"
+							th:text="${g.bedroomitem.GlobalitemName}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('parentCategoryId')}"
+						th:errors="*{parentCategoryId}"></span>
+				</div>
+			</div>
+			<!-- 
+			<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Bed Room:</label>
+				<div class="col-sm-9">
+					<select type="text" class="col-xs-10 col-sm-5"
+						placeholder="Parent Category" th:field="*{parentCategoryId}" id="bedCategoryId"	required="required" >
+						<option value="">Select..</option>
+						<option th:each="c: ${categories}" th:value="${c.categoryId}" th:text="${c.categoryName}"></option>
+					</select> 
+					<span class="text-danger"
+						th:if="${#fields.hasErrors('parentCategoryId')}"
+						th:errors="*{parentCategoryId}"></span>
+				</div>
+			</div>
+			 -->
+			
+			
+							<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Comment:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" 
+						th:field="*{bedDescription}"  /> <span
+						class="text-danger" th:if="${#fields.hasErrors('bedDescription')}"
+						th:errors="*{bedDescription}"></span>
+				</div>
+			</div>
+
+
+
+			<div class="clearfix form-actions">
+				<div class="col-md-offset-3 col-md-9">
+			
+					<button class="btn btn-primary" type="submit">
+						<i class="ace-icon fa fa-check bigger-110"></i> Update
+					</button>
+
+					<button class="btn btn-danger" type="reset">
+						<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<script> 
+
+$(function() {
+	/* Lga Selector*/
+	$('#typeId').change(
+			function(event) {
+//alert('change');
+				$.ajax({
+	type : "GET",
+
+	url : '/../'+ window.location.pathname.split('/')[1] + '/system/bedcategory/fetchcategorybytype/"
+			+ $('#typeId').val(),
+	beforeSend : function() {
+		$.gritter.add({
+			title : "Progress...",
+			text : "Fetching Ctegories of global type",
+			time : 3000
+		});
+	},
+	success : function(html) {
+		$('#bedCategoryId').html(html);
+		$.gritter.add({
+			title : "Success!",
+			text : "Categories fetched",
+			time : 4000
+		});
+	},
+	error : function() {
+		$.gritter.add({
+			title : "Error!",
+			text : "Error fetching Categories",
+			time : 4000
+		});
+	}
+
+});
+
+
+
+
+
+		});
+});
+
+
+
+</script>

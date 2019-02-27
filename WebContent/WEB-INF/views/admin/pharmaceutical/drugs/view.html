@@ -1,0 +1,45 @@
+<div class="page-header">
+	<h1>
+		View <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			View a Drug
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/admin}"><i
+			class="fa fa-home"></i> Admin Dashboard</a> <a
+			class="btn btn-xs btn-primary"
+			th:href="@{/admin/pharmaceutical/drugs}"><i
+			class="fa fa-list"></i> All Drugs</a> <a
+			class="btn btn-xs btn-warning"
+			th:href="@{/admin/pharmaceutical/drugs/edit/{id} (id=${drug.id})}"><i
+			class="fa fa-edit"></i> Edit drug</a> <a class="btn btn-xs btn-danger"
+			th:href="@{/admin/pharmaceutical/drugs/delete/{id} (id=${drug.id})}"><i
+			class="fa fa-trash-o"></i> Delete drug</a>
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<dl class="dl-horizontal">
+			<dt>Name:</dt>
+			<dd th:text="${drug.name}"></dd>
+			<dt>Classification:</dt>
+			<dd th:text="${drug.drugClassification.name}"></dd>
+			<dt>Description:</dt>
+			<dd
+				th:text="${drug.description == null || drug.description == ''} ? 'Not set': ${drug.description}"></dd>
+			<dt>Created date</dt>
+			<dd
+				th:text="${ #dates.format(drug.createdDate, 'MMM dd, yyyy HH:mm')}"></dd>
+			<dt>Last modified date</dt>
+			<dd
+				th:text="${drug.modifiedDate == null} ? 'Not modified yet!': ${ #dates.format(drug.modifiedDate, 'MMM dd, yyyy HH:mm')}"></dd>
+		</dl>
+	</div>
+</div>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+	<div th:fragment="content" class="col-md-6">
+		<h3>Role-Setup Delete</h3>
+
+		<div class="separator"></div>
+		<div class="widget">
+			<div class="widget-head">
+				<h4 class="heading">Delete Action Confirmation</h4>
+			</div>
+
+			<div class="widget-body ">
+				<p>
+					You are about to delete Role-Setup: <strong th:text="${role.roleName}">Name</strong>
+				</p>
+				Are you sure you want to proceed?
+
+			</div>
+			
+			<div class="widget-body">
+			<form role="form" method="POST" th:object="${role}"
+				th:action="@{/system/umgt/roles/delete}">
+				<input type="hidden" th:field="*{roleId}" /> <input type="submit"
+					th:name="@{'confirm'}" class="btn btn-danger" value="Yes" /> <a
+					class="btn btn-primary btn-sm" th:href="@{/system/umgt/roles}"> <i
+					class="fa fa-pencil fa-fw"></i> No
+				</a>
+			</form>
+			</div>
+
+		</div>
+	</div>
+</body>
+</html>

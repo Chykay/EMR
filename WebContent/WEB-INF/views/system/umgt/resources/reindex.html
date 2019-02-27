@@ -1,0 +1,17 @@
+<div class="page-header">
+	<h1>Rebuilding Resource index</h1>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+		<p>
+			You are about to rebuild the system resources. This means the current users permission will be cleared and the system will be closed to everyone asides the admin. Are you sure?
+		</p>
+
+		<form role="form" method="POST">
+			<button class="btn btn-danger" type="submit">
+				<i class="ace-icon fa fa-check bigger-110"></i> Yes
+			</button>
+			<a class="btn btn-primary" th:href="@{/system/umgt/resources/index}">No</a>
+		</form>
+	</div>
+</div>

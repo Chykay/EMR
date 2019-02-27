@@ -1,0 +1,393 @@
+
+<div class="page-header">
+	<h1>
+		INVENTORY MANAGEMENT<small> <i
+			class="ace-icon fa fa-angle-double-right"></i> Make Order 
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard </a>
+	</div>
+</div>
+<p></p>
+
+<style>
+.table {
+	margin: auto;
+}
+
+#add_request {
+	display: inline-block;
+	margin-top: 5px;
+}
+
+#clone-globalItem {
+	display: none;
+}
+<!--
+-->
+</style>
+
+<div class="col-xs-12">
+	<!-- View contents here -->
+	<form role="form" class="form-horizontal" method="POST"
+		th:object="${orderForm}">
+		<div class="col-md-offset-0 col-xs-9">
+			<table class="table" id="container">
+				<thead>
+					<tr>
+						<th class="text-danger">Global Item:</th>
+						<th class="text-danger">Unit Of Measure:</th>
+						<th class="text-danger">Quantity:</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody id="tbody-container">
+
+					<select id="clone-globalItem"
+						class="col-xs-10 col-sm-12 globalItem-prototype">
+						<option value="">Select..</option>
+						<option th:each="g : ${globalItemsList}" th:value="${g.id}"
+							th:text="${g.name}"></option>
+					</select>
+					<!--
+					<tr>
+						<td class="col-sm-4"><select
+							class="col-xs-10 col-sm-12 globalItem" th:field="*{globalItem1}">
+								<option value="">Select..</option>
+								<option th:each="g : ${globalItemsList}" th:value="${g.id}"
+									th:text="${g.name}"></option>
+						</select> <span class="text-danger"
+							th:if="${#fields.hasErrors('globalItem1')}"
+							th:errors="*{globalItem1}"> </span></td>
+						<td class="col-sm-4">
+							<div id="unit-of-measure-holder1">
+								<select class="col-xs-10 col-sm-12" th:field="*{unitOfMeasure1}">
+									<option value="">Select..</option>
+									<option th:each="u : ${unitOfMeasuresList1}" th:value="${u.id}"
+										th:text="${u.name}"></option>
+								</select>
+							</div> <span class="text-danger"
+							th:if="${#fields.hasErrors('unitOfMeasure1')}"
+							th:errors="*{unitOfMeasure1}"> </span>
+						</td>
+						<td class="col-sm-2"><input type="text"
+							class="col-xs-1 col-sm-6" placeholder="Enter Quantity"
+							th:field="*{qty1}" /> <span class="text-danger"
+							th:if="${#fields.hasErrors('qty1')}" th:errors="*{qty1}"></span></td>
+					</tr>
+					<tr>
+						<td class="col-sm-4"><select
+							class="col-xs-10 col-sm-12  globalItem" th:field="*{globalItem2}">
+								<option value="">Select..</option>
+								<option th:each="g : ${globalItemsList}" th:value="${g.id}"
+									th:text="${g.name}"></option>
+						</select> <span class="text-danger"
+							th:if="${#fields.hasErrors('globalItem2')}"
+							th:errors="*{globalItem2}"> </span></td>
+						<td class="col-sm-4">
+							<div id="unit-of-measure-holder2">
+								<select class="col-xs-10 col-sm-12" th:field="*{unitOfMeasure2}">
+									<option value="">Select..</option>
+									<option th:each="u : ${unitOfMeasuresList2}" th:value="${u.id}"
+										th:text="${u.name}"></option>
+								</select>
+							</div> <span class="text-danger"
+							th:if="${#fields.hasErrors('unitOfMeasure2')}"
+							th:errors="*{unitOfMeasure2}"> </span>
+						</td>
+						<td class="col-sm-4"><input type="text"
+							class="col-xs-1 col-sm-6" placeholder="Enter Quantity"
+							th:field="*{qty2}" /> <span class="text-danger"
+							th:if="${#fields.hasErrors('qty2')}" th:errors="*{qty2}"></span>
+						</td>
+						<td></td>
+					</tr>
+
+					<tr>
+						<td class="col-sm-4"><select
+							class="col-xs-10 col-sm-12  globalItem" th:field="*{globalItem3}">
+								<option value="">Select..</option>
+								<option th:each="g : ${globalItemsList}" th:value="${g.id}"
+									th:text="${g.name}"></option>
+						</select> <span class="text-danger"
+							th:if="${#fields.hasErrors('globalItem3')}"
+							th:errors="*{globalItem3}"> </span></td>
+						<td class="col-sm-4">
+							<div id="unit-of-measure-holder3">
+								<select class="col-xs-10 col-sm-12" th:field="*{unitOfMeasure3}">
+									<option value="">Select..</option>
+									<option th:each="u : ${unitOfMeasuresList3}" th:value="${u.id}"
+										th:text="${u.name}"></option>
+								</select>
+							</div> <span class="text-danger"
+							th:if="${#fields.hasErrors('unitOfMeasure3')}"
+							th:errors="*{unitOfMeasure3}"> </span>
+						</td>
+						<td class="col-sm-4"><input type="text"
+							class="col-xs-1 col-sm-6" placeholder="Enter Quantity"
+							th:field="*{qty3}" /> <span class="text-danger"
+							th:if="${#fields.hasErrors('qty3')}" th:errors="*{qty3}"></span>
+						</td>
+						<td></td>
+					</tr>
+-->
+				</tbody>
+			</table>
+			<div class="col-md-offset-0 col-md-9">
+				<a id="add_request" class="btn btn-xs btn-primary" href="#"><i
+					class="fa fa-plus-circle"></i>Add New Order</a>
+			</div>
+			<div class="hr hr-18 dotted hr-double"></div>
+			<div class="clearfix form-actions">
+				<div class="col-xs-12 col-md-offset-4 col-md-9">
+					<input type="hidden" th:field="*{id}" />
+					<button class="btn btn-primary" type="submit">
+						<i class="ace-icon fa fa-check bigger-110"></i> Submit
+					</button>
+				</div>
+			</div>
+		</div>
+
+	</form>
+</div>
+
+
+<script type="text/javascript">
+	/*<![CDATA[*/
+
+	var index;
+	var qualiPiSize = 4;
+	//height
+	$(document).ready(function() {
+
+		$('#add_request').click(function(event) {
+			addOrder();
+			return false;
+		});
+
+		$('#modal_view').click();
+
+		$('.date-picker').datepicker({
+			autoclose : true,
+			format : 'yyyy-mm-dd',
+			todayHighlight : true
+		});
+
+		$('.globalItem').change(function(event) {
+
+			$this = $(this);
+			load($this.val(),$this.attr('name'));
+		});
+
+	});
+	
+	
+	
+	function load(globalItem,name) {
+		var str = "globalItem";
+
+		index = name.substring(str.length, name.length);
+
+		if (globalItem != "") {
+
+			url = "../../item_unit_of_measure/" + globalItem
+
+			$.ajax({
+				url : url,
+				type : "GET",
+				contentType : "application/json; charset=utf-8",
+				async : true, //Cross-domain requests and dataType: "jsonp" requests do not support synchronous operation
+				cache : false, //This will force requested pages not to be cached by the browser          
+				// processData:false, //To avoid making query String instead of JSON
+				dataType : 'json',
+				success : function(data) {
+					//now json variable contains data in json format
+					//let's display a few items
+					// var json = $.parseJSON(data);
+					//now json variable contains data in json format
+					//let's display a few items
+					showGlobalItemUnitOfMeasureForm(data, index);
+
+				},
+				error : function(xhr, status) {
+				},
+				complete : function(xhr, status) {
+				}
+			});
+
+		} else {
+			showGlobalItemUnitOfMeasureForm("", index);
+		}
+	}
+
+	function showGlobalItemUnitOfMeasureForm(data, index) {
+
+		var disp = "";
+		var value = "";
+		var error = "";
+		var default_data = "";
+		if (data != undefined && data.length > 0) {
+			disp += '<select class="col-xs-10 col-sm-12" name="unitOfMeasure'+index+'"> <option value="">Select..</option>';
+
+			for ( var i = 0; i < data.length; ++i) {
+				if (data[i].error != undefined) {
+					error = data[i].error;
+				}
+				if (data[i].default_data != undefined) {
+					default_data = data[i].default_data;
+				}
+				disp += '<option value="' + data[i].id + '"';
+				if (default_data == data[i].id) {
+					disp += ' selected="selected"';
+				}
+				disp += '>' + data[i].name + '</option>';
+			}
+			disp += '</select>';
+
+		} else {
+			disp += '<select class="col-xs-10 col-sm-12" name="unitOfMeasure"> <option value="">Select..</option>';
+
+		}
+
+		$('#unit-of-measure-holder' + index).html(disp);
+
+	}
+
+	function addOrder(globalItem, unitOfMeasure,unitOfMeasureList, qty, itemErr) {
+
+		var obj = $('#container');
+
+		var build = "";
+		var $this;
+		var val;
+		var unitOfMeasureErr="";
+		var qtyErr="";
+
+		if (globalItem == undefined) {
+			globalItem = "";
+		}
+		if (unitOfMeasure == undefined) {
+			unitOfMeasure = "";
+		}
+		if (qty == undefined) {
+			qty = "";
+		}
+
+		if (itemErr == undefined) {
+			itemErr = "";
+		}
+		if (qty == -1) {
+			qtyErr = "Quantity is not a valid number";
+			qty="";
+		}
+		if (unitOfMeasure == -1) {
+			unitOfMeasureErr = "Field cannot not be empty";
+			unitOfMeasure="";
+		}
+
+		//institution
+		$('#clone-globalItem > option').each(function() {
+			$this = $(this);
+			val = $this.val();
+			build += '<option value="' + val + '"';
+			if (globalItem == val) {
+				build += ' selected="selected"';
+			}
+			build += '>' + $this.text() + '</option>';
+		});
+		globalItem = build;
+		build ="";
+		//unit of measure
+		if(unitOfMeasureList!=undefined ){
+		for ( var i = 0; i < unitOfMeasureList.length; ++i) {
+			build  += '<option value="' + unitOfMeasureList[i].id + '"';
+				if (unitOfMeasure == unitOfMeasureList[i].id) {
+					build += ' selected="selected"';
+				}
+				build += '>' + unitOfMeasureList[i].name + '</option>';
+		}
+		}else{
+			build= '<option value="">-select-</option>';
+		}
+		unitOfMeasure=build ;
+		build = "";
+		
+		var disp = '<tr id="request_'+qualiPiSize+'">'
+				+ '<td class="col-sm-4">'
+				+ '<select name="globalItem'
+				+ qualiPiSize
+				+ '" class="col-xs-10 col-sm-12 globalItem" onchange="load(this.value,this.name)">'
+				+ globalItem
+				+ '</select>'
+				+ '<br><span class="text-danger"> '
+				+ itemErr
+				+ '</span></td>'
+				+ '<td class="col-sm-4">'
+				+ '<div id="unit-of-measure-holder'+qualiPiSize+'"><select name="unitOfMeasure'+qualiPiSize+'" class="col-xs-10 col-sm-12">'
+				+ '<option value="">Select..</option>'
+				+ unitOfMeasure
+				+ '</select>'
+				+ '</div><br><span class="text-danger"> '
+				+ unitOfMeasureErr
+				+ '</span></td>'
+				+ '<td class="col-sm-4">'
+				+ '<input type="text" class="col-xs-1 col-sm-6" placeholder="Enter Quantity" name="qty'+qualiPiSize+'" value="'+qty+'"/>'
+				+ '<br><span class="text-danger"> ' + qtyErr + '</span></td>'
+				+ '<td class="col-sm-1"><a title="remove" class="ace-icon fa fa-trash-o bigger-120" href="#" onclick="removeOrder(' + qualiPiSize + ');'
+				+ 'return false;"></a></td></tr>';
+					
+		qualiPiSize++;
+
+		$(obj).append(disp);
+
+	}
+	
+	
+	function removeOrder(id){
+	    if (confirm("Are you sure you want to remove this record?")) {                      
+	        var id="request_"+id; 
+	       var row=document.getElementById(id);
+	        document.getElementById("tbody-container").removeChild(row);          
+	    }  
+	    
+	} 
+
+
+	
+  var data=new Array;
+	function buildObject(id,nme){
+	               var myObject={
+	        id:id,name:nme
+	    }
+	    data.push(myObject);
+	}
+	/*]]>*/
+</script>
+
+
+<th:block th:each=" order: ${orderForm.optionalOrders}">
+
+	<th:block th:each=" unitOfMeasure: ${order.unitOfMeasuresList}">
+		<script th:inline="javascript">
+        /*<![CDATA[*/     
+        buildObject([[${unitOfMeasure.id}]],[[${unitOfMeasure.name}]]);  
+     /*]]>*/
+   </script>
+	</th:block>
+
+	<script th:inline="javascript">
+        /*<![CDATA[*/
+       addOrder([[${order.globalItem}]],[[${order.unitOfMeasure}]],data,[[${order.qty}]],[[${order.prodErr}]]);     
+       data=new Array();
+
+        /*]]>*/
+   </script>
+
+</th:block>
+

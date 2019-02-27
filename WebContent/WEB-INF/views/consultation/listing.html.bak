@@ -1,0 +1,366 @@
+
+<div class="page-header">
+	<!-- <span><h3 class="widget-title" th:inline="text">Previous Consultation for: [[${visit.patient.title.acronym} + ' ' +
+							${visit.patient.surname} + ' ' + ${visit.patient.othernames}]] </h3></span>	 -->
+	
+</div>
+<div class="row">
+	<div class="col-xs-12">
+	<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<!-- <a
+			
+			class="btn btn-xl btn-danger" th:href="@{/consultation/clerknew/{vid}(vid=${vid})}"><i 
+			class="fa fa-list-alt"></i>Start New Consultation</a> 
+			 -->
+				<th:block th:if="${1 > consultationlistsize}" ><a
+			
+			class="btn btn-xl btn-danger"  data-toggle="modal"   th:attr="href='#consult-' + ${vid}"> <i 
+			class="fa fa-list-alt"></i>Start New Consultation</a> 
+			</th:block>
+		<!--  <a
+			
+			class="btn btn-xl btn-danger" th:href="@{/search/datetimer}"><i 
+			class="fa fa-list-alt"></i>Datetimer</a>  -->
+			<br></br>
+	<br></br>
+			<!-- class="btn btn-xl btn-danger" th:href="@{/consultations/clerknew/{vid}(vid=${vid}) }"><i  -->
+	</div>
+</div>
+
+
+<table id="dTable"
+									class="table table-striped table-bordered table-hover">
+							
+					<thead>
+										<tr>
+												<th>Consultation ID</th>
+											<th>Visit Code</th>
+										
+										<th>Patient Name</th>
+										<th>Doctor Name</th>
+									
+										<th>Consultation Date</th>
+										
+												<th><i class="glyphicon glyphicon-asterisk"></i></th>
+										</tr>
+									
+					</thead>
+				<tbody>
+				<tr th:each="v : ${consultationlist}">
+					<td th:text="${v.id}"></td>
+				<td th:text="${v.visit.code}"></td>
+				
+		<!-- 		<td th:text="${consultqueue.visit.patient.surname}+ ' ' +
+							${consultqueue.visit.patient.firstName} "></td> -->
+							
+				<td th:text="${v.visit.patient.title != null ? v.visit.patient.title.acronym + ' ' : '' }  +  ${v.visit.patient.surname} + ' ' + ${v.visit.patient.firstName}"> </td>					
+							
+						<td th:text="${v.user?.userProfile?.lastName + ' '+  v.user?.userProfile?.otherNames}"></td>		
+				<td
+						th:text="${v.effectivedate}">Listed
+						Date</td>
+						
+							
+												<td class="hidden-480">
+												
+	  <a th:href="@{/consultation/main/{cid}(cid=${v.id}) }" ><span class="label label-success arrowed-in arrowed-in-right">
+												  Consultation</span></a>
+									<button th:id="${v.id}"  onclick = "preview(this.id)"  class="btn btn-xs btn-success">Preview</button>
+							
+									
+			<a class="btn btn-danger btn-xs" data-toggle="modal"   title="Raise Bill"
+			    th:attr="href='#bill-'+${v.id}"> <i
+			class="ace-icon  fa fa-credit-card bigger-110"></i>Billing
+		</a>
+															</td>	
+															
+			
+			
+		<div class="modal fade" th:id=" ${'bill-'+v.id}">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- Modal heading -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Billing </h4>
+			</div>
+			<!-- // Modal heading END -->
+			<!-- Modal body -->
+			<div class="modal-body">
+	
+				
+				<form th:object="${vform}" 
+					th:action="@{/invoice/raiseinvoice}" method="post">
+					
+					
+		
+
+
+
+					 <div class="form-group">
+				<label for="billId" class="col-sm-12 col-xs-12 control-label no-padding-left">Select Bill Item:</label>
+				<div class="col-sm-9">
+							<select class="col-xs-10 col-sm-12" th:id="${'item-' + v.id}"  onchange="myFetchmeasure(this.id)"
+								th:field="*{globaitemid}" required="true" >
+								 <option value="">Select..</option>
+					<!-- <option th:text=" ${v.globalitem.GlobalitemName}" th:value="${v.globalitem.itemId}"
+									></option>-->
+							
+							 
+								<option th:each="g: ${globalitemlist}" th:value="${g.itemId}"
+									th:text="${g.GlobalitemName}"></option>
+							
+							
+							
+							</select>
+							
+							
+							 <span class="text-danger"		th:if="${#fields.hasErrors('globaitemid')}"
+								th:errors="*{globaitemid}"></span>
+						</div>
+					</div>
+
+
+
+
+	<div class="form-group">
+						<label for="userId" class="col-sm-12 col-xs-12 control-label no-padding-left">Select Measure:</label>
+						<div class="col-sm-12">
+						<select class="col-xs-12 col-sm-8" th:id="${'itemmeasure-' + v.id}" 
+								th:field="*{itemmeasureid}" required="true" >
+					
+								
+							</select>
+							
+							
+							 <span class="text-danger"		th:if="${#fields.hasErrors('itemmeasureid')}"
+								th:errors="*{itemmeasureid}"></span>
+						</div>
+					
+</div>
+
+<div class="form-group">
+  <label for="userId" class="col-sm-5 col-xs-12 control-label no-padding-left">Use HMO:</label>
+	<div class="col-xs-12 col-sm-8">
+	<input type="checkbox" 	name="usehmo" Checked="checked" />
+	<span class="text-danger" th:if="${#fields.hasErrors('usehmo')}"
+	th:errors="*{usehmo}">
+															</span>
+						</div>
+					
+</div>
+
+
+
+		
+						<div class="clearfix form-actions">
+	<br></br><br></br><br></br>
+		
+			<div hidden="hidden" >
+					<input type="text"   th:attr="value = ${v.visit.id}"  name="visitId" />
+				<input type="text"   th:attr="value = ${v.id}"  name="referenceid" />
+				<input type="text"   th:attr="value = ${v.visit.currentunit.categoryId}"  name="unitId" />
+				<input type="text"   value = "1"  name="qty" />
+				</div>
+		
+		
+							<div class="col-md-offset-5 col-md-9 " style="margin-top:15px">
+						<button type="submit" class="btn btn-primary btn-xs">
+							<i class=""></i> Raise Bill
+						</button>
+					</div>
+							</div>
+
+
+
+
+					</form>
+		
+		
+	
+		
+		
+		
+					<!-- /.Dropzone -->
+					<!-- /.col -->
+				</div>
+
+			<!-- Modal footer -->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-xs" data-dismiss="modal">Cancel</button>
+			</div>
+			<!-- // Modal footer END -->
+		</div>
+	</div>
+</div>
+			
+
+					
+			
+				
+													
+						
+			
+				 
+					</tr>
+					</tbody>
+				</table>
+
+	
+	</div>
+</div>
+
+
+<!-- /.Transfer form -->
+<div class="modal fade" th:id="${'consult-' + vid}" >
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- Modal heading -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Create Consultation</h4>
+			</div>
+			<!-- // Modal heading END -->
+			<!-- Modal body -->
+			<div class="modal-body">
+				<!-- Form -->
+			<!-- 	${map[__${entry.key}__]} -->
+			<!--  <form th:object="${v__${v.id}__}" -->	
+				<form th:object="${visitform}"
+					th:action="@{/consultation/clerknew/{vid}(vid=${vid})}" method="post">
+					
+					<input type="text" hidden="hidden"  th:attr="value = ${vid}"  name="vid"   />
+					
+					
+					<div class="form-group">
+	
+	<label for="date-timepicker1" class="control-label col-xs-12 col-sm-12 no-padding-right">Visit Date / Time </label>
+
+													
+	<div class="col-sm-8">
+	
+	<div class="input-group" >
+	<input  type="text"  class="form-control datetimepicker1" th:field="*{effectivedate}"  required="required"/>
+	
+	<span class="input-group-addon">
+	<i class="fa fa-clock-o bigger-110"></i>
+	</span>
+	
+	</div>
+	
+	
+	<span class="text-danger" th:if="${#fields.hasErrors('effectivedate')}" th:errors="effectivedate"></span>
+	</div>
+
+		</div>
+					
+					
+									
+					
+					
+					
+					
+					<div class="form-group">
+							<label for="Tels"
+								class="col-xs-12  col-sm-12 control-label no-padding-right">Comment Details:</label>
+							<div class="col-sm-12">
+	<!-- th:attr="value = ${v.done_comments}"  name="comment" -->						
+								<textarea type="text" class="col-xs-10 col-sm-12" rows="6" cols="50"  
+								   th:field="*{comment}"
+									   >  </textarea><span class="text-danger"
+									th:if="${#fields.hasErrors('comment')}"
+									th:errors="*{comment}"></span>
+							</div>
+							<!--  th:attr="value = ${v.done_comments}" -->
+						</div>
+					
+					
+					
+					
+				
+					<div class="clearfix form-actions">
+						<p></p>
+						
+						<button type="submit" class="btn btn-primary btn-xs">
+							<i class=""></i> Create
+						</button>
+					</div>
+				</form>
+				<!-- /Dform -->
+			</div>
+			<!-- // Modal body END -->
+
+			<!-- Modal footer -->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-xs" data-dismiss="modal">Cancel</button>
+			</div>
+			<!-- // Modal footer END -->
+		</div>
+	</div>
+</div>
+
+
+<script>
+
+$(function () {
+    $('.datetimepicker1').datetimepicker({
+		autoclose : true,
+		format: 'YYYY-MM-DD HH:mm',
+		todayHighlight : true
+	});
+});
+
+
+function myFetchmeasure(d)
+	{
+	var  h= d.split("-");	
+					$.ajax({
+						type : "GET",
+						url : '/../'+ window.location.pathname.split('/')[1] + '/visits/fetchdrugmeasure/" + $('#' + d).val(),
+						beforeSend : function() {
+							 $.gritter.add({
+								title : "Progress...",
+								text : "Fetching Measure",
+								time : 3000
+							}); 
+						},
+						success : function(html) {
+							$('#itemmeasure-'+h[1]).html(html);
+							 $.gritter.add({
+								title : "Success!",
+								text : "Measure Fetched",
+								time : 4000
+							}); 
+						},
+						error : function() {
+							$.gritter.add({
+								title : "Error!",
+								text : "Error Fetching Measure",
+								time : 4000
+							});
+
+						}
+				});
+			
+		}
+		
+
+
+
+
+
+function preview(id) {
+//	var pat = $('#patientId').val();
+
+	
+	   var myWindow = window.open('/../'+ window.location.pathname.split('/')[1] + '/consultation/preview/"+ id, "MsgWindow", "width=1000, height=700");
+	   myWindow.resizeTo(1200,750);
+	   myWindow.focus();
+    return false
+}
+
+</script>

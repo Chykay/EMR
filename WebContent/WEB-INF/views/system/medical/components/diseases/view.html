@@ -1,0 +1,43 @@
+<div class="page-header">
+	<h1>
+		View <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			View an disease
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-primary"
+			th:href="@{/system/medical/components/diseases}"><i
+			class="fa fa-list"></i> All Diseases</a> <a
+			class="btn btn-xs btn-warning"
+			th:href="@{/system/medical/components/diseases/edit/{id} (id=${disease.id})}"><i
+			class="fa fa-edit"></i> Edit disease</a> <a class="btn btn-xs btn-danger"
+			th:href="@{/system/medical/components/diseases/delete/{id} (id=${disease.id})}"><i
+			class="fa fa-trash-o"></i> Delete disease</a>
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<dl class="dl-horizontal">
+			<dt>Name:</dt>
+			<dd th:text="${disease.name}"></dd>
+			<dt>Description:</dt>
+			<dd
+				th:text="${disease.description == null || disease.description == ''} ? 'Not set': ${disease.description}"></dd>
+			<dt>Created date</dt>
+			<dd
+				th:text="${ #dates.format(disease.createdDate, 'MMM dd, yyyy HH:mm')}"></dd>
+			<dt>Last modified date</dt>
+			<dd
+				th:text="${disease.modifiedDate == null} ? 'Not modified yet!': ${ #dates.format(disease.modifiedDate, 'MMM dd, yyyy HH:mm')}"></dd>
+		</dl>
+	</div>
+</div>

@@ -1,0 +1,248 @@
+package org.calminfotech.user.controllers;
+
+import java.util.ArrayList;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.calminfotech.user.boInterface.GetRoleAssignmentProcBo;
+import org.calminfotech.user.boInterface.GetUserAssignmentProcBo;
+import org.calminfotech.user.boInterface.RoleAssgnmentBo;
+import org.calminfotech.user.boInterface.UserAssgnmentBo;
+import org.calminfotech.system.forms.GetRoleAssignmentProcForm;
+import org.calminfotech.system.forms.GetUserAssignmentProcForm;
+import org.calminfotech.user.models.UserAssignment;
+import org.calminfotech.user.boInterface.PermissionBo;
+import org.calminfotech.user.boInterface.RoleBo;
+import org.calminfotech.user.boInterface.UserBo;
+import org.calminfotech.user.models.Role;
+import org.calminfotech.user.models.RoleAssignment;
+import org.calminfotech.user.models.User;
+import org.calminfotech.user.utils.UserIdentity;
+import org.calminfotech.utils.Alert;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+@Controller
+@RequestMapping(value = "/system/umgt/permission")
+public class PermissionController {
+
+	@Autowired
+	private UserIdentity userIdentity;
+
+	@Autowired
+	private Alert alert;
+
+	@Autowired
+	private GetRoleAssignmentProcBo roleAssignProcBo;
+
+	@Autowired
+	private GetUserAssignmentProcBo userAssignProcBo;
+
+	@Autowired
+	private RoleAssgnmentBo roleAssgned;
+
+	@Autowired
+	private UserAssgnmentBo userAssigned;// delete
+
+	@Autowired
+	private RoleBo roleBo;
+
+	@Autowired
+	private UserBo userBo;
+
+	@Autowired
+	private PermissionBo permBo;
+
+	@RequestMapping(value = { "/role/index" }, method = RequestMethod.GET)
+	public String indexRole(Model model) {
+		int roleId = 0;
+		model.addAttribute("dRoleAssign",
+				this.roleAssignProcBo.fetchRolePermission(roleId,userIdentity.getOrganisation().getId()));
+		model.addAttribute("rForm", new GetRoleAssignmentProcForm());
+		model.addAttribute("roles", roleBo.fetchAllRoleByOrganisation());
+		return "system/umgt/permission/role/index";
+	}
+
+	@RequestMapping(value = "/role/save", method = RequestMethod.POST)
+	public String entryAction(
+			@ModelAttribute("rForm") GetRoleAssignmentProcForm rForm,
+			BindingResult result, RedirectAttributes redirectAttributes,
+			Model model) {
+
+		if (result.hasErrors()) {
+			return "/";
+		}
+		if (rForm.getSaveButton() == null) {
+			return "redirect:/system/umgt/permission/role/request/"
+					+ rForm.getpRole();
+		}
+		// delete all initial checked value
+		this.roleAssgned.deleteAllCheckedValues(rForm.getpRole());
+		// Save
+		// fetch role by Id
+		Role role = roleBo.getRoleById(rForm.getpRole());
+		if (role == null) {
+			alert.setAlert(redirectAttributes,Alert.DANGER ,"Please select a role ");
+			return "redirect:/system/umgt/permission/role/request/"
+			+ rForm.getpRole();
+		}
+		
+		
+		RoleAssignment roleAssign = new RoleAssignment();
+		String[] checkboxes = rForm.getPermissionCheckboxVals();
+	
+		//ArrayList<String> d   = rForm.getPermissionCheckboxVals();
+		System.out.print("***");
+		System.out.print("***");
+	
+		if (checkboxes != null)
+		{
+		// iterate array list
+		for (String checkbox : checkboxes) {
+			roleAssign.setRoleId(role.getRoleId());
+			//roleAssign.setPermissionId(Integer.parseInt(checkbox));
+			roleAssign.setPermissionCode(checkbox);
+			
+			roleAssign.setOrganisation_id(userIdentity.getOrganisation().getId());
+			roleAssgned.save(roleAssign);
+		}
+		
+	}
+		// redirect
+		model.addAttribute("dRoleAssign",
+				this.roleAssignProcBo.fetchRolePermission(rForm.getpRole(),userIdentity.getOrganisation().getId()));
+		model.addAttribute("rForm", new GetRoleAssignmentProcForm());
+		model.addAttribute("roles", roleBo.fetchAllRoleByOrganisation());
+		
+		alert.setAlert(redirectAttributes, Alert.SUCCESS,
+				"Success! Role Permission Saved!!");
+		return "redirect:/system/umgt/permission/role/request/"
+				+ rForm.getpRole();
+	}
+
+	@RequestMapping(value = "/role/request/{roleId}", method = RequestMethod.GET)
+	public String request(@PathVariable("roleId") Integer Id, Model model,
+			HttpServletResponse response) {
+		GetRoleAssignmentProcForm rForm = new GetRoleAssignmentProcForm();
+		rForm.setpRole(Id);
+		model.addAttribute("dRoleAssign",
+				this.roleAssignProcBo.fetchRolePermission(Id,userIdentity.getOrganisation().getId()));
+		model.addAttribute("rForm", rForm);
+		model.addAttribute("roles", roleBo.fetchAllRoleByOrganisation());
+		return "system/umgt/permission/role/index";
+	}
+	
+	
+	
+	//users start from here
+	@RequestMapping(value = { "/user/index" }, method = RequestMethod.GET)
+	public String indexUser(Model model,RedirectAttributes redirectAttributes) {
+		if (userIdentity.getOrganisation().getId()==1  || true)
+		{
+		int userId = 0;
+		model.addAttribute("dUserAssign",
+				this.userAssignProcBo.fetchUserPermission(userId,userIdentity.getOrganisation().getId()));
+		model.addAttribute("uForm", new GetUserAssignmentProcForm());
+		model.addAttribute("users", this.userBo.fetchAll());
+		return "system/umgt/permission/user/index";
+	}
+		else
+		{
+			alert.setAlert(redirectAttributes, Alert.WARNING,
+					"You cannot do this" );
+			
+			return "redirect:/";
+		}
+		}
+
+	@RequestMapping(value = "/user/save", method = RequestMethod.POST)
+	public String entryUserAction(
+			@ModelAttribute("uForm") GetUserAssignmentProcForm uForm,
+			BindingResult result, RedirectAttributes redirectAttributes,
+			Model model) {
+		if (userIdentity.getOrganisation().getId()==1  || true)
+		{
+	
+		if (result.hasErrors()) {
+			return "";
+		}
+		if (uForm.getSaveButton() == null) {
+			return "redirect:/system/umgt/permission/user/request/"
+					+ uForm.getpUser();
+		}
+		
+		
+		// delete all initial checked value
+		this.userAssigned.deleteAllUserCheckedValues(uForm.getpUser());
+		// Save
+		// fetch role by Id
+		User user = this.userBo.getUserById(uForm.getpUser());
+		if (user == null) {
+			alert.setAlert(redirectAttributes,Alert.DANGER ,"Please select a user ");
+			return "redirect:/system/umgt/permission/user/request/"
+					+ uForm.getpUser();
+		}
+		
+		
+		UserAssignment userAssign = new UserAssignment();
+		String[] checkboxes = uForm.getPermissionCheckboxVals();
+		// iterate array list
+		if (checkboxes != null)
+		{
+		for (String checkbox : checkboxes) {
+			userAssign.setUserId(user.getUserId());
+			//userAssign.setPermissionId(Integer.parseInt(checkbox));
+			userAssign.setPermissionCode(checkbox);
+			
+			userAssign.setOrganisation_id(userIdentity.getOrganisation().getId());
+			userAssigned.save(userAssign);
+		}
+		}
+		// redirect
+		model.addAttribute("dUserAssign",
+				this.userAssignProcBo.fetchUserPermission(uForm.getpUser(),userIdentity.getOrganisation().getId()));
+		model.addAttribute("uForm", new GetUserAssignmentProcForm());
+		model.addAttribute("users", userBo.fetchAll());
+		alert.setAlert(redirectAttributes, Alert.SUCCESS,
+				"Success! User Permission Saved!!");
+		return "redirect:/system/umgt/permission/user/request/"
+				+ uForm.getpUser();
+	}
+		else
+		{
+			alert.setAlert(redirectAttributes, Alert.WARNING,
+					"You cannot do this" );
+			
+			return "redirect:/";
+		}
+		}
+	
+	@RequestMapping(value = "/user/request/{userId}", method = RequestMethod.GET)
+	public String requestUser(@PathVariable("userId") Integer Id, Model model,RedirectAttributes redirectAttributes,
+			HttpServletResponse response) {
+		if (userIdentity.getOrganisation().getId()==1  || true)
+		{
+	
+		GetUserAssignmentProcForm uForm = new GetUserAssignmentProcForm();
+		uForm.setpUser(Id);
+		model.addAttribute("dUserAssign",this.userAssignProcBo.fetchUserPermission(Id,userIdentity.getOrganisation().getId()));
+		model.addAttribute("uForm", uForm);
+		model.addAttribute("users", userBo.fetchAll());
+		return "system/umgt/permission/user/index";
+	}
+		else
+		{
+			alert.setAlert(redirectAttributes, Alert.WARNING,
+					"You cannot do this" );
+			
+			return "redirect:/";
+		}
+		}
+	}

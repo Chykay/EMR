@@ -1,0 +1,98 @@
+<th:block th:if="${msg != null}">
+	<div class="row">
+		<div th:replace="layouts/commonviews/alert">Alert Block</div>
+	</div>
+</th:block>
+<div id="login-box" class="login-box visible widget-box no-border">
+	<div class="widget-body">
+		<div class="widget-main">
+			<h4 class="header blue lighter bigger">
+				<i class="ace-icon fa fa-lock green"></i> Set Security Questions
+			</h4>
+
+			<div class="space-6"></div>
+			<form role="form"
+				th:action="@{/user/setup/processquestions/{code} (code=${codeId})}"
+				th:object="${questionsForm}" th:method="post">
+				<!-- Question One -->
+				<div class="form-group">
+					<label for="questionOne">Security Question 1</label> <select
+						style="color: #bdbdbd" th:field="*{questionOne}"
+						class="form-control">
+						<option value="0">Select..</option>
+						<option th:each="sQ1 : ${question1}"
+							th:value="${sQ1.id}" th:text="${sQ1.questionText}"></option>
+					</select><span class="text-danger"
+						th:if="${#fields.hasErrors('questionOne')}"
+						th:errors="*{questionOne}"></span>
+				</div>
+				<div class="form-group">
+					<label for="answer">Answer 1</label> <input type="text"
+						class="form-control" th:field="*{answerOne}"
+						id="exampleInputPassword1" placeholder="Answer" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('answerOne')}"
+						th:errors="*{answerOne}"></span>
+				</div>
+
+				<!-- Question Two -->
+				<div class="form-group">
+					<label for="questionOne">Security Question 2</label> <select
+						style="color: #bdbdbd" th:field="*{questionTwo}"
+						class="form-control">
+						<option value="0">Select..</option>
+						<option th:each="sQ2 : ${question2}"
+							th:value="${sQ2.id}" th:text="${sQ2.questionText}"></option>
+					</select><span class="text-danger"
+						th:if="${#fields.hasErrors('questionTwo')}"
+						th:errors="*{questionTwo}"></span>
+				</div>
+				<div class="form-group">
+					<label for="answer">Answer 2</label> <input type="text"
+						class="form-control" th:field="*{answerTwo}" id="answerTwo"
+						placeholder="Answer" /> <span class="text-danger"
+						th:if="${#fields.hasErrors('answerTwo')}" th:errors="*{answerTwo}"></span>
+				</div>
+				<div class="form-group">
+					<label for="questionThree">Security Question 3</label> <select
+						style="color: #bdbdbd" th:field="*{questionThree}"
+						class="form-control">
+						<option value="0">Select..</option>
+						<option th:each="sQ3 : ${question3}"
+							th:value="${sQ3.id}" th:text="${sQ3.questionText}"></option>
+					</select><span class="text-danger"
+						th:if="${#fields.hasErrors('questionThree')}"
+						th:errors="*{questionThree}"></span>
+				</div>
+				<div class="form-group">
+					<label for="answer">Answer 3</label> <input type="text"
+						class="form-control" th:field="*{answerThree}" id="answerThree"
+						placeholder="Answer" /> <span class="text-danger"
+						th:if="${#fields.hasErrors('answerThree')}"
+						th:errors="*{answerThree}"></span>
+				</div>
+				<div class="form-group">
+					<label for="questionFour">Security Question 4</label> <select
+						style="color: #bdbdbd" th:field="*{questionFour}"
+						class="form-control">
+						<option value="0">Select..</option>
+						<option th:each="sQ4 : ${question4}"
+							th:value="${sQ4.id}" th:text="${sQ4.questionText}"></option>
+					</select><span class="text-danger"
+						th:if="${#fields.hasErrors('questionFour')}"
+						th:errors="*{questionFour}"></span>
+				</div>
+				<div class="form-group">
+					<label for="answer">Answer 4</label> <input type="text"
+						class="form-control" th:field="*{answerFour}" id="answerFour"
+						placeholder="Answer" /> <span class="text-danger"
+						th:if="${#fields.hasErrors('answerFour')}"
+						th:errors="*{answerFour}"></span>
+				</div>
+				<button type="submit" class="btn btn-primary btn-block">Confirm</button>
+			</form>
+		</div>
+		<!-- /.widget-main -->
+	</div>
+	<!-- /.widget-body -->
+</div>
+<!-- /.login-box -->

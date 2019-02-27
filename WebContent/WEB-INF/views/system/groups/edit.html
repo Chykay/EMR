@@ -1,0 +1,85 @@
+<div class="page-header">
+	<h1>
+		Modify Group <small> <i
+			class="ace-icon fa fa-angle-double-right"></i> Modify a User Group
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i class="fa fa-home"></i> System
+			Dashboard</a> <a class="btn btn-xs btn-primary"
+			th:href="@{/system/groups}"><i class="glyphicon glyphicon-list"></i>
+			All Groups</a>
+	</div>
+</div>
+<div class="hr hr-18 dotted hr-double"></div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<div class="widget-box">
+			<div class="widget-header widget-header-flat">
+				<h4 class="widget-title smaller">Group form</h4>
+			</div>
+
+			<div class="widget-body">
+				<div class="widget-main no-padding">
+					<form class="form-horizontal" method="POST"
+						th:object="${groupForm}" th:action="@{/system/groups/update}">
+						<input type="hidden" th:field="*{id}" />
+						<div class="form-group">
+							<label for="lastName"
+								class="col-sm-3 control-label no-padding-right">Group
+								Name:</label>
+							<div class="col-sm-9">
+								<input type="text" class="col-xs-10 col-sm-5"
+									placeholder="Group Name" th:field="*{groupName}" /> <span
+									class="text-danger" th:if="${#fields.hasErrors('groupName')}"
+									th:errors="*{groupName}"></span>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="groupDescription"
+								class="col-sm-3 control-label no-padding-right">Group
+								Description:</label>
+							<div class="col-sm-9">
+								<textarea class="autosize-transition col-xs-10 col-sm-5"
+									th:field="*{groupDescription}" placeholder="Group Description">
+								</textarea>
+								<span class="text-danger"
+									th:if="${#fields.hasErrors('groupDescription')}"
+									th:errors="*{groupDescription}"></span>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="admin"
+								class="col-sm-3 control-label no-padding-right">Administrator:</label>
+							<div class="col-sm-9">
+								<select class="col-xs-10 col-sm-5" th:field="*{admin}">
+									<option value="0">No</option>
+									<option value="1">Yes</option>
+								</select> <span
+									class="text-danger" th:if="${#fields.hasErrors('admin')}"
+									th:errors="*{admin}"></span>
+							</div>
+						</div>
+
+						<div class="clearfix form-actions">
+							<div class="col-md-offset-3 col-md-9">
+								<input class="btn btn-primary" type="submit"
+									value="Update Group" />
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+

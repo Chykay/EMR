@@ -1,0 +1,142 @@
+<div class="page-header">
+	<h1>
+		Organisation Settings<small> <i
+			class="ace-icon fa fa-angle-double-right"></i>Assign Settings
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard</a> 
+	</div>
+</div>
+
+
+<div class="hr hr-18 dotted hr-double"></div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<!-- User Profile -->
+		<div class="tabbable">
+			<ul class="nav nav-tabs padding-18">
+				<li class="active"><a href="#role-details" data-toggle="tab"><i
+						class="fa fa-users"></i> Global Settings</a></li>
+				
+				<!-- <li>
+					<a th:href="@{/system/umgt/permission/user/index}">
+						<i class="fa fa-user"></i> User Assignment
+					</a>
+				</li> -->
+			</ul>
+
+			<div class="hr hr-18 dotted hr-double"></div>
+
+			<div class="tab-content no-border padding-24">
+				<div id="role-details" class="tab-pane in active">
+					<div class="row">
+						<div class="col-md-12">
+							<form role="form" class="form-horizontal" th:object="${sForm}" name="sForm" id="sForm"
+								method="POST" th:action="@{/system/setting/entersetting}">
+								<!-- Elements -->
+
+								<div class="row">
+
+
+									<!-- // Column END -->
+									<!-- Column -->
+									<div class="col-md-12">
+
+										<!-- Group -->
+									   <div class="form-group margin-none innerB">
+									  	<h4 class="header blue">Settings</h4>
+											<!-- Table -->
+											<table id="dTable"
+												class="table table-striped table-bordered table-hover">
+												<!-- Table heading -->
+												<thead>
+													<tr>
+														<th>Name</th>
+														<th >Code</th>
+														
+														<th>Value</th>
+													</tr>
+												</thead>
+												<!-- // Table heading END -->
+												<!-- Table body -->
+												<tbody>
+											<!-- <tr>
+												<td>Check All</td>
+														
+														<td>
+												
+									<input type="checkbox" class="check" value="check all" id="select_all"/>
+									</td>
+										</tr>-->
+													<tr th:each="oset : ${settingslist}">
+														<td th:text="${oset.category + ' - ' + oset.name}" name="name">Description</td>
+														
+													
+														<td >  <input type="text" readonly="readonly"  style="width:180px" placeholder=""
+						 name = "settings_code"  th:value = "${oset.settings_code}"/> 
+						 		<span class="text-danger" th:if="${#fields.hasErrors('settings_code')}"
+																			th:errors="settings_code"></span>
+						     </td>								
+														
+														<td>
+														
+														
+					       <input type="text"  style="width:180px" placeholder=""
+						 name = "settings_value"  th:value = "${oset.settings_value}"/> 
+						 		<span class="text-danger" th:if="${#fields.hasErrors('settings_value')}"
+																			th:errors="settings_value">
+															</span>
+														</td>
+												
+													</tr>
+												</tbody>
+												<!-- // Table body END -->
+											</table>
+											<!-- //Table -->
+											<!-- </div> -->
+										</div> 
+										<!-- // Group END -->
+
+									</div>
+									<!-- // Column END -->
+
+								</div>
+								<!-- // Row END -->
+								<div id="result"></div>
+								<!-- Form actions -->
+								<div class="form-actions center">
+									<button type="submit" name="saveButton" class="btn btn-primary" value="saveBtnVal" id="buttonId" >
+										<i class="fa fa-fw fa-check-square-o"></i> Save changes
+									</button>
+									<a th:href="@{/system}" class="btn btn-default">
+										<i class="fa fa-fw fa-times"></i> Cancel
+									</a>
+								</div>
+								<!-- // Form actions END -->
+								<!-- /.Elements -->
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /.User Profile -->
+	</div>
+</div>
+
+<script type="text/javascript" th:inline="text">
+  
+  // <![CDATA[ 
+    
+  
+  // ]]>
+
+  </script>

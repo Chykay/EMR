@@ -1,0 +1,114 @@
+<div class="page-header">
+	<h1>
+		Add <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			 Lab Test
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-list-alt"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-info" th:href="@{/system/labtest/labtestlist}"><i
+			class="fa fa-list-alt"></i> All Test</a> <!-- <a class="btn btn-xs btn-info"
+			th:href="@{/consultations/visits/consultant}"><i
+			class="fa fa-list-alt"></i> Consultant Point</a> --><!-- <a
+			class="btn btn-xs btn-info" th:href="@{/consultations/visits/laboratory}"><i
+			class="fa fa-list-alt"></i> Lab Point</a> --> <!-- <a class="btn btn-xs btn-info"
+			th:href="@{/consultations/visits/pharmacy}"><i class="fa fa-home"></i>Pharmacy Point</a> -->
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+
+		<form role="form" class="form-horizontal" method="POST"
+			th:action="@{/system/labtest/savetest}" th:object="${labTestForm}">
+			<legend>Lab Test Form</legend>
+
+
+
+<input type="hidden" class="col-xs-12 col-sm-6"	th:field="*{id}" /> 
+	
+			<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Test:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder=""
+						th:field="*{name}" required="required" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('name')}"
+						th:errors="*{name}"></span>
+				</div>
+			</div>	
+			
+
+			<div class="form-group">
+				<label for="surname" class="col-sm-3 control-label no-padding-right">Description:</label>
+				<div class="col-sm-9">
+					<textarea rows="4" cols="45" placeholder="" id="form-field-11" th:field="*{description}" required="required">Enter text here...
+							</textarea><span
+						class="text-danger" th:if="${#fields.hasErrors('description')}"
+						th:errors="*{description}"></span>
+				</div>
+			</div>
+			
+			
+			<div class="clearfix form-actions">
+				<div class="col-md-offset-3 col-md-9">
+					<input type="hidden" th:field="*{id}" />
+					<button class="btn btn-primary" type="submit">
+						<i class="ace-icon fa fa-check bigger-110"></i> Add
+					</button>
+
+					<!-- <button class="btn btn-danger" type="reset">
+						<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+					</button> -->
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript">
+	//height
+</script>
+<script>
+	//this is for GET
+	$(function() {
+		/* Lga Selector*/
+		$('#stateId').change(
+				function(event) {
+					$.ajax({
+						type : "GET",
+						url : '/../'+ window.location.pathname.split('/')[1] + '/utilities/statesandlgas/lgabystate/"
+								+ $('#stateId').val(),
+						beforeSend : function() {
+							$.gritter.add({
+								title : "Progress...",
+								text : "Fetching LGAs",
+								time : 3000
+							});
+						},
+						success : function(html) {
+							$("#lgs").html(html);
+							$.gritter.add({
+								title : "Success!",
+								text : "LGAs fetched",
+								time : 4000
+							});
+						},
+						error : function() {
+							$.gritter.add({
+								title : "Error!",
+								text : "Error fetching LGAs",
+								time : 4000
+							});
+						}
+
+					});
+				});
+	});
+</script>

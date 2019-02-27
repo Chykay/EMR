@@ -1,0 +1,46 @@
+<div class="page-header">
+	<h1>
+		View <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			View a Unit of Measurement
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard
+		</a> 
+		
+		<a
+			class="btn btn-xs btn-primary"
+			th:href="@{/system/unitofmeasurement}"><i
+			class="fa fa-list"></i> All Unit of Measurements
+		</a>
+		<a
+			class="btn btn-xs btn-warning"
+			th:href="@{/system/unitofmeasurement/edit/{id} (id=${measurement.unitId})}"><i
+			class="fa fa-edit"></i> Edit Unit
+		</a> 
+		<a class="btn btn-xs btn-danger"
+			th:href="@{/system/unitofmeasurement/delete/{id} (id=${measurement.unitId})}"><i
+			class="fa fa-trash-o"></i> Delete Unit
+		</a>
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<dl class="dl-horizontal">
+			<dt>Unit Name:</dt>
+			<dd th:text="${measurement.unitOfMeasure}"></dd>
+			<dt>Unit Abbreviaiton:</dt>
+			<dd th:text="${measurement.unitAbbreviate}"></dd>
+			
+			
+		</dl>
+	</div>
+</div>

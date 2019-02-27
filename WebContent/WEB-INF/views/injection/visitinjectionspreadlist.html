@@ -1,0 +1,365 @@
+<div class="page-header">
+	<h1>
+		INJECTION Details Spread for me..<small> <i
+			class="ace-icon fa fa-angle-double-right"></i>
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard</a> 
+			<a
+			class="btn btn-danger btn-xs" th:href="@{/patients/index/all}"><i
+			class="fa fa-list-alt"></i> Create Visit</a>
+	</div>
+</div>
+<div class="hr hr-18 dotted hr-double"></div>
+<!-- 
+<div class="row">
+	<div class="col-xs-12">
+		<h3 th:inline="text">
+			Visit Code: [[${visit.code}]] <small> <a
+				th:href="@{/consultations/view/{id} (id=${visit.id})}">view
+					consultation</a></small>
+		</h3>
+		<hr />
+		<h4>
+			Patient Details <small> <a
+				th:href="@{/customers/patients/view/{id} (id=${visit.patient.patientId})}">view
+			</a></small>
+		</h4>
+		<dl class="dl-horizontal">
+			<dt>Name:</dt>
+			<dd th:inline="text">[[${visit.patient.title.acronym} + '
+				' + ${visit.patient.surname} + ' ' +
+				${visit.patient.othernames}]]</dd>
+			<dt>Code:</dt>
+			<dd th:inline="text">[[${visit.patient.patientId}]]</dd>
+		</dl>
+		<hr />
+	</div>
+</div>
+<div class="row">
+	<div class="col-xs-12 col-md-9">
+		
+		
+	
+		<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 center">
+						<span class="profile-picture"><img
+						th:if="${visit.patient.image == null}"
+								 id="avatar2" style="max-width: 150px"
+							th:src="@{/resources/img/nhis.png}" alt="Profile"
+							class="img-responsive" /><img
+							th:if="${visit.patient.image != null}"
+							 id="avatar2" style="max-width: 150px"
+							th:src="@{/patients/image/{id}(id=${visit.patient.patientId})}"
+							alt="Profile" class="img-responsive" />
+						</span>
+
+					</div>
+				</div>
+		
+	</div>
+
+	
+	
+<div class="col-xs-12 col-md-3">
+		<a class="btn btn-danger btn-xs" data-toggle="modal"
+			href="#transfer-form-modal"> <i
+			class="ace-icon fa fa-share bigger-110"></i> Re-Assign Patient
+		</a>
+	
+		<div class="timeline-container timeline-style2">
+			<span class="timeline-label"> <b>Visit Timeline</b>
+			</span>
+			
+	
+	</div>
+</div>
+	-->
+
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<div class="table-header">Injection details spread awaiting list</div>
+		<table id="dTable"
+			class="table table-striped table-bordered table-hover">
+			<!-- Table heading -->
+			<thead>
+				<tr>
+					<!-- <th>Item name</th> -->
+					<th>Date</th>
+					<th>Injection</th>
+					
+					<th>Dosage</th>
+					<th>Measure</th>
+					
+										        
+<th>Status</th>
+<th>Given Date</th>
+<th>Given By</th>
+<th>Reversed By</th>
+
+
+								
+					<th><i class="glyphicon glyphicon-asterisk"></i></th>
+				</tr>
+			</thead>
+			<!-- // Table heading END -->
+			<!-- Table body -->
+			<tbody>
+				<tr th:each="v : ${prescribedinjection.injectionspread}">
+				    	
+					    <td th:text="${#dates.format(v.effectivedate, 'yyyy-MMM-dd HH:mm')}"> </td>
+				
+			
+				<td th:text="${v.consultationprescribedDrug.globalitem.GlobalitemName}"></td>
+				
+					<td th:text="${v.dosage} "></td>
+					
+					<td th:text="${v.consultationprescribedDrug.itemunitofmeasure.measurename} "></td>
+						<td th:text="${v.prescribedststatus.name}"></td>
+				<!-- 	<td th:text="${v.given_unit != null ? v.given_unit.categoryName : ''}"></td> -->
+				
+					<td th:text="${v.given_date != null ? v.given_date : ''}"></td>
+				
+					<td th:text="${v.given_by != null ? v.given_by.username : '' } "></td>
+					
+					<td th:text="${v.modifiedBy != null ? v.modifiedBy : '' } "></td>
+				
+					
+					<td>
+						<!-- <a th:if="${v.prescribedststatus.prescribedstatus_id == 1}" class="btn btn-xs btn-success tooltips" title="Give Injection"
+						th:href="@{/injectionspread/give/{id} (id=${v.id}) }">
+							<i class="fa fa-trash-o"></i> Give
+					</a>  -->
+					
+					<a th:if="${v.prescribedststatus.prescribedstatus_id == 1}" class="btn btn-xs btn-success tooltips" data-toggle="modal"  title="Give Injection"
+						th:attr="href='#inject-' + ${v.id}">
+							<i class="fa fa-trash-o"></i> Give
+					</a> 
+					
+					
+			<a th:if="${v.prescribedststatus.prescribedstatus_id == 3}" class="btn btn-xs btn-danger tooltips"
+						title="Reverse"
+						th:href="@{/injectionspread/reverse/{id} (id=${v.id}) }"> <i
+							class="fa fa-trash-o"></i> Reverse
+					</a> 
+						<!-- <a class="btn btn-danger btn-xs" data-toggle="modal"  
+			    th:attr="href='#'+${v.id}"> <i
+			class="ace-icon fa fa-share bigger-110"></i>Transfer
+		</a>
+			
+			 -->
+					<div class="modal fade" th:id="${'inject-' + v.id}" >
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- Modal heading -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Injection</h4>
+			</div>
+			<!-- // Modal heading END -->
+			<!-- Modal body -->
+			<div class="modal-body">
+		
+				<form th:object="${vform}" class="form-horizontal"
+					th:action="@{/injectionspread/give}" method="post">
+					
+					<input type="text" hidden="hidden"  th:attr="value = ${v.id}"  name="id"   />
+					
+					
+					<div class="form-group">
+	
+	<label for="date-timepicker1" class=" col-xs-12 col-sm-12 no-padding-right"> Date / Time </label>
+
+													
+	<div class="col-sm-9">
+	
+	<div class="input-group" >
+	<input  type="text"  class="form-control datetimepicker1" th:field="*{given_date}"  required="required"/>
+	
+	<span class="input-group-addon">
+	<i class="fa fa-clock-o bigger-110"></i>
+	</span>
+	
+	</div>
+	
+	
+	<span class="text-danger" th:if="${#fields.hasErrors('given_date')}" th:errors="given_date"></span>
+	</div>
+
+		</div>
+					
+					
+					
+					
+					
+					<div class="form-group">
+							<label for="Tels"
+								class="col-xs-12  col-sm-12  no-padding-right">Comment Details:</label>
+							<div class="col-sm-12">
+	<!-- th:attr="value = ${v.done_comments}"  name="comment" -->						
+								<textarea type="text" class="col-xs-10 col-sm-12" rows="6" cols="50"  
+								   th:field="*{comment}">  </textarea><span class="text-danger"
+									th:if="${#fields.hasErrors('comment')}"
+									th:errors="*{comment}"></span>
+							</div>
+							<!--  th:attr="value = ${v.done_comments}" -->
+						</div>
+					
+					
+					
+					
+				
+					<div class="clearfix form-actions">
+						<p></p>
+						
+						<button type="submit" class="btn btn-primary btn-xs">
+							<i class=""></i> Create
+						</button>
+					</div>
+				</form>
+
+				<!-- Form -->
+			<!-- 	${map[__${entry.key}__]} -->
+			<!--  <form th:object="${v__${v.id}__}" -->	
+			<!-- 	<form th:object="${vform}"
+					th:action="@{/visits/transfer}" method="post">
+					
+					<input type="text"   th:attr="value = ${v.id}"  name="visitId" />
+					
+					
+					<div class="form-group">
+						<label>Select Unit</label>
+						<div class="">
+							<select class="col-xs-10 col-sm-12" th:id="${'unit-' + v.id}" onclick="process(this.id)"
+								th:field="*{unitId}" required="true" >
+								 <option value="">Select..</option>
+								<option th:each="u: ${unitcategory}" th:value="${u.categoryId}"
+									th:text="${u.categoryName}"></option>
+							</select> <span class="text-danger"
+								th:if="${#fields.hasErrors('unitId')}"
+								th:errors="*{unitId}"></span>
+						</div>
+					</div>
+					
+				<div class="form-group">
+						<label>Select User</label>
+						<div class="">
+							<select class="col-xs-10 col-sm-12" th:field="*{userId}"
+								th:id="${'user-' + v.id}" required="true">
+								
+							</select> <span class="text-danger" th:if="${#fields.hasErrors('userId')}"
+								th:errors="*{userId}"></span>
+						</div>
+					</div> 	
+
+					<div class="form-group">
+						<label>Comment</label>
+						<div class="">
+							<textarea class="col-xs-10 col-sm-12" th:field="*{comment}"></textarea>
+							<span class="text-danger" th:if="${#fields.hasErrors('comment')}"
+								th:errors="*{comment}"></span>
+						</div>
+					</div>
+
+					<div class="clearfix form-actions">
+						<br />
+						<button type="submit" class="btn btn-primary btn-xs">
+							<i class=""></i> Transfer
+						</button>
+					</div>
+				</form> -->
+				<!-- /Dform -->
+			</div>
+			<!-- // Modal body END -->
+
+			<!-- Modal footer -->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-xs" data-dismiss="modal">Cancel</button>
+			</div>
+			<!-- // Modal footer END -->
+		</div>
+	</div>
+</div>
+					
+					
+					
+					</td>
+				</tr>
+			</tbody>
+			<!-- // Table body END -->
+		</table>
+		<!-- /. End view content here -->
+	</div>
+</div>
+
+
+
+<!-- Transfer form modal -->
+
+<!-- /.Transfer form -->
+
+
+<script>
+
+
+$(function () {
+    $('.datetimepicker1').datetimepicker({
+		autoclose : true,
+		format: 'YYYY-MM-DD HH:mm',
+		todayHighlight : true
+	});
+});
+
+
+
+function process(d)
+{
+	var  h= d.split("-");
+	$('#'+d).change(function(){
+		
+		$.ajax({
+			url: '/../' + window.location.pathname.split('/')[1] + '/visits/fetchclockedusers/' + $(this).val(),
+			beforeSend: function(){
+				$.gritter.add({
+					// (string | mandatory) the heading of the notification
+					title: 'Processing!',
+					// (string | mandatory) the text inside the notification
+					text: 'Fetching users for selected unit...',
+					time : 100
+				});
+			},
+			success: function(msg){
+				$('#user-'+h[1]).html(msg);
+				$.gritter.add({
+					// (string | mandatory) the heading of the notification
+					title: 'Success!',
+					// (string | mandatory) the text inside the notification
+					text: 'Users fetched...',
+					class_name: 'gritter-success' ,
+					time : 100
+				});
+				
+			
+			
+			},
+			error: function(){
+				$.gritter.add({
+					title: 'Error!',
+					text: 'Cannot fetch point users. Try again or contact admin',
+					class_name: 'gritter-error'
+				});
+
+			}
+		});
+	});
+}
+</script>

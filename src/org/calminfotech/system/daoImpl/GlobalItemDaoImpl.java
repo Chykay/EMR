@@ -1,0 +1,277 @@
+package org.calminfotech.system.daoImpl;
+
+import java.util.List;
+import java.util.Map;
+
+import org.calminfotech.system.boInterface.GlobalItemBo;
+import org.calminfotech.system.daoInterface.GlobalItemDao;
+import org.calminfotech.system.models.GlobalItem;
+import org.calminfotech.system.models.GlobalItemCategoryOuterRecursive;
+import org.calminfotech.system.models.GlobalItemReorder;
+import org.calminfotech.user.utils.UserIdentity;
+import org.hibernate.Criteria;
+import org.hibernate.SQLQuery;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+//import org.calminfotech.system.models.GlobalCategory;
+
+@Repository
+public class GlobalItemDaoImpl implements GlobalItemDao {
+
+	@Autowired
+	private SessionFactory sessionFactory;
+
+	@Autowired
+	private UserIdentity userIdentity;
+
+	@Autowired
+	private GlobalItemBo glomaitembo;
+
+	@Override
+	public List<GlobalItem> fetchTop50byOrganisation(int id) {
+
+		List<GlobalItem> list = sessionFactory
+				.getCurrentSession()
+				.createQuery(
+						"from GlobalItem  where organisation_id=? and  isDeleted=false ORDER BY itemId DESC")
+				.setParameter(0, id).setMaxResults(50).list();
+
+		return list;
+
+	}
+
+	@Override
+	public List<GlobalItem> fetchAll(int organisationid) {
+		// TODO Auto-generated method stub
+
+		List<GlobalItem> list = sessionFactory
+				.getCurrentSession()
+				.createQuery(
+						"from GlobalItem  where organisation_id=? and isDeleted=false ORDER BY itemId DESC")
+				.setParameter(0, organisationid).list();
+
+		return list;
+
+	}
+
+	@Override
+	public List<GlobalItem> fetchAllByType(Integer typeid) {
+
+		List<GlobalItem> list = sessionFactory
+				.getCurrentSession()
+				.createQuery(
+						"from GlobalItem  where globalitemtype.globalitemTypeId = ? and organisation_id=?  and  isDeleted=false ORDER BY itemId DESC")
+				.setParameter(0, typeid)
+				.setParameter(1, userIdentity.getOrganisation().getId())
+
+				.list();
+
+		return list;
+
+	}
+
+	@Override
+	public List<GlobalItem> fetchAllByKind(Integer typeid) {
+
+		List<GlobalItem> list = sessionFactory
+				.getCurrentSession()
+				.createQuery(
+						"from GlobalItem  where globalitemkind.id = ? and organisation.orgCoy.Id=?  and  isDeleted=false ORDER BY item_id DESC")
+
+				.setParameter(0, typeid)
+				.setParameter(1,
+						userIdentity.getOrganisation().getOrgCoy().getId())
+				.list();
+
+		return list;
+
+	}
+
+	@Override
+	public List<GlobalItem> fetchAllByKind_room(String typeid) {
+
+		List<GlobalItem> list = sessionFactory
+				.getCurrentSession()
+				.createSQLQuery(
+						"select * from GlobalItem_item  g inner join organisations o on g.organisation_id=o.id where globalitemkind_code = ? "
+								+
+
+								"and o.company_id=?  and  is_deleted=0 and item_id not in (select bed_category_id b from bed_category  inner join organisations o on b.organisation_id=o.id where o.company_id=? and is_deleted=0) ORDER BY item_id DESC")
+				.addEntity(GlobalItem.class)
+				.setParameter(0, typeid)
+				.setParameter(1,
+						userIdentity.getOrganisation().getOrgCoy().getId())
+				.setParameter(2,
+						userIdentity.getOrganisation().getOrgCoy().getId())
+
+				.list();
+
+		return list;
+
+	}
+
+	@Override
+	public List<GlobalItem> fetchAllByKind_bed(String typeid) {
+
+		List<GlobalItem> list = sessionFactory
+				.getCurrentSession()
+				.createSQLQuery(
+						"select * from Globalitem_item  where globalitemkind_code = ? and organisation_Id=?  and  is_deleted=0 and item_id not in (select bed_id from bed where organisation_Id=? and is_deleted=0) ORDER BY item_id DESC")
+				.addEntity(GlobalItem.class).setParameter(0, typeid)
+				.setParameter(1, userIdentity.getOrganisation().getId())
+				.setParameter(2, userIdentity.getOrganisation().getId()).list();
+
+		return list;
+
+	}
+
+	@Override
+	public List<GlobalItem> fetchAllByKind(String code) {
+
+		List<GlobalItem> list = sessionFactory
+				.getCurrentSession()
+				.createQuery(
+						"from GlobalItem  where globalitemkind.code = ? and organisation_id=?  and  isDeleted=false ORDER BY item_id DESC")
+				// .createQuery("from GlobalItem  where globalitemkind.code = ?   and  isDeleted=false ORDER BY item_id DESC")
+
+				.setParameter(0, code)
+				.setParameter(1, userIdentity.getOrganisation().getId()).list();
+
+		return list;
+
+	}
+
+	@Override
+	public GlobalItem getGlobalItemById(int itemId) {
+		// TODO Auto-generated method stub
+
+		List<GlobalItem> list = sessionFactory.getCurrentSession()
+				.createQuery("from GlobalItem where itemId = ? ")
+				.setParameter(0, itemId)
+				// .setParameter(1, this.userIdentity.getOrganisation().getId())
+				.list();
+		if (list.size() > 0)
+			return list.get(0);
+		return null;
+	}
+
+	@Override
+	public GlobalItemReorder getGlobalItemReorder(int itemId) {
+		// TODO Auto-generated method stub
+
+		List<GlobalItemReorder> list = sessionFactory
+				.getCurrentSession()
+				.createQuery(
+						"from GlobalItemReorder where globalitem.itemId=? and organisation_id=? ")
+				.setParameter(0, itemId)
+				.setParameter(1, this.userIdentity.getOrganisation().getId())
+				.list();
+		if (list.size() > 0)
+			return list.get(0);
+		return null;
+	}
+
+	@Override
+	public void save(GlobalItem globalitem) {
+		// TODO Auto-generated method stub
+
+		this.sessionFactory.getCurrentSession().save(globalitem);
+	}
+
+	@Override
+	public void update(GlobalItem category) {
+		// TODO Auto-generated method stub
+
+		this.sessionFactory.getCurrentSession().update(category);
+	}
+
+	@Override
+	public void delete(GlobalItem category) {
+		// TODO Auto-generated method stub
+
+		this.sessionFactory.getCurrentSession().delete(category);
+	}
+
+	@Override
+	public List<GlobalItemCategoryOuterRecursive> fetchAllTypesNew() {
+		// TODO Auto-generated method stub
+
+		try {
+
+			/*
+			 * Query query = sessionFactory.getCurrentSession().createSQLQuery(
+			 * "exec dbo.outerrecursivenew") .addEntity(OuterRecursive.class);
+			 */String sql = "exec dbo.outerrecursiveproc";
+			SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(
+					sql);
+			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+			List data = query.list();
+
+			for (Object object : data) {
+				Map row = (Map) object;
+
+				System.out.print("Row Id: " + row.get("rowid"));
+				System.out.println(", Names: " + row.get("names"));
+			}
+			// tx.commit();
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	@Override
+	public List<GlobalItem> fetchAllByOgranisation(int organisationId) {
+		// TODO Auto-generated method stub
+
+		List<GlobalItem> list = sessionFactory
+				.getCurrentSession()
+				.createQuery(
+						"from GlobalItem where organisation_id=? and  is_Deleted=0  ")
+				.setParameter(0, organisationId).list();
+		return list;
+	}
+
+	public List<GlobalItem> fetchAllCategoryByOgranisation(int organisationId) {
+		// TODO Auto-generated method stub
+
+		List<GlobalItem> list = sessionFactory
+				.getCurrentSession()
+				.createQuery(
+						"from GlobalItem where organisation_id=?  and  is_Deleted=0 ")
+				.setParameter(0, organisationId).list();
+		return list;
+	}
+
+	@Override
+	public List<GlobalItem> fetchAll() {
+		// TODO Auto-generated method stub
+
+		List<GlobalItem> list = sessionFactory
+				.getCurrentSession()
+				.createQuery(
+						"from GlobalItem where organisation_id=?  and  is_Deleted=0 ")
+				.setParameter(0, this.userIdentity.getOrganisation().getId())
+				.list();
+		return list;
+	}
+
+	@Override
+	public List<GlobalItem> fetchAllByType_room(Integer typeid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void save(GlobalItemReorder item) {
+		// TODO Auto-generated method stub
+		this.sessionFactory.getCurrentSession().saveOrUpdate(item);
+
+	}
+
+}

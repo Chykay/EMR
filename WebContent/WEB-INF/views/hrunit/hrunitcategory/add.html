@@ -1,0 +1,217 @@
+<div class="page-header">
+	<h1>
+		Add <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			Add a HR Unit 
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/hrunit}"><i
+			class="fa fa-home"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-primary" th:href="@{/hrunit/hrunitcategory/index}"><i
+			class="fa fa-list"></i> Recent Hrunit </a>
+			<a
+			class="btn btn-xs btn-primary" th:href="@{/hrunit/hrunitcategory/index/all}"><i
+			class="fa fa-list"></i>View All Hrunit </a>
+			
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+
+		<form role="form" class="form-horizontal" method="POST"
+			th:object="${hrunitCategoryForm}">
+			<legend>Hrunit  Form</legend>
+
+
+			
+			
+		 	<div class="form-group" hidden="hidden">
+				<label for="gender" class="col-sm-3 control-label no-padding-right"> Hrunit  Type:</label>
+				<div class="col-sm-9">
+					<select th:field="*{hrunitTypeId}" class="col-xs-10 col-sm-5"   id="hrunitTypeId">
+					 <!-- 	<option value="">Select..</option> -->
+						<option th:each="g: ${hrunittype}" th:value="${g.hrunitTypeId}"
+							th:text="${g.hrunittypename}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('hrunitTypeId')}"
+						th:errors="*{hrunitTypeId}"></span>
+				</div>
+			</div>
+			
+			
+				<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Unit Name:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" 
+						th:field="*{categoryName}" required="required" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('categoryName')}"
+						th:errors="*{categoryName}"></span>
+				</div>
+			</div>
+
+			
+			
+			<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Parent Unit:</label>
+				<div class="col-sm-9">
+					<select type="text" class="col-xs-10 col-sm-5"
+						placeholder="Parent Unit" th:field="*{parentCategoryId}" id="parentCategoryId"	 >
+						<option value="">Select..</option>
+						<option th:each="c: ${categories}" th:value="${c.categoryId}" th:text="${c.categoryName}"></option>
+					</select> <span class="text-danger"
+						th:if="${#fields.hasErrors('parentCategoryId')}"
+						th:errors="*{parentCategoryId}"></span>
+				</div>
+			</div>
+							<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Description:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" 
+						th:field="*{categoryDescription}" required="required" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('categoryDescription')}"
+						th:errors="*{categoryDescription}"></span>
+				</div>
+			</div>
+
+
+
+    
+
+ <div class="form-group">
+<label for="name" class="col-sm-3 control-label no-padding-right">Attend to Queue:</label>
+			<div class="col-sm-9">
+
+    <input type="checkbox" th:field="*{attendQ}" />
+
+
+
+
+
+				</div>
+			</div>
+    
+    
+
+
+
+    
+    <div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Module:</label>
+				<div class="col-sm-9">
+					<select type="text" class="col-xs-10 col-sm-5"
+						placeholder="" th:field="*{point_id}" >
+						<option value="0">Select..</option>
+						<option th:each="c: ${points}" th:value="${c.id}" th:text="${c.name}"></option>
+						
+					</select> <span class="text-danger"
+						th:if="${#fields.hasErrors('point_id')}"
+						th:errors="*{point_id}"></span>
+				</div>
+			</div>
+   
+     <div class="form-group" >
+				<label for="name" class="col-sm-3 control-label no-padding-right">Billing Scheme:</label>
+				<div class="col-sm-9">
+					<select type="text" class="col-xs-10 col-sm-5" 
+						placeholder="" th:field="*{billschemeId}"  >
+						<option value="0">Select..</option> 
+						<option th:each="c: ${billscheme}" th:value="${c.id}" th:text="${c.name}"></option>
+					</select> <span class="text-danger"
+						th:if="${#fields.hasErrors('billschemeId')}"
+						th:errors="*{billschemeId}"></span>
+				</div>
+			</div>
+			
+			
+ <div class="form-group" id="ps">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Inventory:</label>
+				<div class="col-sm-9">
+					<select type="text" class="col-xs-10 col-sm-5"
+						placeholder="" th:field="*{pointstore_id}" >
+						<option value="0">Select..</option>
+						<option th:each="c: ${pointstore}" th:value="${c.categoryId}" th:text="${c.categoryName}"></option>
+						
+					</select> <span class="text-danger"
+						th:if="${#fields.hasErrors('pointstore_id')}"
+						th:errors="*{pointstore_id}"></span>
+				</div>
+			</div>
+
+
+
+
+			<div class="clearfix form-actions">
+				<div class="col-md-offset-3 col-md-9">
+			
+					<button class="btn btn-primary" type="submit">
+						<i class="ace-icon fa fa-check bigger-110"></i> Add
+					</button>
+
+					<button class="btn btn-danger" type="reset">
+						<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<script> 
+
+$(function() {
+	/* Lga Selector*/
+	$('#hrunitTypeId').change(
+			function(event) {
+$.ajax({
+	type : "GET",
+
+	url : '/../'+ window.location.pathname.split('/')[1] + '/hrunit/hrunitcategory/fetchcategorybytype/"
+			+ $('#hrunitTypeId').val(),
+	beforeSend : function() {
+		$.gritter.add({
+			title : "Progress...",
+			text : "Fetching Categories of global type",
+			time : 3000
+		});
+	},
+	success : function(html) {
+		$('#parentCategoryId').html(html);
+		$.gritter.add({
+			title : "Success!",
+			text : "Categories fetched",
+			time : 4000
+		});
+	},
+	error : function() {
+		$.gritter.add({
+			title : "Error!",
+			text : "Error fetching Categories",
+			time : 4000
+		});
+	}
+
+});
+
+
+
+
+
+		});
+});
+
+
+
+
+$("#form").submit(function(){
+	var a = document.getElementById('categoryName}').value;
+    var b = document.getElementById('parentCategoryId').value; 
+    if(a == b) { return false; }
+    alert("Parent and Name must not match!!!");
+    return true;
+});
+</script>

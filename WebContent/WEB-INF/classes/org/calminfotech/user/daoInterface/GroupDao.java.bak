@@ -1,0 +1,24 @@
+package org.calminfotech.user.daoInterface;
+
+import java.util.List;
+
+import org.calminfotech.admin.models.Organisation;
+import org.calminfotech.user.models.Group;
+
+public interface GroupDao {
+
+	void save(Group group);
+
+	void update(Group group);
+
+	void delete(Group group);
+
+	Group getGroupById(int id);
+
+	List<Group> fetchAll();
+
+	public List<Group> fetchAllByOrganisation(Organisation organisation);
+	
+	public Group getAdminGroupByOrganisation(Organisation organisation);
+
+}

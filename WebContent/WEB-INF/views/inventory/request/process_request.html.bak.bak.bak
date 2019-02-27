@@ -1,0 +1,513 @@
+
+
+<div class="page-header">
+	<h1>
+		INVENTORY OFFICE - APROVE / ISSUE ITEM - <span th:text= "${@userIdentity.getCurrentUnit()?.getCategoryName()}"> </span> <small> <i
+			class="ace-icon fa fa-angle-double-right"></i> REQUESTS MANAGEMENT
+			MODULE
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard </a> <a
+			class="btn btn-xs btn-primary" th:href="@{/inventory/request }">
+			<i class="fa fa-plus-circle"></i>Point Requests
+		</a>
+	</div>
+</div>
+<p></p>
+
+<style>
+.table {
+	margin: auto;
+}
+
+ul.req-stat-ul li {
+	list-style-type: none;
+	float: left;
+	margin-right: 10px;
+}
+
+ul.req-stat-ul li:first {
+	margin-right: 30px;
+	font-weight: bold;
+}
+<!--
+-->
+</style>
+
+<div class="col-xs-12">
+	<!-- View contents here -->
+
+	
+	<div class="well well-sm">
+		<ul>
+			<li>Request ID:&nbsp;<span class="text-danger"
+				th:text="${pointRequest.requestBatchId}">Request ID</span>
+			</li>
+			
+			<li>Request Status:&nbsp;<span
+				 class="text-danger" th:text="${T(org.calminfotech.inventory.utils.PointRequestStatus).fromCode(pointRequest.requestStatus)}">Request
+				Status</span>
+			</li>
+			
+			<li>From Unit: &nbsp; <span class="text-danger"
+				th:text="${pointRequest.unit?.categoryName}">Unit</span>
+			</li>
+			
+					
+			<li>To Unit:&nbsp; <span class="text-danger"
+				th:text="${pointRequest.unitto?.CategoryName}"> Point</span>
+			</li>
+			
+	
+			<li><span class=""> Date Of Request:&nbsp;<span
+					class="text-danger" th:text="${pointRequest.requestDate}">Date Of Request</span>
+			</span></li>
+
+		</ul>
+	</div>
+	
+
+	<div class="col-md-offset-0 col-xs-11">
+
+		<table class="table" id="container"
+			th:with="pointRequestEnum=${T(org.calminfotech.inventory.utils.PointRequestStatus)}">
+			<thead>
+				<tr>
+					<th>S/No:</th>
+					<th>Global Item:</th>
+					<th>Unit Of Measure:</th>
+					<th>Qty Requested:</th>
+					<th>Qty Available:</th>
+					<th>Qty Approved:</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+
+				<th:block th:if="${pointRequest !=null}">
+
+					<tr 
+						th:each=" pointRequestLine,iterStat : ${pointRequest.pointRequestLines}">
+					<!-- 	<form role="form" method="POST"
+						th:action="@{/inventory/request/line_request/approve}"
+						th:object="${processPointRequestForm}">-->
+						<td th:text="${iterStat.count}">S/No</td>
+						<td class="" th:text="${pointRequestLine.globalItem?.GlobalitemName}">GlobalItem</td>
+						<td class="" th:text="${pointRequestLine.globalUnitofMeasure?.searchname}">Unit
+						Of Measure</td>
+						<td class="" th:text="${pointRequestLine.quantity}">Qty
+								Requested</td>
+							<td class="" th:text="${pointRequestLine.quantityAvailable}">Qty
+								Available</td>
+							<!-- <td class=""><input
+								th:value="${pointRequestLine.quantityApproved}"
+								th:name="qty_approved" type="text"
+								class="col-xs-7 col-sm-8 input-qty-approved"
+								placeholder="Enter Quantity"   oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"  /></td>
+							<td> -->
+							<td>
+								<div class="hidden-sm hidden-xs action-buttons">
+										
+			<a class="btn btn-warning btn-xs" data-toggle="modal"   title="Issue"
+			    th:attr="href='#qty-'+${pointRequestLine.id}"> <i
+			class="ace-icon fa fa-credit-card bigger-110"></i>Issue Out
+		</a>
+											
+									
+			<a  class="btn btn-xs btn-danger tooltips"
+						title="Issue Log"
+						th:href="@{/inventory/request/line_request/storeissuelog/view/{id} (id=${pointRequestLine.id}) }"> <i
+							class="fa fa-trash-o"></i> View Issue Log
+					</a> 		
+								
+								
+								
+										
+
+<div class="modal fade" th:id=" ${'qty-'+pointRequestLine.id}">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- Modal heading -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Issue Item</h4>
+			</div>
+			<!-- // Modal heading END -->
+			<!-- Modal body -->
+			<div class="modal-body">
+	
+				
+				<form th:object="${vform}" 
+					th:action="@{/inventory/request/line_request/give}" method="post" class="form-horizontal">
+					
+						
+		
+<div class="form-group">
+</div>
+		
+		
+	<div class="form-group">
+	
+	<label for="date-timepicker1" class="col-sm-3 control-label no-padding-right"> Date / Time </label>
+
+													
+	<div class="col-sm-5">
+	
+	<div class="input-group" >
+	<input  type="text"  class="form-control datetimepicker" th:field="*{dispensedate}"  required="required"/>
+	
+	<span class="input-group-addon">
+	<i class="fa fa-clock-o bigger-110"></i>
+	</span>
+	
+	</div>
+	
+	
+	<span class="text-danger" th:if="${#fields.hasErrors('dispensedate')}" th:errors="dispensedate"></span>
+	</div>
+
+		</div>
+		
+		
+		
+<div class="form-group">
+				<label for="height" class="col-sm-3 control-label no-padding-right">Quantity:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder="" required="required" oninput="this.value = this.value.replace(/[^0-9]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"
+						th:field="*{qty}" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('qty')}"
+						th:errors="*{qty}"></span>
+				</div>
+			</div>
+
+
+
+
+					<div class="form-group">
+				<label for="description" class="col-sm-3 control-label no-padding-right">Batch No.:</label>
+			<div class="col-sm-8">
+			<input type="text"  class="col-xs-10 col-sm-8"
+					 placeholder="" th:field="*{batchno}" />
+			
+							<span class="text-danger"
+								th:if="${#fields.hasErrors('batchno')}"
+								th:errors="*{batchno}"></span>
+								
+						</div>
+						
+					</div>
+
+
+
+
+					<div class="form-group">
+				<label for="description" class="col-sm-3 control-label no-padding-right">License No:</label>
+			<div class="col-sm-8">
+			<input type="text"  class="col-xs-10 col-sm-8"
+					 placeholder="" th:field="*{manulicno}" />
+			
+							<span class="text-danger"
+								th:if="${#fields.hasErrors('manulicno')}"
+								th:errors="*{manulicno}"></span>
+								
+						</div>
+						
+					</div>
+
+
+
+					<div class="form-group">
+				<label for="description" class="col-sm-3 control-label no-padding-right">Serial No.:</label>
+			<div class="col-sm-8">
+			<input type="text"  class="col-xs-10 col-sm-10"
+					 placeholder="" th:field="*{otherinfo}" />
+			
+							<span class="text-danger"
+								th:if="${#fields.hasErrors('otherinfo')}"
+								th:errors="*{otherinfo}"></span>
+								
+						</div>
+						
+					</div>
+
+
+
+<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-3 no-padding-right"
+								for="date-picker">Manufacture Date:</label>
+
+							<div class="col-xs-12 col-sm-9">
+								<div class="clearfix">
+
+									<input type="text" class="col-xs-12 col-sm-3 date-picker"
+										th:field="*{manufacturedate}"
+										data-date-format="yyyy-mm-dd" />
+										
+										<span class="text-danger"
+										th:if="${#fields.hasErrors('manufacturedate')}" th:errors="manufacturedate"></span>
+
+								</div>
+							</div>
+				</div>
+	
+				<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-3 no-padding-right"
+								for="date-picker">Expiry Date:</label>
+
+							<div class="col-xs-12 col-sm-9">
+								<div class="clearfix">
+
+									<input type="text" class="col-xs-12 col-sm-3 date-picker"
+										 th:field="*{expirydate}"
+										data-date-format="yyyy-mm-dd" />
+										
+										<span class="text-danger"
+										th:if="${#fields.hasErrors('expirydate')}" th:errors="expirydate"></span>
+
+								</div>
+							</div>
+				</div>
+		
+
+
+
+
+	
+		
+			<div hidden="hidden" >
+					<input type="text"   th:attr="value = ${pointRequestLine.id}"  name="id" />
+					<input type="text"   th:attr="value = ${pointRequestLine.pointRequest.id}"  name="bid" />
+					
+				</div>
+		
+		
+							<div class="col-md-offset-5 col-md-9" style="margin-top:15px">
+						<button type="submit" class="btn btn-primary btn-xs">
+							<i class=""></i> Save
+						</button>
+					</div>
+						
+
+
+
+
+					</form>
+		
+		
+	
+		
+		
+		
+					<!-- /.Dropzone -->
+					<!-- /.col -->
+				</div>
+
+			<!-- Modal footer -->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-xs" data-dismiss="modal">Cancel</button>
+			</div>
+			<!-- // Modal footer END -->
+		</div>
+	</div>
+</div>
+								
+								
+											
+                                 <!-- 
+									<th:block th:if="${pointRequestLine.requestStatus == pointRequestEnum.Pending.code}">
+										<button class="btn btn-xs btn-primary tooltip-info"
+											type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i>Approve
+										</button>
+										
+										<a class="btn btn-xs btn-primary tooltip-info"
+											data-rel="tooltip"
+											th:href="@{/inventory/request/line_request/issue/{id}/batch/{bid}(id=${pointRequestLine.id},bid=${pointRequest.id}) }"><i
+											class="fa fa-plus-circle"></i>Issue </a>
+											
+										<a class="btn btn-xs btn-primary tooltip-info"
+											data-rel="tooltip"
+											th:href="@{/inventory/request/line_request/disapprove/{id}/batch/{bid}(id=${pointRequestLine.id},bid=${pointRequest.id}) }"><i
+											class="fa fa-plus-circle"></i>Disapprove </a>
+									<a class="btn btn-xs btn-primary tooltip-info"
+										data-rel="tooltip"
+										th:href="@{/inventory/request/line_request/delete/{id}/batch/{bid}(id=${pointRequestLine.id},bid=${pointRequest.id}) }"><i
+										class="fa fa-plus-circle"></i>Delete </a>
+									
+									</th:block>
+									<th:block th:if="${pointRequestLine.requestStatus == pointRequestEnum.Approved.code}">
+										<button disabled="disabled" hidden="hidden"
+											class="btn btn-xs btn-primary tooltip-info" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i>Approve
+										</button>
+										<a class="btn btn-xs btn-primary tooltip-info"
+											data-rel="tooltip"
+											th:href="@{/inventory/request/line_request/issue/{id}/batch/{bid}(id=${pointRequestLine.id},bid=${pointRequest.id}) }"><i
+											class="fa fa-plus-circle"></i>Issue </a>
+										<a class="btn btn-xs btn-primary tooltip-info"
+											data-rel="tooltip"
+											th:href="@{/inventory/request/line_request/disapprove/{id}/batch/{bid}(id=${pointRequestLine.id},bid=${pointRequest.id}) }"><i
+											class="fa fa-plus-circle"></i>Disapprove </a>
+									</th:block>
+									<th:block th:if="${pointRequestLine.requestStatus == pointRequestEnum.Issued.code}">
+										<button disabled="disabled" hidden="hidden"
+											class="btn btn-xs btn-primary tooltip-info" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i>Approve
+										</button>
+										
+										<button disabled="disabled" hidden="hidden"
+											class="btn btn-xs btn-primary tooltip-info" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i>Disapprove
+										</button>
+										
+										<button disabled="disabled" hidden="hidden"
+											class="btn btn-xs btn-primary tooltip-info" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i>Issue
+										</button>
+									<a class="btn btn-xs btn-primary tooltip-info"
+											data-rel="tooltip"
+											th:href="@{/inventory/request/line_request/reverseissue/{id}/batch/{bid}(id=${pointRequestLine.id},bid=${pointRequest.id}) }"><i
+											class="fa fa-plus-circle"></i>Reverse Issue </a></th:block>
+									
+								</div>
+							</td> <input type="hidden" name="request_line_id"
+								th:value="${pointRequestLine.id}" /> <input type="hidden"
+								name="request_id" th:value="${pointRequest.id}" />
+
+						</form>
+					</tr>
+				</th:block>
+ -->
+ </div>
+ </td>
+ <!-- </form>-->
+ </tr>
+ </th:block>
+			</tbody>
+		</table>
+		<div class="hr hr-18 dotted hr-double"></div>
+
+<!-- 
+		<div class="hr hr-18 dotted hr-double"></div>
+		<div class="clearfix form-actions">
+			<div class="col-md-offset-4 col-md-9">
+				<button class="btn btn-primary" type="submit">
+					<i class="ace-icon fa fa-check bigger-110"></i> Submit
+				</button>
+				<a class="btn btn-danger" th:href="@{/inventory/request }"> <i
+					class="fa fa-plus-circle bigger-110"></i>Cancel
+				</a>
+			</div>
+
+		</div>
+		-->
+	</div>
+</div>
+
+
+<script>
+	$(document).ready(function() {
+
+		/*	$('.input-qty-approved').change(function(event) {
+				$this = $(this);
+				alert($this.attr('name') + "/" + $this.val())
+			});*/
+
+	});
+</script>
+
+<th:block th:if="${pageDelete}">
+
+	<div id="modal-table" class="modal fade" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header no-padding">
+					<div class="table-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">
+							<span class="white">&times;</span>
+						</button>
+						Are you sure you want to delete this record?:
+					</div>
+				</div>
+				<form role="form" class="form-horizontal" method="POST">
+
+					<div class="modal-body no-padding">
+						<table
+							class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
+							<tbody>
+
+								<tr>
+									<td>Global Item:</td>
+									<td th:text="${pointRequestLine.globalItem.GlobalitemName}">Global
+										Item:</td>
+								</tr>
+
+								<tr>
+									<td>Unit Of Measure:</td>
+									<td
+										th:text="${pointRequestLine.globalUnitofMeasure.measurename}">Unit
+										Of Measure</td>
+								</tr>
+
+								<tr>
+									<td>Quantity:</td>
+									<td th:text="${pointRequestLine.quantity}">Quantity</td>
+								</tr>
+
+							</tbody>
+						</table>
+					</div>
+					<div class="clearfix form-actions">
+						<div class="col-md-offset-3 col-md-9">
+							<input type="hidden" name="requestLineId"
+								th:value="${pointRequestLine.id}" /> <input type="hidden"
+								name="requestBatchId" th:value="${pointRequest.id}" />
+							<button class="btn btn-primary" type="submit">
+								<i class="ace-icon fa fa-check bigger-110"></i> Confirm Delete
+							</button>
+
+							<button type="button" class="btn btn-danger" data-dismiss="modal"
+								aria-hidden="true">
+								<i class="fa fa-plus-circle"></i>Cancel
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+
+	<a id="modal_view" href="#modal-table" role="button" class="green"
+		data-toggle="modal"> </a>
+</th:block>
+
+	<script type="text/javascript">
+		//height
+		jQuery(function($) {
+			$('#modal_view').click();
+
+		       $('.datetimepicker').datetimepicker({
+					autoclose : true,
+					format: 'YYYY-MM-DD HH:mm',
+					todayHighlight : true
+				});
+		    
+		});
+	</script>
+
+
+
+
+
+
+

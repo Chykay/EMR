@@ -1,0 +1,447 @@
+<div class="page-header">
+	<h1>
+		New <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			Schedule an Appointment
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xl btn-warning" th:href="@{/appointment/schedule}"><i
+			class="fa fa-list"></i> All Appointments
+		</a>
+	
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+
+		<form role="form" class="form-horizontal" method="POST"
+			th:object="${appForm}">
+			<legend>Schedule Appointment Form</legend>
+		
+			
+<!-- 			
+			<div class="form-group">
+				<label for="patient ID" class="col-sm-3 control-label no-padding-right">Patient ID:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" id = "customerid"
+						
+						th:field="*{refID}" th:readonly="readonly" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('refID')}"  
+						th:errors="*{refID}"></span>
+						<span class="input-group-btn">
+							<button type="button" onclick = "mypatient();" class="btn btn-purple btn-sm">
+							Search
+							<i class="ace-icon fa fa-search icon-on-right bigger-110"></i>
+							</button>
+						</span>
+				</div>
+			</div>
+			
+				<div class="form-group">
+				<label for="fullName" class="col-sm-3 control-label no-padding-right">Full Name:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" id = "customername" placeholder="full Name"
+						th:field="*{fullName}" readonly="readonly" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('fullName')}"
+						th:errors="*{fullName}"></span>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="phoneNo"
+					class="col-sm-3 control-label no-padding-right">Phone Number 
+					:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" id = "customerphone"
+						placeholder="Phone Number" th:field="*{phoneNo}" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('phoneNo')}"
+						th:errors="*{phoneNo}"></span>
+				</div>
+			</div>
+			
+			
+				<div class="form-group">
+				<label for="emailID"
+					class="col-sm-3 control-label no-padding-right">Email ID 
+					:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" id = "customeremail"
+						placeholder="Email ID" th:field="*{emailID}" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('emailID')}"
+						th:errors="*{emailID}"></span>
+				</div>
+			</div>
+			
+				<div class="form-group">
+				<label for="gender" class="col-sm-3 control-label no-padding-right">Gender:</label>
+				<div class="col-sm-9">
+					<select th:field="*{genderId}" class="col-xs-10 col-sm-5">
+						<option value="0">Select..</option>
+						<option th:each="g: ${genders}" th:value="${g.id}"
+							th:text="${g.type}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('genderId')}"
+						th:errors="*{genderId}"></span>
+				</div>
+			</div>
+			
+			
+				<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-3 no-padding-right"
+								for="appointmentDate">Date of Appointment:</label>
+
+							<div class="col-xs-12 col-sm-9">
+								<div class="clearfix">
+
+									<input type="text" class="col-xs-12 col-sm-3 date-picker"
+										id="date-picker" th:field="*{appointmentDate}"
+										data-date-format="yyyy-mm-dd" /> <span class="text-danger"
+										th:if="${#fields.hasErrors('appointmentDate')}" th:errors="appointmentDate"></span>
+	<input type="text" class="form-control col-xs-12 col-sm-3 date-timepicker1"
+										id="date-timepicker1"  th:field="*{appointmentDate}"
+										 /> <span class="input-group-addon"
+										th:if="${#fields.hasErrors('appointmentDate')}" th:errors="appointmentDate">	<i class="fa fa-clock-o bigger-110"></i></span>
+				
+								</div>
+							</div>
+				</div>
+				
+				
+				
+				
+					
+				
+				
+				
+				<div class="form-group">
+				<label for="language" class="col-sm-3 control-label no-padding-right">Preferred Language:</label>
+				<div class="col-sm-9">
+					<select th:field="*{languageId}" class="col-xs-10 col-sm-5">
+						<option value="0">Select..</option>
+						<option th:each="l: ${language}" th:value="${l.id}"
+							th:text="${l.name}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('languageId')}"
+						th:errors="*{languageId}"></span>
+				</div>
+			</div>
+			
+				
+					<div class="form-group">
+				<label for="appointmentSpecialty" class="col-sm-3 control-label no-padding-right">Appointment Specialty / Department</label>
+				<div class="col-sm-9">
+					<select th:field="*{appointmentSpecialty}"
+										 class="col-xs-10 col-sm-5">
+										<option value="0">Select...</option>
+							
+										<option value="Anaesthesia=">Anaesthesia</option>
+										<option value="
+Emergency Medicine">
+Emergency Medicine</option>
+										<option value="
+Clinical Neurophysiology">
+Clinical Neurophysiology</option>
+										<option value="Cardiology">Cardiology</option>
+										<option value="Dermatology">Dermatology</option>
+											<option value="Endocrinology Diabetes Mellitus">Endocrinology  Diabetes Mellitus</option>
+										<option value="General (Internal) Medicine">General (Internal) Medicine</option>
+										<option value="Medical Oncology">Medical Oncology</option>
+									<option value="Others">Others</option>
+									
+										
+			</select>  <span class="text-danger" th:if="${#fields.hasErrors('appointmentSpecialty')}"
+			th:errors="*{appointmentSpecialty}"></span>
+				</div>
+			</div>
+				
+						<div class="form-group">
+				<label for="appointmentType" class="col-sm-3 control-label no-padding-right">Appointment Type</label>
+				<div class="col-sm-9">
+					<select th:field="*{appointmentType}"
+										 class="col-xs-10 col-sm-5">
+										<option value="0">Select...</option>
+				
+										<option value="Cervix checkup">Cervix checkup</option>
+										<option value="Heart checkup">Heart checkup</option>
+										<option value="Hearing Tes">Hearing Tes</option>
+											<option value="Eye checkup">Eye checkup</option>
+								
+									<option value="Others">Others</option>
+									
+										
+			</select>  <span class="text-danger" th:if="${#fields.hasErrors('appointmentType')}"
+			th:errors="*{appointmentType}"></span>
+				</div>
+			</div>
+	
+			
+			<div class="form-group">
+				<label for="Unit" class="col-sm-3 control-label no-padding-right">Select Unit:</label>
+				<div class="col-sm-9">
+					<select class="col-xs-10 col-sm-5" th:field="*{unitId}">
+						<option value="0">Select..</option>
+						<option th:each="u : ${unit}" th:value="${u.unitId}"
+							th:text="${u.unit_name}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('unitId')}"
+						th:errors="*{unitId}"></span>
+				</div>
+			</div>
+
+	
+
+			<div class="form-group">
+				<label for="userId" class="col-sm-3 control-label no-padding-right">Prefered Doctor:</label>
+				<div class="col-sm-9">
+							
+						<select th:field="*{userId}" id="lg" class="col-xs-10 col-sm-5">
+										<option value="0">Select</option>
+									</select> <span class="text-danger" th:if="${#fields.hasErrors('userId')}"
+										th:errors="userId"></span>
+						
+				</div>
+			</div>
+			
+			
+			<div class="form-group">
+									<label for="appointmentDetail"
+										class="col-sm-3 control-label no-padding-right">Appointment
+										Detail:</label>
+									<div class="col-sm-9">
+										<textarea class="col-xs-10 col-sm-5"
+											placeholder="appointmentDetail" th:field="*{appointmentDetail}"></textarea>
+										<span class="text-danger"
+											th:if="${#fields.hasErrors('appointmentDetail')}"
+											th:errors="*{appointmentDetail}"></span>
+									</div>
+								</div> -->
+							
+
+			
+<input type="text" th:field="*{VisitId}" /> -->
+	<input type="text" th:field="*{consultationId}" />
+ 	
+
+				
+							<div class="row">
+				
+					<div class="form-group">
+				<label for="Visit ID" class="col-sm-3 control-label no-padding-right">Visit ID:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" 
+						
+						th:field="*{VisitId}" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('VisitId')}"  
+						th:errors="*{VisitId}"></span>
+					
+				</div>
+			</div>
+				</div>
+				
+				
+				<div class="row">
+				
+					<div class="form-group">
+				<label for="consultation ID" class="col-sm-3 control-label no-padding-right">consultation ID:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" 
+						
+						th:field="*{consultationId}" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('consultationId')}"  
+						th:errors="*{consultationId}"></span>
+					
+				</div>
+			</div>
+				</div>
+				
+				
+				
+
+<div class="row">
+											<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-3 no-padding-right"
+								for="appDate">Date of Appointment:</label>
+
+							<div class="col-xs-12 col-sm-9">
+								<div class="clearfix">
+
+	<input type="text" class="form-control col-xs-12 col-sm-3 date-timepicker1"
+										id="date-timepicker1"  th:field="*{appDate}"
+										 /> <span class="input-group-addon"
+										th:if="${#fields.hasErrors('appDate')}" th:errors="appDate">	<i class="fa fa-clock-o bigger-110"></i></span>
+				
+								</div>
+							</div>
+				</div>
+
+</div>
+	<div class="space-2"></div>
+		<div class="space-2"></div>
+	
+	
+				
+<div class="row">
+											<div class="form-group">
+				<label for="appSpeciality" class="col-sm-3 control-label no-padding-right">Department / Unit</label>
+				<div class="col-sm-9">
+					<select th:field="*{appSpeciality}"
+										 class="col-xs-10 col-sm-5">
+										<option value="0">Select...</option>
+							
+										<option value="Anaesthesia=">Anaesthesia</option>
+										<option value="
+Emergency Medicine">
+Emergency Medicine</option>
+										<option value="
+Clinical Neurophysiology">
+Clinical Neurophysiology</option>
+										<option value="Cardiology">Cardiology</option>
+										<option value="Dermatology">Dermatology</option>
+											<option value="Endocrinology Diabetes Mellitus">Endocrinology  Diabetes Mellitus</option>
+										<option value="General (Internal) Medicine">General (Internal) Medicine</option>
+										<option value="Medical Oncology">Medical Oncology</option>
+									<option value="Others">Others</option>
+									
+										
+			</select>  <span class="text-danger" th:if="${#fields.hasErrors('appSpeciality')}"
+			th:errors="*{appSpeciality}"></span>
+				</div>
+			</div>
+
+</div>
+	<div class="space-2"></div>
+		<div class="space-2"></div>
+		
+		
+		
+				
+<div class="row">
+					<div class="form-group">
+				<label for="appType" class="col-sm-3 control-label no-padding-right">Appointment Type</label>
+				<div class="col-sm-9">
+					<select th:field="*{appType}"
+										 class="col-xs-10 col-sm-5">
+										<option value="0">Select...</option>
+				
+										<option value="Cervix checkup">Cervix checkup</option>
+										<option value="Heart checkup">Heart checkup</option>
+										<option value="Hearing Tes">Hearing Tes</option>
+											<option value="Eye checkup">Eye checkup</option>
+								
+									<option value="Others">Others</option>
+									
+										
+			</select>  <span class="text-danger" th:if="${#fields.hasErrors('appType')}"
+			th:errors="*{appType}"></span>
+				</div>
+			</div>
+
+			
+		
+
+			
+
+
+</div>
+	<div class="space-2"></div>
+		<div class="space-2"></div>
+		
+		
+				
+<div class="row">
+				
+			<div class="form-group">
+									<label for="appDetail"
+										class="col-sm-3 control-label no-padding-right">Appointment
+										Detail:</label>
+									<div class="col-sm-9">
+										<textarea class="col-xs-10 col-sm-5"
+											placeholder="appointmentDetail" th:field="*{appDetail}"></textarea>
+										<span class="text-danger"
+											th:if="${#fields.hasErrors('appDetail')}"
+											th:errors="*{appDetail}"></span>
+									</div>
+								</div>
+							
+
+</div>
+	<div class="space-2"></div>
+		<div class="space-2"></div>
+		
+		
+
+
+
+
+			<div class="clearfix form-actions">
+				<div class="col-md-offset-3 col-md-9">
+			
+					<button class="btn btn-primary" type="submit">
+						<i class="ace-icon fa fa-check bigger-110"></i> Save
+					</button>
+
+					<button class="btn btn-danger" type="reset">
+						<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+ 
+ 
+<script type="text/javascript">
+
+function mypatient() {
+   var myWindow = window.open("/../" + window.location.pathname.split('/')[1] + "/getRelatedPatient", "MsgWindow", "width=500, height=500");
+  //  myWindow.document.write("<p>This window's name is: " + myWindow.name + "</p>");
+    myWindow.focus();
+    return false
+  
+}
+</script>
+
+<!-- 
+<script>
+	//this is for GET
+	$(function() {
+		/* User Selector*/
+		$('#unitId').change(
+				function(event) {
+					$.ajax({
+						type : "GET",
+						url : '/../' + window.location.pathname.split('/')[1] + '/utilities/unitandusers/userbyunit/'
+								+ $('#unitId').val(),
+						beforeSend : function() {
+							$.gritter.add({
+								title : "Progress...",
+								text : "Fetching Doctors",
+								time : 3000
+							});
+						},
+						success : function(html) {
+							$("#lg").html(html);
+							$.gritter.add({
+								title : "Success!",
+								text : "Doctors fetched",
+								time : 4000
+							});
+						},
+						error : function() {
+							$.gritter.add({
+								title : "Error!",
+								text : "Error fetching Doctors",
+								time : 4000
+							});
+						}
+
+					});
+				});
+	});
+</script>
+s --> 

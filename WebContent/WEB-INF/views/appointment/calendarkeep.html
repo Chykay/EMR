@@ -1,0 +1,461 @@
+
+	<div class="page-header">
+	<h1>
+	CALENDAR APPOINTMENT SCHEDULE <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			
+		</small>
+	</h1>
+</div>
+
+			
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							<div class="row">
+								<div class="col-sm-9">
+									<div class="space"></div>
+
+									<!-- #section:plugins/data-time.calendar -->
+									<div id="calendar"></div>
+
+									<!-- /section:plugins/data-time.calendar -->
+									
+					
+							<!-- 	<div class="col-sm-3">
+									<div class="widget-box transparent">
+										<div class="widget-header">
+											<h4>Draggable events</h4>
+										</div>
+
+										<div class="widget-body">
+											<div class="widget-main no-padding">
+												<div id="external-events">
+													<div class="external-event label-grey" data-class="label-grey">
+														<i class="ace-icon fa fa-arrows"></i>
+														My Event 1
+													</div>
+
+													<div class="external-event label-success" data-class="label-success">
+														<i class="ace-icon fa fa-arrows"></i>
+														My Event 2
+													</div>
+
+													<div class="external-event label-danger" data-class="label-danger">
+														<i class="ace-icon fa fa-arrows"></i>
+														My Event 3
+													</div>
+
+													<div class="external-event label-purple" data-class="label-purple">
+														<i class="ace-icon fa fa-arrows"></i>
+														My Event 4
+													</div>
+
+													<div class="external-event label-yellow" data-class="label-yellow">
+														<i class="ace-icon fa fa-arrows"></i>
+														My Event 5
+													</div>
+
+													<div class="external-event label-pink" data-class="label-pink">
+														<i class="ace-icon fa fa-arrows"></i>
+														My Event 6
+													</div>
+
+													<div class="external-event label-info" data-class="label-info">
+														<i class="ace-icon fa fa-arrows"></i>
+														My Event 7
+													</div>
+
+													<label>
+														<input type="checkbox" class="ace ace-checkbox" id="drop-remove" />
+														<span class="lbl"> Remove after drop</span>
+													</label>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>-->
+							</div>
+
+							<!-- PAGE CONTENT ENDS -->
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				
+</div>
+		
+		<!-- inline scripts related to this page -->
+		<script type="text/javascript" th:inline="javascript">
+			jQuery(function($) {
+
+/* initialize the external events
+	-----------------------------------------------------------------*/
+
+	$('#external-events div.external-event').each(function() {
+
+		// create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
+		// it doesn't need to have a start or end
+		var eventObject = {
+			title: $.trim($(this).text()) // use the element's text as the event title
+		};
+
+		// store the Event Object in the DOM element so we can get to it later
+		$(this).data('eventObject', eventObject);
+
+		// make the event draggable using jQuery UI
+		$(this).draggable({
+			zIndex: 999,
+			revert: true,      // will cause the event to go back to its
+			revertDuration: 0  //  original position after the drag
+		});
+		
+	});
+
+
+
+
+	/* initialize the calendar
+	-----------------------------------------------------------------*/
+
+	var date = new Date();
+	var d = date.getDate();
+	var m = date.getMonth();
+	var y = date.getFullYear();
+
+	var jsn={
+		//isRTL: true,
+		 buttonText: {
+			prev: '<i class="ace-icon fa fa-chevron-left"></i>',
+			next: '<i class="ace-icon fa fa-chevron-right"></i>'
+		},
+	
+		header: {
+			left: 'prev,next today',
+			center: 'title',
+			right: 'month,agendaWeek,agendaDay'
+		},
+		//  events: [
+		
+		  /*{
+			title: 'See Doctor Tunde',
+			start: '2018-03-05 14:00:00',
+			end: '2018-03-05 19:00:00',
+			className: 'label-important',
+			allDay: false
+		  }
+		  
+		  ,
+		  
+		  {
+			title: 'Long Event enterprise',
+			start: new Date(y, m, d-1),
+			end: new Date(y, m, d+2),
+			className: 'label-success'
+		  }
+		  /*
+		  ,
+		  {
+			title: 'Some Event',
+			start: new Date(y, m, d-3, 16, 0),
+			allDay: false
+		  },
+		  {
+			title: 'Another Event',
+			start: new Date(y, m, d-2, 16, 0),
+			allDay: false
+		  }
+		  */
+		//] 
+	//	,
+		editable: true,
+		droppable: true, // this allows things to be dropped onto the calendar !!!
+		drop: function(date, allDay) { // this function is called when something is dropped
+		
+			// retrieve the dropped element's stored Event Object
+			var originalEventObject = $(this).data('eventObject');
+			var $extraEventClass = $(this).attr('data-class');
+			
+			
+			// we need to copy it, so that multiple events don't have a reference to the same object
+			var copiedEventObject = $.extend({}, originalEventObject);
+			
+			// assign it the date that was reported
+			copiedEventObject.start = date;
+			copiedEventObject.allDay = allDay;
+			if($extraEventClass) copiedEventObject['className'] = [$extraEventClass];
+			
+			// render the event on the calendar
+			// the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
+			$('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
+			
+			// is the "remove after drop" checkbox checked?
+			if ($('#drop-remove').is(':checked')) {
+				// if so, remove the element from the "Draggable Events" list
+				$(this).remove();
+			}
+			
+		}
+		,
+		selectable: true,
+		selectHelper: true,
+		/*select: function(start, end, allDay) {
+			
+			bootbox.prompt("New Event Title:", function(title) {
+				if (title !== null) {
+					calendar.fullCalendar('renderEvent',
+						{
+							title: title,
+							start: start,
+							end: end,
+							allDay: allDay
+						},
+						true // make the event "stick"
+					);
+				}
+			});
+			
+
+			calendar.fullCalendar('unselect');
+		}*/
+		select: function(start, end, allDay) {
+			//display a modal
+			var modal = 
+			'<div class="modal fade"> <div class="modal-dialog"> <div class="modal-content"><div class="modal-body"><button type="button" class="close" data-dismiss="modal" style="margin-top:-10px;">&times;</button>' +
+			
+				 ' <center><h2>Enter New Appointment</h2></center><br></br><form class="no-margin" th:object="${appform}" method="POST" th:action="@{/appointment/save}">' +
+				 '<label><b>Patient Name :</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>' + 
+					 
+				 '<input type="text"   id="patientname"   required="required" disabled="disabled"  style="width:340px" />'   +
+					  
+				'<input type="text" id="patientid" name ="patientid"  hidden="hidden" /> ' +
+			 
+'<a	class="btn btn-xs btn-success" onclick ="myOpenpatientsearch()"> <i	class="glyphicon glyphicon-list"></i> Search</a>' +
+			
+'<br></br><br></br>' +
+ 
+				 
+				 
+				 '<label><b>User Name :</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>' + 
+				 
+				 '<select id="userid" name="userid" required="required">' +  [[${userlist}]] + '</select>' +
+				 
+				 '<br></br><br></br>' +
+				 
+				 '<label><b>Appointment details :</b> &nbsp;&nbsp;&nbsp;</label>'+
+				
+				 '<input class="middle" autocomplete="off" required="required" type="text" style="width:360px" value="" id="title" name="title">&nbsp;</input>' +
+					
+					'<br></br><br></br>' +
+			    
+						'<label><b>Start Date and Time :</b> &nbsp;</label>'+
+						
+						'<input type="text" class="middle" required="required"  id="start_date" name="start_date"  />' +
+					
+						'<br></br><br></br>' +
+						
+					
+						'<label><b>End Date and Time :</b> &nbsp;</label>'+
+						'<input type="text" class="middle" required="required"  id="end_date" name="end_date"  />' +
+									 
+						
+						
+				   ' <div class="modal-footer">' +
+				   '<button type="submit" class="btn btn-sm btn-success"><i class="ace-icon fa fa-check"></i> Save Event</button>'+
+					'<button type="button" class="btn btn-sm" data-dismiss="modal"><i class="ace-icon fa fa-times"></i> Cancel</button>' +
+ '  </div></form></div></div> </div> </div>' ;
+ 
+ 
+				
+// $('#start_date').off( "datetimepicker");
+// $('#end_date').fn.datetimepicker = null;
+ 
+ $("#start_date").removeAttr('id');
+
+$("#end_date").removeAttr('id');
+
+ 
+		
+        		 
+			var modal = $(modal).appendTo('body');
+			
+			
+			  $(function () {
+			         $('#start_date').datetimepicker({
+						autoclose : true,
+						format: 'YYYY-MM-DD HH:mm',
+						todayHighlight : true
+					});
+			     });
+			
+			  
+			  
+			  
+			     $(function () {
+			         $('#end_date').datetimepicker({
+						autoclose : true,
+						format: 'YYYY-MM-DD HH:mm',
+						todayHighlight : true
+					});
+			     });
+			     
+			    
+			     
+				 
+			 document.getElementById("start_date").value= moment(start).format('YYYY-MM-DD HH:mm');
+			     document.getElementById("end_date").value= moment(end).format('YYYY-MM-DD HH:mm');
+
+			
+			 	
+			     
+			     
+			     
+				/*			 
+						
+			modal.find('form').on('submit', function(ev){
+				ev.preventDefault();
+
+				eventTitle = $(this).find("input[type=text]").val();
+				
+				 
+				 
+				calendar.fullCalendar('renderEvent', 
+						{
+							title: '',
+							start: '',
+							end: '',
+							allDay: ''
+						}
+						
+						,
+						true // make the event "stick"
+					);
+				modal.modal("hide");
+			});
+			modal.find('button[data-action=delete]').on('click', function() {
+				calendar.fullCalendar('removeEvents' , function(ev){
+					return (ev._id == calEvent._id);
+				})
+				modal.modal("hide");
+			});
+
+		*/
+			modal.modal('show').on('hidden', function(){
+				
+				modal.remove();
+			});	
+			
+			
+		}
+		,
+		eventClick: function(calEvent, jsEvent, view) {
+
+			//display a modal
+			var modal = '<div class="modal fade"> <div class="modal-dialog">  <div class="modal-content"> <div class="modal-body">' +
+				  ' <button type="button" class="close" data-dismiss="modal" style="margin-top:-10px;">&times;</button>' +
+				  '<form class="no-margin"> <label>Change event name &nbsp;</label>' +
+					 '<input class="middle" autocomplete="off" type="text" value=" Event IdI:' + calEvent.EventId + ' title ' + calEvent.title + '" />' +
+					'<button type="submit" class="btn btn-sm btn-success"><i class="ace-icon fa fa-check"></i> Save</button>' +
+				   '</form> </div> <div class="modal-footer"><button type="button" class="btn btn-sm btn-danger" data-action="delete"><i class="ace-icon fa fa-trash-o"></i> Delete Event</button>' +
+					'<button type="button" class="btn btn-sm" data-dismiss="modal"><i class="ace-icon fa fa-times"></i> Cancel</button>' +
+				 '</div> </div> </div></div>';
+		
+		
+			var modal = $(modal).appendTo('body');
+			modal.find('form').on('submit', function(ev){
+				ev.preventDefault();
+
+				calEvent.title = $(this).find("input[type=text]").val();
+				calendar.fullCalendar('updateEvent', calEvent);
+				modal.modal("hide");
+			});
+			
+			modal.find('button[data-action=delete]').on('click', function() {
+				calendar.fullCalendar('removeEvents' , function(ev){
+					return (ev._id == calEvent._id);
+				})
+				modal.modal("hide");
+			});
+			
+			modal.modal('show').on('hidden', function(){
+				modal.remove();
+			});
+
+
+			//console.log(calEvent.id);
+			//console.log(jsEvent);
+			//console.log(view);
+
+			// change the border color just for fun
+			//$(this).css('border-color', 'red');
+
+		}
+		
+	}
+	
+	//var obj = '{ "name":"John", "age":30, "city":"New York"}';
+	
+//	var e = '[{"EventId":"1","title": "All day true no zero time", "start": "2018-04-26 14:00", "end": "2018-04-26 19:00","className": "label-success", "allDay": true},{"EventId":"2","title": "See allday false oo zero no all Tunde", "start": "2018-04-26 00:00", "end": "2018-04-26 00:00","className": "label-important", "allDay": false}]';
+var e=[[${eventlist}]];
+	
+	//alert(e);
+	jsn.events=JSON.parse(e);
+		  
+	//jsn.events=JSON.parse(e);
+	
+	var calendar = $('#calendar').fullCalendar(jsn);
+
+
+})
+		</script>
+
+
+<script type="text/javascript">
+     $(function () {
+         $("#datetimepicker1").datetimepicker({
+			autoclose : true,
+			format: "YYYY-MM-DD HH:mm",
+			todayHighlight : true
+		});
+     });
+     
+    
+     
+
+	 	function myOpenpatientsearch() {
+	 		   var myWindow = window.open("/EMR/search/appointmentpatientsearchwin", "MsgWindow", "width=550, height=600");
+	 		  //  myWindow.document.write("<p>This window's name is: " + myWindow.name + "</p>");
+	 		    myWindow.focus();
+	 		    return false
+	 		  
+	 		}
+	 	
+	 	function mypatient()
+	 	{
+	 		
+	 		if ( $('#patientname').val()=='' )
+	 			
+	 			{
+	 			
+	 			alert("Patient Name cannot be empty");
+	 			return false;	
+	 			}
+	 		
+	 		
+	 		
+	 	}
+	 	
+
+ </script>
+	
+<link rel="stylesheet"	th:href="@{/resources/assets/css/ace.onpage-help.css}" />
+	<!-- 
+<link rel="stylesheet" 	th:href="@{/resources/docs/assets/js/themes/sunburst.css}" />
+		
+		
+<script type="text/javascript"	th:src="@{/resources/assets/js/ace/ace.onpage-help.js}"></script>
+<script type="text/javascript"	th:src="@{/resources/docs/assets/js/rainbow.js}"></script>
+<script type="text/javascript"	th:src="@{/resources/docs/assets/js/language/generic.js}"></script>
+<script type="text/javascript"	th:src="@{/resources/docs/assets/js/language/html.js}"></script>
+<script type="text/javascript"	th:src="@{/resources/docs/assets/js/language/css.js}"></script>
+<script type="text/javascript"	th:src="@{/resources/docs/assets/js/language/javascript.js}"></script>
+		<script type="text/javascript"> ace.vars['base'] = '..'; </script>
+	 -->
+	 

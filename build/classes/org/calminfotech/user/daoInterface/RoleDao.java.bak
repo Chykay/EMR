@@ -1,0 +1,25 @@
+package org.calminfotech.user.daoInterface;
+
+import java.util.List;
+
+import org.calminfotech.admin.models.Organisation;
+import org.calminfotech.user.models.Role;
+
+public interface RoleDao {
+	
+	void save(Role role);
+	
+	void delete(Role role);
+	
+	void update(Role role);
+	
+	Role getRoleById(int id);
+	
+	Role getRoleByIdJson(int id);
+	
+	List<Role> fetchAll();
+	
+	List<Role> fetchAllRoleByOrganisation(Organisation organisation);
+	
+	Role getRoleByAdmin(Organisation organisation);
+}

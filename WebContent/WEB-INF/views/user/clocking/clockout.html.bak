@@ -1,0 +1,69 @@
+
+<div class="page-header">
+	<h1>Clock Out: Click on yes to clock out</h1>
+	
+	
+</div>
+<div class="row">
+	<div class="col-xs-12">
+		<p>
+			You are about to CLOCK OUT OF SYSTEM: <!-- <strong
+				th:text="${patient.title.acronym} + ' ' + ${patient.surname} + ' ' + ${patient.othernames}">name</strong>.
+	 -->		Are you really sure? You will not get new assignments again till the next time you clock in!
+		</p>
+
+		<form role="form" method="POST" th:object="${clockoutform}">
+			<input type="hidden" th:field="*{UserloginId}" />
+			<input type="hidden" th:field="*{username}" />
+			
+			<input type="hidden" th:field="*{loginSectionId}" />
+				<input type="hidden" th:field="*{loginSectionPointId}" />
+
+			
+			<button class="btn btn-danger" type="submit">
+				<i class="ace-icon fa fa-check bigger-110"></i> Yes
+			</button>
+			<a class="btn btn-primary" th:href="@{/user/clocking/user}">No</a>
+		</form>
+	</div>
+</div>
+<!-- 
+<script>
+	//this is for GET
+	$(function() {
+		/* Lga Selector*/
+		$('#loginSectionId').change(
+				function(event) {
+					$.ajax({
+						type : "GET",
+						url : "../../../utilities/section/pointbysection/"
+								+ $('#loginSectionId').val(),
+						beforeSend : function() {
+							$.gritter.add({
+								title : "Progress...",
+								text : "Fetching Login Points",
+								time : 3000
+							});
+						},
+						success : function(html) {
+							$("#lp").html(html);
+							$.gritter.add({
+								title : "Success!",
+								text : "Login Points fetched",
+								time : 4000
+							});
+						},
+						error : function() {
+							$.gritter.add({
+								title : "Error!",
+								text : "Error fetching Login Points",
+								time : 4000
+							});
+						}
+
+					});
+				});
+	});
+</script>
+
+ -->

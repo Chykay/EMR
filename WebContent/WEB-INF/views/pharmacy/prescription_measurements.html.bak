@@ -1,0 +1,610 @@
+<div class="page-header">
+	<h1>
+		PRESCRIBED DRUG MEASUREMENT<small> <i
+			class="ace-icon fa fa-angle-double-right"></i>	<span th:text="${vpd.globalitem != null ? vpd.globalitem.GlobalitemName : ''}"></span>
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard</a> 
+			<!-- <a
+			class="btn btn-danger btn-xs" th:href="@{/patients/index/all}"><i
+			class="fa fa-list-alt"></i> Create Visit</a>
+	 --></div>
+</div>
+<div class="hr hr-18 dotted hr-double"></div>
+ 
+<div class="row">
+	<div class="col-xs-12">
+		
+		<hr />
+		
+		
+			
+		
+			
+			
+				
+			
+			
+			
+			<div class="clearfix form-actions">
+				<div class="col-md-12 col-md-offset-5">
+				
+				<!-- 				<button class="btn btn-primary" id="submit" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i> 
+											<span th:text="${vpd.globalitem != null ? vpd.globalitem.GlobalitemName : ''}"></span>
+										</button> -->
+										
+											
+										
+			</div>
+			</div>
+			
+	
+	
+	</div>
+</div>
+
+		
+		
+	
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<div class="table-header">Prescription Measurement </div>
+		<table id="dTable"
+			class="table table-striped table-bordered table-hover">
+			<!-- Table heading -->
+			<thead>
+				<tr>
+					<!-- <th>Item name</th> -->
+					<th>Measurement</th>
+					<th>Quantity</th>
+					<!-- <th>Last Qty Dispensed</th>-->
+					
+					<th>Status</th>
+					<!-- 
+					<th>Given Unit</th>
+					
+					<th>Given/Reversed By</th>
+					 -->
+					<th><i class="glyphicon glyphicon-asterisk"></i></th>
+				</tr>
+			</thead>
+			<!-- // Table heading END -->
+			<!-- Table body -->
+			<tbody>
+				<tr th:each="v : ${vpd.prescriptionmeasurements}">
+				<!--       <td th:text="${#dates.format(v.duedate, 'yyyy-MMM-dd')}"> </td>  -->
+				      <td th:text="${v.globalitemUnitofMeasurevw != null ? v.globalitemUnitofMeasurevw.measurename : ''}"> </td>
+
+				
+					<td th:text="${v.quantity}"></td>
+					<!-- <td th:text="${v.qtydisp}"></td> -->
+					
+						<td th:text="${v.prescribedststatus  != null ? v.prescribedststatus.name : ''}"></td>
+	<!-- 
+			<td th:text="${v.given_unit != null ? v.given_unit.categoryName : ''}"></td>
+					
+					<td th:text="${v.given_by != null ? v.given_by.username : '' } "></td>
+		 -->			
+					<td>
+		
+			<a  class="btn btn-xs btn-danger tooltips"
+						title="Dispense Log"
+						th:href="@{/dispensespreadlog/view/{id} (id=${v.id}) }"> <i
+							class="fa fa-trash-o"></i> View Dispense Log
+					</a> 
+					
+					<!-- 
+					
+					
+			<a th:if="${v.prescribedststatus.prescribedstatus_id == 3}" class="btn btn-xs btn-danger tooltips"
+						title="Reverse"
+						th:href="@{/dispensespread/reverse/{id} (id=${v.id}) }"> <i
+							class="fa fa-trash-o"></i> Reverse
+					</a> 
+				
+					
+					
+			<a class="btn btn-danger btn-xs" data-toggle="modal"   title="Raise Bill"
+			    th:attr="href='#bill-'+${v.id}"> <i
+			class="ace-icon fa fa-credit-card bigger-110"></i>Billing
+		</a>
+					-->
+				
+				
+			<a class="btn btn-warning btn-xs" data-toggle="modal"   title="Dispense"
+			    th:attr="href='#qty-'+${v.id}"> <i
+			class="ace-icon fa fa-credit-card bigger-110"></i>Dispense
+		</a>
+		<!-- 
+					<a th:if="${v.prescribedststatus.prescribedstatus_id == 1}" class="btn btn-xs btn-success tooltips" title="Dispense"
+						th:href="@{/dispensespread/give/{id} (id=${v.id}) }">
+							<i class="fa fa-trash-o"></i> Old Dispense
+					</a> 
+			 -->		
+					<!-- 
+					
+						<a class="btn btn-danger btn-xs" data-toggle="modal"  
+			    th:attr="href='#'+${v.id}"> <i
+			class="ace-icon fa fa-share bigger-110"></i>Transfer
+		</a>
+			
+			 -->
+					<div class="modal fade" th:id="${v.id}">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- Modal heading -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Change Status</h4>
+			</div>
+			<!-- // Modal heading END -->
+			<!-- Modal body -->
+			<div class="modal-body">
+				<!-- Form -->
+			<!-- 	${map[__${entry.key}__]} -->
+			<!--  <form th:object="${v__${v.id}__}" -->	
+			
+			<!-- 	<form th:object="${v_form}"
+					th:action="@{/prescribeddrug/changestatus}" method="post">
+					
+					<input type="text" hidden="hidden"  th:attr="value = ${v.id}"  name="id"   />
+					
+					
+					<div class="form-group">
+						<label>Select Status</label>
+						<div class="">
+							<select class="col-xs-10 col-sm-12" th:id="${'s-' + v.id}" 
+								th:field="*{statusId}" required="true" >
+								 <option value="">Select..</option>
+								<option th:each="s: ${statuslist}" th:value="${s.prescribedstatus_id}"
+									th:text="${s.name}"></option>
+							</select> <span class="text-danger"
+								th:if="${#fields.hasErrors('statusId')}"
+								th:errors="*{statusId}"></span>
+						</div>
+					</div>
+				
+					<div class="clearfix form-actions">
+						<br />
+						<button type="submit" class="btn btn-primary btn-xs">
+							<i class=""></i> Change
+						</button>
+					</div>
+				</form> -->
+				 
+			</div>
+			<!-- // Modal body END -->
+
+			<!-- Modal footer -->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-xs" data-dismiss="modal">Cancel</button>
+			</div>
+			<!-- // Modal footer END -->
+		</div>
+	</div>
+</div>
+					
+					
+			
+<div class="modal fade" th:id=" ${'bill-'+v.id}">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- Modal heading -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Billing </h4>
+			</div>
+			<!-- // Modal heading END -->
+			<!-- Modal body -->
+			<div class="modal-body">
+	
+				
+				<form th:object="${vform}" 
+					th:action="@{/invoice/raiseinvoice}" method="post">
+					
+					
+		
+
+
+
+					 <div class="form-group">
+				<label for="billId" class="col-sm-12 col-xs-12 control-label no-padding-left">Select Bill Item:</label>
+				<div class="col-sm-9">
+							<select class="col-xs-10 col-sm-12" th:id="${'item-' + v.id}"  onchange="myFetchmeasure(this.id)"
+								th:field="*{globaitemid}" required="true" >
+								 <option th:value="${v.globalitemUnitofMeasurevw.globalitem_id}" th:text ="${v.globalitemUnitofMeasurevw.globalitemname}"></option> 
+					
+							
+							 
+								<!-- <option th:each="g: ${globalitemlist}" th:value="${g.itemId}"
+									th:text="${g.GlobalitemName}"></option>
+							 -->
+							
+							
+							</select>
+							
+							
+							 <span class="text-danger"		th:if="${#fields.hasErrors('globaitemid')}"
+								th:errors="*{globaitemid}"></span>
+						</div>
+					</div>
+
+
+<br></br>
+
+	<div class="form-group">
+						<label for="userId" class="col-sm-12 col-xs-12 control-label no-padding-left">Select Measure:</label>
+						<div class="col-sm-9">
+						<select class="col-xs-10 col-sm-12" th:id="${'itemmeasure-' + v.id}" 
+								th:field="*{itemmeasureid}" required="true" >
+							 <option th:value="${v.globalitemUnitofMeasurevw .id}" th:text ="${v.globalitemUnitofMeasurevw.searchname}"></option> 
+					
+								
+							</select>
+							
+							
+							 <span class="text-danger"		th:if="${#fields.hasErrors('itemmeasureid')}"
+								th:errors="*{itemmeasureid}"></span>
+						</div>
+					
+</div>
+
+
+
+		
+						<div class="clearfix form-actions">
+				<br></br>
+		
+		
+		
+			<div hidden="hidden" >
+					<input type="text"   th:attr="value = ${v.consultationprescribedDrug.visitConsultation.visit.id}"  name="visitId" />
+				<input type="text"   th:attr="value = ${v.id}"  name="referenceid" />
+				<input type="text"   th:attr="value = ${v.consultationprescribedDrug.hrunit.categoryId}"  name="unitId" />
+				<input type="text"   th:attr="value = ${v.qtydisp}" name="qty" />
+				</div>
+		
+		
+							<div class="col-md-offset-5 col-md-9 " style="margin-top:15px">
+						<button type="submit" class="btn btn-primary btn-xs">
+							<i class=""></i> Raise Bill
+						</button>
+					</div>
+							</div>
+
+
+
+
+					</form>
+		
+		
+	
+		
+		
+		
+					<!-- /.Dropzone -->
+					<!-- /.col -->
+				</div>
+
+			<!-- Modal footer -->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-xs" data-dismiss="modal">Cancel</button>
+			</div>
+			<!-- // Modal footer END -->
+		</div>
+	</div>
+</div>
+			
+
+<div class="modal fade" th:id=" ${'qty-'+v.id}">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- Modal heading -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Change Quantity and dispense  </h4>
+			</div>
+			<!-- // Modal heading END -->
+			<!-- Modal body -->
+			<div class="modal-body">
+	
+				
+				<form th:object="${vform}" 
+					th:action="@{/dispensespread/give}" method="post" class="form-horizontal">
+					
+						
+		
+<div class="form-group">
+</div>
+		
+		
+	<div class="form-group">
+	
+	<label for="date-timepicker1" class="col-sm-3 control-label no-padding-right"> Date / Time </label>
+
+													
+	<div class="col-sm-5">
+	
+	<div class="input-group" >
+	<input  type="text"  class="form-control datetimepicker" th:field="*{dispensedate}"  required="required"/>
+	
+	<span class="input-group-addon">
+	<i class="fa fa-clock-o bigger-110"></i>
+	</span>
+	
+	</div>
+	
+	
+	<span class="text-danger" th:if="${#fields.hasErrors('dispensedate')}" th:errors="dispensedate"></span>
+	</div>
+
+		</div>
+		
+		
+		
+<div class="form-group">
+				<label for="height" class="col-sm-3 control-label no-padding-right">Quantity:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder="" required="required" oninput="this.value = this.value.replace(/[^0-9]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"
+						th:field="*{qty}" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('qty')}"
+						th:errors="*{qty}"></span>
+				</div>
+			</div>
+
+
+
+
+					<div class="form-group">
+				<label for="description" class="col-sm-3 control-label no-padding-right">Batch No.:</label>
+			<div class="col-sm-8">
+			<input type="text"  class="col-xs-10 col-sm-8"
+					 placeholder="" th:field="*{batchno}" />
+			
+							<span class="text-danger"
+								th:if="${#fields.hasErrors('batchno')}"
+								th:errors="*{batchno}"></span>
+								
+						</div>
+						
+					</div>
+
+
+
+
+					<div class="form-group">
+				<label for="description" class="col-sm-3 control-label no-padding-right">GT TIN No:</label>
+			<div class="col-sm-8">
+			<input type="text"  class="col-xs-10 col-sm-8"
+					 placeholder="" th:field="*{manulicno}" />
+			
+							<span class="text-danger"
+								th:if="${#fields.hasErrors('manulicno')}"
+								th:errors="*{manulicno}"></span>
+								
+						</div>
+						
+					</div>
+
+
+
+					<div class="form-group">
+				<label for="description" class="col-sm-3 control-label no-padding-right">Serial No.:</label>
+			<div class="col-sm-8">
+			<input type="text"  class="col-xs-10 col-sm-10"
+					 placeholder="" th:field="*{otherinfo}" />
+			
+							<span class="text-danger"
+								th:if="${#fields.hasErrors('otherinfo')}"
+								th:errors="*{otherinfo}"></span>
+								
+						</div>
+						
+					</div>
+
+
+
+<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-3 no-padding-right"
+								for="date-picker">Manufacture Date:</label>
+
+							<div class="col-xs-12 col-sm-9">
+								<div class="clearfix">
+
+									<input type="text" class="col-xs-12 col-sm-3 date-picker"
+										th:field="*{manufacturedate}"
+										data-date-format="yyyy-mm-dd" />
+										
+										<span class="text-danger"
+										th:if="${#fields.hasErrors('manufacturedate')}" th:errors="manufacturedate"></span>
+
+								</div>
+							</div>
+				</div>
+	
+				<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-3 no-padding-right"
+								for="date-picker">Expiry Date:</label>
+
+							<div class="col-xs-12 col-sm-9">
+								<div class="clearfix">
+
+									<input type="text" class="col-xs-12 col-sm-3 date-picker"
+										 th:field="*{expirydate}"
+										data-date-format="yyyy-mm-dd" />
+										
+										<span class="text-danger"
+										th:if="${#fields.hasErrors('expirydate')}" th:errors="expirydate"></span>
+
+								</div>
+							</div>
+				</div>
+		
+
+
+
+
+	
+		
+			<div hidden="hidden" >
+					<input type="text"   th:attr="value = ${v.consultationprescribedDrug.visitConsultation.visit.id}"  name="visitId" />
+				<input type="text"   th:attr="value = ${v.id}"  name="id" />
+				</div>
+		
+		
+							<div class="col-md-offset-5 col-md-9" style="margin-top:15px">
+						<button type="submit" class="btn btn-primary btn-xs">
+							<i class=""></i> Save
+						</button>
+					</div>
+						
+
+
+
+
+					</form>
+		
+		
+	
+		
+		
+		
+					<!-- /.Dropzone -->
+					<!-- /.col -->
+				</div>
+
+			<!-- Modal footer -->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-xs" data-dismiss="modal">Cancel</button>
+			</div>
+			<!-- // Modal footer END -->
+		</div>
+	</div>
+</div>
+
+
+					
+					
+					</td>
+				</tr>
+			</tbody>
+			<!-- // Table body END -->
+		</table>
+		<!-- /. End view content here -->
+	</div>
+</div>
+
+
+
+<!-- Transfer form modal -->
+
+<!-- /.Transfer form -->
+
+
+<script>
+/*
+jQuery(function($) {
+	var oTable1 = $('#dTable').dataTable({
+		bAutoWidth : false,
+		"aoColumns" : [ {
+			"bSortable" : true
+		},
+		null, 
+		null,
+		 {
+			"bSortable" : true
+		},
+		null,
+		null
+		
+		
+		]
+
+	,
+	//"sScrollY": "200px",
+	"bPaginate": true,
+
+	//"sScrollX": "100%",
+	//"sScrollXInner": "120%",
+	//"bScrollCollapse": true,
+	//Note: if you are applying horizontal scrolling (sScrollX) on a ".table-bordered"
+	//you may want to wrap the table inside a "div.dataTables_borderWrap" element
+
+	//"iDisplayLength": 50
+	});
+
+});
+
+*/
+$(function(){
+	/* DatePicker*/
+	$('.date-picker').datepicker({
+		autoclose : true,
+		format: 'yyyy-mm-dd',
+		todayHighlight : true
+	})//show datepicker when clicking on the icon
+	.next().on(ace.click_event, function() {
+		$(this).prev().focus();
+	});
+	
+
+	
+	       $('.datetimepicker').datetimepicker({
+				autoclose : true,
+				format: 'YYYY-MM-DD HH:mm',
+				todayHighlight : true
+			});
+	    
+/*$(".tooltips").tooltip({
+		animation : true
+	});*/
+});
+
+
+
+function myFetchmeasure(d)
+	{
+	var  h= d.split("-");	
+					$.ajax({
+						type : "GET",
+						url : '/../'+ window.location.pathname.split('/')[1] + '/visits/fetchdrugmeasure/" + $('#' + d).val(),
+						beforeSend : function() {
+							 $.gritter.add({
+								title : "Progress...",
+								text : "Fetching Measure",
+								time : 3000
+							}); 
+						},
+						success : function(html) {
+							$('#itemmeasure-'+h[1]).html(html);
+							 $.gritter.add({
+								title : "Success!",
+								text : "Measure Fetched",
+								time : 4000
+							}); 
+						},
+						error : function() {
+							$.gritter.add({
+								title : "Error!",
+								text : "Error Fetching Measure",
+								time : 4000
+							});
+
+						}
+				});
+			
+		}
+		
+</script>

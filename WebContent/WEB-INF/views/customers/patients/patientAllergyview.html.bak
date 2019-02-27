@@ -1,0 +1,322 @@
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+
+				<div>
+					<div class="row">
+
+							<div class="col-xs-12 col-sm-9">
+						
+								<div class="profile-info-row">
+									<div class="profile-info-name">Patient Category</div>
+
+									<div class="profile-info-value">
+										<span th:text="${pAllergy.categoryId}"></span>
+									</div>
+								</div>
+								
+								<div class="profile-info-row">
+									<div class="profile-info-name">Allergy</div>
+
+									<div class="profile-info-value">
+										<span th:text="${pAllergy.pk.allergy.allergyId}">alexdoe</span>
+									</div>
+								</div>
+
+
+								<div class="profile-user-info">
+									<div class="profile-info-row">
+										<div class="profile-info-name">Descrition</div>
+
+										<div class="profile-info-value">
+											<span th:text="${pAllergy.description}">alexdoe</span>
+										</div>
+									</div>
+									
+									
+									<div class="profile-user-info">
+									<div class="profile-info-row">
+										<div class="profile-info-name">Descrition</div>
+
+										<div class="profile-info-value">
+											<span th:text="${pAllergy.description}">alexdoe</span>
+										</div>
+									</div>
+
+									
+
+
+									<div class="profile-user-info">
+									<div class="profile-info-row">
+										<div class="profile-info-name">Reactions</div>
+
+										<div class="profile-info-value">
+											<span th:text="${pAllergy.reactions}">alexdoe</span>
+										</div>
+									</div>
+
+
+
+
+
+
+
+
+								</div>
+
+								<div class="hr hr-8 dotted"></div>
+							</div>
+							<!-- /.col -->
+						</div>
+				</div>
+			
+			
+	</div>
+</div>
+</div>
+</div>
+
+<script>
+	jQuery(function($) {
+		var oTable1 = $('#dTableA').dataTable({
+			bAutoWidth : false,
+			"aoColumns" : [ {
+				"bSortable" : true
+			}, null, null,{
+				"bSortable" : false
+			} ]
+
+		//,
+		//"sScrollY": "200px",
+		//"bPaginate": false,
+
+		//"sScrollX": "100%",
+		//"sScrollXInner": "120%",
+		//"bScrollCollapse": true,
+		//Note: if you are applying horizontal scrolling (sScrollX) on a ".table-bordered"
+		//you may want to wrap the table inside a "div.dataTables_borderWrap" element
+
+		//"iDisplayLength": 50
+		});
+
+	});
+</script>
+
+<script>
+	jQuery(function($) {
+		var oTable1 = $('#dTable').dataTable({
+			bAutoWidth : false,
+			"aoColumns" : [ {
+				"bSortable" : true
+			}, null, null, null,{
+				"bSortable" : false
+			} ]
+
+		//,
+		//"sScrollY": "200px",
+		//"bPaginate": false,
+
+		//"sScrollX": "100%",
+		//"sScrollXInner": "120%",
+		//"bScrollCollapse": true,
+		//Note: if you are applying horizontal scrolling (sScrollX) on a ".table-bordered"
+		//you may want to wrap the table inside a "div.dataTables_borderWrap" element
+
+		//"iDisplayLength": 50
+		});
+
+	});
+</script>
+
+<!-- <div class="modal fade" id="modal-simple">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			Form
+			<form th:action="@{/patients/imageUpload}"
+				th:object="${imageForm}" method="post" enctype="multipart/form-data">
+				Modal heading
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title">Change Image</h4>
+				</div>
+				// Modal heading END
+				Modal body
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="lastName"
+							class="col-sm-3 control-label no-padding-right">Image:</label>
+						<div class="col-sm-9">
+							<input type="file" th:field="*{imageFile}" placeholder="image" /><span
+								class="text-danger" th:if="${#fields.hasErrors('imageFile')}"
+								th:errors="*{imageFile}"></span>
+						</div>
+					</div>
+				</div>
+				// Modal body END
+
+				Modal footer
+				<div class="modal-footer">
+					<input type="hidden" th:field="*{id}" />
+					<button class="btn btn-primary btn-xs" type="submit"
+						id="save-changes">Upload image</button>
+					<button type="button" class="btn btn-xs" data-dismiss="modal">Cancel</button>
+				</div>
+				// Modal footer END
+			</form>
+			/.Form
+		</div>
+	</div>
+</div> -->
+
+ <!-- <div class="modal fade" id="modal-simple1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			Form
+			Modal heading
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Patient Allergy Assessment</h4>
+			</div>
+			// Modal heading END
+			Modal body
+			<div class="modal-body">
+				<div class="row">
+					 Dropzone
+					<div class="space space-4"></div>
+
+					 Dropzone
+
+
+					<form role="form" class="form-horizontal" method="POST"
+						th:object="${aForm}">
+						<div class="form-group">
+							<label for="allergy"
+								class="col-sm-3 control-label no-padding-right">Allergy
+								Category:</label>
+							<div class="col-sm-9">
+								<select class="col-xs-10 col-sm-5" id="allergyCategoryId"
+									th:field="*{allergyCategoryId}">
+									<option value="0">Select..</option>
+									<option th:each="c : ${categories}" th:value="${c.allergyCategoryId}"
+										th:text="${c.name}"></option>
+								</select> <span class="text-danger"
+									th:if="${#fields.hasErrors('allergyCategoryId')}"
+									th:errors="*{allergyCategoryId}"></span>
+							</div>
+						</div>
+
+
+
+						<div class="form-group">
+							<label for="detail"
+								class="col-sm-3 control-label no-padding-right">Allergy
+								Name:</label>
+							<div class="col-sm-9">
+								<select th:field="*{allergyId}" id="allergies"
+									class="col-xs-10 col-sm-5">
+									<option value="0">Select</option>
+								</select> <span class="text-danger"
+									th:if="${#fields.hasErrors('allergyId')}" th:errors="allergyId"></span>
+
+							</div>
+						</div>
+
+
+
+						<div class="form-group">
+							<label for="reactions"
+								class="col-sm-3 control-label no-padding-right">Reactions:</label>
+							<div class="col-sm-9">
+								<textarea class="col-xs-10 col-sm-5"
+									placeholder="Triggers, effects and Symptoms"
+									th:field="*{reactions}"></textarea>
+								<span class="text-danger"
+									th:if="${#fields.hasErrors('reactions')}"
+									th:errors="*{reactions}"></span>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="description"
+								class="col-sm-3 control-label no-padding-right">Description:</label>
+							<div class="col-sm-9">
+								<textarea class="col-xs-10 col-sm-5"
+									placeholder="medication and treatments" th:field="*{description}"></textarea>
+								<span class="text-danger"
+									th:if="${#fields.hasErrors('description')}"
+									th:errors="*{description}"></span>
+							</div>
+						</div>
+
+						<div class="clearfix form-actions">
+							<div class="col-md-offset-3 col-md-9">
+								<input type="hidden" th:field="*{patientId}" />
+								<button class="btn btn-primary" type="submit">
+									<i class="ace-icon fa fa-check bigger-110"></i> Add
+								</button>
+
+								<button class="btn btn-danger" type="reset">
+									<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+								</button>
+							</div>
+						</div>
+					</form>
+					/.Dropzone
+					/.col
+				</div>
+			</div>
+			// Modal body END
+
+			Modal footer
+			// Modal footer END
+			/.Form
+		</div>
+	</div>
+</div> 
+ -->
+<!-- <script>
+	//this is for GET
+	$(function() {
+		/* Lga Selector*/
+		
+		$('#allergyCategoryId').change(
+				function(event) {
+					$.ajax({
+						type : "GET",
+						url : "/../HMS/utilities/allergies/allergiesbycategory/"
+								+ $('#allergyCategoryId').val(),
+						beforeSend : function() {
+							/* $.gritter.add({
+								title : "Progress...",
+								text : "Fetching allegries based on category",
+								time : 3000
+							}); */
+						},
+						success : function(html) {
+							$("#allergies").html(html);
+							/* $.gritter.add({
+								title : "Success!",
+								text : "Allergy List fetched",
+								time : 4000,
+								class_name: 'gritter-success' 
+							}); */
+						},
+						error : function() {
+							/* $.gritter.add({
+								title : "Error!",
+								text : "Error fetching Allergy List",
+								time : 4000,
+								class_name: 'gritter-error'
+							}); */
+						}
+
+					});
+				});
+	});
+</script> -->
+
+
+
+ 

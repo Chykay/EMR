@@ -1,0 +1,595 @@
+package org.calminfotech.system.controllers;
+
+import java.sql.CallableStatement;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+
+import org.calminfotech.hrunit.models.Staffgroupranking;
+import org.calminfotech.system.boInterface.GlobalItemBo;
+import org.calminfotech.system.boInterface.GlobalItemCategoryBo;
+import org.calminfotech.system.boInterface.GlobalItemTypeBo;
+import org.calminfotech.system.boInterface.GlobalItemUnitofMeasureBo;
+import org.calminfotech.system.boInterface.GlobalUnitofMeasureBo;
+import org.calminfotech.system.forms.GlobalItemForm;
+import org.calminfotech.system.forms.GlobalItemRankingForm;
+import org.calminfotech.system.forms.GlobalItemUnitOfMeasureForm;
+import org.calminfotech.system.forms.GlobalitemSearchForm;
+import org.calminfotech.system.models.GlobalItem;
+import org.calminfotech.system.models.GlobalItemCategory;
+import org.calminfotech.system.models.GlobalItemRanking;
+import org.calminfotech.system.models.GlobalItemReorder;
+import org.calminfotech.system.models.GlobalItemType;
+import org.calminfotech.system.models.GlobalItemUnitofMeasure;
+import org.calminfotech.system.models.GlobalItemUnitofMeasureVw;
+import org.calminfotech.system.models.GlobalUnitofMeasure;
+import org.calminfotech.user.utils.UserIdentity;
+import org.calminfotech.utils.Alert;
+import org.calminfotech.utils.Auditor;
+import org.calminfotech.utils.GlobalItemkindList;
+import org.calminfotech.utils.GlobalUnitofMeasureList;
+import org.calminfotech.utils.SearchUtility;
+import org.calminfotech.utils.StaffgrouprankingList;
+import org.calminfotech.utils.annotations.Layout;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+@Controller
+@RequestMapping(value = "/system/globalitem")
+@Layout(value = "layouts/form_wizard_layout")
+public class GlobalItemController {
+
+	@Autowired
+	private GlobalItemCategoryBo globalItemCategoryBo;
+
+	@Autowired
+	private GlobalItemBo globalItemBo;
+
+	@Autowired
+	private GlobalItemTypeBo globalItemTypeBo;
+
+	@Autowired
+	private GlobalItemkindList globalkindBo;
+
+	@Autowired
+	private GlobalUnitofMeasureList globalunitofmeasureBo;
+
+	@Autowired
+	private GlobalUnitofMeasureBo unitofmeasureBo;
+
+	@Autowired
+	private GlobalItemUnitofMeasureBo globalitemunitBo;
+
+	@Autowired
+	private StaffgrouprankingList rankingBo;
+
+	@Autowired
+	private SearchUtility searchUtilBo;
+
+	@Autowired
+	private Alert alert;
+
+	@Autowired
+	private Auditor auditor;
+
+	@Autowired
+	private UserIdentity userIdentity;
+
+	@Autowired
+	private SessionFactory sessionFactory;
+
+	@RequestMapping(value = { "s", "/indexs" }, method = RequestMethod.GET)
+	@Layout("layouts/datatable")
+	// @Layout(value = "layouts/form_wizard_layout")
+	public String index(Model model) {
+
+		model.addAttribute("global", globalItemBo
+				.fetchTop50byOrganisation(userIdentity.getOrganisation()
+						.getId()));
+
+		model.addAttribute("orgId", userIdentity.getOrganisation().getId());
+		return "system/globalitem/index";
+	}
+
+	@RequestMapping(value = { "/index/all" }, method = RequestMethod.GET)
+	@Layout("layouts/datatable")
+	// @Layout(value = "layouts/form_wizard_layout")
+	public String indexall(Model model) {
+		model.addAttribute("globalItemType",
+				this.globalItemTypeBo.fetchAllByOrganisation());
+		// model.addAttribute("global",
+		// globalItemBo.fetchAll(userIdentity.getOrganisation().getId()));
+		model.addAttribute("orgId", userIdentity.getOrganisation().getId());
+		GlobalitemSearchForm pf = new GlobalitemSearchForm();
+		pf.setMysp(0);
+		model.addAttribute("globalitemSearch", pf);
+
+		return "system/globalitem/indexall";
+	}
+
+	@RequestMapping(value = "/index/all", method = RequestMethod.POST)
+	@Layout("layouts/datatable")
+	public String searchPatient(
+			@ModelAttribute("globalitemSearch") GlobalitemSearchForm globalitemSearchForm,
+			BindingResult result, Model model, HttpSession session,
+			RedirectAttributes redirectAttributes) {
+
+		// List patientList = searchBo.searchPatient(searchForm, session);
+		model.addAttribute("globalItemType",
+				this.globalItemTypeBo.fetchAllByOrganisation());
+		List globalitemList = searchUtilBo.searchGlobalitem(
+				globalitemSearchForm, session);
+
+		model.addAttribute("global", globalitemList);
+
+		return "system/globalitem/indexall";
+	}
+
+	@RequestMapping(value = "/view/{Id}")
+	@Layout("layouts/datatable")
+	public String view(@PathVariable("Id") Integer id, Model model,
+			RedirectAttributes redirectAttributes) {
+
+		GlobalItem globalitem = this.globalItemBo.getGlobalItemById(id);
+		if (null == globalitem) {
+			alert.setAlert(redirectAttributes, Alert.DANGER,
+					"Error! Invalid resource");
+			return "redirect:/globalitem/index";
+		}
+		model.addAttribute("globalitem", globalitem);
+
+		// GlobalitemunitofMeasure
+
+		GlobalItemUnitOfMeasureForm globalitemunitofmeasureform = new GlobalItemUnitOfMeasureForm();
+
+		GlobalItemRankingForm globalitemrankingform = new GlobalItemRankingForm();
+
+		globalitemunitofmeasureform.setGlobalitem_id(globalitem.getItemId());
+		globalitemrankingform.setGlobalitem_id(globalitem.getItemId());
+
+		GlobalItemForm globalitemform = new GlobalItemForm();
+
+		globalitemform.setGlobalitemId(globalitem.getItemId());
+		GlobalItemReorder globalitemreorder = globalItemBo
+				.getGlobalItemReorder(globalitem.getItemId());
+
+		globalitemunitofmeasureform.setGlobalitem_id(globalitem.getItemId());
+
+		List<Staffgroupranking> staffranking = rankingBo.fetchAll();
+
+		List<GlobalItemRanking> globalitemranking = globalitemunitBo
+				.fetchAllRankingByItemId(globalitem.getItemId());
+
+		List<GlobalUnitofMeasure> globalunitofmeasure = unitofmeasureBo
+				.fetchAll();
+
+		List<GlobalItemUnitofMeasure> globalitemunitofmeasure = this.globalitemunitBo
+				.fetchAllByItemId(globalitem.getItemId());
+
+		List<GlobalItemUnitofMeasureVw> globalitemunitofmeasurevw = this.globalitemunitBo
+				.fetchAllByItemIdvw(globalitem.getItemId());
+
+		/*
+		 * this iwll be for reorderlevel* List<GlobalItemUnitofMeasureVw>
+		 * globalitemunitofmeasurevw =
+		 * this.globalitemunitBo.fetchAllByItemIdvw(globalitem.getItemId());
+		 */
+
+		System.out.print("!!!!!!!!!!!!!" + globalitemunitofmeasure.size());
+		System.out.print("oooooooooooo" + globalitemunitofmeasurevw.size());
+		String reorderlevel = "";
+		if (globalitemreorder == null) {
+			reorderlevel = "Not Yet Set";
+
+		} else {
+			reorderlevel = globalitemreorder.getReorderqty().toString();
+		}
+
+		model.addAttribute("reorderlevel", reorderlevel);
+		model.addAttribute("globalitemunitform", globalitemunitofmeasureform);
+
+		model.addAttribute("globalitemrankingform", globalitemrankingform);
+
+		model.addAttribute("staffranking", staffranking);
+
+		model.addAttribute("globalunit", globalunitofmeasure);
+
+		model.addAttribute("globalitemunitofmeasure", globalitemunitofmeasure);
+
+		model.addAttribute("globalitemranking", globalitemranking);
+
+		model.addAttribute("GlobalItemForm", globalitemform);
+		model.addAttribute("globalitemunitofmeasurevw",
+				globalitemunitofmeasurevw);
+
+		// globalitemunitofmeasureform.setGlobalitem_id(globalitem.getItemId());
+
+		// List<GlobalUnitofMeasure> globalunitofmeasure =
+
+		// model.addAttribute("giunform", giunform);
+
+		return "system/globalitem/view";
+	}
+
+	@RequestMapping(value = "/save", method = RequestMethod.GET)
+	@Layout(value = "layouts/form_wizard_layout")
+	public String add(Model model) {
+		model.addAttribute("globalItemType",
+				globalItemTypeBo.fetchAllByOrganisation());
+		model.addAttribute("globalitemkind", this.globalkindBo.fetchAll());
+		// model.addAttribute("categories",
+		// globalItemCategoryBo.fetchAll(userIdentity.getOrganisation().getId()));
+
+		model.addAttribute("GlobalItemForm", new GlobalItemForm());
+
+		return "system/globalitem/add";
+	}
+
+	@RequestMapping(value = "/save", method = RequestMethod.POST)
+	public String save(@ModelAttribute("GlobalItemForm") GlobalItemForm iForm,
+			BindingResult result, Model model,
+			RedirectAttributes redirectAttributes) {
+		try {
+
+			if (result.hasErrors()) {
+				System.out.println("Errors here!!!");
+				return "system/globalitem/add";
+			}
+
+			GlobalItem globalItem = new GlobalItem();
+			GlobalItemCategory category = globalItemCategoryBo
+					.getGlobalItemCategoryById(iForm.getItemCategoryId());
+			GlobalItemType catType = this.globalItemTypeBo
+					.getGlobalItemTypeById(iForm.getGlobaltypeId());
+
+			globalItem.setGlobalItemCategory(category);
+
+			// if (!iForm.getGlobalitemkindcode().equals(""))
+			// {
+
+			globalItem.setGlobalitemkind(this.globalkindBo
+					.getglobalkindByCode(iForm.getGlobalitemkindcode()));
+
+			// }
+
+			globalItem.setOrganisation(userIdentity.getOrganisation());
+
+			globalItem.setGlobalitemName(iForm.getGlobalitemName());
+
+			globalItem.setGlobalitemcode(iForm.getGlobalitemcode());
+
+			globalItem.setLicenseno(iForm.getLicenseno());
+
+			globalItem.setDescription(iForm.getGlobalitemDescription());
+
+			globalItem.setCreatedBy(userIdentity.getUsername());
+			globalItem.setGlobalitemtype(catType);
+			// category.setCreatedDate(new GregorianCalendar().getTime());
+
+			// category.setModifiedBy(userIdentity.getUsername());
+
+			// category.setModifiedDate(new GregorianCalendar().getTime());
+
+			globalItemBo.save(globalItem);
+
+			alert.setAlert(redirectAttributes, Alert.SUCCESS, "Success! "
+					+ iForm.getGlobalitemName() + " added Successfully!");
+
+		}
+
+		catch (Exception e) {
+
+			alert.setAlert(redirectAttributes, Alert.DANGER,
+					"May be Item exists " + e.getMessage());
+
+		}
+
+		return "redirect:/system/globalitem/index/all";
+	}
+
+	@RequestMapping(value = "/reorder/save", method = RequestMethod.POST)
+	public String savereorder(
+			@ModelAttribute("GlobalItemForm") GlobalItemForm iForm,
+			HttpServletRequest httpRequest, BindingResult result, Model model,
+			RedirectAttributes redirectAttributes) {
+		try {
+
+			if (result.hasErrors()) {
+				System.out.println("Errors here!!!");
+				return "redirect:/system/globalitem/view/"
+						+ iForm.getGlobalitemId();
+			}
+
+			GlobalItemReorder gir;
+
+			gir = globalItemBo.getGlobalItemReorder(iForm.getGlobalitemId());
+
+			if (gir == null) {
+				gir = new GlobalItemReorder();
+			}
+
+			GlobalItem globalitem = new GlobalItem();
+
+			globalitem.setItemId(iForm.getGlobalitemId());
+
+			gir.setCreatedBy(userIdentity.getUsername());
+
+			gir.setCreatedDate(new GregorianCalendar().getTime());
+
+			gir.setOrganisation(userIdentity.getOrganisation());
+			gir.setReorderqty(iForm.getReorderqty());
+			gir.setGlobalitem(globalitem);
+
+			if (gir != null) {
+
+				gir.setModifiedBy(userIdentity.getUsername());
+				gir.setModifiedDate(new GregorianCalendar().getTime());
+
+			}
+
+			globalItemBo.save(gir);
+
+			if (gir != null) {
+
+				GlobalItemForm auditForm = new GlobalItemForm();
+
+				auditForm.setReorderqty(gir.getReorderqty());
+
+				auditor.before(httpRequest, "reorder", auditForm);
+
+				auditor.after(httpRequest, "reorder", iForm,
+						userIdentity.getUsername(),
+						gir.getGlobalitemReorderId());
+
+			}
+
+			alert.setAlert(redirectAttributes, Alert.SUCCESS,
+					"Reorder level added Successfully!");
+
+		}
+
+		catch (Exception e) {
+
+			alert.setAlert(redirectAttributes, Alert.DANGER, e.getMessage());
+
+		}
+
+		return "redirect:/system/globalitem/view/" + iForm.getGlobalitemId();
+	}
+
+	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+	// @Layout(value = "layouts/form_wizard_layout")
+	public String editAction(@PathVariable("id") Integer id, Model model,
+			RedirectAttributes redirectAttributes, HttpServletRequest request,
+			HttpServletRequest httpRequest) {
+
+		// GlobalItemCategory gCategory =
+		// globalItemCategoryBo.getGlobalCategoryItemById(id);
+
+		GlobalItem globalitem = globalItemBo.getGlobalItemById(id);
+
+		// Integer parent = category.getCategoryId();
+
+		// String h=globalitem.getBed().getBedName().toString();
+		// System.out.print("fromglobalitem" + h);
+
+		if (globalitem == null) {
+			alert.setAlert(redirectAttributes, Alert.DANGER,
+					"Error! Invalid resource");
+			return "redirect:/system/globalitem";
+		}
+
+		GlobalItemForm iForm = new GlobalItemForm();
+
+		iForm.setItemCategoryId(globalitem.getGlobalItemCategory()
+				.getCategoryId());
+		iForm.setGlobaltypeId(globalitem.getGlobalitemtype()
+				.getGlobalitemTypeId());
+
+		if (globalitem.getGlobalitemkind() != null) {
+
+			iForm.setGlobalitemkindcode(globalitem.getGlobalitemkind()
+					.getCode());
+
+		}
+
+		iForm.setGlobalitemDescription(globalitem.getDescription());
+		iForm.setGlobalitemName(globalitem.getGlobalitemName());
+		iForm.setGlobalitemcode(globalitem.getGlobalitemcode());
+		iForm.setLicenseno(globalitem.getLicenseno());
+
+		model.addAttribute("categories", globalItemCategoryBo
+				.fetchAllByOrganisationByCategoryType(globalitem
+						.getGlobalitemtype().getGlobalitemTypeId()));
+		model.addAttribute("globalItemType",
+				globalItemTypeBo.fetchAllByOrganisation());
+		model.addAttribute("globalItemKind", this.globalkindBo
+				.fetchAllByType(globalitem.getGlobalitemtype()
+						.getGlobalitemTypeId()));
+
+		model.addAttribute("GlobalItemForm", iForm);
+		model.addAttribute("gitemid", globalitem.getItemId());
+		// auditor
+		auditor.before(httpRequest, "globalitem", iForm);
+
+		return "system/globalitem/edit";
+	}
+
+	@RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
+	public String update(@PathVariable("id") Integer id,
+			@Valid @ModelAttribute("iForm") GlobalItemForm iForm,
+			BindingResult result, Model model, HttpServletRequest httpRequest,
+			RedirectAttributes redirectAttributes, HttpServletRequest request) {
+		try {
+
+			iForm.setModifiedBy(userIdentity.getUsername());
+			iForm.setModifiedDate(new GregorianCalendar().getTime());
+
+			GlobalItemCategory category = globalItemCategoryBo
+					.getGlobalItemCategoryById(iForm.getItemCategoryId());
+
+			GlobalItemType catType = this.globalItemTypeBo
+					.getGlobalItemTypeById(iForm.getGlobaltypeId());
+
+			GlobalItem globalitem = globalItemBo.getGlobalItemById(id);
+			// if
+			// (globalitem.getOrganisation()==userIdentity.getOrganisation()
+			// || userIdentity.getOrganisation().getId()==1 )
+			// {
+			globalitem.setGlobalitemName(iForm.getGlobalitemName());
+			globalitem.setGlobalitemcode(iForm.getGlobalitemcode());
+
+			globalitem.setLicenseno(iForm.getLicenseno());
+
+			globalitem.setDescription(iForm.getGlobalitemDescription());
+
+			globalitem.setGlobalItemCategory(category);
+
+			globalitem.setGlobalitemkind(this.globalkindBo
+					.getglobalkindByCode(iForm.getGlobalitemkindcode()));
+
+			globalitem.setOrganisation(userIdentity.getOrganisation());
+
+			globalitem.setModifiedBy(userIdentity.getUsername());
+			globalitem.setModifiedDate(new GregorianCalendar().getTime());
+			globalitem.setGlobalitemtype(catType);
+
+			globalItemBo.update(globalitem);
+
+			auditor.after(httpRequest, "globalitem", iForm,
+					userIdentity.getUsername(), id);
+
+			alert.setAlert(redirectAttributes, Alert.SUCCESS, "Success! "
+					+ iForm.getGlobalitemName() + " edited Successfully!");
+			// }
+			// else
+			// {
+			// alert.setAlert(redirectAttributes, Alert.DANGER,
+			// "You are not the owner of the item. you cannot edit it.");
+			// }
+
+		}
+
+		catch (Exception e) {
+
+			alert.setAlert(redirectAttributes, Alert.DANGER,
+					"May be Item exists " + e.getMessage());
+
+		}
+
+		return "redirect:/system/globalitem/index/all";
+	}
+
+	// @RequestMapping(value = "/delete/{id}")
+	// public String delete(@PathVariable("id") Integer id, Model model,
+	// RedirectAttributes redirectAttributes) {
+	// GlobalItemCategory gCategory = globalItemCategoryBo
+	// .getGlobalItemCategoryById(id);
+	// // if (null == gCategory) {
+	// alert.setAlert(redirectAttributes, Alert.DANGER,
+	// "Error! Invalid resource");
+	// return "redirect:/system/globalitemcategory/index";
+	// }
+
+	// GlobalItemCategoryForm cForm = new GlobalItemCategoryForm();
+	// cForm.setParentCategoryId(gCategory.getCategoryId());
+	// cForm.setCategoryName(gCategory.getCategoryName());
+	// model.addAttribute("gCategory", gCategory);
+	// model.addAttribute("cForm", cForm);
+	// return "system/globalitemcategory/delete";
+	// }
+
+	@RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
+	public String confirmDelete(@PathVariable("id") Integer id,
+	// @ModelAttribute("cForm") GlobalItemCategoryForm cForm,
+			RedirectAttributes redirectAttributes) {
+		GlobalItem globalitem = globalItemBo.getGlobalItemById(id);
+		// if (null == gCategory) {
+		// alert.setAlert(redirectAttributes, Alert.DANGER,
+		// "Error! Invalid resource");
+		// return "redirect:/system/globalitemcategory/index";
+		// }
+
+		if (globalitem.getOrganisation() != userIdentity.getOrganisation()
+				&& userIdentity.getOrganisation().getId() != 1) {
+			alert.setAlert(redirectAttributes, Alert.DANGER,
+					"You are not the owner of the item. you cannot edit it.");
+		}
+
+		globalitem.setModifiedBy(userIdentity.getUsername());
+		globalitem.setModifiedDate(new GregorianCalendar().getTime());
+		globalitem.setDeleted(true);
+		globalItemBo.update(globalitem);
+		alert.setAlert(redirectAttributes, Alert.SUCCESS,
+				"Success! Global-Item  deleted");
+		return "redirect:/system/globalitem/index/all";
+
+	}
+
+	@RequestMapping(value = "/refreshglobalitemcategory/{organisationId}", method = RequestMethod.GET)
+	@ResponseBody
+	public void refreshglobalitemcategory(
+			@PathVariable("organisationId") Integer organisationId, Model model)
+			throws HibernateException, SQLException {
+
+		System.out.println("inrefresh");
+
+		Session session = sessionFactory.openSession();
+
+		CallableStatement cs = null;
+		cs = session.connection().prepareCall(
+				"{? = call globalitemcategory_outerrecursive(?)}");
+
+		cs.registerOutParameter(1, Types.INTEGER);
+		cs.setInt(2, organisationId);
+
+		cs.execute();
+		System.out.println(cs.getInt(1));
+
+		System.out.println("Done with the query");
+
+	}
+
+	@RequestMapping(value = "/fetchcategorybytype/{cattypeid}", method = RequestMethod.GET, produces = "text/html")
+	@ResponseBody
+	public String ajaxfetchcategory(
+			@PathVariable("cattypeid") Integer cattypeid, Model model,
+			RedirectAttributes redirectAttributes) {
+		String itemcatStr = "<option value=''>Select Category</option>";
+
+		// model.addAttribute("globalItemType",globalItemTypeBo.fetchAllByOrganisation());
+
+		// model.addAttribute("categories",
+		// globalItemCategoryBo.fetchAll(userIdentity.getOrganisation().getId()));
+		List<GlobalItemCategory> list = globalItemCategoryBo
+				.fetchAllByOrganisationByCategoryType(cattypeid);
+		// System.out.println("Ajax Size Controller");
+		// System.out.println(list.size());
+		try {
+			for (GlobalItemCategory itemcat : list) {
+				itemcatStr += "<option value='" + itemcat.getCategoryId()
+						+ "'>" + itemcat.getCategoryName() + "</option>";
+			}
+		} catch (Exception e) {
+		}
+
+		return itemcatStr;
+	}
+
+}

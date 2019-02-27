@@ -1,0 +1,210 @@
+<div class="page-header">
+	<h1>
+		Edit <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			UPDATE DIAGNOSIS INVESTIGATION
+		</small>
+	</h1>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/visitdiseases/listing/{cid}(cid=${con.id})}"
+			><i
+			class="fa fa-home"></i> Manage Diagnosis List</a> 
+			<!-- <a
+			class="btn btn-xs btn-primary" th:href="@{/visits/queue/2}"
+			><i
+			class="fa fa-list"></i>Presenting Complaints Queue</a>-->
+	</div>
+</div>
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<form role="form" class="form-horizontal" method="POST"   onsubmit="return mydiseases()"
+			th:object="${diseases}">
+			<legend>DIAGNOSIS Form</legend>
+	<div class="form-group">
+	
+	<label for="date-timepicker1" class="col-sm-3 control-label no-padding-right">Diagnosis Date / Time </label>
+
+													
+	<div class="col-sm-5">
+	
+	<div class="input-group" >
+	<input  type="text" id="datetimepicker1" class="form-control" th:field="*{duedate}"  required="required"/>
+	
+	<span class="input-group-addon">
+	<i class="fa fa-clock-o bigger-110"></i>
+	</span>
+	
+	</div>
+	
+	
+	<span class="text-danger" th:if="${#fields.hasErrors('duedate')}" th:errors="duedate"></span>
+	</div>
+
+		</div>
+	
+		
+	<div class="form-group">
+							<label for="detail"
+								class="col-sm-3 control-label no-padding-right">Diagnosis:
+								</label>
+							<div class="col-sm-8">
+							
+							<input type="text" class="col-xs-10 col-sm-8"  
+									  id="diseasesname"   required="required" disabled="disabled" th:attr="value = ${diseasesname}" />  
+									  
+								<input type="text" class="col-xs-5 col-sm-5"   
+									th:field="*{diseases_id}"   th:id="diseasesId" onclick="myFunction()"  hidden="hidden"/>  
+							 <!-- hidden="hidden" -->
+			<a	class="btn btn-xs btn-success" onclick ="myOpendiseaseswin()"> <i	class="glyphicon glyphicon-list"></i> Search</a>
+								
+								<!--  </div>   -->	
+								 <span class="text-danger"
+									th:if="${#fields.hasErrors('diseases_id')}" th:errors="diseases_id"></span>
+
+							</div> 
+						</div>
+	
+	<!-- 
+	<div class="form-group">
+						<label for="userId" class="col-sm-3 control-label no-padding-left">Select Result:</label>
+						<div class="col-sm-8">
+							<select class="col-xs-10 col-sm-12" th:field="*{result_id}"
+								th:id="result_id" required="true">
+								
+							</select> <span class="text-danger" th:if="${#fields.hasErrors('result_id')}"
+								th:errors="*{result_id}"></span>
+						</div>
+					</div> 	
+	
+	-->
+	
+	
+	
+	
+					<div class="form-group">
+				<label for="description" class="col-sm-3 control-label no-padding-right">Other Detail:</label>
+			<div class="col-sm-8">
+			<textarea  class="col-xs-10 col-sm-8" rows="8" cols="50" id="od"
+					 placeholder="" th:field="*{other_detail}"  > </textarea>
+			
+							<span class="text-danger"
+								th:if="${#fields.hasErrors('other_detail')}"
+								th:errors="*{other_detail}"></span>
+								
+						</div>
+						
+					</div>
+
+
+	
+
+			<div class="clearfix form-actions">
+				<div class="col-md-offset-6 col-md-9">
+					 <!-- <input type="hidden" th:field="*{visit_id}" /> -->
+					<button class="btn btn-primary" type="submit">
+						<i class="ace-icon fa fa-check bigger-110"></i> Update
+					</button>
+
+					<button class="btn btn-danger" type="reset">
+						<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+					</button> 
+				</div>
+			</div> 
+			
+			
+
+
+		</form>
+	</div>
+</div>
+
+
+<script>
+//this is for GET
+/*
+function myFunction()
+	{
+	            	
+					$.ajax({
+						type : "GET",
+						url : '/../'+ window.location.pathname.split('/')[1] + '/visits/fetchexamresult/"	+ $('#diseasesId').val(),
+						beforeSend : function() {
+							 $.gritter.add({
+								title : "Progress...",
+								text : "Fetching Exam Result",
+								time : 3000
+							}); 
+						},
+						success : function(html) {
+							$("#result_id").html(html);
+							 $.gritter.add({
+								title : "Success!",
+								text : "Exam Result Fetched",
+								time : 4000
+							}); 
+						},
+						error : function() {
+							$.gritter.add({
+								title : "Error!",
+								text : "Error fetching Exam Result",
+								time : 4000
+							});
+
+						}
+				});
+			
+		}
+		
+
+	
+	/*
+	$(function() {
+		$('#od').change(
+				
+				function(event) {
+	                 	alert("Oooo");
+		
+		
+				
+	});
+	});
+*/
+	function myOpendiseaseswin() {
+		   var myWindow = window.open("/EMR/search/diseasessearchwin", "_blank", "width=600, height=700");
+		  //  myWindow.document.write("<p>This window's name is: " + myWindow.name + "</p>");
+		    myWindow.resizeTo(600,700);
+		    myWindow.focus();
+		    return false
+		  
+		}
+	
+	function mydiseases()
+	{
+		
+		if ( $('#diseasesname').val()=='' )
+			
+			{
+			
+			alert("Diagnosis Name cannot be empty");
+			return false;	
+			}
+		
+		
+		
+	}
+
+	
+</script> 
+<script type="text/javascript">
+     $(function () {
+         $('#datetimepicker1').datetimepicker({
+			autoclose : true,
+			format: 'YYYY-MM-DD HH:mm',
+			todayHighlight : true
+		});
+     });
+ </script>

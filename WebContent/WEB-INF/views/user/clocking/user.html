@@ -1,0 +1,132 @@
+<div class="page-header">
+	<h1>
+		Clocking In / Out Module <small> <i
+			class="ace-icon fa fa-angle-double-right"></i> Clocking In / Out  Details
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-list-alt"></i> System Dashboard</a> 
+	
+					
+	</div>
+</div>
+<div class="hr hr-18 dotted hr-double"></div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<div class="table-header">Result for Registered Users</div>
+		<table id="dTable"
+			class="table table-striped table-bordered table-hover">
+			<!-- Table heading -->
+			<thead>
+				<tr>
+
+			
+					<th>Full Name</th>
+					
+				
+					<th>Activation Status</th>
+					<th>Status</th>
+					<th>Lock</th>
+					<th>Role</th>
+					<th>Clocking Status</th>
+				
+					
+			
+					
+					<th><i class="glyphicon glyphicon-asterisk"></i></th>
+				</tr>
+			</thead>
+			<!-- // Table heading END -->
+			<!-- Table body -->
+			<tbody>
+				<tr th:each="user : ${usertable}">
+			
+					<td
+						th:text="${user.userProfile.title.acronym} + ' ' +  ${user.userProfile.lastName} + ' ' + ${user.userProfile.otherNames}">Lastname</td>
+			
+	
+					<td th:switch="${user.activation}"><span th:case="true">Activated</span>
+						<span th:case="false">Not Activated</span></td>
+											<td th:switch="${user.status}"><span th:case="true">Active</span>
+						<span th:case="false">Not Active</span></td>
+									<td th:switch="${user.lock}"><span th:case="true">Locked</span>
+						<span th:case="false">Not Locked</span></td>
+							<td th:text="${user.role.roleName}">patientname</td>
+							
+					<!-- 	<td th:switch="${user.clock_status}"><span th:case="true">
+						<i class="fa fa-lock"></i> Clocked In</span> <span th:case="false">
+						<i class="fa fa-unlock"></i> Clocked Out</span></td> -->
+						
+						<td><span th:case="true">
+						<i class="fa fa-lock"></i> Clocked In</span> <span th:case="false">
+						<i class="fa fa-unlock"></i> Clocked Out</span></td>
+		
+						<!-- <td th:switch="${user.clock_status}"><span th:case="true"> 	
+							<a class="btn btn-xs btn-danger tooltips"  
+								title="Click here to Clock-Out"
+								th:href="@{/user/clocking/clockout/{id}(id=${user.userId}) }">
+								<i class="fa fa-trash-o"></i> CLOCK-OUT 
+							</a>
+						</span> <span th:case="false">
+							<a class="btn btn-xs btn-info tooltips" title="Click here to Clock-In"
+							th:href="@{/user/clocking/add/{id}(id=${user.userId}) }">
+								<i class="fa fa-trash-o"></i> CLOCK-IN 
+							</a>	
+							
+					</span></td> -->
+			
+
+					<td><span th:case="true"> 	
+							<a class="btn btn-xs btn-danger tooltips"  
+								title="Click here to Clock-Out"
+								th:href="@{/user/clocking/clockout/{id}(id=${user.userId}) }">
+								<i class="fa fa-trash-o"></i> CLOCK-OUT 
+							</a>
+						</span> <span th:case="false">
+							<a class="btn btn-xs btn-info tooltips" title="Click here to Clock-In"
+							th:href="@{/user/clocking/add/{id}(id=${user.userId}) }">
+								<i class="fa fa-trash-o"></i> CLOCK-IN 
+							</a>	
+							
+					</span></td>
+					
+			
+				</tr>
+			</tbody>
+			<!-- // Table body END -->
+		</table>
+		<!-- /. End view content here -->
+	</div>
+</div>
+<script>
+	jQuery(function($) {
+		var oTable1 = $('#dTable').dataTable({
+			bAutoWidth : false,
+			"aoColumns" : [ {
+				"bSortable" : true
+			}, null, null, null,null, null, null, {
+				"bSortable" : false
+			} ]
+
+		//,
+		//"sScrollY": "200px",
+		//"bPaginate": false,
+
+		//"sScrollX": "100%",
+		//"sScrollXInner": "120%",
+		//"bScrollCollapse": true,
+		//Note: if you are applying horizontal scrolling (sScrollX) on a ".table-bordered"
+		//you may want to wrap the table inside a "div.dataTables_borderWrap" element
+
+		//"iDisplayLength": 50
+		});
+
+	});
+</script>

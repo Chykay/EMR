@@ -1,0 +1,1295 @@
+<style type = "text/css">
+.ScrollStyle
+{
+    max-height: 200px;
+    overflow-y: scroll;
+}
+</style>
+
+
+<div class="page-header">
+	<h1>
+		Doctor's Consultation Module <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			Patient's Clerking Page	
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-list-alt"></i> Home Page</a> 
+	
+			
+				<a class="btn btn-xs btn-warning"  
+						title="patients on queue"
+						th:href="@{/visits/queue/3}">
+							<i class="fa fa-trash-o"></i>  Waiting List
+				</a>
+			<a class="btn btn-xs btn-danger"  
+						title="stop attending to patient"
+						th:href="@{/consultation/listing/{id}(id=${con.visit.id}) }">
+							<i class="fa fa-list-alt"></i> Consultation Listing	</a>
+		
+	</div>
+	
+	
+<!-- 	<div class="col-xs-12">
+				
+									
+										
+											<button class="btn btn-default btn-app btn-sm">
+											<i class="ace-icon fa fa-share  bigger-200"></i>
+											AGE
+										</button>
+										
+											<button class="btn btn-lg btn-danger">28 </button>
+									
+									
+										<button class="btn btn-app btn-purple btn-sm">
+	
+	
+											<i class="ace-icon fa fa-share bigger-200"></i>
+											BLD GRP
+										</button>
+										
+											<button class="btn btn-lg btn-warning"> O+ </button>
+										
+									
+									
+									
+									
+										<button class="btn btn-app btn-info btn-sm">
+	
+	
+											<i class="ace-icon fa fa-share bigger-200"></i>
+										GENOTYPE
+										</button>
+										
+											<button class="btn btn-lg btn-light"> AA </button>
+										
+									
+								<button class="btn btn-app btn-pink btn-sm">
+	
+	
+											<i class="ace-icon fa fa-share bigger-200"></i>
+											BMI
+										</button>
+										
+											<button class="btn btn-lg btn-success">OVERWEIGHT (35)</button>
+								
+									
+									
+										</div> -->
+</div>
+<div class="hr hr-18 dotted hr-double"></div>
+
+<div class="widget-box widget-color-grey">
+										<div class="widget-header">
+		<h3 class="widget-title" th:inline="text">[[${con.visit.patient.title?.acronym} + ' ' + ${con.visit.patient.surname} + ' ' + ${con.visit.patient.othernames}]] </h3>
+							<!-- <h5 th:inline="text">Visit Code: [[${con.visit.code}]]</h5> -->
+	<div class="widget-toolbar">
+												
+												
+								
+											</div>
+											<div class="widget-toolbar">
+												<a href="#" data-action="collapse">
+													<i class="1 ace-icon fa fa-chevron-up bigger-125"></i>
+												</a>
+											</div>
+
+											<div class="widget-toolbar no-border">
+												
+											</div>
+										</div>
+
+										<div class="widget-body">
+											<div class="widget-main">
+		
+
+
+
+
+
+
+
+
+
+										<!-- #section:custom/widget-box.options -->
+									
+										
+		<div class="row">
+					<div class="col-xs-12 col-sm-2 col-md-2 center">
+				
+							<span class="profile-picture"> <img
+								th:if="${con.visit.patient.image == null}" id="avatar2"
+								style="max-width: 120px" th:src="@{/resources/img/nhis.png}"
+								alt="Profile" class="img-responsive" /> <img
+								th:if="${con.visit.patient.image != null}" id="avatar2"
+								style="max-width: 120px"
+								th:src="@{/patients/image/{id}(id=${con.visit.patient.patientId})}"
+								alt="Profile" class="img-responsive" />
+							</span>
+
+							<div class="space space-4"></div>
+							<a class="btn btn-sm btn-block btn-success" th:href="@{/patients/view/{id}(id=${con.visit.patient.patientId})}"
+								> <!--  <i class="glyphicon glyphicon-picture"></i>-->
+								Edit Client 
+							</a>
+
+						
+					
+	
+					</div>
+					
+					
+						<div class="col-xs-6 col-sm-6 col-md-6">
+					<!--  Vitals should be displayed if present-->
+					
+				
+					
+						
+							<dl class="dl-horizontal">
+							
+							
+									
+									<dt>Consultation ID</dt>
+								<dd th:inline="text"><h5 class="widget-title" th:inline="text">[[${cid}]]</h5> </dd>
+						
+						<!-- 		
+							<dt>Visit ID</dt>
+							
+							
+								<dd th:inline="text"><h5 class="widget-title" th:inline="text">[[${con.visit.id}]]</h5> </dd>
+							 -->	
+								<dt>Visit Code</dt>
+								<dd th:inline="text"><h5 class="widget-title" th:inline="text">[[${con.visit.code}]]</h5> </dd>
+								
+								<dt>Patient Code</dt>
+								<dd th:inline="text"><h5 class="widget-title" th:inline="text">[[${con.visit.patient.patientCode}]]</h5> </dd>
+								
+					<dt>Date of Birth</dt>
+								<dd th:inline="text"><h5 class="widget-title" th:inline="text"><span
+					th:text="${ #dates.format(con.visit.createDate, 'yyyy-MM-dd')}"></span></h5> </dd>
+								
+								
+								
+								<dt>Blood Group</dt>
+								<dd th:inline="text"><h5 class="widget-title" th:inline="text">[[${con.visit.patient.bloodgenotype?.name}]]</h5> </dd>
+								<dt>Genotype</dt>
+								<dd th:inline="text"><h5 class="widget-title" th:inline="text">[[${con.visit.patient.bloodgroup?.name}]]</h5> </dd>
+								<dt>Preferred Language</dt>
+								<dd th:inline="text"><h5 class="widget-title" th:inline="text">[[${con.visit.patient.language?.name}]]</h5> </dd>
+								<dt>Occupation</dt>
+								<dd th:inline="text"><h5 class="widget-title" th:inline="text">[[${con.visit.patient.occupation?.name}]]</h5></dd>
+								<dt>Marital Status</dt>
+								<dd th:inline="text"><h5 class="widget-title" th:inline="text">[[${con.visit.patient.maritalStatus?.status}]]</h5></dd>
+								<!-- 
+								<dt>Current BMI</dt>
+								<dd th:inline="text">	<span class="label label-inverse arrowed">OBESE</span><br></br><br></br>
+								</dd> -->
+								
+							</dl>
+
+					</div>
+					
+						<div class="col-xs-12 col-sm-12 col-md-12">
+					<!--  Vitals should be displayed if present-->
+						
+						<!-- <h4>Last Visit Detail</h4> -->
+						
+				
+							
+
+					
+		<!-- 		<div class="widget-box widget-color-green">
+					<div class="widget-header">
+						<h4 class="widget-title lighter smaller">Recommended Tests</h4>
+					</div>
+
+					<div class="widget-body">
+						<div class="widget-main padding-8">
+							<th:block th:if="${not #lists.isEmpty(con.visit.labTests)}">
+								<ul class="list-unstyled spaced">
+									<li class="text-warning bigger-110 red"
+										th:each="t: ${con.visit.labTests}" th:inline="text"><i
+										class="ace-icon fa fa-exclamation-triangle"></i> <b>[[${t.test.name}]]</b>
+									</li>
+								</ul>
+							</th:block>
+						</div>
+					</div>
+				</div> -->
+				
+				<!-- <div class="widget-box widget-color-red">
+					<div class="widget-header">
+						<h4 class="widget-title lighter smaller">Prescribed Drugs</h4>
+					</div>
+
+					<div class="widget-body">
+						<div class="widget-main padding-8">
+							<th:block th:if="${not #lists.isEmpty(con.visit.prescribedDrugs)}">
+								<ul class="list-unstyled spaced">
+									<li class="text-warning bigger-110 red"
+										th:each="t: ${con.visit.prescribedDrugs}" th:inline="text"><i
+										class="ace-icon fa fa-exclamation-triangle"></i> <b>[[${t.drug.name}]]</b>
+									</li>
+								</ul>
+							</th:block>
+						</div>
+					</div>
+				</div> -->
+					
+
+					</div>
+				</div>
+									
+									
+
+									
+							
+
+								
+								
+											</div>
+	</div>
+									</div>
+								
+		
+
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							<div class="row">
+							
+<div class="col-xs-12 col-sm-3 widget-container-col">
+
+	
+				
+				<!-- second accordion -->
+		
+		<div class="widget-box widget-color-purple">
+			<div class="widget-header">
+			 <h5 class="widget-title">Allergies</h5>
+                <div class="widget-toolbar">
+				    <a href="#" data-action="collapse">
+													<i class="1 ace-icon fa fa-chevron-up bigger-125"></i>
+												</a>
+											</div>
+
+											<div class="widget-toolbar no-border">
+												
+											</div>
+										</div>
+
+										<div class="widget-body">
+											<div class="widget-main">
+											
+									<th:block th:if="${#lists.isEmpty(con.visit.patient.patientAllergy)}">
+                                  No Allergy Recorded
+        <ul class="list-unstyled spaced">
+									
+								</ul>
+							</th:block>
+							
+							<th:block th:if="${con.visit.patient.patientAllergy != null}">
+								<ul class="list-unstyled spaced">
+									<li class="" th:each="a: ${con.visit.patient.patientAllergy}" th:inline="text">
+										 [[${a.allergy.name}]] :
+										 
+										 <br></br>
+										  [[${a.reaction}]]
+									
+									</li>
+								</ul>
+							</th:block>
+		
+											</div>
+	</div>
+</div>
+			
+			
+				
+				
+				
+				<!-- second accordion -->
+		
+		<div class="widget-box widget-color-purple">
+			<div class="widget-header">
+			 <h5 class="widget-title">Patient History</h5>
+                <div class="widget-toolbar">
+				    <a href="#" data-action="collapse">
+													<i class="1 ace-icon fa fa-chevron-up bigger-125"></i>
+												</a>
+											</div>
+
+											<div class="widget-toolbar no-border">
+												
+											</div>
+										</div>
+
+										<div class="widget-body">
+											<div class="widget-main">
+											
+										<th:block th:if="${#lists.isEmpty(con.visit.patient.patientHistory)}">
+                                  No History
+        <ul class="list-unstyled spaced">
+									
+								</ul>
+							</th:block>
+							<th:block th:if="${not #lists.isEmpty(con.visit.patient.patientHistory)}">
+								<ul class="list-unstyled spaced">
+									<li class="" th:each="h: ${con.visit.patient.patientHistory}" th:inline="text">
+										 [[${h.historyType.name}]] :
+										 
+										 <br></br>
+										 [[${h.history}]]																	
+									</li>
+								</ul>
+							</th:block>
+		
+											</div>
+	</div>
+</div>
+			
+				
+				
+				
+				
+				
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		<!-- second accordion -->
+		
+		<div class="widget-box widget-color-purple">
+			<div class="widget-header">
+			 <h5 class="widget-title">Patient HMO</h5>
+                <div class="widget-toolbar">
+				    <a href="#" data-action="collapse">
+													<i class="1 ace-icon fa fa-chevron-up bigger-125"></i>
+												</a>
+											</div>
+
+											<div class="widget-toolbar no-border">
+												
+											</div>
+										</div>
+
+										<div class="widget-body">
+											<div class="widget-main">
+											
+											<th:block th:if="${#lists.isEmpty(con.visit.patient.patientHmo)}">
+                                  No HMO
+        <ul class="list-unstyled spaced">
+									
+								</ul>
+							</th:block>
+							<th:block th:if="${not #lists.isEmpty(con.visit.patient.patientHmo)}">
+								<ul class="list-unstyled spaced">
+									<li class="" th:each="h: ${con.visit.patient.patientHmo}" th:inline="text">
+										 [[${h.hmoPackage.hmo.name}]] :
+										 
+										 <br></br>
+										 [[${h.hmoPackage.name}]] : [[${h.hmostatus.name}]]																	
+									</li>
+								</ul>
+							</th:block>
+		
+											</div>
+	</div>
+</div>
+		
+		<!-- ends here -->
+
+
+
+
+
+
+
+		<!-- second accordion -->
+		
+		<div class="widget-box widget-color-purple">
+			<div class="widget-header">
+			 <h5 class="widget-title">Family History</h5>
+                <div class="widget-toolbar">
+				    <a href="#" data-action="collapse">
+													<i class="1 ace-icon fa fa-chevron-up bigger-125"></i>
+												</a>
+											</div>
+
+											<div class="widget-toolbar no-border">
+												
+											</div>
+										</div>
+
+										<div class="widget-body">
+											<div class="widget-main">
+											
+											<th:block th:if="${#lists.isEmpty(con.visit.patient.patientFamilyHistory)}">
+                                  No Family History
+        <ul class="list-unstyled spaced">
+									
+								</ul>
+							</th:block>
+						<th:block th:if="${not #lists.isEmpty(con.visit.patient.patientFamilyHistory)}">
+								<ul class="list-unstyled spaced">
+									<li class="" th:each="f: ${con.visit.patient.patientFamilyHistory}" th:inline="text">
+						[[${f.historyType.name}]] :
+										 
+										 <br></br>
+										 [[${f.history}]]
+										 			</li>
+								</ul>
+							</th:block>
+		
+											</div>
+	</div>
+</div>
+		
+		<!-- ends here -->
+
+
+
+
+		<!-- second accordion -->
+		
+		<div class="widget-box widget-color-purple">
+			<div class="widget-header">
+			 <h5 class="widget-title">Telephone</h5>
+                <div class="widget-toolbar">
+				    <a href="#" data-action="collapse">
+													<i class="1 ace-icon fa fa-chevron-up bigger-125"></i>
+												</a>
+											</div>
+
+											<div class="widget-toolbar no-border">
+												
+											</div>
+										</div>
+
+										<div class="widget-body">
+											<div class="widget-main">
+										<th:block th:if="${#lists.isEmpty(con.visit.patient.patientTelephone)}">
+                                  No Telephone
+        <ul class="list-unstyled spaced">
+									
+								</ul>
+							</th:block>
+						<th:block th:if="${not #lists.isEmpty(con.visit.patient.patientTelephone)}">
+								<ul class="list-unstyled spaced">
+									<li class="" th:each="t: ${con.visit.patient.patientTelephone}" th:inline="text">
+						[[${t.telnumber}]] 
+										 
+										 			</li>
+								</ul>
+							</th:block>
+											</div>
+	</div>
+</div>
+		
+		<!-- ends here -->
+
+
+
+
+
+
+		<!-- second accordion -->
+		
+		<div class="widget-box widget-color-purple">
+			<div class="widget-header">
+			 <h5 class="widget-title">Address</h5>
+                <div class="widget-toolbar">
+				    <a href="#" data-action="collapse">
+													<i class="1 ace-icon fa fa-chevron-up bigger-125"></i>
+												</a>
+											</div>
+
+											<div class="widget-toolbar no-border">
+												
+											</div>
+										</div>
+
+										<div class="widget-body">
+											<div class="widget-main">
+											
+											<th:block th:if="${#lists.isEmpty(con.visit.patient.patientAddress)}">
+                                  No Address
+        <ul class="list-unstyled spaced">
+									
+								</ul>
+							</th:block>
+						<th:block th:if="${not #lists.isEmpty(con.visit.patient.patientAddress)}">
+								<ul class="list-unstyled spaced">
+									<li class="" th:each="a: ${con.visit.patient.patientAddress}" th:inline="text">
+						[[${a.address}]] 
+										 
+										 			</li>
+								</ul>
+							</th:block>
+		
+											</div>
+	</div>
+</div>
+
+
+
+
+		<!-- 		
+				
+				
+
+
+-->
+
+
+
+
+			</div> 
+								<!-- this is the second column for forms and buttons -->	
+								
+						
+								
+										<div class="col-xs-12 col-sm-4 widget-container-col">
+									<div class="widget-box">
+										<div class="widget-header">
+											<h5 class="widget-title smaller">Vital Signs </h5>
+
+											 <div class="widget-toolbar">
+												<!--  <span class="label label-success">
+													
+													<i class="ace-icon fa fa-arrow-up"></i>
+												</span>-->
+											</div> 
+										</div>
+
+							
+										
+										
+										
+										<!-- PRINCESS -->
+											<div class="alert alert-white">
+											
+								
+								<br></br>
+								 
+								<button type="button" onclick="takeVitals();"
+									class="btn btn-sm btn-success">Take Vitals</button>
+								<button type="button" onclick="viewVitals();"
+									class="btn btn-sm btn-success">Vitals History</button>
+								<br></br> 
+							</div>
+							
+							
+							<!-- VITAL FORM -->
+		<div class="modal fade" id="modal-simple">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<!-- Form -->
+							<!-- Modal heading -->
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal"
+									aria-hidden="true">&times;</button>
+								<h4 class="modal-title">Patient Vitals</h4>
+							</div>
+							<!-- // Modal heading END -->
+							<!-- Modal body -->
+							<div class="modal-body">
+								<div class="row">
+									<!--  Dropzone -->
+									<div class="space space-4"></div>
+
+									<!--  Dropzone -->
+
+
+								<!-- 	<form method="post" th:object="${visitVitalsForm}"
+										id="vitals-form"
+										th:action="@{/vitals/add/{id}/{pId}(id=${con.visit.id}, pId=${con.visit.patient.patientId})}">
+										<input type="hidden" th:field="*{visitId}" /> 					
+										 <input
+											type="hidden" th:field="*{patientId}" /> 
+
+                                       
+										<div class="form-group">
+											<label>Body Temperature (°C or °F)</label>
+											<div class="">
+												<input class="col-xs-10 col-sm-10" th:field="*{temperature}" />
+												<span class="text-danger"
+													th:if="${#fields.hasErrors('temperature')}"
+													th:errors="*{temperature}"></span>
+											</div>
+										</div>
+
+										<div class="form-group">
+											<label>Blood Pressure (mm/Hg)</label>
+											<div class="">
+												<input class="col-xs-10 col-sm-10"
+													th:field="*{bloodPressure}" /> <span class="text-danger"
+													th:if="${#fields.hasErrors('bloodPressure')}"
+													th:errors="*{bloodPressure}"></span>
+											</div>
+										</div>
+
+										<div class="form-group">
+											<label>Pulse rate (bpm)</label>
+											<div class="">
+												<input class="col-xs-10 col-sm-10" th:field="*{heartRate}" />
+												<span class="text-danger"
+													th:if="${#fields.hasErrors('heartRate')}"
+													th:errors="*{heartRate}"></span>
+											</div>
+										</div>
+
+										<div class="form-group">
+											<label>Respiration Rate (rate of breathing)</label>
+											<div class="">
+												<input class="col-xs-10 col-sm-10" th:field="*{respiration}" />
+												<span class="text-danger"
+													th:if="${#fields.hasErrors('respiration')}"
+													th:errors="*{respiration}"></span>
+											</div>
+										</div>
+
+										<div class="form-group">
+											<label>Height</label>
+											<div class="">
+												<input class="col-xs-10 col-sm-10" id="heightField"
+													th:field="*{height}" /> <span class="text-danger"
+													th:if="${#fields.hasErrors('respiration')}"
+													th:errors="*{respiration}"></span>
+											</div>
+										</div>
+
+										<div class="form-group">
+											<label>Weight</label>
+											<div class="">
+												<input class="col-xs-10 col-sm-10" id="weightField"
+													th:field="*{weight}" /> <span class="text-danger"
+													th:if="${#fields.hasErrors('respiration')}"
+													th:errors="*{respiration}"></span>
+											</div>
+										</div>
+
+										<div class="form-group">
+											<label>BMI</label>
+											<div class="">
+												<input class="col-xs-10 col-sm-10" id="bmi" />
+
+											</div>
+										</div>
+
+										<div class="form-group">
+											<label>Others</label>
+											<div class="">
+												<textarea class="col-xs-10 col-sm-12" th:field="*{others}"></textarea>
+												<span class="text-danger"
+													th:if="${#fields.hasErrors('others')}"
+													th:errors="*{others}"></span>
+											</div>
+										</div>
+
+										<div class="clearfix form-actions">
+											<br />
+											<button type="submit" class="btn btn-primary btn-xs"
+												id="submitForm">
+												<i class=""></i> Save
+											</button>
+										</div>
+									</form> -->
+									<!-- /.Dropzone -->
+									<!-- /.col -->
+								</div>
+							</div>
+							<!-- // Modal body END -->
+
+							<!-- Modal footer -->
+							<!-- // Modal footer END -->
+							<!-- /.Form -->
+							
+							
+						</div>
+					</div>
+				</div>
+				
+				<!-- VITAL FORM ENDS HERE -->						
+							
+							<!-- PRINCESS ENDS HERE -->
+							
+							
+									</div>
+									<br></br>
+									
+									<div class="widget-box">
+										<div class="widget-header">
+											<h5 class="widget-title smaller">PATIENT CLERKING</h5>
+
+											<div class="widget-toolbar">
+												<!--<span class="label label-success">
+													16%
+													<i class="ace-icon fa fa-arrow-up"></i>
+												</span>-->
+											</div>
+										</div>
+
+										<div class="widget-body">
+											<div class="widget-main padding-6">
+												<div class= "alert alert-info align='center'"> 
+
+		
+	<button  onclick = "complaint();" class="btn btn-xs btn-success">Presenting Complaint</button><br></br><br></br>
+	
+	<button onclick = "examination();" class="btn btn-xs btn-success">Patient Examination</button>	<br></br><br></br>
+
+	
+	
+	<button onclick = "labtest();" class="btn btn-xs btn-success"> Laboaratory Investigation</button>	<br></br><br></br>
+	
+	<button onclick = "diagnosis();" class="btn btn-xs btn-success">Make Diagnosis</button><br></br><br></br>
+	<button onclick = "prescribeddrug();" class="btn btn-xs btn-success">Drug Prescription</button><br></br><br></br>
+	
+		<button onclick = "surgery();" class="btn btn-xs btn-success">Recommend Surgical Procedure</button><br></br><br></br>
+	<button onclick = "radiology();" class="btn btn-xs btn-success">Radiology Investigation</button><br></br><br></br>
+	
+	<button  onclick = "admission();" class="btn btn-xs btn-success">Refer for Admission</button><br></br><br></br>
+
+	<!-- <button type="button" onclick = "viewDoc();" class="btn btn-xs btn-success">Document Management</button>	<br></br><br></br>	-->						
+		<button  onclick = "otherhospital();" class="btn btn-xs btn-success">Refer to Hospital</button>	<br></br><br></br>							
+	<button   onclick = "note();" class="btn btn-xs btn-success">General Note</button><br></br><br></br>
+										<br></br><br></br>
+									
+
+
+
+ </div>
+											</div>
+										</div>
+									</div>
+									
+									
+								</div>
+								
+								<!-- this is the third column for timeline -->
+									<div class="col-xs-12 col-sm-5 widget-container-col">
+									
+	<!-- 								<a class="btn btn-danger btn-xs" data-toggle="modal"
+			href="#transfer-form-modal"> <i
+			class="ace-icon fa fa-share bigger-200"></i> Assign Patient
+		</a> -->
+		
+		<!-- 
+			<button class="btn btn-small btn-danger">ASSIGN PATIENT TO THE NEXT POINT</button><br></br><br></br>
+		
+		 -->
+	<div class="widget-box widget-color-red">
+										<div class="widget-header">
+											<h5 class="widget-title">Last 5 Consultations</h5>
+
+											<div class="widget-toolbar">
+												<a href="#" data-action="collapse">
+													<i class="1 ace-icon fa fa-chevron-up bigger-125"></i>
+												</a>
+											</div>
+
+											<div class="widget-toolbar no-border">
+												
+											</div>
+										</div>
+
+										<div class="widget-body">
+											<div class="widget-main">
+		
+												
+
+
+
+<div class="widget-box widget-color-grey">
+										<!-- #section:custom/widget-box.options -->
+										<div class="widget-header">
+											<h5 class="widget-title bigger lighter">
+												<i class="ace-icon fa fa-table"></i>
+												Visit Details
+											</h5>
+
+											<div class="widget-toolbar widget-toolbar-light no-border">
+												<select id="simple-colorpicker-1" class="hide">
+													<option selected="" data-class="blue" value="#307ECC">#307ECC</option>
+													<option data-class="blue2" value="#5090C1">#5090C1</option>
+													<option data-class="blue3" value="#6379AA">#6379AA</option>
+													<option data-class="green" value="#82AF6F">#82AF6F</option>
+													<option data-class="green2" value="#2E8965">#2E8965</option>
+													<option data-class="green3" value="#5FBC47">#5FBC47</option>
+													<option data-class="red" value="#E2755F">#E2755F</option>
+													<option data-class="red2" value="#E04141">#E04141</option>
+													<option data-class="red3" value="#D15B47">#D15B47</option>
+													<option data-class="orange" value="#FFC657">#FFC657</option>
+													<option data-class="purple" value="#7E6EB0">#7E6EB0</option>
+													<option data-class="pink" value="#CE6F9E">#CE6F9E</option>
+													<option data-class="dark" value="#404040">#404040</option>
+													<option data-class="grey" value="#848484">#848484</option>
+													<option data-class="default" value="#EEE">#EEE</option>
+												</select>
+											</div>
+										</div>
+
+										<!-- /section:custom/widget-box.options -->
+										<div class="widget-body">
+											<div class="widget-main no-padding">
+												<table class="table table-striped table-bordered table-hover">
+													<thead class="thin-border-bottom">
+														 <tr >
+														 
+															<th> Date</th>
+															<th>Visit Code</th>
+															<!-- <th>Consult Id</th>-->
+					
+															<th> Doctor</th>
+															<th></th>
+															</tr>
+					        						</thead>
+
+													<tbody>
+														 <tr th:each="topcon : ${top5con}">
+															<td class="" th:text="${topcon.createDate}"></td>
+                                                            <td class="" th:text="${topcon.visit.code}"></td>
+                                                            <!-- <td class="" th:text="${topcon.id}"></td> -->
+                                                            
+															<td th:text="${topcon.user.userProfile.lastName} + ' ' + ${topcon.user.userProfile.otherNames}">
+															</td>
+
+															<td>
+															<!-- @{/consultation/preview/{cid} (cid=${topcon.id})} -->
+															<!-- <a th:id="${topcon.id}"  title="View Consultation" onclick = "preview(this.id)"  >
+							 <span class="label label-success arrowed-in arrowed-in-right">View</span></a>--> 
+					<button th:id="${topcon.id}"  onclick = "preview(this.id)"  class="btn btn-xs btn-success">Preview</button>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+
+										
+								
+											</div>
+	</div>
+									</div>
+								
+		
+		
+		<!-- second accordion -->
+		<!-- 
+		<div class="widget-box widget-color-purple">
+										<div class="widget-header">
+											<h5 class="widget-title">Patient's Referral Form</h5>
+
+											<div class="widget-toolbar">
+												<a href="#" data-action="collapse">
+													<i class="1 ace-icon fa fa-chevron-up bigger-125"></i>
+												</a>
+											</div>
+
+											<div class="widget-toolbar no-border">
+												
+											</div>
+										</div>
+
+										<div class="widget-body">
+											<div class="widget-main">
+		
+												
+
+
+
+
+											<div class="widget-box">
+											<div class="widget-header">
+												<h4 class="widget-title">Doctor's / Hospital Referral Form</h4>
+
+												<div class="widget-toolbar">
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+
+													<a href="#" data-action="close">
+														<i class="ace-icon fa fa-times"></i>
+													</a>
+												</div>
+											</div>
+
+											<div class="widget-body">
+												<div class="widget-main">
+		
+							
+										
+													
+												</div>
+											</div>
+											
+										
+											
+											
+										</div>
+								
+											</div>
+	</div>
+</div>
+		-->
+		<!-- ends here -->
+		
+		
+		<!-- third one -->
+		<div class="widget-box widget-color-dark">
+										<div class="widget-header">
+											<h5 class="widget-title">Visit Timeline Widget</h5>
+
+											<div class="widget-toolbar">
+												<a href="#" data-action="collapse">
+													<i class="1 ace-icon fa fa-chevron-up bigger-125"></i>
+												</a>
+											</div>
+
+											<div class="widget-toolbar no-border">
+												
+											</div>
+										</div>
+
+										<div class="widget-body">
+											<div class="widget-main">
+		
+												
+
+
+
+											<div class="widget-box">
+							
+
+											
+											<!-- third one -->
+											
+											<div class="timeline-container timeline-style2">
+			<span class="timeline-label"> <b>Visit Timeline</b>
+			</span>
+			
+		<div class="timeline-items">
+
+				<th:block th:each="t : ${con.visit.timeline}">
+
+					<div class="timeline-item clearfix">
+						<div class="timeline-info">
+							 <span class="timeline-date"
+								th:text="${ #dates.format(t.createDate, 'yyyy-MM-dd hh:mm:ss')}">11:15
+								
+					pm</span> <i class="timeline-indicator btn btn-info no-hover"></i>
+						</div>
+
+						<div class="widget-box transparent">
+							<div class="widget-body">
+								<div class="widget-main no-padding">
+									<b><span class="bigger-110" th:text="${t.point.id}">
+											pointName </span></b> <br /> <i
+										class="ace-icon fa fa-user blue bigger-125"></i> <span
+										class="bigger-110" th:text="${t.point.name}">
+										point_username </span> <br /> <span th:text="${t.visit.code}">No
+										Comment</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</th:block>
+			</div>
+		
+		</div>
+			
+											
+											<!-- ends here -->
+											
+											
+										</div>
+								</div>
+											</div>
+</div>
+<!-- ends here -->
+		
+
+									
+									
+								</div><!-- /.span -->
+					
+</div>
+
+
+								
+								
+								
+								
+							</div><!-- /.row -->
+
+							<div class="space-24"></div>
+
+							
+						
+
+							
+		<script type="text/javascript">
+			jQuery(function($) {
+		
+				
+				$('#myTab a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+					if($(e.target).attr('href') == "#home") drawChartNow();
+				})
+			
+			
+				$('#accordion-style').on('click', function(ev){
+					var target = $('input', ev.target);
+					var which = parseInt(target.val());
+					if(which == 2) $('#accordion').addClass('accordion-style2');
+					 else $('#accordion').removeClass('accordion-style2');
+				});
+				
+				//$('[href="#collapseTwo"]').trigger('click');
+			
+			
+			
+				$("#bootbox-regular").on(ace.click_event, function() {
+					bootbox.prompt("What is your name?", function(result) {
+						if (result === null) {
+							
+						} else {
+							
+						}
+					});
+				});
+					
+				$("#bootbox-confirm").on(ace.click_event, function() {
+					bootbox.confirm("Are you sure?", function(result) {
+						if(result) {
+							//
+						}
+					});
+				});
+				
+
+
+			
+			
+			
+		
+			
+			
+			
+			
+			});
+		</script>						
+
+							
+					</div><!-- /.row -->
+<script type="text/javascript" th:inline="text">
+
+
+
+function takeVitals() {
+	//var pat = $('#con.visitId').val();
+	var myWindow = window.open('/../'+ window.location.pathname.split('/')[1] + '/vitals/add/con/" + [[${con.id}]],
+		 "MsgWindow",
+			"width=800, height=600");
+	//  myWindow.document.write("<p>This window's name is: " + myWindow.name + "</p>");
+//	+ "/" + [[${con.id}]],
+myWindow.resizeTo(1000,750);
+myWindow.focus();
+	return false
+}
+
+function viewVitals() {
+	//var pat = $('#con.visitId').val();
+	var myWindow = window.open('/../'+ window.location.pathname.split('/')[1] + '/vitals/listbyvisit/con/" + [[${con.id}]],
+		 "MsgWindow",
+			"width=1000, height=500");
+	
+	//  myWindow.document.write("<p>This window's name is: " + myWindow.name + "</p>");
+//	+ "/" + [[${con.id}]],
+myWindow.resizeTo(1000,750);
+//window.resizeTo(width, height);
+
+	myWindow.focus();
+	return false
+
+}
+
+
+
+
+function complaint() {
+	//var pat = $('#patientId').val();
+
+	   var myWindow = window.open('/../'+ window.location.pathname.split('/')[1] + '/presenting/listing/" + [[${con.id}]], "MsgWindow", "width=1000, height=700");
+	  
+  //  myWindow.document.write("<p>This window's name is: " + myWindow.name + "</p>");
+  myWindow.resizeTo(900,750);
+    myWindow.focus();
+    return false
+}
+
+
+
+function examination() {
+//	var pat = $('#patientId').val();
+
+	
+	   var myWindow = window.open('/../'+ window.location.pathname.split('/')[1] + '/visitexamination/listing/"+ [[${con.id}]], "MsgWindow", "width=1000, height=700");
+	   myWindow.resizeTo(900,750);
+	   myWindow.focus();
+    return false
+}
+
+
+
+
+
+
+function labtest() {
+//	var pat = $('#patientId').val();
+
+	
+	   var myWindow = window.open('/../'+ window.location.pathname.split('/')[1] + '/prescribedlabtest/listing/"+ [[${con.id}]], "MsgWindow", "width=1000, height=700");
+	   myWindow.resizeTo(900,750);
+	   myWindow.focus();
+    return false
+}
+
+
+function diagnosis() {
+//	var pat = $('#patientId').val();
+
+	
+	   var myWindow = window.open('/../'+ window.location.pathname.split('/')[1] + '/visitdiseases/listing/"+ [[${con.id}]], "MsgWindow", "width=1000, height=700");
+	   myWindow.resizeTo(900,750);
+	   myWindow.focus();
+    return false
+}
+
+
+
+function prescribeddrug() {
+//	var pat = $('#patientId').val();
+
+	
+	   var myWindow = window.open('/../'+ window.location.pathname.split('/')[1] + '/prescribeddrug/listing/"+ [[${con.id}]], "MsgWindow", "width=1000, height=700");
+	   myWindow.resizeTo(1200,750);
+	   myWindow.focus();
+    return false
+}
+
+
+
+function surgery() {
+//	var pat = $('#patientId').val();
+
+	
+	   var myWindow = window.open('/../'+ window.location.pathname.split('/')[1] + '/prescribedsurgery/listing/"+ [[${con.id}]], "MsgWindow", "width=1000, height=700");
+	   myWindow.resizeTo(900,750);
+	   myWindow.focus();
+    return false
+}
+
+
+
+function radiology() {
+//	var pat = $('#patientId').val();
+
+	
+	   var myWindow = window.open('/../'+ window.location.pathname.split('/')[1] + '/prescribedxray/listing/"+ [[${con.id}]], "MsgWindow", "width=1000, height=700");
+	   myWindow.resizeTo(900,750);
+	   myWindow.focus();
+    return false
+}
+
+
+function note() {
+//	var pat = $('#patientId').val();
+
+	
+	   var myWindow = window.open('/../'+ window.location.pathname.split('/')[1] + '/consultationnote/listing/"+ [[${con.id}]], "MsgWindow", "width=1000, height=700");
+	   myWindow.resizeTo(900,750);
+	   myWindow.focus();
+    return false
+}
+
+
+
+function admission() {
+//	var pat = $('#patientId').val();
+
+	
+	   var myWindow = window.open('/../'+ window.location.pathname.split('/')[1] + '/prescribedadmission/listing/"+ [[${con.id}]], "MsgWindow", "width=1000, height=700");
+	   myWindow.resizeTo(900,750);
+	   myWindow.focus();
+    return false
+}
+
+
+
+
+function otherhospital() {
+//	var pat = $('#patientId').val();
+
+	
+	   var myWindow = window.open('/../'+ window.location.pathname.split('/')[1] + '/visitreferral/listing/"+ [[${con.id}]], "MsgWindow", "width=1000, height=700");
+	   myWindow.resizeTo(900,750);
+	   myWindow.focus();
+    return false
+}
+
+
+
+function preview(id) {
+//	var pat = $('#patientId').val();
+
+	
+	   var myWindow = window.open('/../'+ window.location.pathname.split('/')[1] + '/consultation/preview/"+ id, "MsgWindow", "width=1000, height=700");
+	   myWindow.resizeTo(1200,750);
+	   myWindow.focus();
+    return false
+}
+
+
+</script>	
+
+<script type="text/javascript" language="Javascript">
+$(document).ready(function(){
+    $("#heightField").keyup(function(){
+     
+       var height= $("#heightField").val();
+       var weight= $("#weightField").val();
+       $("#bmi").val(weight/(height*height));
+         
+    });
+    $("#weightField").keyup(function(){
+        var weight= $("#weightField").val();
+ var height= $("#heightField").val();
+ $("#bmi").val(weight/(height*height));
+
+    });
+    
+    }); 
+
+</script>

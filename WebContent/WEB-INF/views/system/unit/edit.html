@@ -1,0 +1,139 @@
+<div class="page-header">
+	<h1>
+		Edit <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			Edit Category
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-success" th:href="@{/admin}"><i
+			class="fa fa-home"></i> Admin Dashboard</a> <a
+			class="btn btn-xs btn-primary"
+			th:href="@{/system/unit/category/list}"><i class="fa fa-list"></i>
+			All Unit Categories</a> <a class="btn btn-xs btn-warning"
+			th:href="@{/system/unit/category/save}"><i
+			class="fa fa-plus-circle"></i> Add Unit</a>
+
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+
+		<form id="form" role="form" class="form-horizontal" method="POST"
+			th:object="${unitForm}">
+			<legend>Edit Unit Form</legend>
+
+			<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Unit Name:</label>
+				<div class="col-sm-9">
+					<select type="text" class="col-xs-10 col-sm-5"
+						placeholder="" th:field="*{unitCategoryId}">
+						<option value="">Select..</option>
+						<option th:each="c: ${unitCategory}" th:value="${c.unitCategoryId}" th:text="${c.name}"></option>
+					</select> <span class="text-danger"
+						th:if="${#fields.hasErrors('unitCategoryId')}"
+						th:errors="*{unitCategoryId}"></span>
+				</div>
+			</div>
+
+			<!-- <div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Name:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5"
+						placeholder="Category Name" th:field="*{name}" required="required" />
+					<span class="text-danger" th:if="${#fields.hasErrors('name')}"
+						th:errors="*{name}"></span>
+				</div>
+			</div> -->
+
+			<center><div>
+    <input type="checkbox" th:field="*{attendQ}" />
+    <label for="choice-dollar">Attend to queue?</label>
+
+    <div class="reveal-if-active">
+    
+    <div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Point:</label>
+				<div class="col-sm-9">
+					<select type="text" class="col-xs-10 col-sm-5"
+						placeholder="" th:field="*{pointId}">
+						<option value="">Select..</option>
+						<option th:each="c: ${visitpoint}" th:value="${c.id}" th:text="${c.name}"></option>
+						
+					</select> <span class="text-danger"
+						th:if="${#fields.hasErrors('pointId')}"
+						th:errors="*{pointId}"></span>
+				</div>
+			</div>
+    
+     <div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Billing Scheme:</label>
+				<div class="col-sm-9">
+					<select type="text" class="col-xs-10 col-sm-5"
+						placeholder="" th:field="*{billingScheme}">
+						<option value="">Select..</option>
+						<option th:each="c: ${billingScheme}" th:value="${c.id}" th:text="${c.name}"></option>
+					</select> <span class="text-danger"
+						th:if="${#fields.hasErrors('billingScheme')}"
+						th:errors="*{billingScheme}"></span>
+				</div>
+			</div>
+
+    </div>
+  </div></center>
+
+			<div class="clearfix form-actions">
+				<div class="col-md-offset-3 col-md-9">
+					<input type="hidden" th:field="*{unitId}" />
+					<button class="btn btn-primary" type="submit">
+						<i class="ace-icon fa fa-check bigger-110"></i> Update
+					</button>
+
+					<button class="btn btn-danger" type="reset">
+						<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<!-- <script>
+
+$(document).ready(function() {
+
+
+	$("#form").submit(function() {
+		 BothFieldsIdenticalCaseSensitive2();
+	});
+
+});
+
+function BothFieldsIdenticalCaseSensitive2() {
+    var two = document.getElementById('parentId').value;
+    var three = document.getElementById('name').value;
+    if(two == three) { return false; }
+    alert("Warning!! passcodes must not match!!!");
+    return true;
+    
+    
+} 
+
+</script> -->
+<script>
+	$("#form").submit(function() {
+		var a = document.getElementById('parentId').value;
+		var b = document.getElementById('name').value;
+		alert()
+		if (a == b) {
+			alert("Warning!! Parent and Name must not match!!!");
+			return false;
+		}
+		return true;
+	});
+</script>

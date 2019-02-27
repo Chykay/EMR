@@ -1,0 +1,135 @@
+<div class="page-header">
+	<h1>
+		Edit <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			Edit a User
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-primary" th:href="@{/system/umgt/users}"><i
+			class="glyphicon glyphicon-list"></i> All users</a>
+	</div>
+</div>
+<div class="hr hr-18 dotted hr-double"></div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+
+		<form role="form" class="form-horizontal" method="POST"
+			th:object="${userForm}">
+			<legend class="scheduler-border">User Form</legend>
+			<div class="form-group">
+				<label for="lastName"
+					class="col-sm-3 control-label no-padding-right">Email:</label>
+				<div class="col-sm-9">
+					<input type="email" class="col-xs-10 col-sm-5" readonly="readonly"
+						placeholder="User Email" th:field="*{email}" required="required" />
+					<span class="text-danger" th:if="${#fields.hasErrors('email')}"
+						th:errors="*{email}"></span>
+				</div>
+			</div>
+
+	<div class="form-group">
+				<label for="lastName"
+					class="col-sm-3 control-label no-padding-right">Last Name:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5"
+						placeholder="Last Name" th:field="*{lastName}" required="required"  readonly="readonly"/>
+					<span class="text-danger" th:if="${#fields.hasErrors('lastName')}"
+						th:errors="*{lastName}"></span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="lastName"
+					class="col-sm-3 control-label no-padding-right">Othernames:</label>
+				<div class="col-sm-9">
+
+					<input type="text" class="col-xs-10 col-sm-5"
+						placeholder="Other Names" th:field="*{otherNames}"
+						required="required"  readonly="readonly"/> <span class="text-danger"
+						th:if="${#fields.hasErrors('otherNames')}"
+						th:errors="*{otherNames}"></span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="title" class="col-sm-3 control-label no-padding-right">User Type:</label>
+				<div class="col-sm-9">
+					<select th:field="*{user_type_id}" class="col-xs-10 col-sm-5" required="required">
+						<option value="">Select</option>
+						<option th:each="ut : ${usertype}" th:value="${ut.id}"
+							th:text="${ut.Name}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('user_type_id')}"
+						th:errors="*{user_type_id}"></span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="userRoles"
+					class="col-sm-3 control-label no-padding-right">User Role Group:</label>
+				<div class="col-sm-9">
+					<select th:field="*{role_id}" class="col-xs-10 col-sm-5"  required="required">
+					<!-- 	<option value="">Select..</option>-->
+						<option th:each="role : ${roles}" th:value="${role.roleId}"
+							th:text="${role.roleName}"></option>
+					</select> <span class="text-danger"
+						th:if="${#fields.hasErrors('role_id')}" th:errors="*{role_id}"></span>
+				</div>
+			</div>
+
+
+			<div class="form-group" hidden="hidden">
+				<label for="level"
+					class="col-sm-3 control-label no-padding-right">Level Security:</label>
+				<div class="col-sm-9">
+					<select th:field="*{levelsecurity}" class="col-xs-10 col-sm-5" >
+						<option  th:value="0" th:text="No"></option>
+						<option  th:value="1" th:text="Yes"></option>
+						
+					</select> <span class="text-danger"
+						th:if="${#fields.hasErrors('levelsecurity')}" th:errors="*{levelsecurity}"></span>
+				</div>
+			</div>
+
+
+		
+			<div class="clearfix form-actions">
+				<div class="col-md-offset-3 col-md-9">
+					<button class="btn btn-primary" type="submit" value="Update"  >
+					<i class="ace-icon fa fa-undo bigger-110"></i> Update
+					</button>
+					<button class="btn btn-danger" type="reset" >
+						<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script>
+	$(function() { 
+		$('#userRole').change(function(event) {
+			var email = $('#email').val();
+			$.ajax({
+				type : "GET",
+				url : '../../../utilities/verifydomain/userForm/' + email +'/',
+				beforeSend : function() {},
+				success : function(html) {
+					if(msg === false){//
+						alert('Mail not accepted.');
+						$("#email").val("");
+					}
+				},
+				error : function() {}
+			});
+		});
+	});
+</script>

@@ -1,0 +1,21 @@
+
+<div class="page-header">
+	<h1>Delete an Item</h1>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+		<p>
+			You are about to delete a Item : <strong th:text="${sItem.itemName}">name</strong>.
+			Are you sure?
+		</p>
+
+		<form role="form" method="POST" th:object="${sitemForm}">
+			<input type="hidden" th:field="*{id}" />
+			<button class="btn btn-danger" type="submit">
+				<i class="ace-icon fa fa-check bigger-110"></i> Yes
+			</button>
+			<a class="btn btn-primary" th:href="@{/admin/insurances/hmos}"
+				th:if="${@userIdentity.renderLink(25')}">No</a>
+		</form>
+	</div>
+</div>

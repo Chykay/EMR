@@ -1,0 +1,146 @@
+<div class="page-header">
+	<h1>
+		Edit <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			Edit a Unit
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/hrunit}"><i
+			class="fa fa-home"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-primary" th:href="@{/hrunit/hrunit/index}"><i
+			class="fa fa-list"></i> Recent Unit  </a>
+			<a
+			class="btn btn-xs btn-primary" th:href="@{/hrunit/hrunit/index/all}"><i
+			class="fa fa-list"></i>View All Unit  </a>
+			
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+
+		<form role="form" class="form-horizontal" method="POST"
+			th:object="${hrunitForm}">
+			<legend>EDIT Unit  Form</legend>
+
+
+			
+			
+		 	<div class="form-group">
+				<label for="gender" class="col-sm-3 control-label no-padding-right"> Unit Type:</label>
+				<div class="col-sm-9">
+					<select th:field="*{hrunitTypeId}" class="col-xs-10 col-sm-5"  required="required" id="typeId">
+						<option value="">Select..</option>
+						<option th:each="g: ${hrunitType}" th:value="${g.hrunitTypeId}"
+							th:text="${g.diseasetypename}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('hrunitTypeId')}"
+						th:errors="*{hrunitTypeId}"></span>
+				</div>
+			</div>
+			
+			
+				<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Item Name:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" 
+						th:field="*{hrunitName}" required="required" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('hrunitName')}"
+						th:errors="*{hrunitName}"></span>
+				</div>
+			</div>
+
+			
+			
+			<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Item Category:</label>
+				<div class="col-sm-9">
+					<select type="text" class="col-xs-10 col-sm-5"
+						placeholder="Parent Category" th:field="*{parentCategoryId}" id="itemCategoryId"	required="required" >
+						<option value="">Select..</option>
+						<option th:each="c: ${categories}" th:value="${c.categoryId}" th:text="${c.categoryName}"></option>
+					</select> 
+					<span class="text-danger"
+						th:if="${#fields.hasErrors('itemCategoryId')}"
+						th:errors="*{itemCategoryId}"></span>
+				</div>
+			</div>
+							<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Description:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" 
+						th:field="*{hrunitDescription}" required="required" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('hrunitDescription')}"
+						th:errors="*{hrunitDescription}"></span>
+				</div>
+			</div>
+
+
+
+			<div class="clearfix form-actions">
+				<div class="col-md-offset-3 col-md-9">
+			
+					<button class="btn btn-primary" type="submit">
+						<i class="ace-icon fa fa-check bigger-110"></i> Update
+					</button>
+
+					<button class="btn btn-danger" type="reset">
+						<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<script> 
+
+$(function() {
+	/* Lga Selector*/
+	$('#typeId').change(
+			function(event) {
+//alert('change');
+				$.ajax({
+	type : "GET",
+
+	url : "/../' + window.location.pathname.split('/')[1] + '/hrunit/hrunitcategory/fetchcategorybytype/"
+			+ $('#typeId').val(),
+	beforeSend : function() {
+		$.gritter.add({
+			title : "Progress...",
+			text : "Fetching Ctegories of global type",
+			time : 3000
+		});
+	},
+	success : function(html) {
+		$('#itemCategoryId').html(html);
+		$.gritter.add({
+			title : "Success!",
+			text : "Categories fetched",
+			time : 4000
+		});
+	},
+	error : function() {
+		$.gritter.add({
+			title : "Error!",
+			text : "Error fetching Categories",
+			time : 4000
+		});
+	}
+
+});
+
+
+
+
+
+		});
+});
+
+
+
+</script>

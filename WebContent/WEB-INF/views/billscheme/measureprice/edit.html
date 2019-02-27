@@ -1,0 +1,70 @@
+<div class="page-header">
+	<h1>
+		Edit <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			Edit Billing Scheme Measure Price
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/}"><i
+			class="fa fa-home"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-primary" th:href="@{/billscheme}"><i
+			class="fa fa-list"></i> All Billing Schemes</a>
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+
+		<form role="form" class="form-horizontal" method="POST"
+						th:object="${mpForm}" >
+						<legend>Billing Scheme Measure Price Form</legend>
+						
+						
+						<div class="form-group">
+				<label for="Bill Scheme" class="col-sm-3 control-label no-padding-right">Bill Scheme:</label>
+				<div class="col-sm-9">
+					<select th:field="*{billscheme_id}" class="col-xs-10 col-sm-5" required="required">
+						<option value="">Select</option>
+						<option th:each="bs : ${billschemelist}" th:value="${bs.id}"
+							th:text="${bs.name}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('billscheme_id')}"
+						th:errors="*{billscheme_id}"></span>
+				</div>
+			</div>
+						
+						
+						<div class="form-group">
+				<label for="price" class="col-sm-3 control-label no-padding-right">Price:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder=""  oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"
+						th:field="*{price}" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('price')}"
+						th:errors="*{price}"></span>
+				</div>
+			</div>
+						
+						
+					
+					
+
+						<div class="clearfix form-actions">
+							<div class="col-md-offset-3 col-md-9">
+								 <input type="hidden" th:field="*{globalitemunitofmeasure_id}" />
+								<button class="btn btn-primary" type="submit">
+									<i class="ace-icon fa fa-check bigger-110"></i> update
+								</button>
+
+								<button class="btn btn-danger" type="reset">
+									<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+								</button>
+							</div>
+						</div>
+					</form>
+	</div>
+</div>

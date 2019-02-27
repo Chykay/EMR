@@ -1,0 +1,329 @@
+<div class="page-header">
+	<h1>
+		New <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			Add DRUG 
+		</small>
+	</h1>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/prescribeddrug/listing/{cid}(cid=${con.id})}"
+			><i
+			class="fa fa-home"></i> Manage Drug List</a> 
+			<!-- <a
+			class="btn btn-xs btn-primary" th:href="@{/visits/queue/2}"
+			><i
+			class="fa fa-list"></i>Presenting Complaints Queue</a>-->
+	</div>
+</div>
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<form role="form" class="form-horizontal" method="POST"   onsubmit="return mydrug()"
+			th:object="${drug}">
+			<legend>DRUG Form</legend>
+	
+		
+	<div class="form-group">
+							<label for="detail"
+								class="col-sm-3 control-label no-padding-right">Drug:
+								</label>
+							<div class="col-sm-8">
+							
+							<input type="text" class="col-xs-10 col-sm-5"  
+									  id="drugname"   required="required" disabled="disabled" />  
+									  
+								<input type="text" class="col-xs-5 col-sm-5"   
+									th:field="*{drug_id}"   th:id="drugId" onclick="myFunction()"  hidden="hidden"/>  
+							 <!-- hidden="hidden" -->
+			<a	class="btn btn-xs btn-success" onclick ="myOpendrugwin()"> <i	class="glyphicon glyphicon-list"></i> Search</a>
+								
+								<!--  </div>   -->	
+								 <span class="text-danger"
+									th:if="${#fields.hasErrors('drug_id')}" th:errors="drug_id"></span>
+
+							</div> 
+						</div>
+	
+	
+	<div class="form-group">
+						<label for="userId" class="col-sm-3 control-label no-padding-left">Select Measure:</label>
+						<div class="col-sm-8">
+							<select class="col-xs-10 col-sm-5" th:field="*{itemmeasure_id}"
+								th:id="itemmeasure_id" required="true">
+								
+							</select> <span class="text-danger" th:if="${#fields.hasErrors('itemmeasure_id')}"
+								th:errors="*{itemmeasure_id}"></span>
+						</div>
+					</div> 	
+	
+	
+	
+			<div class="form-group">
+				<label for="height" class="col-sm-3 control-label no-padding-right">Start Dosage:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder=""  oninput="this.value = this.value.replace(/[^0-9]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"
+						th:field="*{start_dosage}" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('start_dosage')}"
+						th:errors="*{start_dosage}"></span>
+				</div>
+			</div>
+			 
+	
+	
+		
+	<div class="form-group">
+	
+	<label for="date-timepicker1" class="col-sm-3 control-label no-padding-right">Due Date / Time </label>
+
+													
+	<div class="col-sm-5">
+	
+	<div class="input-group" >
+	<input  type="text" id="datetimepicker1" class="form-control" th:field="*{duedate}"  required="required"/>
+	
+	<span class="input-group-addon">
+	<i class="fa fa-clock-o bigger-110"></i>
+	</span>
+	
+	</div>
+	
+	
+	<span class="text-danger" th:if="${#fields.hasErrors('duedate')}" th:errors="duedate"></span>
+	</div>
+
+		</div>
+	
+	
+	
+			<div class="form-group">
+				<label for="height" class="col-sm-3 control-label no-padding-right">Every:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder=""  oninput="this.value = this.value.replace(/[^0-9]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"
+						th:field="*{frequency}" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('frequency')}"
+						th:errors="*{frequency}"></span>
+				</div>
+			</div>
+			 
+	
+	
+	
+	<div class="form-group">
+						<label for="userId" class="col-sm-3 control-label no-padding-left">Period:</label>
+						<div class="col-sm-8">
+							<select class="col-xs-10 col-sm-5" th:field="*{period_id}"
+								th:id="period_id" required="true">
+								
+								<option value=''>Select Period</option>
+								<option th:each="period: ${periodlist}" th:value="${period.period_id}"
+							th:text="${period.name}"></option>
+								
+							</select> <span class="text-danger" th:if="${#fields.hasErrors('period_id')}"
+								th:errors="*{period_id}"></span>
+						</div>
+					</div> 	
+	
+	
+	
+	
+			<div class="form-group">
+				<label for="height" class="col-sm-3 control-label no-padding-right">Periodic Dosage:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder=""  oninput="this.value = this.value.replace(/[^0-9]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"
+						th:field="*{dosage}" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('dosage')}"
+						th:errors="*{dosage}"></span>
+				</div>
+			</div>
+			 
+	
+	
+	
+	
+			<div class="form-group">
+				<label for="height" class="col-sm-3 control-label no-padding-right">Periodic Times:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder=""  oninput="this.value = this.value.replace(/[^0-9]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"
+						th:field="*{no_of_times}" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('no_of_times')}"
+						th:errors="*{no_of_times}"></span>
+				</div>
+			</div>
+			 
+	
+			<div class="form-group">
+				<label for="unit" class="col-sm-3 control-label no-padding-right">Unit:</label>
+	<div class="col-sm-8">
+							<select class="col-xs-10 col-sm-8" 
+								th:field="*{unitId}" required="true" >
+								 <option value="">Select..</option>
+								<option th:each="u: ${unitlist}" th:value="${u.categoryId}"
+									th:text="${u.categoryName}"></option>
+							</select> <span class="text-danger"
+								th:if="${#fields.hasErrors('unitId')}"
+								th:errors="*{unitId}"></span>
+						</div>
+					</div>
+	
+	
+	
+					<div class="form-group">
+				<label for="description" class="col-sm-3 control-label no-padding-right">Other Detail:</label>
+			<div class="col-sm-8">
+			<textarea  class="col-xs-10 col-sm-8" rows="8" cols="50" id="od"
+					 placeholder="" th:field="*{other_detail}"  > </textarea>
+			
+							<span class="text-danger"
+								th:if="${#fields.hasErrors('other_detail')}"
+								th:errors="*{other_detail}"></span>
+								
+						</div>
+						
+					</div>
+
+
+	
+
+			<div class="clearfix form-actions" style="padding: 20px 37%  20px">
+				<div class="col-md-offset-9 col-md-9">
+					 <!-- <input type="hidden" th:field="*{visit_id}" /> -->
+					<button class="btn btn-primary" type="submit">
+						<i class="ace-icon fa fa-check bigger-110"></i> Add
+					</button>
+
+					<button class="btn btn-danger" type="reset">
+						<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+					</button> 
+				</div>
+			</div> 
+			
+			
+
+
+		</form>
+	</div>
+</div>
+
+
+<script>
+//this is for GET
+/*
+function myFunction()
+	{
+	            	
+					$.ajax({
+						type : "GET",
+						url : '/../'+ window.location.pathname.split('/')[1] + '/visits/fetchexamresult/'	+ $('#drugId').val(),
+						beforeSend : function() {
+							 $.gritter.add({
+								title : "Progress...",
+								text : "Fetching Exam Result",
+								time : 3000
+							}); 
+						},
+						success : function(html) {
+							$("#result_id").html(html);
+							 $.gritter.add({
+								title : "Success!",
+								text : "Exam Result Fetched",
+								time : 4000
+							}); 
+						},
+						error : function() {
+							$.gritter.add({
+								title : "Error!",
+								text : "Error fetching Exam Result",
+								time : 4000
+							});
+
+						}
+				});
+			
+		}
+		
+
+	
+	/*
+	$(function() {
+		$('#od').change(
+				
+				function(event) {
+	                 	alert("Oooo");
+		
+		
+				
+	});
+	});
+*/
+	function myOpendrugwin() {
+		   var myWindow = window.open("/EMR/search/drugsearchwin", "_blank", "width=600, height=700");
+		  //  myWindow.document.write("<p>This window's name is: " + myWindow.name + "</p>");
+		    myWindow.resizeTo(600,700);
+		    myWindow.focus();
+		    return false
+		  
+		}
+	
+	function mydrug()
+	{
+		
+		if ( $('#drugname').val()=='' )
+			
+			{
+			
+			alert("Drug Name cannot be empty");
+			return false;	
+			}
+		
+		
+		
+	}
+
+
+	function myFunction()
+		{
+		            	
+						$.ajax({
+							type : "GET",
+							url : '/../'+ window.location.pathname.split('/')[1] + '/visits/fetchdrugmeasuredrug/' + $('#drugId').val(),
+							beforeSend : function() {
+								 $.gritter.add({
+									title : "Progress...",
+									text : "Fetching Measure",
+									time : 3000
+								}); 
+							},
+							success : function(html) {
+								$("#itemmeasure_id").html(html);
+								 $.gritter.add({
+									title : "Success!",
+									text : "Measure Fetched",
+									time : 4000
+								}); 
+							},
+							error : function() {
+								$.gritter.add({
+									title : "Error!",
+									text : "Error Fetching Measure",
+									time : 4000
+								});
+
+							}
+					});
+				
+			}
+			
+	
+</script> 
+<script type="text/javascript">
+     $(function () {
+         $('#datetimepicker1').datetimepicker({
+			autoclose : true,
+			format: 'YYYY-MM-DD HH:mm',
+			todayHighlight : true
+		});
+     });
+ </script>

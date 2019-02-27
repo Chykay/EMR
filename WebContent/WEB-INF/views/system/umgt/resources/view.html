@@ -1,0 +1,71 @@
+<div class="page-header">
+	<h1>
+		Permissions <small> <i
+			class="ace-icon fa fa-angle-double-right"></i> Set groups access to a
+			resource
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-primary" th:href="@{/system/umgt/resources}"><i
+			class="fa fa-list-alt"></i> All Resources</a>
+	</div>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+		Allow or Deny access to <strong>Resource:<span
+			th:text="${resource.urlPattern}">/url</span></strong> for respective groups
+	</div>
+</div>
+<div class="hr hr-18 dotted hr-double"></div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<table class="table table-stripped table-hovered table-bordered">
+			<thead>
+				<tr>
+					<td>Group</td>
+					<td>Status</td>
+					<td><i class="fa fa-cog"></i></td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="gP : ${gPermission}">
+					<td th:text="${gP.group.groupName}"></td>
+
+					<th:block th:if="${gP.access}">
+						<!-- If has access -->
+						<td><i class="fa fa-unlock"></i> Allowed</td>
+						<td>
+							<form th:action="@{/system/umgt/resources/deny}">
+								<input type="hidden" name="groupId" th:value="${gP.group.id}" />
+								<input type="hidden" name="resourceId" th:value="${resource.id}" />
+								<button type="submit" class="btn btn-xs btn-warning">
+									<i class="fa fa-lock"></i> Deny Access
+								</button>
+							</form>
+						</td>
+					</th:block>
+					<th:block th:if="not ${gP.access}">
+						<!-- If doesn't have access -->
+						<td><i class="fa fa-lock"></i> Denied</td>
+						<td>
+							<form th:action="@{/system/umgt/resources/allow}">
+								<input type="hidden" name="groupId" th:value="${gP.group.id}" />
+								<input type="hidden" name="resourceId" th:value="${resource.id}" />
+								<button type="submit" class="btn btn-xs btn-success">
+									<i class="fa fa-unlock"></i> Grant Access
+								</button>
+							</form>
+						</td>
+					</th:block>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

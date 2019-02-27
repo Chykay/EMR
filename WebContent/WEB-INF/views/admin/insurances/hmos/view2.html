@@ -1,0 +1,48 @@
+<div class="page-header">
+	<h1>
+		View <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			View an HMO
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/admin/insurances}"
+			th:if="${@userIdentity.renderLink(28)}"><i
+			class="fa fa-home"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-primary" th:href="@{/admin/insurances/hmos}"
+			th:if="${@userIdentity.renderLink(25)}"><i
+			class="fa fa-list"></i> All HMOs</a> <a class="btn btn-xs btn-warning"
+			th:href="@{/admin/insurances/hmos/edit/{id} (id=${hmo.id})}"
+			th:if="${@userIdentity.renderLink(29)}"><i
+			class="fa fa-edit"></i> Edit hmo</a> <a class="btn btn-xs btn-danger"
+			th:href="@{/admin/insurances/hmo/delete/{id} (id=${hmo.id})}"
+			th:if="${@userIdentity.renderLink(26)}"><i
+			class="fa fa-trash-o"></i> Delete hmo</a>
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<dl class="dl-horizontal">
+			<dt>Name:</dt>
+			<dd th:text="${hmo.name}"></dd>
+			<dt>Name:</dt>
+			<dd th:text="${hmo.address}"></dd>
+			<dt>Name:</dt>
+			<dd th:text="${hmo.lga.localGovernmentAreasName}"></dd>
+			<dt>Name:</dt>
+			<dd th:text="${hmo.state.stateName}"></dd>
+			<dt>Created date</dt>
+			<dd
+				th:text="${ #dates.format(hmo.createdDate, 'MMM dd, yyyy HH:mm')}"></dd>
+			<dt>Last modified date</dt>
+			<dd
+				th:text="${hmo.modifiedDate == null} ? 'Not modified yet!': ${ #dates.format(hmo.modifiedDate, 'MMM dd, yyyy HH:mm')}"></dd>
+		</dl>
+	</div>
+</div>

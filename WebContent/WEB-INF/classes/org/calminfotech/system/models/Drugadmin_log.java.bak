@@ -1,0 +1,132 @@
+package org.calminfotech.system.models;
+
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.calminfotech.consultation.models.VisitConsultationInjectionSpread;
+import org.calminfotech.consultation.models.VisitConsultationPrescribedAdmission;
+import org.calminfotech.inventory.models.PointRequest;
+import org.calminfotech.visitqueue.models.Visit;
+import org.hibernate.annotations.NamedNativeQuery;
+
+@Entity
+
+@Table(name = "drugadmin_log")
+@org.hibernate.annotations.Entity(dynamicInsert = true)
+public class Drugadmin_log implements java.io.Serializable {
+	
+	private static final long serialVersionUID = -9160881819374280018L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", unique = true, nullable = false)
+	private Integer id;
+	
+
+	@ManyToOne
+	@JoinColumn(name = "spreadid")
+	private VisitConsultationInjectionSpread  drugspread;
+	
+		
+	@Column(name = "action")
+	private String action;
+	
+		
+	@Column(name = "created_by")
+	private String createdBy;
+
+		
+	@Column(name = "created_date")
+	private Date createdDate;
+
+	
+	private Integer organisationId;
+
+	public Integer getId() {
+		return id;
+	}
+
+
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+
+
+
+
+
+	public VisitConsultationInjectionSpread getDrugspread() {
+		return drugspread;
+	}
+
+
+
+	public void setDrugspread(VisitConsultationInjectionSpread drugspread) {
+		this.drugspread = drugspread;
+	}
+
+
+
+	public String getAction() {
+		return action;
+	}
+
+
+
+	public void setAction(String action) {
+		this.action = action;
+	}
+
+
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+
+
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+
+
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+
+
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+
+
+	
+
+	
+
+
+
+
+	
+
+
+}

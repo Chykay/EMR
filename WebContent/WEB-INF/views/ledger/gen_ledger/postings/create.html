@@ -1,0 +1,303 @@
+<div class="page-header">
+	<h1>
+		Add New Account
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/ledger/gen_ledger/index}">
+			<i class="fa fa-home"></i> System Dashboard
+		</a> 
+		<a class="btn btn-xs btn-primary" th:href="@{/ledger/gen_ledger/create}">
+			<i class="fa fa-plus-circle"></i> Add Account 
+		</a>
+	
+ 		<span   id="imgId" hidden="hidden" > 
+ 			<img th:src="@{/resources/assets/images/ajax-loader.gif}" id="loading_img" />  
+ 		</span>      
+	</div>
+</div>
+
+
+<div>
+	<form role="form" class="form-horizontal" method="POST" style="margin-top:20px;"
+			th:object="${posting}">
+		<div class="col-md-6">
+			<div class="row">
+				<div class="form-group">
+					<label class="control-label col-xs-12 col-sm-3 no-padding-right"
+						for="create_date">Date</label>
+		
+					<div class="col-xs-12 col-sm-9">
+						<div class="clearfix">
+							<input type="text" class="col-xs-12 col-sm-3 create_date" 
+								id="create_date" th:field="*{create_date}"
+								data-date-format="yyyy-mm-dd" /> 
+							<span class="text-danger"
+								th:if="${#fields.hasErrors('create_date')}" th:errors="create_date"></span>
+		
+						</div>
+					</div>
+				</div>
+				
+				 <div class="form-group">
+							<label class="control-label col-xs-12 col-sm-3 no-padding-right"
+								for="date-picker">Date to:</label>
+
+							<div class="col-xs-12 col-sm-9">
+								<div class="clearfix">
+
+									<input type="text" class="col-xs-12 col-sm-3 date-picker" required="required"
+										id="date-picker-2" th:field="*{create_date}"
+										data-date-format="yyyy-mm-dd" /> <span class="text-danger"
+										th:if="${#fields.hasErrors('create_date')}" th:errors="create_date"></span>
+
+								</div>
+							</div>
+				</div> 
+						
+				<div class="form-group">
+					<label for="p_account_no" class="col-sm-3 control-label no-padding-right">Posting Account:</label>
+					<div class="col-sm-9">
+						<input id="p_account_no_search" /> <br />
+						<select th:field="*{p_account_no}" class="col-xs-10 col-sm-5"  required="required">
+							<option value="">Select..</option>
+								<option th:each="generalLedger: ${generalLedgers}" 
+							th:value = "${generalLedger.account_no}" 
+							th:text="${generalLedger.account_no}">Posting Account</option>
+						</select>
+						<span class="text-danger" th:if="${#fields.hasErrors('p_account_no')}"
+							th:errors="*{p_account_no}">
+						</span>
+					</div>
+				</div>
+				
+				
+					
+				<div class="form-group">
+					<label for="ref_no" class="col-sm-3 control-label no-padding-right">Ref No:</label>
+					<div class="col-sm-9">
+						<input type="text" class="col-xs-10 col-sm-5" placeholder="Reference Number"
+							th:field="*{ref_no}" required="required" /> <span
+							class="text-danger" th:if="${#fields.hasErrors('ref_no')}"
+							th:errors="*{ref_no}"></span>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="p_branch_bal" class="col-sm-3 control-label no-padding-right">Balance:</label>
+					<div class="col-sm-9">
+						<input type="text" class="col-xs-10 col-sm-5" 
+							th:field="*{p_branch_bal}" readonly="readonly" /> <span
+							class="text-danger" th:if="${#fields.hasErrors('p_branch_bal')}"
+							th:errors="*{p_branch_bal}"></span>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					<label for="p_description" class="col-sm-3 control-label no-padding-right">Description:</label>
+					<div class="col-sm-9">
+					
+						<textarea class="col-xs-10 col-sm-5" 
+							th:field="*{p_description}"
+							th:value="${p_description}">
+						
+						</textarea>
+						<span
+							class="text-danger" th:if="${#fields.hasErrors('p_description')}"
+							th:errors="*{p_description}"></span>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label for="p_amount" class="col-sm-3 control-label no-padding-right">Amount:</label>
+					<div class="col-sm-9">
+						<input type="text" class="col-xs-10 col-sm-5" 
+							th:field="*{p_amount}"
+							th:value="${p_amount}" /> <span
+							class="text-danger" th:if="${#fields.hasErrors('p_amount')}"
+							th:errors="*{p_amount}"></span>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label for="p_post_code" class="col-sm-3 control-label no-padding-right">Post Code:</label>
+					<div class="col-sm-9">
+						<select th:field="*{p_post_code}" class="col-xs-10 col-sm-5"  required="required" id="p_post_code">
+							<option value="">Select..</option>
+								<option th:each="postCode: ${postCodes}" 
+							th:value = "${postCode.code}" 
+							th:text="${postCode.description}">Post Code</option>
+						</select>
+						<span class="text-danger" th:if="${#fields.hasErrors('p_post_code')}"
+							th:errors="*{p_post_code}">
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		
+		<div class="row" style="border-top: 3px double #E5E5E5;"></div> 
+		<hr />
+		
+		<!-- RECEIVING BRANCH -->
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					<label for="r_account_no" class="col-sm-3 control-label no-padding-right">Receiving Account:</label>
+					<div class="col-sm-9">
+					<input id="r_account_no_search" /> <br />
+					
+						<select th:field="*{r_account_no}" class="col-xs-10 col-sm-5"  required="required">
+							<option value="">Select..</option>
+								<option th:each="generalLedger: ${generalLedgers}" 
+							th:value = "${generalLedger.account_no}" 
+							th:text="|${generalLedger.account_no} (${generalLedger.balance})|">Posting Account</option>
+						</select>
+						<span class="text-danger" th:if="${#fields.hasErrors('r_account_no')}"
+							th:errors="*{r_account_no}">
+						</span>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label for="r_branch_id" class="col-sm-3 control-label no-padding-right">Receiving Branch:</label>
+					<div class="col-sm-9">
+						<select th:field="*{r_branch_id}" class="col-xs-10 col-sm-5"  required="required">
+							<option value="">Select..</option>
+								<option th:each="branch : ${branches}" 
+							th:value = "${branch.Id}" 
+							th:text="${branch.name}">Receiving Branch</option>
+						</select>
+						<span class="text-danger" th:if="${#fields.hasErrors('r_branch_id')}"
+							th:errors="*{r_branch_id}">
+						</span>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="row">				
+				<div class="form-group">
+					<label for="r_description" class="col-sm-3 control-label no-padding-right">Description:</label>
+					<div class="col-sm-9">
+					
+						<textarea class="col-xs-10 col-sm-5" 
+							th:field="*{r_description}"
+							th:value="${r_description}">
+						
+						</textarea>
+						<span
+							class="text-danger" th:if="${#fields.hasErrors('r_description')}"
+							th:errors="*{r_description}"></span>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label for="p_amount" class="col-sm-3 control-label no-padding-right">Amount:</label>
+					<div class="col-sm-9">
+						<input type="text" class="col-xs-10 col-sm-5" 
+							th:field="*{p_amount}"
+							readonly="readonly" /> <span
+							class="text-danger" th:if="${#fields.hasErrors('p_amount')}"
+							th:errors="*{p_amount}"></span>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label for="r_post_code" class="col-sm-3 control-label no-padding-right">Post Code:</label>
+					<div class="col-sm-9">
+						<select th:field="*{r_post_code}" class="col-xs-10 col-sm-5"  required="required" id="r_post_code">
+							<option value="">Select..</option>
+								<option th:each="postCode: ${postCodes}" 
+							th:value = "${postCode.code}" 
+							th:text="${postCode.description}">Post Code</option>
+						</select>
+						<span class="text-danger" th:if="${#fields.hasErrors('r_post_code')}"
+							th:errors="*{r_post_code}">
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="clearfix">
+			<div class="col-md-offset-4 col-md-6">
+				<button class="btn btn-primary" type="submit">
+					<i class="ace-icon fa fa-check bigger-110"></i> Add
+				</button>
+
+				<button class="btn btn-danger" type="reset">
+					<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+				</button>
+			</div>
+		</div>
+	</form>
+</div>
+
+<script type="text/javascript">
+$('#p_amount').blur(function(){
+	this.attr('value', this.value);
+	var branches = '${branches}';
+	console.log(branches);
+});
+$('.datepicker').datepicker({
+	autoclose : true,
+	format: 'yyyy-mm-dd',
+	todayHighlight : true
+})//show datepicker when clicking on the icon
+.next().on(ace.click_event, function() {
+	$(this).prev().focus();
+});
+	
+jQuery.fn.filterByText = function(textbox) {
+	  return this.each(function() {
+	    var select = this;
+	    var options = [];
+	    $(select).find('option').each(function() {
+	      options.push({
+	        value: $(this).val(),
+	        text: $(this).text()
+	      });
+	    });
+	    $(select).data('options', options);
+
+	    $(textbox).bind('change keyup', function() {
+	      var options = $(select).empty().data('options');
+	      var search = $.trim($(this).val());
+	      var regex = new RegExp(search, "gi");
+
+	      $.each(options, function(i) {
+	        var option = options[i];
+	        if (option.text.match(regex) !== null) {
+	        	/* var o = new Option(option.text, option.value);
+	        	// jquerify the DOM object 'o' so we can use the html method
+	        	$(o).html(option.text); */
+	        	
+	           $(select).append(
+	           '<option value="'+ option.value +'">' + option.text + '</option>'
+	          ); 
+	        }
+	      });
+	    });
+	  });
+	};
+
+	// You could use it like this:
+
+	$(function() {
+	  $('#p_account_no').filterByText($('#p_account_no_search'));
+	});
+	
+	$(function() {
+		  $('#r_account_no').filterByText($('#r_account_no_search'));
+		});
+</script>

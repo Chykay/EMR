@@ -1,0 +1,135 @@
+<div class="page-header">
+	<h1>
+		Add <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			Create a patient profile
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<!-- <div class="col-xs-12">
+		Button for view
+		<a class="btn btn-xs btn-primary" th:href="@{/patients}"><i
+			class="fa fa-list"></i> All Patients
+		</a>
+		<a class="btn btn-xs btn-purple" th:href="@{/caspatient/}"><i
+			class="fa fa-list"></i> Casualty Patients
+		</a>
+		<a class="btn btn-xs btn-yellow" href="#"><i
+			class="fa fa-list"></i> Patients Settings
+		</a>
+		<a class="btn btn-xs btn-warning" th:href="@{/consultations/visits}"><i
+			class="fa fa-list"></i> Create Visit
+		</a>
+	</div> -->
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+
+		<form role="form" class="form-horizontal" method="POST"
+			th:object="${relatedPatientForm}">
+			<legend>Related Patient Profile Form</legend>
+
+
+
+
+
+<div class="form-group">
+				<label for="patient ID" class="col-sm-3 control-label no-padding-right">Patient ID:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" 
+						th:field="*{patientId}"  /> <span
+						class="text-danger" th:if="${#fields.hasErrors('patientId')}"
+						th:errors="*{patientId}"></span>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="patient ID" class="col-sm-3 control-label no-padding-right">Related Patient ID:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" id = "customerid"
+						
+						th:field="*{relPatientId}" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('relPatientId')}"
+						th:errors="*{relPatientId}"></span>
+						<span class="input-group-btn">
+							<button type="button" onclick = "mypatient();" class="btn btn-purple btn-sm">
+							Search
+							<i class="ace-icon fa fa-search icon-on-right bigger-110"></i>
+							</button>
+						</span>
+				</div>
+			</div>
+			
+			
+
+			<!-- <div class="form-group">
+				<label for="title" class="col-sm-3 control-label no-padding-right">Title:</label>
+				<div class="col-sm-9">
+					<select th:field="*{titleId}" class="col-xs-10 col-sm-5">
+						<option value="0">Select..</option>
+						<option th:each="t: ${titles}" th:value="${t.id}"
+							th:text="${t.acronym}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('titleId')}"
+						th:errors="*{titleId}"></span>
+				</div>
+			</div> -->
+
+			<!-- <div class="form-group">
+				<label for="patient code" class="col-sm-3 control-label no-padding-right">Patient Code:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder=""
+						th:field="*{patient_code}" readonly = "readonly" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('patient_code')}"
+						th:errors="*{patient_code}"></span>
+				</div>
+			</div> -->
+			
+			
+			<div class="form-group">
+				<label for="relationship" class="col-sm-3 control-label no-padding-right">Relationship</label>
+				<div class="col-sm-9">
+					<select th:field="*{relationship}" class="col-xs-10 col-sm-5">
+						<option value="0">Select..</option>
+						<option value="father">father</option>
+						<option value="mother">mother</option>	
+						<option value="brother">brother</option>
+						<option value="sister">sister</option>
+						<option value="son">son</option>
+						<option value="daughter">daughter</option>					
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('relationship')}"
+						th:errors="*{relationship}"></span>
+				</div>
+			</div>
+			
+			
+			
+			<div class="clearfix form-actions">
+				<div class="col-md-offset-3 col-md-9">
+					
+					<button class="btn btn-primary" type="submit">
+						<i class="ace-icon fa fa-check bigger-110"></i> Add
+					</button>
+
+					<button class="btn btn-danger" type="reset">
+						<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+function mypatient() {
+   var myWindow = window.open('/../'+ window.location.pathname.split('/')[1] + '/getRelatedPatient", "MsgWindow", "width=500, height=500");
+  //  myWindow.document.write("<p>This window's name is: " + myWindow.name + "</p>");
+    myWindow.focus();
+    return false
+  
+}
+</script>

@@ -1,0 +1,134 @@
+<div class="page-header">
+
+	<div class="profile-info-row">
+							
+							<div class="profile-info-name"> <span class="profile-picture"> <img
+								th:if="${v.organisation.logo == null}" id="avatar2"
+								style="max-width: 80px" th:src="@{/resources/img/logo.jpg}"
+								alt="Profile" class="img-responsive" /> <img
+								th:if="${v.organisation.logo  != null}" id="avatar2"
+								style="max-width: 80px"
+									th:src="@{/system/organisations/image/{id}(id=${@userIdentity.getOrganisation().getId()})}"
+								
+								alt="Profile" class="img-responsive" />
+								</span>
+							</div>
+
+								  <div class="profile-info-value">
+										
+		<h1><span th:text="${v.organisation.name}"></span> Invoice</h1>
+		
+		<!-- 
+		 <span th:text="${v.organisation.address  != null ? v.organisation.address :'' + ' ' + v.organisation.phoneno != null ? v.organisation.phoneno : ''}">
+		</span>-->
+								  </div>
+								
+									
+										
+							</div>		
+	
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		
+			<div class="profile-info-row">
+
+								<div class="profile-info-name"  style="text-align: left ; padding-left:20px "><b>Date:</b></div>
+
+								<div class="profile-info-value">
+									<span th:text="${v.effectiveDate}"></span>
+								</div>
+						</div>
+						
+			
+			<div class="profile-info-row">
+								<div class="profile-info-name"  style="text-align: left ; padding-left:20px "><b>Visit Code:</b></div>
+
+								<div class="profile-info-value">
+									<span th:text="${v.code}"></span>
+								</div>
+							
+
+					</div>
+						
+							<div class="profile-info-row">
+							
+							<div class="profile-info-name" style="text-align: left ; padding-left:20px "><b>Name:</b></div>
+
+								  <div class="profile-info-value">
+								  
+									<span th:text="${v.patient.surname + ' ' + v.patient.firstName} "></span>
+								  </div>
+										
+							</div>		
+			</div>
+		
+		<div class="hr hr-18 dotted hr-double"></div>
+					
+						<div class="profile-info-row">
+                            <div class="profile-info-name" style="text-align: left; padding-left:20px " ><b>Bill Id</b></div>							
+							<div class="profile-info-name" style="text-align: left;width:1000px"><b>Description</b></div>
+                            <div class="profile-info-name" style="text-align: right"><b>Cash</b></div>
+                     <div class="profile-info-name" style="text-align: right"><b>HMO</b></div>
+
+
+									
+										
+							</div>		
+		
+					
+			
+						<div class="profile-info-row" th:each="inv : ${v.billinvoice}">
+							
+							<div class="profile-info-name" style="text-align: left;  text-color:black;padding-left:20px " th:text="${inv.id}"></div>
+
+							<div class="profile-info-name" style="text-align: left ; text-color:black; width:1000px" th:text="${inv.globalitem.GlobalitemName + ' ' + inv.description}"></div>
+
+							<div class="profile-info-name" style="text-align: right; text-color:black " th:text="${#numbers.formatDecimal(inv.cashamt, 0, 'COMMA', 2, 'POINT')}"></div>
+
+							<div class="profile-info-name" style="text-align: right ;text-color:black " th:text="${#numbers.formatDecimal(inv.hmoamt, 0, 'COMMA', 2, 'POINT')}"></div>
+								
+		
+		
+	                          </div>
+	                          
+	                          
+	                          	<div class="profile-info-row">
+							
+							<div class="profile-info-name" style="text-align: left; padding-left:20px; width:1000px">Total Amt:</div>
+							
+							  <div class="profile-info-value" style="width:1000px">
+									<span th:text="${#numbers.formatDecimal(v.mfig.totamt, 0, 'COMMA', 2, 'POINT')}"></span>
+								  </div>
+							  
+                             </div>
+                             
+                             <div class="profile-info-row">
+							
+							<div class="profile-info-name" style="text-align: left; padding-left:20px;width:1000px ">Total HMO:</div>
+							
+							  <div class="profile-info-value" style="width:1000px">
+									<span th:text="${#numbers.formatDecimal(v.mfig.tothmo, 0, 'COMMA', 2, 'POINT')}"></span>
+								  </div>
+							  
+                             </div>
+                             <div class="profile-info-row">
+							
+							<div class="profile-info-name" style="text-align: left;  padding-left:20px ;width:1000px">Total Cash:</div>
+							
+							  <div class="profile-info-value" style="width:1000px">
+									<span th:text="${#numbers.formatDecimal(v.mfig.totcash, 0, 'COMMA', 2, 'POINT')}"></span>
+								  </div>
+							  
+                             </div>
+                             <div class="profile-info-row" >
+							<div class="profile-info-name" style="text-align: left;  padding-left:20px ;width:1500px">Thanks for your Patronage:</div>
+							
+							  
+                             </div>
+                             
+                             
+</div>
+

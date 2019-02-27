@@ -1,0 +1,95 @@
+<div class="page-header">
+	<h1>
+		Edit <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			an Hospital Director
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-primary" th:href="@{/admin/organisations}"><i
+			class="fa fa-list"></i> All Hospitals</a>
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+
+		<form role="form" class="form-horizontal" method="POST"
+			th:object="${directorForm}" enctype="multipart/form-data">
+			<legend>Hospital Director Form</legend>			
+
+			<div class="form-group">
+				<label for="directorLastName" class="col-sm-3 control-label no-padding-right">Last Name:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5"
+						placeholder="Last Name" th:field="*{directorLastName}" required="required" />
+					<span class="text-danger" th:if="${#fields.hasErrors('directorLastName')}"
+						th:errors="*{directorLastName}"></span>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="directorFirstName" class="col-sm-3 control-label no-padding-right">First Name:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5"
+						placeholder="First Name" th:field="*{directorFirstName}" required="required" />
+					<span class="text-danger" th:if="${#fields.hasErrors('directorFirstName')}"
+						th:errors="*{directorFirstName}"></span>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="directorEmail" class="col-sm-3 control-label no-padding-right">Email:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5"
+						placeholder="Email" th:field="*{directorEmail}" required="required" />
+					<span class="text-danger" th:if="${#fields.hasErrors('directorEmail')}"
+						th:errors="*{directorEmail}"></span>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="directorPhone" class="col-sm-3 control-label no-padding-right">Phone Number:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5"
+						placeholder="Phone Number" th:field="*{directorPhone}" required="required" />
+					<span class="text-danger" th:if="${#fields.hasErrors('directorPhone')}"
+						th:errors="*{directorPhone}"></span>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="directorAvatar"
+					   class="col-sm-3 control-label no-padding-right">Upload Image:</label>
+							<div class="col-sm-9">
+								 <input type="file" class="col-xs-10 col-sm-5"
+											th:field="*{directorAvatar}" required="required" /> <span
+											class="text-danger" th:if="${#fields.hasErrors('directorAvatar')}"
+											th:errors="*{directorAvatar}"></span>
+							</div>
+			</div>
+			
+
+			<div class="clearfix form-actions">
+				<div class="col-md-offset-3 col-md-9">
+					<!-- <input type="text" th:field="*{organisationId}" />	 -->
+					<input type="hidden" th:field="*{directorId}" />				
+					<button class="btn btn-primary" type="submit">
+						<i class="ace-icon fa fa-check bigger-110"></i> Add
+					</button>
+
+					<button class="btn btn-danger" type="reset">
+						<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>

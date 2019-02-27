@@ -1,0 +1,77 @@
+<div class="page-header">
+	<h1>
+		Edit Account: <small><span th:text="${account.name}">Name</span></small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/ledger/bal_sheet_cat/index}">
+			<i class="fa fa-home"></i> System Dashboard
+		</a> 
+		<a class="btn btn-xs btn-primary" th:href="@{/ledger/bal_sheet_cat/create}">
+			<i class="fa fa-plus-circle"></i> Add Account 
+		</a>
+	
+ 		<span   id="imgId" hidden="hidden" > 
+ 			<img th:src="@{/resources/assets/images/ajax-loader.gif}" id="loading_img" />  
+ 		</span>      
+	</div>
+</div>
+<div>
+	<form role="form" class="form-horizontal" method="POST"
+			th:object="${account}">
+			
+		<div class="form-group">
+			<label for="name" class="col-sm-3 control-label no-padding-right">Name:</label>
+			<div class="col-sm-9">
+				<input type="text" class="col-xs-10 col-sm-5" placeholder="Name"
+					th:field="*{name}" required="required" /> <span
+					class="text-danger" th:if="${#fields.hasErrors('name')}"
+					th:errors="*{name}"></span>
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="gender" class="col-sm-3 control-label no-padding-right">Active Status:</label>
+			<div class="col-sm-9">
+				<select th:field="*{is_active}" class="col-xs-10 col-sm-5"  required="required" id="is_active">
+					<option  value="">Select..</option>
+					<option value="0">Inactive</option>
+					<option value="1">Active</option>
+				</select>
+				<span class="text-danger" th:if="${#fields.hasErrors('is_active')}"
+					th:errors="*{is_active}">
+				</span>
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="gender" class="col-sm-3 control-label no-padding-right">Parent Account:</label>
+			<div class="col-sm-9">
+				<select th:field="*{parent_id}" class="col-xs-10 col-sm-5"  required="required" id="parent_id">
+					<option value="" >Select..</option>
+						<option th:each="p_account: ${p_accounts}" 
+					th:value = "${p_account.id}" 
+					th:text="${p_account.name}">Parent Name</option>
+				</select>
+				<span class="text-danger" th:if="${#fields.hasErrors('parent_id')}"
+					th:errors="*{parent_id}">
+				</span>
+			</div>
+		</div>
+		
+		<div class="clearfix form-actions">
+			<div class="col-md-offset-3 col-md-9">
+				<button class="btn btn-primary" type="submit">
+					<i class="ace-icon fa fa-check bigger-110"></i> Update
+				</button>
+
+				<button class="btn btn-danger" type="reset">
+					<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+				</button>
+			</div>
+		</div>
+	</form>
+</div>

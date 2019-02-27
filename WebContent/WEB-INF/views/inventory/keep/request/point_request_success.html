@@ -1,0 +1,95 @@
+
+<div class="page-header">
+	<h1>
+		INVENTORY OFFICE MANAGEMENT<small> <i
+			class="ace-icon fa fa-angle-double-right"></i> Make Order Request
+		</small>
+	</h1>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard </a> <a
+			class="btn btn-xs btn-primary" th:href="@{/inventory/request/new}">
+			<i class="fa fa-plus-circle"></i>Make A New Request
+		</a>
+	</div>
+</div>
+
+<p></p>
+
+<style>
+.table {
+	margin: auto
+}
+<!--
+-->
+</style>
+
+<div class="col-xs-12">
+	<!-- View contents here -->
+
+
+<div class="well well-sm">
+		<ul>
+			<li>Request ID:&nbsp;<span class="text-danger"
+				th:text="${pointRequest.requestBatchId}">Request ID</span>
+			</li>
+			
+			<li>Unit: &nbsp; <span class="text-danger"
+				th:text="${pointRequest.unit?.unitName}">Unit</span>
+			</li>
+			
+					
+			<li>Point:&nbsp; <span class="text-danger"
+				th:text="${pointRequest.visitWorkflowPoint?.name}"> Point</span>
+			</li>
+						
+			<li><span class=""> Department:&nbsp;<span
+					class="text-danger" th:text="${pointRequest.department?.departmentName}">
+						Department</span>
+			</span></li>
+			
+	
+			<li><span class=""> Date Of Request:&nbsp;<span
+					class="text-danger" th:text="${pointRequest.requestDate}">Date Of Request</span>
+			</span></li>
+
+
+		</ul>
+	</div>
+	
+	<div class="col-xs-10">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Global Item:</th>
+					<th>Unit Of Measure:</th>
+					<th>Quantity Requested:</th>
+				</tr>
+			</thead>
+			<tbody>
+				<th:block th:if="${pointRequest !=null}">
+
+					<tr th:each=" pointRequestLine : ${pointRequest.pointRequestLines}">
+						<td th:text=" ${pointRequestLine.globalItem?.name}">Global
+							Item</td>
+						<td
+							th:text=" ${pointRequestLine.globalUnitofMeasure?.searchname}">Unit
+							Of Measure</td>
+						<td th:text=" ${pointRequestLine.quantity}">Quantity
+							Requested</td>
+
+					</tr>
+				</th:block>
+
+			</tbody>
+
+		</table>
+	</div>
+</div>
+
+
+
+

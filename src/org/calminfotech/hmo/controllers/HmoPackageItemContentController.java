@@ -1,0 +1,287 @@
+package org.calminfotech.hmo.controllers;
+
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
+import org.calminfotech.billing.boInterface.BillSchemeBo;
+import org.calminfotech.billing.models.BillScheme;
+import org.calminfotech.hmo.boInterface.HmoBo;
+
+import org.calminfotech.hmo.boInterface.HmoPackageItemBo;
+import org.calminfotech.hmo.boInterface.HmoPackageBo;
+import org.calminfotech.hmo.boInterface.HmoPackageItemContentBo;
+
+import org.calminfotech.hmo.forms.HmoForm;
+import org.calminfotech.hmo.forms.HmoPackageItemContentForm;
+import org.calminfotech.hmo.forms.HmoPackageItemForm;
+import org.calminfotech.hmo.forms.HmoPackageForm;
+import org.calminfotech.hmo.models.Hmo;
+import org.calminfotech.hmo.models.HmoPackageItem;
+import org.calminfotech.hmo.models.HmoPackage;
+import org.calminfotech.hmo.models.HmoPackageItemContent;
+import org.calminfotech.patient.forms.PatientAddressForm;
+import org.calminfotech.patient.forms.PatientHistoryForm;
+import org.calminfotech.user.utils.Authorize;
+import org.calminfotech.user.utils.UserIdentity;
+import org.calminfotech.utils.Alert;
+import org.calminfotech.utils.Auditor;
+import org.calminfotech.utils.BankList;
+import org.calminfotech.utils.BillitemList;
+import org.calminfotech.utils.HmostatusList;
+import org.calminfotech.utils.PeriodList;
+
+import org.calminfotech.utils.annotations.Layout;
+import org.calminfotech.utils.models.Addresstype;
+import org.calminfotech.utils.models.Billingwinsearch;
+import org.calminfotech.utils.models.Historytype;
+import org.calminfotech.utils.models.Hmostatus;
+import org.calminfotech.utils.models.Period;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+@Controller
+@RequestMapping(value = "/hmo")
+public class HmoPackageItemContentController {
+
+	@Autowired
+	private Alert alert;
+	
+	@Autowired
+	private HmoPackageItemBo hmoPackageItemBo;
+	
+
+	@Autowired
+	private HmoPackageItemContentBo hmoPackageContentBo;
+	
+	
+	//@Autowired
+	//private ItemServiceGroupBo itemServiceGroupBo;
+	
+	@Autowired
+	private HmoPackageItemBo hmoItemBo;
+	
+
+	@Autowired
+	private HmoPackageItemContentBo hmoContentBo;
+	
+	@Autowired
+	private UserIdentity userIdentity;
+	
+	@Autowired
+	private HmoBo hmoBo;
+	
+
+	@Autowired
+	private BankList  bankList;
+	
+	
+	@Autowired
+	private HmostatusList  hmostatusList;
+	
+	@Autowired
+	private PeriodList  periodList;
+	
+	@Autowired
+	private Auditor auditor;
+	
+	@Autowired
+	private BillSchemeBo billSchemeBo;
+	
+	@Autowired
+	private BillitemList   billitemBo;
+	
+	@Autowired
+	private Authorize   authorize;
+
+	
+	@RequestMapping(value = { "/hmopackageitemcontent/save" })
+	@Layout(value = "layouts/datatable")
+	public String addHmoItem3(@PathVariable("id") Integer pid, Model model,
+			RedirectAttributes redirectAttributes) {
+		if (authorize.isAllowed("HMC001"))
+		{
+	
+		Hmo hmo = hmoBo.getHmoById(pid);
+		if (null == hmo) {
+			alert.setAlert(redirectAttributes, Alert.DANGER,
+					"Error! Invalid resource");
+			return "admin/hmos";
+		}
+		model.addAttribute("iForm", new HmoPackageItemForm());
+		//model.addAttribute("categories", this.hmoCategoryListBo.fetchAll());
+
+		return "admin/hmos/addHmoItem";
+	}
+		
+		else
+		{
+			alert.setAlert(redirectAttributes, Alert.WARNING,
+					"You have no permission to Add HMO Package Content");
+			
+			return "redirect:/";
+		}
+		
+
+		}
+
+	
+
+	@RequestMapping(value = "/hmopackageitemcontent/save", method = RequestMethod.POST)
+	public String saveActionItem3(
+			@Valid @ModelAttribute("hmopackcontentForm") HmoPackageItemContentForm hmoItemContentForm,
+			BindingResult result, RedirectAttributes redirectAttributes,
+			Model model) {
+		if (authorize.isAllowed("HMC001"))
+		{
+		if (result.hasErrors()) {
+			//model.addAttribute("categories", this.hmoItemBo.fetchAll());
+			return "hmo/index";
+		}
+		HmoPackageItem hmoPackageItem = this.hmoPackageItemBo.getHmoItemById(hmoItemContentForm.getHmopackageitem_id());
+        Billingwinsearch  billitemsearch = this.billitemBo.getBillingitemById(hmoItemContentForm.getBillingitem_id());
+
+		HmoPackageItemContent hmoContentItem = new HmoPackageItemContent();
+		
+		
+		
+		hmoContentItem.setHmoPackageItem(hmoPackageItem);
+	hmoContentItem.setBillitem(billitemsearch);
+	
+		hmoContentItem.setDescription(hmoItemContentForm.getDescription());
+	
+		hmoContentItem.setHmostatus(this.hmostatusList.getHmostatusById(hmoItemContentForm.getStatus_id()));
+		hmoContentItem.setDescription(hmoItemContentForm.getDescription());
+		hmoContentItem.setCreatedBy(userIdentity.getUsername());
+		hmoContentItem.setOrganisationId(userIdentity.getOrganisation().getId());
+
+		this.hmoContentBo.save(hmoContentItem);
+		alert.setAlert(redirectAttributes, Alert.SUCCESS,
+				"Success! Item added!");
+		return "redirect:/hmo/hmopackageitem/view/" + hmoPackageItem.getId();
+	}
+	
+	else
+	{
+		alert.setAlert(redirectAttributes, Alert.WARNING,
+				"You have no permission to Add HMO Package Content");
+		
+		return "redirect:/";
+	}
+	
+
+	}
+
+
+	@RequestMapping(value = "/hmopackageitemcontent/edit/{id}")
+	public String editActionEdititem3(@PathVariable("id") Integer id,
+			Model model, RedirectAttributes redirectAttributes,
+			HttpServletRequest request) {
+		if (authorize.isAllowed("HMC003"))
+		{
+		HmoPackageItemContent hmoItemContent = hmoContentBo.getHmoItemContentById(id);
+		if (null == hmoItemContent) {
+			alert.setAlert(redirectAttributes, Alert.DANGER, "Invalid resource");
+			return "redirect:/hmo/index";
+		}
+		
+		
+		HmoPackageItemContentForm hmoItemContentForm = new HmoPackageItemContentForm();
+
+	//	hmoItemContentForm.setHmopackageitem_id(hmoItemContent.getHmoPackageItem().getId());
+		
+		
+		
+		
+		
+		hmoItemContentForm.setBillingitem_id(hmoItemContent.getBillitem().getId());
+
+		hmoItemContentForm.setDescription(hmoItemContent.getDescription());
+		hmoItemContentForm.setStatus_id(hmoItemContent.getHmostatus().getHmostatus_id());
+		
+		List<Hmostatus> hmostatus =hmostatusList.fetchAll();
+		//List<Period> period = periodList.fetchAll();
+		
+		//model.addAttribute("period",period);
+		model.addAttribute("billitemname",hmoItemContent.getBillitem().getName());
+		
+		model.addAttribute("hmostatus",hmostatus);
+		
+		model.addAttribute("hmopackcontentForm", hmoItemContentForm);
+		auditor.before(request, "HMO Item Form", hmoItemContentForm);
+		return "hmo/hmocontent/edit";
+		}
+		
+		else
+		{
+			alert.setAlert(redirectAttributes, Alert.WARNING,
+					"You have no permission to Edit HMO Package Content");
+			
+			return "redirect:/";
+		}
+		
+
+		}
+
+	@RequestMapping(value = "/hmopackageitemcontent/edit/{id}", method = RequestMethod.POST)
+	public String updateActionEdititem3(@PathVariable("id") Integer id,
+			@Valid @ModelAttribute("hmopackcontentForm") HmoPackageItemContentForm hmoItemContentForm,
+			BindingResult result, RedirectAttributes redirectAttributes,
+			Model model, HttpServletRequest request) {
+		if (authorize.isAllowed("HMC003"))
+		{
+	
+		HmoPackageItemContent hmoContentItem  = this.hmoPackageContentBo.getHmoItemContentById(id);
+	//	HmoPackageItem hmoPackageItem = hmoPackageItemBo.getHmoItemById(hmoItemContentForm.getHmopackageitem_id());
+		
+		if (result.hasErrors()) {
+			//model.addAttribute("categoriesItem", this.hmoItemBo.fetchAll());
+			return "redirect:/hmo/index";
+		}
+		// NEWWLY ADDED
+
+	    hmoContentItem.setBillitem(billitemBo.getBillingitemById(hmoItemContentForm.getBillingitem_id()));
+		hmoContentItem.setDescription(hmoItemContentForm.getDescription());
+		hmoContentItem.setHmostatus(this.hmostatusList.getHmostatusById(hmoItemContentForm.getStatus_id()));
+		hmoContentItem.setDescription(hmoItemContentForm.getDescription());
+		hmoContentItem.setModifiedDate(new GregorianCalendar().getTime());
+		hmoContentItem.setModifiedBy(userIdentity.getUsername());
+		
+
+		// end
+		hmoContentBo.update(hmoContentItem);
+		auditor.after(request, "HMO Item Form", hmoItemContentForm,
+				userIdentity.getUsername(),id);
+
+		alert.setAlert(redirectAttributes, Alert.SUCCESS,
+				"Success! Item updated");
+		/*
+		 * return "redirect:/admin/hmos/viewSaveItem/" + hmoItem.getItemId();
+		 */
+		return "redirect:/hmo/hmopackageitem/view/" + hmoContentItem.getHmoPackageItem().getId();
+
+}
+		
+		else
+		{
+			alert.setAlert(redirectAttributes, Alert.WARNING,
+					"You have no permission to Edit HMO Package Content");
+			
+			return "redirect:/";
+		}
+		
+
+		}
+	
+	
+
+}

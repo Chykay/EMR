@@ -1,0 +1,100 @@
+
+<div class="page-header">
+	<h1>
+		INVENTORY OFFICE MANAGEMENT<small> <i
+			class="ace-icon fa fa-angle-double-right"></i> Make Order Request
+		</small>
+	</h1>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard </a> <a
+			class="btn btn-xs btn-primary"
+			th:href="@{/inventory/order_request/user}"> <i
+			class="fa fa-plus-circle"></i>Back To Requests
+		</a>
+	</div>
+</div>
+
+<p></p>
+
+<style>
+.table {
+	margin: auto
+}
+<!--
+-->
+</style>
+
+<div class="col-xs-12">
+	<!-- View contents here -->
+
+	<div class="profile-info-row">
+		<div class="profile-info-name">Request ID:</div>
+
+		<div class="profile-info-value">
+			<span th:text="${pointRequest.requestBatchId}">Request ID</span>
+		</div>
+	</div>
+	
+	<div class="profile-info-row">
+		<div class="profile-info-name">Request Status:</div>
+
+		<div class="profile-info-value">
+			<span th:text="${T(org.calminfotech.inventory.utils.PointRequestStatus).fromCode(pointRequest.requestStatus)}">Request Status</span>
+		</div>
+	</div>
+
+	<div class="profile-info-row">
+		<div class="profile-info-name">Department/Point:</div>
+
+		<div class="profile-info-value">
+			<span th:text="${pointRequest.visitWorkflowPoint.name}">Point</span>
+		</div>
+	</div>
+
+	<div class="profile-info-row">
+		<div class="profile-info-name">Date Of Request:</div>
+
+		<div class="profile-info-value">
+			<span th:text="${pointRequest.requestDate}">Date Of Request</span>
+		</div>
+	</div>
+
+	<div class="col-xs-10">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Global Item:</th>
+					<th>Unit Of Measure:</th>
+					<th>Quantity Requested:</th>
+					<th>Quantity Approved:</th>
+					<th>Request Status:</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each=" pointRequestLine : ${pointRequest.pointRequestLines}">
+					<td th:text=" ${pointRequestLine.globalItem.name}">Global Item</td>
+					<td
+						th:text=" ${pointRequestLine.globalUnitofMeasure.unit_of_measure}">Unit
+						Of Measure</td>
+					<td th:text=" ${pointRequestLine.quantity}">Quantity
+						Requested</td>
+
+					<td th:text=" ${pointRequestLine.quantityApproved}">Quantity
+						Approved</td>
+
+					<td th:text="${T(org.calminfotech.inventory.utils.PointRequestStatus).fromCode(pointRequestLine.requestStatus)}">Request Status
+						</td>
+				</tr>
+			</tbody>
+
+		</table>
+	</div>
+</div>
+
+
+
+

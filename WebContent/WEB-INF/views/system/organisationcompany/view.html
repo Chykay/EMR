@@ -1,0 +1,227 @@
+<div class="page-header">
+	<h1>
+		Hospital Profile <small> <i
+			class="ace-icon fa fa-angle-double-right"></i></small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> Dashboard
+		</a>
+		<a class="btn btn-xs btn-primary" th:href="@{/system/organisations }">
+			<i class="glyphicon glyphicon-list"></i> All Hospital
+		</a> 		
+
+	</div>
+</div>
+<div class="hr hr-18 dotted hr-double"></div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<!-- User Profile -->
+		<div id="user-profile-2" class="user-profile">
+			<div class="tabbable">
+				<ul class="nav nav-tabs padding-18">
+					<li class="active">
+						<a data-toggle="tab" href="#home"> <i
+							class="green ace-icon fa fa-user bigger-120"></i> Profile
+						</a>
+					</li>
+					<li>
+						<a data-toggle="tab" href="#logo"> <i
+							class="green ace-icon fa fa-user bigger-120"></i> Logo
+						</a>
+					</li>
+				<!-- 
+					<li class="">
+						<a th:href="@{/admin/organisations/director/{hId}(hId=${organisation.id})}">
+							<i class="brown ace-icon fa fa-leaf bigger-120"></i> Directors
+						</a>
+					</li>
+                 -->
+				
+				</ul>
+
+				<div class="tab-content no-border padding-24">
+					<div id="home" class="tab-pane in active">
+						<div class="row">
+							<div class="col-xs-12 col-sm-9">
+								<h4 class="blue">
+									<span class="middle"
+										th:text="${organisation.name}"></span>
+								</h4>
+
+							<div class="profile-user-info">
+									<div class="profile-info-row">
+										<div class="profile-info-name">Email Address</div>
+
+										<div class="profile-info-value">
+											<span th:text="${organisation.Email}"></span>
+										</div>
+									</div>
+
+							</div>   
+
+
+							<div class="profile-user-info">
+									<div class="profile-info-row">
+										<div class="profile-info-name">Domain Address</div>
+
+										<div class="profile-info-value">
+											<span th:text="${organisation.Domain}"></span>
+										</div>
+									</div>
+
+							</div>   
+
+							<div class="profile-user-info">
+									<div class="profile-info-row">
+										<div class="profile-info-name">Phone No</div>
+
+										<div class="profile-info-value">
+											<span th:text="${organisation.Phoneno}"></span>
+										</div>
+									</div>
+
+							</div>   
+
+
+							<div class="profile-info-row">
+										<div class="profile-info-name">Address</div>
+
+										<div class="profile-info-value">
+											<i class="fa fa-map-marker light-orange bigger-110"></i> <span
+												th:text="${organisation.address == null}? 'Not set' : ${organisation.address}">2010/06/20</span>
+										</div>
+							</div>							
+							
+							
+							<div class="profile-user-info">
+									<div class="profile-info-row">
+										<div class="profile-info-name">Hospital Category</div>
+
+										<div class="profile-info-value">
+											<span th:text="${organisation.organisationCategory != null ? organisation.organisationCategory.categoryName : ''}">alexdoe</span>
+										</div>
+									</div>
+
+							</div>
+							
+							<div class="profile-user-info">
+									<div class="profile-info-row">
+										<div class="profile-info-name">State</div>
+
+										<div class="profile-info-value">
+											<span th:text="${organisation.state != null ?  organisation.state.stateName : ''}">alexdoe</span>
+										</div>
+									</div>
+
+							</div>
+							
+							<div class="profile-user-info">
+									<div class="profile-info-row">
+										<div class="profile-info-name">LGA</div>
+
+										<div class="profile-info-value">
+											<span th:text="${organisation.lga != null ? organisation.lga.localGovernmentAreasName : ''}">alexdoe</span>
+										</div>
+									</div>
+
+							</div>
+
+								<div class="hr hr-8 dotted"></div>
+							</div>
+							<!-- /.col -->
+						</div>
+						<!-- /.row -->
+
+						<div class="space-20"></div>
+					</div>
+					
+					
+					
+					<div id="logo" class="tab-pane in active">
+						<div class="row">
+							<div class="col-xs-12 col-sm-9 col-md-9 center">
+								<span class="profile-picture"> 
+								<img th:if="${@userIdentity.getOrganisation().getOrgCoy().getLogo() == null}" id="avatar2"
+								style="max-width: 300px"
+									th:src="@{/resources/img/nhis.png}" alt="Profile"
+									class="img-responsive" /> 
+									<img th:if="${@userIdentity.getOrganisation().getOrgCoy().getLogo() != null}" id="avatar2"
+									th:src="@{/system/organisationscompany/image/{id}(id=${organisation.id})}"
+									alt="Profile" class="img-responsive" />
+								</span>
+
+								<div class="space space-4"></div>
+								<a class="btn btn-sm btn-block btn-success" href="#modal-logo"
+									data-toggle="modal"> <i class="glyphicon glyphicon-picture"></i>
+									Change Image
+								</a>
+
+							</div>
+							<!-- /.col -->
+
+							
+							<!-- /.col -->
+						</div>
+						<!-- /.row -->
+
+						<div class="space-20"></div>
+					</div>
+					
+					
+					
+				</div>
+			</div>
+		</div>
+
+		<!-- Profile Ends  -->
+		<!-- End View contents here -->
+	</div>
+</div>
+
+
+<div class="modal fade" id="modal-logo">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- Form -->
+			<form th:action="@{/system/organisations/imageUpload}"
+				th:object="${imageForm}" method="post" enctype="multipart/form-data">
+				<!-- Modal heading -->
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title">Change Image</h4>
+				</div>
+				<!-- // Modal heading END -->
+				<!-- Modal body -->
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="lastName"
+							class="col-sm-3 control-label no-padding-right">Image:</label>
+						<div class="col-sm-9">
+							<input type="file" th:field="*{imageFile}" placeholder="image" /><span
+								class="text-danger" th:if="${#fields.hasErrors('imageFile')}"
+								th:errors="*{imageFile}"></span>
+						</div>
+					</div>
+				</div>
+				<!-- // Modal body END -->
+
+				<!-- Modal footer -->
+				<div class="modal-footer">
+					<button class="btn btn-primary btn-xs" type="submit" onclick="return saveAlert();"
+						id="save-changes">Save Changes</button>
+					<button type="button" class="btn btn-xs" data-dismiss="modal">Cancel</button>
+				</div>
+				<!-- // Modal footer END -->
+			</form>
+			<!-- /.Form -->
+		</div>
+	</div>
+</div>

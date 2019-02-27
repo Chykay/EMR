@@ -1,0 +1,330 @@
+package org.calminfotech.system.controllers;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.sql.Blob;
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+
+import org.apache.commons.io.IOUtils;
+
+//import org.calminfotech.hmo.boInterface.HmoBo;
+//import org.calminfotech.hmo.boInterface.HmoPackageBo;
+//import org.calminfotech.hmo.models.Hmo;
+//import org.calminfotech.hmo.models.HmoPackage;
+
+import org.calminfotech.patient.boInterface.PatientBo;
+import org.calminfotech.patient.boInterface.PatientBo;
+import org.calminfotech.patient.boInterface.PatientDocumentBo;
+import org.calminfotech.patient.boInterface.PatientDocumentBo;
+
+import org.calminfotech.patient.boInterface.PatientFamilyHistoryBo;
+import org.calminfotech.patient.boInterface.PatientHmoBo;
+import org.calminfotech.patient.boInterface.PatientHistoryBo;
+import org.hibernate.SessionFactory;
+
+import org.calminfotech.patient.boInterface.PatientHistoryBo;
+import org.calminfotech.patient.boInterface.PatientPaymentOptionBo;
+import org.calminfotech.patient.boInterface.PatientSearchBo;
+
+import org.calminfotech.patient.forms.PatientAllergyForm;
+import org.calminfotech.patient.forms.PatientDocumentForm;
+import org.calminfotech.patient.forms.PatientEmergencyForm;
+import org.calminfotech.patient.forms.PatientFamilyHistoryForm;
+import org.calminfotech.patient.forms.PatientForm;
+import org.calminfotech.patient.forms.PatientHmoForm;
+import org.calminfotech.patient.forms.PatientImageForm;
+import org.calminfotech.patient.forms.PatientMedicalHistoryForm;
+import org.calminfotech.patient.forms.PatientPaymentOptionForm;
+import org.calminfotech.patient.forms.PatientSocialHistoryForm;
+import org.calminfotech.patient.forms.PatientSurgicalHistoryForm;
+import org.calminfotech.patient.forms.PatientHistoryForm;
+import org.calminfotech.patient.forms.PatientSearchForm;
+import org.calminfotech.patient.models.Patient;
+import org.calminfotech.patient.models.PatientAllergy;
+import org.calminfotech.patient.models.PatientHistory;
+
+import org.calminfotech.patient.models.PatientDocument;
+
+import org.calminfotech.patient.models.PatientFamilyHistory;
+import org.calminfotech.patient.models.PatientHmo;
+
+import org.calminfotech.patient.models.PatientPaymentOption;
+
+import org.calminfotech.patient.utils.PatientCodeGenerator;
+
+import org.calminfotech.system.boInterface.ExaminationBo;
+import org.calminfotech.system.boInterface.ExaminationResultSetupBo;
+import org.calminfotech.system.boInterface.LanguageBo;
+import org.calminfotech.system.boInterface.TitleBo;
+import org.calminfotech.billing.boInterface.BillSchemeBo;
+import org.calminfotech.billing.boInterface.BillSchemeItemBo;
+
+import org.calminfotech.system.boInterface.PointBo;
+import org.calminfotech.system.forms.AllergyForm;
+import org.calminfotech.system.forms.ExaminationResultSetupForm;
+
+import org.calminfotech.system.models.Diseases;
+
+import org.calminfotech.system.models.Title;
+
+import org.calminfotech.system.boInterface.LanguageBo;
+import org.calminfotech.system.boInterface.TitleBo;
+import org.calminfotech.billing.boInterface.BillSchemeBo;
+import org.calminfotech.billing.boInterface.BillSchemeItemBo;
+
+import org.calminfotech.system.boInterface.PointBo;
+import org.calminfotech.system.forms.AllergyForm;
+
+import org.calminfotech.system.models.Diseases;
+import org.calminfotech.system.models.Examination;
+import org.calminfotech.system.models.ExaminationResultSetup;
+
+import org.calminfotech.system.models.Title;
+
+import org.calminfotech.user.utils.UserIdentity;
+import org.calminfotech.utils.Alert;
+import org.calminfotech.utils.Auditor;
+import org.calminfotech.utils.BloodgenotypeList;
+import org.calminfotech.utils.BloodgroupList;
+import org.calminfotech.utils.DateUtils;
+import org.calminfotech.utils.GenderList;
+import org.calminfotech.utils.GlobalUnitofMeasureList;
+import org.calminfotech.utils.LifestatusList;
+import org.calminfotech.utils.LocalGovernmentAreaList;
+import org.calminfotech.utils.MaritalStatusList;
+import org.calminfotech.utils.OccupationList;
+import org.calminfotech.utils.HistoryTypeList;
+import org.calminfotech.utils.models.Historytype;
+import org.calminfotech.utils.StatesList;
+import org.calminfotech.utils.SurgicalList;
+import org.calminfotech.utils.annotations.Layout;
+import org.calminfotech.utils.models.LocalGovernmentArea;
+import org.calminfotech.utils.models.MaritalStatus;
+import org.calminfotech.utils.models.Historytype;
+import org.calminfotech.utils.models.State;
+import org.hibernate.Hibernate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import javax.servlet.http.HttpSession;
+@Controller
+@RequestMapping(value = "/system")
+public class ExaminationResultSetupController {
+	
+	
+	
+	@Autowired
+	private ExaminationBo examinationBo;
+
+	
+
+	@Autowired
+	private Alert alert;
+
+	@Autowired
+	private UserIdentity userIdentity;
+
+	@Autowired
+	private Auditor auditor;
+
+	@Autowired
+	private LocalGovernmentAreaList lgasList;
+
+	@Autowired
+	private MaritalStatusList MSList;
+
+	@Autowired
+	private OccupationList occuList;
+	
+	
+	@Autowired
+	private BloodgroupList groupList;
+	
+	@Autowired
+	private BloodgenotypeList genoList;
+	
+	@Autowired
+	private LifestatusList lifeList;
+	
+
+	
+
+	
+	@Autowired
+	private StatesList stateList;
+	
+//	@Autowired
+//	private HmoBo hmoBo;
+	
+	/*@Autowired
+	private EhmoBo ehmoBo;*/
+
+	@Autowired
+	private HistoryTypeList historytypeBo;
+
+
+
+	@Autowired
+	GlobalUnitofMeasureList gunitofMeasure;
+	
+
+	
+	@Autowired
+	private PatientSearchBo searchBo;
+
+	
+
+	
+	
+	
+	@Autowired
+	private ExaminationResultSetupBo examinationResultSetupBo;
+	
+	@RequestMapping(value = "/examinationresultsetup/save", method = RequestMethod.POST)
+	@Layout("layouts/datatable")
+	public String addHistory(
+			@ModelAttribute("examresultForm") ExaminationResultSetupForm examresultForm,
+			BindingResult result, Model model, 
+			RedirectAttributes redirectAttributes) {
+	
+		ExaminationResultSetup examinationresult = new ExaminationResultSetup();
+		Examination examination= examinationBo.getExaminationById(examresultForm.getExaminationId());
+		
+		//Historytype  historytype = historytypeBo.getHistoryTypeById(examinationForm.getHistorytypeId());
+		
+	
+		examinationresult.setExamination(examination);
+		if (examresultForm.getUnitofmeasure_id().intValue()!=0)
+		{
+		examinationresult.setUnitofmeasure(this.gunitofMeasure.getGlobalUnitofMeasureById(examresultForm.getUnitofmeasure_id()));
+		}
+		examinationresult.setDescription(examresultForm.getDescription());
+		examinationresult.setCreatedBy(userIdentity.getUsername());
+		examinationresult.setCreatedDate(new GregorianCalendar().getTime());
+		
+		examinationresult.setOrganisation(userIdentity.getOrganisation());
+		
+		examinationResultSetupBo.save(examinationresult);
+		
+		
+		return "redirect:/system/examination/view/" + examinationresult.getExamination().getExaminationId();
+	
+	}
+
+	@RequestMapping(value = "/examinationresultsetup/edit/{id}", method = RequestMethod.GET)
+	@Layout("layouts/datatable")
+	public String geteditHistory(@PathVariable("id") Integer id,
+			@ModelAttribute("examresultForm") ExaminationResultSetupForm examinationresultForm,
+			BindingResult result, Model model, 
+			RedirectAttributes redirectAttributes,HttpServletRequest request) {
+
+		ExaminationResultSetup  examinationresult = examinationResultSetupBo.getExaminationResultSetupById(id);
+		//List<Historytype> historytype = historytypeBo.fetchAll();
+		
+		//examinationForm.s(examinationhist.getId());
+		examinationresultForm.setExaminationId(examinationresult.getExamination().getExaminationId());
+		examinationresultForm.setDescription(examinationresult.getDescription());
+		if (examinationresult.getUnitofmeasure()!=null)
+		{
+		examinationresultForm.setUnitofmeasure_id(examinationresult.getUnitofmeasure().getId());
+		}
+			
+		
+	//	model.addAttribute("list",historytype);
+	
+		model.addAttribute("unitM", gunitofMeasure.fetchAll());
+		
+		this.auditor.before(request, "Examination History", examinationresultForm);
+		return "system/examinationresultsetup/edit";
+	
+		
+	}
+
+	
+
+	@RequestMapping(value = "/examinationresultsetup/edit/{id}", method = RequestMethod.POST)
+	@Layout("layouts/datatable")
+	public String posteditHistory( @PathVariable("id") Integer id,
+			@ModelAttribute("examresultForm") ExaminationResultSetupForm examinationresultForm,
+			BindingResult result, Model model, 
+			RedirectAttributes redirectAttributes, HttpServletRequest request) {
+	
+		ExaminationResultSetup  examinationresult = examinationResultSetupBo.getExaminationResultSetupById(id);
+		if (examinationresultForm.getUnitofmeasure_id().intValue()!=0)
+		{
+		
+		examinationresult.setUnitofmeasure(this.gunitofMeasure.getGlobalUnitofMeasureById(examinationresultForm.getUnitofmeasure_id()));
+		}
+		else
+		{
+			examinationresult.setUnitofmeasure(null);
+		}
+		
+		
+		examinationresult.setDescription(examinationresultForm.getDescription());
+		examinationresult.setModifiedBy(userIdentity.getUsername());
+		
+		examinationresult.setModifiedDate(new GregorianCalendar().getTime());
+		examinationResultSetupBo.update(examinationresult);
+				
+		alert.setAlert(redirectAttributes, Alert.SUCCESS,
+				"Success! Examination Result  Updated");
+		this.auditor.after(request, "Examination Result History", examinationresultForm,
+				this.userIdentity.getUsername(),id);
+		
+		return "redirect:/system/examination/view/" +   examinationresult.getExamination().getExaminationId();
+	
+	}
+
+	
+	
+	@RequestMapping(value = "/examinationresultsetup/delete/{id}", method = RequestMethod.GET)
+	public String confirmDelete(@PathVariable("id") Integer id,
+	@ModelAttribute("examForm") ExaminationResultSetupForm examinationForm,
+	RedirectAttributes redirectAttributes) {
+		
+		ExaminationResultSetup  examinationhist = examinationResultSetupBo.getExaminationResultSetupById(id);
+		
+		examinationhist.setModifiedBy(userIdentity.getUsername());
+		examinationhist.setModifiedDate(new GregorianCalendar().getTime());
+		examinationhist.setDeleted(true);
+		examinationResultSetupBo.update(examinationhist);
+		
+		alert.setAlert(redirectAttributes, Alert.SUCCESS,
+				"Success! History  deleted");
+		return "redirect:/system/examination/view/" + examinationhist.getExamination().getExaminationId();
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+}

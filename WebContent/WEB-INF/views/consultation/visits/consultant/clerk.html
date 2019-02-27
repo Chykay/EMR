@@ -1,0 +1,27 @@
+
+<div class="page-header">
+	<h1>DOCTOR POINT: Start Attending to Patient</h1>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+		<p>
+			You are about to start attending to this patient: <!-- <strong
+				th:text="${patient.title.acronym} + ' ' + ${patient.surname} + ' ' + ${patient.othernames}">name</strong>.
+	 -->		Are you sure? This patient will NOW BE AVAILABLE to other doctors!!!
+		</p>
+
+		<form role="form" method="POST" th:object="${clerkform}">
+			<input type="hidden" th:field="*{id}" />
+			<input type="hidden" th:field="*{clerking_status_id}" />
+			<input type="hidden" th:field="*{code}" />
+			
+			
+			
+			
+			<button class="btn btn-danger" type="submit">
+				<i class="ace-icon fa fa-check bigger-110"></i> Yes
+			</button>
+			<a class="btn btn-primary" th:href="@{/consultations/visits/vitals}">No</a>
+		</form>
+	</div>
+</div>

@@ -1,0 +1,351 @@
+<div class="page-header">
+	<h1>
+		View Group <small> <i
+			class="ace-icon fa fa-angle-double-right"></i> Detail of a group
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-primary" th:href="@{/system/groups}"><i
+			class="glyphicon glyphicon-list"></i> All Groups</a> <a
+			class="btn btn-xs btn-primary" th:href="@{/system/groups/add}"><i
+			class="fa fa-plus-circle"></i> Add Group</a> <a
+			class="btn btn-xs btn-warning"
+			th:href="@{/system/groups/edit/{id} (id = ${group.id})}"> <i
+			class="fa fa-edit"></i> Edit Group
+		</a> <a class="btn btn-xs btn-info" data-toggle="modal"
+			href="#modal-simple"> <i class="fa fa-pencil-square-o"></i> Edit
+			Actions
+		</a>
+	</div>
+</div>
+<div class="hr hr-18 dotted hr-double"></div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+		<div class="row">
+			<div class="col-md-6">
+				<div class="widget-box widget-color-dark">
+					<div class="widget-header widget-header-flat">
+						<h4 class="widget-title smaller">Group detail</h4>
+					</div>
+
+					<div class="widget-body">
+						<div class="widget-main">
+							<dl>
+								<dt>Name:</dt>
+								<dd th:text="${group.groupName}">Group Name</dd>
+								<dt>Administrator</dt>
+								<dd th:text="${group.admin} ? 'Yes' : 'No'"></dd>
+								<dt>Description:</dt>
+								<dd th:text="${group.groupDescription}">Group Name</dd>
+								<dt>Created Date:</dt>
+								<dd
+									th:text="${ #dates.format(group.createdDate, 'MMM dd yyyy HH:mm')}">Created
+									Date</dd>
+								<dt>Modified Date:</dt>
+								<dd
+									th:text="${group.modifiedDate} ? ${ #dates.format(group.modifiedDate, 'MMM dd yyyy HH:mm')} : 'Not Modified yet'">Modified
+									Date</dd>
+
+							</dl>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="widget-box widget-color-dark">
+					<div class="widget-header widget-header-flat">
+						<h4 class="widget-title smaller">Group Actions</h4>
+					</div>
+					<div class="widget-body no-padding">
+						<div class="widget-main">
+							<table id="t-actions"
+								class="table table-stripped table-hover table-bordered">
+								<thead>
+									<tr>
+										<th>Actions</th>
+										<th>Desc</th>
+									</tr>
+								</thead>
+								<th:block th:switch="${#lists.isEmpty(group.userActions)}">
+									<tbody th:case="true">
+										<tr>
+											<td colspan="3">No Action</td>
+										</tr>
+									</tbody>
+									<tbody th:case="false">
+										<tr th:each="a : ${group.userActions}">
+											<td th:text="${a.actionName}"></td>
+											<td th:text="${a.actionDesc}"></td>
+										</tr>
+									</tbody>
+								</th:block>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+
+				<div class="widget-box widget-color-dark">
+					<div class="widget-header widget-header-flat">
+						<h4 class="widget-title smaller">Group User Form Fields</h4>
+					</div>
+
+					<div class="widget-body">
+						<div class="widget-main">
+							<button class="btn btn-xs btn-primary pull-right add-btn">Add
+								Field</button>
+							<table class="table table-bordered table-hovered">
+								<thead>
+									<tr>
+										<th>Label</th>
+										<th>Input</th>
+										<th><i class="fa fa-cog"></i></th>
+									</tr>
+								</thead>
+								<tbody th:if="${#lists.isEmpty(group.groupFormFields)}">
+									<tr>
+										<td colspan="3">
+											<button class="btn btn-xs btn-primary pull-right">Add
+												Field</button>
+										</td>
+									</tr>
+								</tbody>
+								<tbody th:if="${not #lists.isEmpty(group.groupFormFields)}">
+									<tr th:each="field: ${group.groupFormFields}">
+										<td th:text="${field.label}">Label</td>
+										<td th:text="${field.inputType.type}">Input Type</td>
+										<td>
+											<button
+												class="btn btn-xs btn-warning edit-btn"
+												th:attr="data-field-id=${field.id}, data-group-id=${group.id}">
+												<i class="fa fa-edit"></i>
+											</button>
+											<button
+												class="btn btn-xs btn-danger"
+												th:attr="data-field-id=${field.id}, data-group-id=${group.id}">
+												<i class="fa fa-trash-o"></i>
+											</button>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Group Form Field Modal -->
+<div class="modal fade" id="group-field-modal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- Modal heading -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Add/Edit Group Form Field</h4>
+			</div>
+			<!-- // Modal heading END -->
+			<!-- Modal body -->
+			<div class="modal-body">
+				<form method="post" id="modalFieldForm">
+					<input type="hidden" name="groupId" id="hiddenGroupId" th:value="${group.id}" />
+					<input type="hidden" name="fieldId" id="hiddenFieldId" />
+					<label class="form-label">Label</label> <input type="text" name="fieldLabel" id="field-label"
+						class="form-control" /> <label class="form-label">Select
+						input type</label> <select name="fieldInputType" class="form-control" id="field-input-type">
+						<option th:each="i: ${inputTypes}" th:value="${i.id}"
+							th:text="${i.type}"></option>
+					</select>
+				</form>
+			</div>
+			<!-- // Modal body END -->
+
+			<!-- Modal footer -->
+			<div class="modal-footer">
+				<button class="btn btn-primary btn-xs"
+					id="field-save-changes">Save Changes</button>
+				<button type="button" class="btn btn-xs" data-dismiss="modal">Cancel</button>
+			</div>
+			<!-- // Modal footer END -->
+		</div>
+	</div>
+</div>
+<!-- /.Group Form Field Modal -->
+
+<!-- Group Action Modal -->
+<div class="modal fade" id="modal-simple">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- Modal heading -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Edit Group Actions</h4>
+			</div>
+			<!-- // Modal heading END -->
+			<!-- Modal body -->
+			<div class="modal-body">
+				<form method="post" id="modalForm" th:object="${actionsForm}">
+					<div class="checkbox" th:each="action : ${actions}">
+						<label> <input type="checkbox" id="action-checkbox"
+							th:field="*{actions}" th:value="${action.id}" /> <strong
+							th:text="${action.actionName}"></strong> - <span
+							th:text="${action.actionDesc}">Desc </span>
+						</label>
+					</div>
+					<span class="text-danger" th:if="${#fields.hasErrors('actions')}"
+						th:errors="*{actions}"></span>
+				</form>
+			</div>
+			<!-- // Modal body END -->
+
+			<!-- Modal footer -->
+			<div class="modal-footer">
+				<button class="btn btn-primary btn-xs" data-dismiss="modal"
+					id="save-changes">Save Changes</button>
+				<button type="button" class="btn btn-xs" data-dismiss="modal">Cancel</button>
+			</div>
+			<!-- // Modal footer END -->
+		</div>
+	</div>
+</div>
+<script type="text/javascript" th:inline="javascript">
+
+	$("#field-save-changes").click(function(){
+		$.ajax({
+			url: [[@{/system/groups/groupfields/}]],
+			method: "post",
+			dataType: "json",
+			data: $("#modalFieldForm").serialize(),
+			beforeSend: function(){
+				$.gritter.add({
+					title : 'Processing...',
+					text : "Posting data...",
+					time : 4000
+				});
+			},
+			error: function(msg){
+				$.gritter.add({
+					title : 'Error!',
+					text : "Oops! Something went wrong",
+					time : 4000
+				});
+			},
+			success: function(msg){
+				alert(msg);
+				if(msg.status){
+					$.gritter.add({
+						title : 'Success!',
+						text : msg.payload,
+						time : 6000
+					});
+				}else{
+					$.gritter.add({
+						title : 'Error!',
+						text : msg.errors,
+						time : 6000
+					});
+				}
+			}
+		});
+	});
+
+	// Display form for fresh addition
+	$('.add-btn').click(function(){
+		//Display the form
+		$("#group-field-modal").modal('show');
+		alert($("#modalFieldForm").serialize());
+		$("#field-label").val("");
+		$("#field-input-type").val(-1);
+		$("#hiddenFieldId").val("");
+		$("#group-field-modal").modal('show');
+	});
+
+	$('.edit-btn').click(function(){
+		var groupId = $(this).data('group-id');
+		var fieldId  = $(this).data('field-id');
+
+		$.ajax({
+			url: [[@{/system/groups/groupfields/}]] + groupId + '/' + fieldId,
+			dataType: "json",
+			beforeSend:  function(){
+				$.gritter.add({
+					title : 'Processing...',
+					text : "Fetching data...",
+					time : 4000
+				});
+			},
+			success: function(msg){
+				
+				if(msg.status){
+					// Populate the fields
+					$("#field-label").val(msg.payload.label);
+					$("#field-input-type").val(msg.payload.inputType);
+					$("#hiddenFieldId").val(fieldId);
+
+					//Display the form
+					$("#group-field-modal").modal('show');
+				}else{
+					$.gritter.add({
+						title : 'Error!',
+						text : "Invalid field.",
+						time : 4000
+					});
+				}
+			},
+			error: function(){
+				$.gritter.add({
+					title : 'Error!',
+					text : "Sorry! Could not fetch data.",
+					time : 4000
+				});
+			}
+		});
+		
+	});
+
+	$("#save-changes").click(function() {
+		$.ajax({
+			type : "post",
+			data : $("#modalForm").serialize(),
+			success : function(msg) {
+				$.gritter.add({
+					title : 'Success!',
+					text : "Group actions Updated",
+					time : 4000
+				});
+				$("#t-actions tbody").html(msg);
+			},
+			error : function(msg) {
+				$.gritter.add({
+					title : 'Error!',
+					text : "Sorry! Group actions not updated.",
+					time : 4000
+				});
+			},
+			beforeSend : function() {
+				$.gritter.add({
+					title : 'Processing...',
+					text : "Data sent for storage...",
+					time : 4000
+				});
+			}
+		}).done();
+
+	});
+
+	
+</script>

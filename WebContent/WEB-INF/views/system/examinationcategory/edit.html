@@ -1,0 +1,144 @@
+<div class="page-header">
+	<h1>
+		Edit <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			Edit Examination Category
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard</a> <a
+			class="btn btn-xs btn-primary" th:href="@{/system/examinationcategory/index}"><i
+			class="fa fa-list"></i> Recent Examination Category</a>
+			<a
+			class="btn btn-xs btn-primary" th:href="@{/system/examinationcategory/index/all}"><i
+			class="fa fa-list"></i>View All Examination Categories</a>
+			
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+
+		<form role="form" class="form-horizontal" method="POST"
+			th:object="${examinationCategoryForm}">
+			<legend>EDIT Examination Category Form</legend>
+
+
+			
+			
+		 	<div class="form-group">
+				<label for="gender" class="col-sm-3 control-label no-padding-right"> Examination Category Type:</label>
+				<div class="col-sm-9">
+					<select th:field="*{examinationTypeId}" class="col-xs-10 col-sm-5"  required="required" id="examinationTypeId">
+						<option value="">Select..</option>
+						<option th:each="g: ${examinationtype}" th:value="${g.examinationTypeId}"
+							th:text="${g.examinationtypename}"></option>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('examinationTypeId')}"
+						th:errors="*{examinationTypeId}"></span>
+				</div>
+			</div>
+			
+			
+				<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Category Name:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" 
+						th:field="*{categoryName}" required="required" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('categoryName')}"
+						th:errors="*{categoryName}"></span>
+				</div>
+			</div>
+
+			
+			
+			<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Parent Category:</label>
+				<div class="col-sm-9">
+					<select type="text" class="col-xs-10 col-sm-5"
+						placeholder="Parent Category" th:field="*{parentCategoryId}" id="parentCategoryId"	 >
+						<option value="">Select..</option>
+						<option th:each="c: ${categories}" th:value="${c.categoryId}" th:text="${c.categoryName}"></option>
+					</select> <span class="text-danger"
+						th:if="${#fields.hasErrors('parentCategoryId')}"
+						th:errors="*{parentCategoryId}"></span>
+				</div>
+			</div>
+							<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right">Description:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" 
+						th:field="*{categoryDescription}" required="required" /> <span
+						class="text-danger" th:if="${#fields.hasErrors('categoryDescription')}"
+						th:errors="*{categoryDescription}"></span>
+				</div>
+			</div>
+
+
+
+			<div class="clearfix form-actions">
+				<div class="col-md-offset-3 col-md-9">
+			
+					<button class="btn btn-primary" type="submit">
+						<i class="ace-icon fa fa-check bigger-110"></i> Update
+					</button>
+
+					<button class="btn btn-danger" type="reset">
+						<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<script> 
+
+$(function() {
+	/* Lga Selector*/
+	$('#examinationTypeId').change(
+			function(event) {
+$.ajax({
+	type : "GET",
+
+	url : '/../'+ window.location.pathname.split('/')[1] + '/system/examinationcategory/fetchcategorybytype/"
+			+ $('#examinationTypeId').val(),
+	beforeSend : function() {
+		$.gritter.add({
+			title : "Progress...",
+			text : "Fetching Categories of global type",
+			time : 3000
+		});
+	},
+	success : function(html) {
+		$('#parentCategoryId').html(html);
+		$.gritter.add({
+			title : "Success!",
+			text : "Categories fetched",
+			time : 4000
+		});
+	},
+	error : function() {
+		$.gritter.add({
+			title : "Error!",
+			text : "Error fetching Categories",
+			time : 4000
+		});
+	}
+
+});
+
+
+
+
+
+		});
+});
+
+
+
+</script>

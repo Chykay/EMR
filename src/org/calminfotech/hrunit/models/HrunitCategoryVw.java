@@ -1,0 +1,217 @@
+package org.calminfotech.hrunit.models;
+
+import java.util.Date;
+import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import org.calminfotech.system.models.Organisation;
+
+@Entity
+@org.hibernate.annotations.Entity(dynamicInsert = true)
+@Table(name = "vw_hrunit_cat")
+public class HrunitCategoryVw {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "hrunit_category_id", unique = true, nullable = false)
+	private Integer categoryId;
+
+	@Column(name = "category_name", nullable = false)
+	private String categoryName;
+
+	@Column(name = "description", nullable = false)
+	private String description;
+
+	@Column(name = "pointname", nullable = false)
+	private String pointname;
+	
+	
+	
+	@Column(name = "schemename", nullable = false)
+	private String schemename;
+	
+	
+	@Column(name = "queue", nullable = false)
+	private boolean queue;
+	
+	
+	public boolean isQueue() {
+		return queue;
+	}
+
+	public void setQueue(boolean queue) {
+		this.queue = queue;
+	}
+
+	public String getPointname() {
+		return pointname;
+	}
+
+	public void setPointname(String pointname) {
+		this.pointname = pointname;
+	}
+
+	public String getSchemename() {
+		return schemename;
+	}
+
+	public void setSchemename(String schemename) {
+		this.schemename = schemename;
+	}
+
+	
+	public String getHrunitType() {
+		return hrunitType;
+	}
+
+	public void setHrunitType(String hrunitType) {
+		this.hrunitType = hrunitType;
+	}
+	@Column(name = "parent_name", nullable = true)
+	private String parentName;
+
+	@Column(name = "hrunit_type", nullable = false)
+	private String hrunitType; 
+	
+	/*@ManyToOne
+	@JoinColumn(name = "globalitemtype_id")
+	private GlobalItemType itemTypeId;*/
+/*
+	@Column(name = "parent_category_id", nullable = true)
+	private String parentCategoryId;
+*/
+	/*@OneToMany
+	@JoinColumn(name = "item_category_id")
+	private Set<GlobalItem> globalItem;
+*/
+
+	
+	@Column(name = "organisation_id")
+	private Integer organisationId;
+/*
+	@Column(name = "created_by")
+	private String createdBy;
+
+	@Column(name = "create_date")
+	private Date createDate;
+
+	@Column(name = "modify_date")
+	private Date modifyDate;
+
+*/
+	public Integer getCategoryId() {
+		return categoryId;
+	}
+
+	public void setCategoryId(Integer categoryId) {
+		this.categoryId = categoryId;
+	}
+
+	public String getCategoryName() {
+		return categoryName;
+	}
+
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getParentName() {
+		return parentName;
+	}
+
+	public void setParentName(String parentName) {
+		this.parentName = parentName;
+	}
+
+
+	/*
+	public String getParentCategoryId() {
+		return parentCategoryId;
+	}
+
+	public void setParentCategoryId(String parentCategoryId) {
+		this.parentCategoryId = parentCategoryId;
+	}
+*/
+	public Integer getOrganisationId() {
+		return organisationId;
+	}
+
+	public void setOrganisationId(Integer organisationId) {
+		this.organisationId = organisationId;
+	}
+/*
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+	public Date getModifyDate() {
+		return modifyDate;
+	}
+
+	public void setModifyDate(Date modifyDate) {
+		this.modifyDate = modifyDate;
+	}
+
+	public String getModifiedBy() {
+		return modifiedBy;
+	}
+
+	public void setModifiedBy(String modifiedBy) {
+		this.modifiedBy = modifiedBy;
+	}
+
+
+	
+
+	@Column(name = "modified_by")
+	private String modifiedBy;
+*/
+	@Column(name = "is_deleted")
+	private boolean isDeleted;
+
+	public boolean isDeleted() {
+		return isDeleted;
+	}
+
+	public void setDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+
+	// Setters and Getters
+
+
+
+	
+	
+	
+}

@@ -1,0 +1,75 @@
+
+
+<div class="page-header">
+	<h1>
+		INVENTORY OFFICE MANAGEMENT<small> <i
+			class="ace-icon fa fa-angle-double-right"></i> STOCK OPENING BALANCE
+			MODULE
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
+			class="fa fa-home"></i> System Dashboard </a> <a
+			class="btn btn-xs btn-primary"
+			th:href="@{/inventory/stock_opening_balance}"><i
+			class="fa fa-plus-circle"></i> Stock Opening Balances </a>
+	</div>
+</div>
+
+<p></p>
+
+
+<div class="col-xs-12 col-sm-9">
+	<h4 class="blue">
+		<span class="middle">
+			Stock Opening Balance Details:
+			</span>
+	</h4>
+
+	<div class="profile-user-info">
+		<div class="profile-info-row">
+			<div class="profile-info-name">Global Item Title:</div>
+
+			<div class="profile-info-value">
+				<span th:text="${stockOpeningBalance.globalItem?.name}">Global Item</span>
+			</div>
+		</div>
+		
+		
+			<div class="profile-info-row">
+			<div class="profile-info-name">Unit Of Measure:</div>
+
+			<div class="profile-info-value">
+				<span
+					th:text="${stockOpeningBalance.globalUnitofMeasure?.searchname}">Unit Of Measure:</span>
+			</div>
+		</div>
+
+		<div class="profile-info-row">
+			<div class="profile-info-name">Opening Balance:</div>
+
+			<div class="profile-info-value">
+				<span
+					th:text="${stockOpeningBalance.openingBalance}">Opening Balance:</span>
+			</div>
+		</div>
+
+		<div class="profile-info-row">
+			<div class="profile-info-name">Date Added:</div>
+
+			<div class="profile-info-value">
+				 <span
+					th:text="${stockOpeningBalance.dateAdded}">Date Added</span>
+			</div>
+		</div>
+
+	</div>
+
+	<div class="hr hr-8 dotted"></div>
+</div>
+
+

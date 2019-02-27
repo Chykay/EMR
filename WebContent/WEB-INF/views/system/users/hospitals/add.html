@@ -1,0 +1,87 @@
+<div class="page-header">
+	<h1>
+		Add HCP User <small> <i
+			class="ace-icon fa fa-angle-double-right"></i> Create a new User
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/system}"><i class="fa fa-home"></i> System
+			Dashboard</a> <a class="btn btn-xs btn-primary"
+			th:href="@{/system/users}"><i class="glyphicon glyphicon-list"></i>
+			All users</a>
+	</div>
+</div>
+<div class="hr hr-18 dotted hr-double"></div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- View contents here -->
+
+		<form role="form" class="form-horizontal" method="POST"
+			th:object="${userForm}" th:action="@{/system/users/hcp/entry}">
+			<legend class="scheduler-border">HCP User Form</legend>
+			<div class="form-group">
+				<label for="lastName"
+					class="col-sm-3 control-label no-padding-right">Email:</label>
+				<div class="col-sm-9">
+					<input type="email" class="col-xs-10 col-sm-5"
+						placeholder="User Email" th:field="*{email}" required="required" />
+					<span class="text-danger" th:if="${#fields.hasErrors('email')}"
+						th:errors="*{email}"></span>
+				</div>
+			</div>
+
+
+			<div class="form-group">
+				<label for="userGroups"
+					class="col-sm-3 control-label no-padding-right">User Group:</label>
+				<div class="col-sm-9">
+					<select th:field="*{userGroup}" class="col-xs-10 col-sm-5">
+						<option value="0">Select</option>
+						<option th:each="group : ${groups}" th:value="${group.id}"
+							th:text="${group.groupName}"></option>
+					</select> <span class="text-danger"
+						th:if="${#fields.hasErrors('userGroup')}" th:errors="*{userGroup}"></span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="lastName"
+					class="col-sm-3 control-label no-padding-right">Last Name:</label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5"
+						placeholder="Last Name" th:field="*{lastName}" required="required" />
+					<span class="text-danger" th:if="${#fields.hasErrors('lastName')}"
+						th:errors="*{lastName}"></span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="lastName"
+					class="col-sm-3 control-label no-padding-right">Othernames:</label>
+				<div class="col-sm-9">
+
+					<input type="text" class="col-xs-10 col-sm-5"
+						placeholder="Other Names" th:field="*{otherNames}"
+						required="required" /> <span class="text-danger"
+						th:if="${#fields.hasErrors('otherNames')}"
+						th:errors="*{otherNames}"></span>
+				</div>
+			</div>
+
+			<div class="clearfix form-actions">
+				<div class="col-md-offset-3 col-md-9">
+					<input class="btn btn-primary" type="submit"
+						value="Create User" />
+					<button class="btn btn-danger" type="reset">
+						<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>

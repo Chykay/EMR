@@ -1,0 +1,24 @@
+
+<div class="page-header">
+	<h1>Cancel a patient appointment</h1>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+		<p>
+			You are about to Cancel a patient's appointment: <!-- <strong
+				th:text="${appmodel.fullName} + ' (' + ${appmodel.phoneNo} +')">name</strong> -->.
+			Are you sure?
+		</p>
+
+		<form role="form" method="POST" th:object="${appform}">
+		
+			
+				<input type="hidden" 	th:field="*{patientId}" /> 
+			
+			<button class="btn btn-danger" type="submit">
+				<i class="ace-icon fa fa-check bigger-110"></i> Yes
+			</button>
+			<a class="btn btn-primary" th:href="@{/appointment/schedule}">No</a>
+		</form>
+	</div>
+</div>

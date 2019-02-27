@@ -1,0 +1,302 @@
+package org.calminfotech.visitqueue.models;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
+import javax.persistence.Table;
+
+import org.calminfotech.system.models.Organisation;
+import org.calminfotech.patient.models.Patient;
+import org.calminfotech.patient.models.PatientFamilyHistory;
+
+import org.calminfotech.patient.models.Patient;
+import org.calminfotech.hrunit.models.Unit;
+import org.calminfotech.visitqueue.models.VisitWorkflowPoint;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
+@Entity
+@org.hibernate.annotations.Entity(dynamicInsert = true)
+@Table(name = "visit_consultation_visitations")
+@SQLDelete(sql = "UPDATE visit_consultation_visitations SET is_deleted = 1 WHERE id = ?")
+@Where(clause = "is_deleted <> 1")
+public class Visit implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", unique = true, nullable = false)
+	private Integer id;
+
+	@Column(name = "system_id")
+	private String code;
+	
+	@Column(name = "user_id")
+	private int userId;
+	
+	
+	@Column(name = "modify_date")
+	private Date modifyDate;
+
+	@Column(name = "modified_by")
+	private String modifiedBy;
+
+	
+
+	@ManyToOne
+	@JoinColumn(name = "patient_id")
+	private Patient patient;
+
+	@ManyToOne
+	@JoinColumn(name = "organisation_id")
+	private Organisation organisation;
+
+	@Column(name = "create_date")
+	private Date createDate;
+
+	@Column(name = "created_by")
+	private String createdBy;
+	
+	@Column(name = "is_deleted")
+	private boolean isDeleted;
+
+	@ManyToOne
+	@JoinColumn(name = "visit_status_id")
+	private VisitStatus status;
+
+	@OneToMany(fetch = FetchType.EAGER)
+	@JoinColumn(name = "visit_id")
+	@OrderBy("createDate ASC")
+	private Set<VisitTimeline> timeline = new HashSet<VisitTimeline>();
+
+	@ManyToOne
+	@JoinColumn(name = "point_id")
+	private VisitWorkflowPoint point;
+	
+	
+	/*@ManyToOne
+	@JoinColumn(name = "department_id")
+	private Department department;*/
+	
+	
+	@Column(name = "unit_id")
+	private int unitId;
+	
+	
+	/*@ManyToOne
+	@JoinColumn(name = "section_id")
+	private LoginSection loginSection;*/
+	
+	
+	/*private Integer clerking_status_id;*/
+	
+
+	
+	
+	
+	
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public int getUserId() {
+		return userId;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+
+	
+	public Patient getPatient() {
+		return patient;
+	}
+
+	public void setPatient(Patient patient) {
+		this.patient = patient;
+	}
+
+	public Organisation getOrganisation() {
+		return organisation;
+	}
+
+	public void setOrganisation(Organisation organisation) {
+		this.organisation = organisation;
+	}
+
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public boolean isDeleted() {
+		return isDeleted;
+	}
+
+	public void setDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+
+	public VisitStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(VisitStatus status) {
+		this.status = status;
+	}
+
+	/**
+	 * @return the doctorVisit
+	 */
+	/**
+	 * @return the pharmacyVisit
+
+	/**
+	 * @param pharmacyVisit
+	 *            the pharmacyVisit to set
+	 */
+
+
+	/**
+	 * @return the vitalVisit
+	 */
+	
+
+	/**
+	 * @param vitalVisit
+	 *            the vitalVisit to set
+	 */
+	
+	public VisitWorkflowPoint getPoint() {
+		return point;
+	}
+
+	public void setPoint(VisitWorkflowPoint point) {
+		this.point = point;
+	}
+
+	
+	/**
+	 * @param laboratoryVisit
+	 *            the laboratoryVisit to set
+	 */
+	
+
+	/**
+	 * @return the timeline
+	 */
+	public Set<VisitTimeline> getTimeline() {
+		return timeline;
+	}
+
+	/**
+	 * @param timeline
+	 *            the timeline to set
+	 */
+	public void setTimeline(Set<VisitTimeline> timeline) {
+		this.timeline = timeline;
+	}
+
+	/**
+	 * @return the labTest
+	 */
+
+
+
+	/*public Integer getClerking_status_id() {
+		return clerking_status_id;
+	}
+
+	public void setClerking_status_id(Integer clerking_status_id) {
+		this.clerking_status_id = clerking_status_id;
+	}*/
+
+
+
+	
+
+	public int getUnitId() {
+		return unitId;
+	}
+
+	public void setUnitId(int unitId) {
+		this.unitId = unitId;
+	}
+
+	public Date getModifyDate() {
+		return modifyDate;
+	}
+
+	public void setModifyDate(Date modifyDate) {
+		this.modifyDate = modifyDate;
+	}
+
+	public String getModifiedBy() {
+		return modifiedBy;
+	}
+
+	public void setModifiedBy(String modifiedBy) {
+		this.modifiedBy = modifiedBy;
+	}
+
+	
+	
+/*	public VisitClerkingStatus getvClerkingStatus() {
+		return vClerkingStatus;
+	}
+
+	public void setvClerkingStatus(VisitClerkingStatus vClerkingStatus) {
+		this.vClerkingStatus = vClerkingStatus;
+	}*/
+
+/*	public LoginSectionPoint getLoginSectionPoint() {
+		return loginSectionPoint;
+	}
+
+	public void setLoginSectionPoint(LoginSectionPoint loginSectionPoint) {
+		this.loginSectionPoint = loginSectionPoint;
+	}*/
+
+
+}
