@@ -26,22 +26,7 @@
 			th:object="${posting}">
 		<div class="col-md-6">
 			<div class="row">
-				<div class="form-group">
-					<label class="control-label col-xs-12 col-sm-3 no-padding-right"
-						for="create_date">Date</label>
-		
-					<div class="col-xs-12 col-sm-9">
-						<div class="clearfix">
-							<input type="text" class="col-xs-12 col-sm-3 create_date" 
-								id="create_date" th:field="*{create_date}"
-								data-date-format="yyyy-mm-dd" /> 
-							<span class="text-danger"
-								th:if="${#fields.hasErrors('create_date')}" th:errors="create_date"></span>
-		
-						</div>
-					</div>
-				</div>
-				
+							
 				 <div class="form-group">
 							<label class="control-label col-xs-12 col-sm-3 no-padding-right"
 								for="date-picker">Date to:</label>
@@ -61,12 +46,12 @@
 				<div class="form-group">
 					<label for="p_account_no" class="col-sm-3 control-label no-padding-right">Posting Account:</label>
 					<div class="col-sm-9">
-						<input id="p_account_no_search" /> <br />
-						<select th:field="*{p_account_no}" class="col-xs-10 col-sm-5"  required="required">
+						<input id="p_account_no_search"  name="p_account_no_search" style="margin: 10px;width: 165px;" onkeyup="filter()" onblur="selectAccount()" /> <br />
+						<select th:field="*{p_account_no}" size="10" style="margin: 10px; width: 165px;height: 170px;"  required="required">
 							<option value="">Select..</option>
-								<option th:each="generalLedger: ${generalLedgers}" 
+							<option th:each="generalLedger: ${generalLedgers}" 
 							th:value = "${generalLedger.account_no}" 
-							th:text="${generalLedger.account_no}">Posting Account</option>
+							th:text="|${generalLedger.account_no} (${generalLedger.name})|">Posting Account</option>
 						</select>
 						<span class="text-danger" th:if="${#fields.hasErrors('p_account_no')}"
 							th:errors="*{p_account_no}">
@@ -74,6 +59,20 @@
 					</div>
 				</div>
 				
+				<div class="form-group">
+					<label for="r_branch_id" class="col-sm-3 control-label no-padding-right">Branch:</label>
+					<div class="col-sm-9">
+						<select th:field="*{r_branch_id}" class="col-xs-10 col-sm-5"  required="required">
+							<option value="">Select..</option>
+								<option th:each="branch : ${branches}" 
+							th:value = "${branch.Id}" 
+							th:text="${branch.name}">Receiving Branch</option>
+						</select>
+						<span class="text-danger" th:if="${#fields.hasErrors('r_branch_id')}"
+							th:errors="*{r_branch_id}">
+						</span>
+					</div>
+				</div>
 				
 					
 				<div class="form-group">
@@ -106,7 +105,8 @@
 					
 						<textarea class="col-xs-10 col-sm-5" 
 							th:field="*{p_description}"
-							th:value="${p_description}">
+							th:value="${p_description}"
+							onblur="setDesc()">
 						
 						</textarea>
 						<span
@@ -151,15 +151,15 @@
 		<div class="row">
 			<div class="col-md-6">
 				<div class="form-group">
-					<label for="r_account_no" class="col-sm-3 control-label no-padding-right">Receiving Account:</label>
+					<label for="r_account_no" class="col-sm-3 control-label no-padding-right">Account:</label>
 					<div class="col-sm-9">
-					<input id="r_account_no_search" /> <br />
+					<input id="r_account_no_search"  name="r_account_no_search" style="margin: 10px;width: 165px;" onkeyup="filterR()" /> <br />
 					
-						<select th:field="*{r_account_no}" class="col-xs-10 col-sm-5"  required="required">
+						<select th:field="*{r_account_no}" size="10" style="margin: 10px; width: 165px;height: 170px;"  required="required">
 							<option value="">Select..</option>
 								<option th:each="generalLedger: ${generalLedgers}" 
 							th:value = "${generalLedger.account_no}" 
-							th:text="|${generalLedger.account_no} (${generalLedger.balance})|">Posting Account</option>
+							th:text="|${generalLedger.account_no} (${generalLedger.balance})|">Account</option>
 						</select>
 						<span class="text-danger" th:if="${#fields.hasErrors('r_account_no')}"
 							th:errors="*{r_account_no}">
@@ -168,7 +168,7 @@
 				</div>
 				
 				<div class="form-group">
-					<label for="r_branch_id" class="col-sm-3 control-label no-padding-right">Receiving Branch:</label>
+					<label for="r_branch_id" class="col-sm-3 control-label no-padding-right">Branch:</label>
 					<div class="col-sm-9">
 						<select th:field="*{r_branch_id}" class="col-xs-10 col-sm-5"  required="required">
 							<option value="">Select..</option>
@@ -202,20 +202,21 @@
 				</div>
 				
 				<div class="form-group">
-					<label for="p_amount" class="col-sm-3 control-label no-padding-right">Amount:</label>
+					<label for="r_amount" class="col-sm-3 control-label no-padding-right">Amount:</label>
 					<div class="col-sm-9">
 						<input type="text" class="col-xs-10 col-sm-5" 
-							th:field="*{p_amount}"
+							th:field="*{r_amount}"
+							th:value="${p_amount}"
 							readonly="readonly" /> <span
-							class="text-danger" th:if="${#fields.hasErrors('p_amount')}"
-							th:errors="*{p_amount}"></span>
+							class="text-danger" th:if="${#fields.hasErrors('r_amount')}"
+							th:errors="*{r_amount}"></span>
 					</div>
 				</div>
 				
 				<div class="form-group">
 					<label for="r_post_code" class="col-sm-3 control-label no-padding-right">Post Code:</label>
 					<div class="col-sm-9">
-						<select th:field="*{r_post_code}" class="col-xs-10 col-sm-5"  required="required" id="r_post_code">
+						<select th:field="*{r_post_code}" class="col-xs-10 col-sm-5" readonly="readonly" required="required" id="r_post_code">
 							<option value="">Select..</option>
 								<option th:each="postCode: ${postCodes}" 
 							th:value = "${postCode.code}" 
@@ -228,6 +229,8 @@
 				</div>
 			</div>
 		</div>
+		
+		<input type="hidden" id="generalLedgerss" value="${generalLedgerss}" /> 
 		
 		<div class="clearfix">
 			<div class="col-md-offset-4 col-md-6">
@@ -244,11 +247,69 @@
 </div>
 
 <script type="text/javascript">
+/*<![CDATA[*/
 $('#p_amount').blur(function(){
-	this.attr('value', this.value);
-	var branches = '${branches}';
-	console.log(branches);
+	var valuee = parseFloat(this.value.replace(/,/g, ""))
+    .toFixed(2)
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	
+	if(valuee == "NaN"){
+		alert("Input '" + this.value + "' contains characters that are not allowed");
+		this.value = "";
+	} else {
+		this.value = valuee;
+		
+		$('#r_amount').attr('value', valuee);
+	}
+	
 });
+
+$('#p_post_code').change(function() {
+	var selected_option = $('#p_post_code option:selected');
+	
+	$('#r_post_code option').each(function() {
+	    if($(this)[0].value != selected_option[0].value ) {
+	    	$(this)[0].selected = true;
+	    } 
+	});
+});
+
+
+
+function myFunction() {
+	console.log( window.location.pathname);
+	console.log( window.location.pathname.split('/')[1]);
+	/*$.ajax({
+		type : "GET",
+		url : '/../'+ window.location.pathname.split('/')[1] + '/admissionperiod/fetchbedbyroom/'	+ $('#bedroom_id').val(),
+		beforeSend : function() {
+			 $.gritter.add({
+				title : "Progress...",
+				text : "Fetching Bed...",
+				time : 3000
+			}); 
+		},
+		success : function(html) {
+			$("#bed_id").html(html);
+			 $.gritter.add({
+				title : "Success!",
+				text : "Bed Fetched",
+				time : 4000
+			}); 
+		},
+		error : function() {
+			$.gritter.add({
+				title : "Error!",
+				text : "Error fetching Bed",
+				time : 4000
+			});
+
+		}
+});*/
+}
+
+
 $('.datepicker').datepicker({
 	autoclose : true,
 	format: 'yyyy-mm-dd',
@@ -257,8 +318,82 @@ $('.datepicker').datepicker({
 .next().on(ace.click_event, function() {
 	$(this).prev().focus();
 });
+
+function setDesc() {
+	$("#r_description")[0].value = $("#p_description")[0].value;
+}
+
+function filterP() {
+    /* var keyword = $("#p_account_no_search").val();
+    console.log(keyword);
+
+	$("#p_account_no option").each(function() {
+    	var txt = $(this).toLowerCase();
+        console.log(txt);
+        console.log($(this)[0]);
+        if (!txt.includes(keyword.toLowerCase())) {
+        	$(this)[0].style.display = 'none';
+        } else {
+        	$(this)[0].style.display = 'list-item';
+        }
+    }); */
+    var keyword = document.getElementById("p_account_no_search").value;
+    var fleet = document.getElementById("p_account_no");
+    for (var i = 0; i < fleet.length; i++) {
+        var txt = fleet.options[i].text.toLowerCase();
+        if (!txt.includes(keyword.toLowerCase())) {
+            fleet.options[i].style.display = 'none';
+        } else {
+            fleet.options[i].style.display = 'list-item';
+        }
+    }
+}
+
+function filter() {
+    var keyword = document.getElementById("p_account_no_search").value;
+    var fleet = document.getElementById("p_account_no");
+    for (var i = 0; i < fleet.length; i++) {
+        var txt = fleet.options[i].text.toLowerCase();
+        if (!txt.includes(keyword.toLowerCase())) {
+            fleet.options[i].style.display = 'none';
+        } else {
+            fleet.options[i].style.display = 'list-item';
+        }
+    }
+}
+
+function selectAccount(){
+	var fleet = $("#p_account_no");
+	console.log(fleet.val()); // will be null if not selected.
+	console.log("here");
+	var options = $('#p_account_no option:selected');
+	console.log(options)
 	
-jQuery.fn.filterByText = function(textbox) {
+	
+	/*
+		collect the text
+		use it to loop thryogh the options's text
+		select the first one.
+		get the inner html and set it to the text box.
+		set selected = true
+	*/
+}
+
+
+function filterR() {
+	var keyword = document.getElementById("r_account_no_search").value;
+    var fleet = document.getElementById("r_account_no");
+    for (var i = 0; i < fleet.length; i++) {
+        var txt = fleet.options[i].text.toLowerCase();
+        if (!txt.includes(keyword.toLowerCase())) {
+            fleet.options[i].style.display = 'none';
+        } else {
+            fleet.options[i].style.display = 'list-item';
+        }
+    }
+}
+	
+/* jQuery.fn.filterByText = function(textbox) {
 	  return this.each(function() {
 	    var select = this;
 	    var options = [];
@@ -278,13 +413,11 @@ jQuery.fn.filterByText = function(textbox) {
 	      $.each(options, function(i) {
 	        var option = options[i];
 	        if (option.text.match(regex) !== null) {
-	        	/* var o = new Option(option.text, option.value);
-	        	// jquerify the DOM object 'o' so we can use the html method
-	        	$(o).html(option.text); */
+	        	
 	        	
 	           $(select).append(
 	           '<option value="'+ option.value +'">' + option.text + '</option>'
-	          ); 
+	          );
 	        }
 	      });
 	    });
@@ -299,5 +432,7 @@ jQuery.fn.filterByText = function(textbox) {
 	
 	$(function() {
 		  $('#r_account_no').filterByText($('#r_account_no_search'));
-		});
+		}); */
+		
+		/*]]>*/
 </script>

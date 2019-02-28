@@ -82,7 +82,7 @@ public class GeneralLedgerController {
 						+ account.getId());
 
 		model.addAttribute("account", account);
-		return "redirect:/ledger/gen_ledger/view/" + account.getId();
+		return "redirect:/ledger/gen_ledger/index";
 	}
 	
 	

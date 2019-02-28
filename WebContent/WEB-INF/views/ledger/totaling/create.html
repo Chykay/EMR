@@ -86,3 +86,15 @@
 		</div>
 	</form>
 </div>
+
+<script>
+$('#code').blur(function(){
+	var code = $(this)[0].value;
+	
+	if(code.length > 4) {
+		alert("code cannot be more than 4 letters");
+		$(this)[0].value = "";
+	}
+	// check if length of val is less than 4, true, add 000, check if it is greater than 4, throw error.
+});
+</script>

@@ -130,15 +130,10 @@
 			
 			var optValue = $('#totaling_code')[0].selectedOptions[0].innerText;
 			
-			if(optValue != 'Select..'){
-				var splitOption = optValue.split("-");	
-				
-				var account_no = splitOption[0] + "-" + splitOption[1] + "-" + code;
-			} else {
-				account_no = "-" + code;
-			}
-			$('#account_no').attr('value', account_no).trigger("change");
-			$('"change"#account_no').trigger("change");
+			var splitOption = optValue.split("-");	
+			var account_no = splitOption[0] + "-" + splitOption[1] + "-" + code;
+			 
+			$('#account_no').attr('value', account_no);
 		});
 		
 		})

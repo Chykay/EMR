@@ -30,6 +30,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.google.gson.Gson;
+
 
 @Controller
 @RequestMapping(value = "/ledger/gen_ledger/postings")
@@ -90,8 +92,11 @@ public class GLPostingController {
 		List<Organisation> branches = this.organisationBo.fetchAll(org.getId());
 		List<PostCode> postCodes = this.postCodeDaoImpl.fetchAll();
 		
+		Gson gson = new Gson();
+		
 		model.addAttribute("posting", posting);
 		model.addAttribute("generalLedgers", generalLedgers);
+		model.addAttribute("generalLedgerss", generalLedgers.get(0));
 		model.addAttribute("postCodes", postCodes);
 		model.addAttribute("branches", branches);
 		return "/ledger/gen_ledger/postings/create";
