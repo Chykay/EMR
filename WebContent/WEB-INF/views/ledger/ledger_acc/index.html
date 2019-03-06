@@ -7,10 +7,10 @@
 <div class="row">
 	<div class="col-xs-12">
 		<!-- Button for view -->
-		<a class="btn btn-xs btn-info" th:href="@{/ledger/gen_ledger/index}">
+		<a class="btn btn-xs btn-info" th:href="@{/ledger/ledger_acc/index}">
 			<i class="fa fa-home"></i> System Dashboard
 		</a> 
-		<a class="btn btn-xs btn-primary" th:href="@{/ledger/gen_ledger/create}">
+		<a class="btn btn-xs btn-primary" th:href="@{/ledger/ledger_acc/create}">
 			<i class="fa fa-plus-circle"></i> Add Account 
 		</a>
 	
@@ -52,16 +52,16 @@
 						
 					<td>
 						<a class="btn btn-xs btn-primary tooltips"
-							title="view category details" 		th:href="@{/ledger/gen_ledger/view/{id} (id=${account.id}) }"> <i
+							title="view category details" 		th:href="@{/ledger/ledger_acc/view/{id} (id=${account.id}) }"> <i
 								class="fa fa-eye"></i>
 						</a> 
 						 <!-- <a class="btn btn-xs btn-warning tooltips"
 							title="Edit Item details"
-							th:href="@{/ledger/gen_ledger/edit/{id}(id=${account.id}) }"> <i
+							th:href="@{/ledger/ledger_acc/edit/{id}(id=${account.id}) }"> <i
 								class="fa fa-edit"></i>
 						</a> --> <a class="btn btn-xs btn-danger tooltips" 
 							title="Delete Item details"   th:id="${account.id}"  onclick="return Confirm(this.id)"
-							th:href="@{/ledger/gen_ledger/delete/{id}(id=${account.id}) }"> <i
+							th:href="@{/ledger/ledger_acc/delete/{id}(id=${account.id}) }"> <i
 								class="fa fa-trash-o"></i>
 						</a>
 					</td>

@@ -11,7 +11,8 @@ import javax.persistence.Transient;
 @org.hibernate.annotations.Entity(dynamicInsert = true)
 //@SQLDelete(sql = "UPDATE GeneralLedger SET is_deleted = 1 WHERE id = ?")
 @Table(name = "GL_setup_table")
-public class GeneralLedger extends CommonLedger{
+public class LedgerAccount extends CommonLedger{
+	
 	@Id
 	@GeneratedValue
 	@Column(name ="id")

@@ -5,10 +5,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
-@Table(name="GL_postings")
-public class GLPosting extends CommonLedger {
+@Table(name="GL_history")
+public class GLHistory extends CommonLedger {
 	@Id
 	@GeneratedValue
 	@Column(name="id")
@@ -20,7 +21,7 @@ public class GLPosting extends CommonLedger {
 	@Column(name="p_branch_id")
 	private Integer p_branch_id;
 	
-	@Column(name="p_branch_bal")
+	@Transient
 	private float p_branch_bal;
 	
 	@Column(name="p_description")
@@ -38,20 +39,23 @@ public class GLPosting extends CommonLedger {
 	@Column(name="r_branch_id")
 	private Integer r_branch_id;
 	
-	@Column(name="r_branch_bal")
+	@Transient
 	private float r_branch_bal;
 	
 	@Column(name="r_description")
 	private String r_description;
 	
-	@Column(name="r_amount")
-	private float r_amount;
-	
 	@Column(name="r_post_code")
 	private String r_post_code;
 	
-	@Column(name="ref_no")
-	private String ref_no;
+	@Column(name="ref_no1")
+	private String ref_no1;
+	
+	@Column(name="ref_no2")
+	private String ref_no2;
+	
+	@Column(name="ref_no3")
+	private String ref_no3;
 	
 	@Column(name="currency")
 	private String currency = "NGN";
@@ -144,13 +148,6 @@ public class GLPosting extends CommonLedger {
 		this.r_description = r_description;
 	}
 
-	public float getR_amount() {
-		return r_amount;
-	}
-
-	public void setR_amount(float r_amount) {
-		this.r_amount = r_amount;
-	}
 
 	public String getR_post_code() {
 		return r_post_code;
@@ -160,12 +157,29 @@ public class GLPosting extends CommonLedger {
 		this.r_post_code = r_post_code;
 	}
 	
-	public String getRef_no() {
-		return ref_no;
+
+	public String getRef_no1() {
+		return ref_no1;
 	}
 
-	public void setRef_no(String ref_no) {
-		this.ref_no = ref_no;
+	public void setRef_no1(String ref_no1) {
+		this.ref_no1 = ref_no1;
+	}
+
+	public String getRef_no2() {
+		return ref_no2;
+	}
+
+	public void setRef_no2(String ref_no2) {
+		this.ref_no2 = ref_no2;
+	}
+
+	public String getRef_no3() {
+		return ref_no3;
+	}
+
+	public void setRef_no3(String ref_no3) {
+		this.ref_no3 = ref_no3;
 	}
 
 	public String getCurrency() {

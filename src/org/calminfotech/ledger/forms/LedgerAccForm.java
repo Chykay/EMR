@@ -1,6 +1,6 @@
 package org.calminfotech.ledger.forms;
 
-public class GenLedgerForm {
+public class LedgerAccForm {
 
 	private Integer id;
 	

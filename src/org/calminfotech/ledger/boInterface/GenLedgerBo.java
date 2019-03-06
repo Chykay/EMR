@@ -1,19 +1,19 @@
 package org.calminfotech.ledger.boInterface;
 
-import java.util.List;
-
-import org.calminfotech.ledger.forms.GenLedgerForm;
-import org.calminfotech.ledger.models.GeneralLedger;
-
+import org.calminfotech.ledger.forms.GLPostingForm;
+import org.calminfotech.ledger.models.GLEntry;
+import org.calminfotech.ledger.models.GenLedgBalance;
+import org.calminfotech.ledger.models.LedgerAccount;
+import org.calminfotech.ledger.utiility.LedgerException;
 
 public interface GenLedgerBo {
-	public List<GeneralLedger> fetchAll();
 	
-	public GeneralLedger getLedgerById(int id);
+	public void GLPosting(GLPostingForm glPostingForm) throws LedgerException;
 	
-	public GeneralLedger save(GenLedgerForm genLedgerForm);
+	public GenLedgBalance getBalance(String account_no, int branch_id, int company_id) throws LedgerException;
 	
-	public void delete(GeneralLedger genLedgerAccount);
+	public void GLEntry(GLEntry glEntry) throws LedgerException;
 	
-	public GeneralLedger update(GenLedgerForm genLedgerForm, int id);
+	public void updateGLBalance(LedgerAccount ledgerAccount) throws LedgerException;
+	
 }

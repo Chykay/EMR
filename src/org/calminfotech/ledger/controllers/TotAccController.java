@@ -42,6 +42,15 @@ public class TotAccController {
 	@Autowired
 	LedgerTypesImpl ledgerTypesImpl;
 	
+	@RequestMapping(value = {"/index"}, method=RequestMethod.GET)
+	public String indexTotaling(Model model) {
+		List<TotalingAccount> totalingAccounts = this.totAccBo.fetchAll();
+		
+		model.addAttribute("accounts", totalingAccounts);
+		// model.addAttribute("id", id);
+		return "/ledger/totaling/index";
+	}
+	
 	/* SHOW ALL */
 	@RequestMapping(value = {"/view/{id}"}, method=RequestMethod.GET)
 	public String show(Model model, @PathVariable int id) {
@@ -57,6 +66,7 @@ public class TotAccController {
 		model.addAttribute("account", new TotalingForm());
 		
 		List<LedgerType> ledger_types = this.ledgerTypesImpl.fetchAll();
+		System.out.println(ledger_types.get(0));
 		model.addAttribute("ledger_types", ledger_types);
 		return "/ledger/totaling/create";
 	}

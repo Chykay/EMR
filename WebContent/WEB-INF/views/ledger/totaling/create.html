@@ -22,6 +22,7 @@
 
 
 <div>
+<br />
 	<form role="form" class="form-horizontal" method="POST"
 			th:object="${account}">
 			
@@ -87,14 +88,24 @@
 	</form>
 </div>
 
-<script>
+<script type="text/javascript">
+/*<![CDATA[*/
 $('#code').blur(function(){
-	var code = $(this)[0].value;
+	var code = $(this).val();
 	
 	if(code.length > 4) {
-		alert("code cannot be more than 4 letters");
-		$(this)[0].value = "";
+		alert("code cannot be MORE than 4 values");
+		$('#code')[0].value = "";
+	} else if (code.length < 4){
+
+		var x = 4 - code.length;
+		for(i=0; i<x; i++){
+			code = "0" + code;
+		}
+
+		$('#code')[0].value = code;
 	}
 	// check if length of val is less than 4, true, add 000, check if it is greater than 4, throw error.
 });
+/*]]>*/
 </script>

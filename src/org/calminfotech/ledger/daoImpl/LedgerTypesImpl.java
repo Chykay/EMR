@@ -13,6 +13,7 @@ public class LedgerTypesImpl {
 	@Autowired
 	private SessionFactory sessionFactory;
 
+	@SuppressWarnings("unchecked")
 	public List<LedgerType> fetchAll() {
 		List<LedgerType> ledgers = sessionFactory.getCurrentSession()
 				  .createQuery("from LedgerType")

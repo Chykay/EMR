@@ -395,12 +395,13 @@
 		<!-- LEDGER--> 
 		 <mapping class="org.calminfotech.ledger.models.BalSheetCat" />
 		 <mapping class="org.calminfotech.ledger.models.CommonLedger" />
-		 <mapping class="org.calminfotech.ledger.models.GeneralLedger" />
 		 <mapping class="org.calminfotech.ledger.models.GenLedgBalance" />
-		 <mapping class="org.calminfotech.ledger.models.GLPosting" />
+		 <mapping class="org.calminfotech.ledger.models.GLEntry" />
+		 <mapping class="org.calminfotech.ledger.models.GLHistory" />
+		 <mapping class="org.calminfotech.ledger.models.GPermission" />
+		 <mapping class="org.calminfotech.ledger.models.LedgerAccount" />
 		 <mapping class="org.calminfotech.ledger.models.LedgerType" />
 		 <mapping class="org.calminfotech.ledger.models.PostCode" />
 		 <mapping class="org.calminfotech.ledger.models.TotalingAccount" />
-		 <mapping class="org.calminfotech.ledger.models.GPermission" />
 	</session-factory>
 </hibernate-configuration>

@@ -7,11 +7,13 @@ public class GLPostingForm {
 	
 	private String p_account_no;
 	
+	private Integer p_branch_id;
+	
 	private float p_branch_bal;
 	
 	private String p_description;
 	
-	private float p_amount;
+	private float amount;
 	
 	private String p_post_code;
 	
@@ -27,7 +29,11 @@ public class GLPostingForm {
 	
 	private String r_post_code;
 	
-	private String ref_no;
+	private String ref_no1;
+		
+	private String ref_no2;
+	
+	private String ref_no3;
 	
 	private String currency = "NGN";
 
@@ -73,11 +79,11 @@ public class GLPostingForm {
 	}
 
 	public float getP_amount() {
-		return p_amount;
+		return amount;
 	}
 
-	public void setP_amount(float p_amount) {
-		this.p_amount = p_amount;
+	public void setP_amount(float amount) {
+		this.amount = amount;
 	}
 
 	public String getP_post_code() {
@@ -140,12 +146,45 @@ public class GLPostingForm {
 		return currency;
 	}
 
-	public String getRef_no() {
-		return ref_no;
+
+	public Integer getP_branch_id() {
+		return p_branch_id;
 	}
 
-	public void setRef_no(String ref_no) {
-		this.ref_no = ref_no;
+	public void setP_branch_id(Integer p_branch_id) {
+		this.p_branch_id = p_branch_id;
+	}
+
+	public float getAmount() {
+		return amount;
+	}
+
+	public void setAmount(float amount) {
+		this.amount = amount;
+	}
+
+	public String getRef_no1() {
+		return ref_no1;
+	}
+
+	public void setRef_no1(String ref_no1) {
+		this.ref_no1 = ref_no1;
+	}
+
+	public String getRef_no2() {
+		return ref_no2;
+	}
+
+	public void setRef_no2(String ref_no2) {
+		this.ref_no2 = ref_no2;
+	}
+
+	public String getRef_no3() {
+		return ref_no3;
+	}
+
+	public void setRef_no3(String ref_no3) {
+		this.ref_no3 = ref_no3;
 	}
 
 	public void setCurrency(String currency) {

@@ -7,10 +7,10 @@
 <div class="row">
 	<div class="col-xs-12">
 		<!-- Button for view -->
-		<a class="btn btn-xs btn-info" th:href="@{/ledger/gen_ledger/index}">
+		<a class="btn btn-xs btn-info" th:href="@{/ledger/ledger_acc/index}">
 			<i class="fa fa-home"></i> System Dashboard
 		</a> 
-		<a class="btn btn-xs btn-primary" th:href="@{/ledger/gen_ledger/create}">
+		<a class="btn btn-xs btn-primary" th:href="@{/ledger/ledger_acc/create}">
 			<i class="fa fa-plus-circle"></i> Add Account 
 		</a>
 	
@@ -113,7 +113,6 @@
 </div>
 
 <script>
-	$(function() {
 		/* Form Account Number*/
 		$('#totaling_code').change(function(){
 			var selElement = $(this);
@@ -125,17 +124,16 @@
 			$('#account_no')[0].value = account_no;
 			});
 		
-		$('#code').blur(function(){
-			var code = $(this)[0].value;
-			
-			var optValue = $('#totaling_code')[0].selectedOptions[0].innerText;
-			
-			var splitOption = optValue.split("-");	
-			var account_no = splitOption[0] + "-" + splitOption[1] + "-" + code;
-			 
-			$('#account_no').attr('value', account_no);
-		});
+
+	$('#code').blur(function(){
+		var code = this.value;
 		
-		})
+		var optValue = $('#totaling_code')[0].selectedOptions[0].innerText;
+		
+		var splitOption = optValue.split("-");	
+		var account_no = splitOption[0] + "-" + splitOption[1] + "-" + code;
+		 
+		$('#account_no')[0].value = account_no;
+	});
 	
 </script>

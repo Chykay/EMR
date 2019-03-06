@@ -1,18 +1,12 @@
 package org.calminfotech.ledger.daoInterface;
 
-import java.util.List;
-
-import org.calminfotech.ledger.models.GeneralLedger;
+import org.calminfotech.ledger.models.GLEntry;
+import org.calminfotech.ledger.models.GenLedgBalance;
 
 public interface GenLedgerDao {
-
-	public List<GeneralLedger> fetchAll();
+	public GenLedgBalance getBalance(String account_no, int branch_id, int company_id);
 	
-	public GeneralLedger getLedgerById(int id);
+	public void updateGLBalance(GenLedgBalance genLedgBalance);
 	
-	public void save(GeneralLedger generalLedger);
-	
-	public void delete(GeneralLedger generalLedger);
-	
-	public void update(GeneralLedger generalLedger);
+	public void GLEntry(GLEntry glEntry);
 }

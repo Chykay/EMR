@@ -6,21 +6,23 @@ import javax.validation.Valid;
 
 import org.calminfotech.ledger.boInterface.BalSheetCatBo;
 import org.calminfotech.ledger.boInterface.GenLedgerBo;
+import org.calminfotech.ledger.boInterface.LedgerAccBo;
 import org.calminfotech.ledger.boInterface.TotAccBo;
-import org.calminfotech.ledger.daoImpl.GLBalDaoImpl;
 import org.calminfotech.ledger.daoImpl.PostCodeDaoImpl;
 import org.calminfotech.ledger.forms.GLPostingForm;
-import org.calminfotech.ledger.forms.GenLedgerForm;
+import org.calminfotech.ledger.forms.LedgerAccForm;
 import org.calminfotech.ledger.models.BalSheetCat;
-import org.calminfotech.ledger.models.GeneralLedger;
+import org.calminfotech.ledger.models.LedgerAccount;
 import org.calminfotech.ledger.models.PostCode;
 import org.calminfotech.ledger.models.TotalingAccount;
+import org.calminfotech.ledger.utiility.LedgerException;
 import org.calminfotech.system.boInterface.OrganisationBo;
 import org.calminfotech.system.models.Organisation;
 import org.calminfotech.user.utils.UserIdentity;
 import org.calminfotech.utils.Alert;
-import org.calminfotech.utils.Auditor;
 import org.calminfotech.utils.annotations.Layout;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,14 +32,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.google.gson.Gson;
-
 
 @Controller
 @RequestMapping(value = "/ledger/gen_ledger/postings")
 public class GLPostingController {
 	@Autowired
-	private GenLedgerBo genLedgerBo;
+	private LedgerAccBo ledgerAccBo;
 	
 	@Autowired
 	private BalSheetCatBo balSheetCatBo;
@@ -49,19 +49,21 @@ public class GLPostingController {
 	private OrganisationBo organisationBo;
 	
 	@Autowired
-	private GLBalDaoImpl gLBalDaoImpl;
+	private GenLedgerBo genLedgerBo;
+	
 	
 	@Autowired
 	private PostCodeDaoImpl postCodeDaoImpl;
-	
+
 	@Autowired
 	private Alert alert;
+	
+	@Autowired
+	private SessionFactory sessionFactory;
 
 	@Autowired
 	private UserIdentity userIdentity;
 
-	@Autowired
-	private Auditor auditor;
 	
 	/* POST GL */
 	@RequestMapping(value = {"/index"}, method=RequestMethod.GET)
@@ -70,7 +72,7 @@ public class GLPostingController {
 		List<TotalingAccount> totalingAccounts = this.totAccBo.fetchAll();
 		List<BalSheetCat> balSheetCats = this.balSheetCatBo.fetchAll();
 		
-		model.addAttribute("account", new GenLedgerForm());
+		model.addAttribute("account", new LedgerAccForm());
 		model.addAttribute("balSheetCats", balSheetCats);
 		model.addAttribute("totalingAccounts", totalingAccounts);
 		return "/ledger/gen_ledger/postings/create";
@@ -80,23 +82,27 @@ public class GLPostingController {
 	@RequestMapping(value = {"/post"}, method=RequestMethod.GET)
 	public String postGl(Model model) {		
 		Organisation org = userIdentity.getOrganisation();
-		GLPostingForm posting = new GLPostingForm();
-		float posting_bal = this.gLBalDaoImpl.getBalance(org.getId(), org.getOrgCoy().getId()).getCurr_balance();
+	
+		List<LedgerAccount> ledgerAccounts = this.ledgerAccBo.fetchAll(org.getId(), org.getOrgCoy().getId());
 		
-		posting.setP_branch_bal(posting_bal);
-		List<GeneralLedger> generalLedgers = this.genLedgerBo.fetchAll();
-		
-		for(GeneralLedger gl : generalLedgers) {
-			gl.setBalance(this.gLBalDaoImpl.getBalance(gl.getOrganisation().getId(), gl.getOrgCoy().getId()).getCurr_balance());
+		for(LedgerAccount gl : ledgerAccounts) {
+			 try {
+				//if (this.genLedgerBo.getBalance(gl.getAccount_no(), gl.getOrganisation().getId(), gl.getOrgCoy().getId()) != null) {
+					gl.setBalance(this.genLedgerBo.getBalance(gl.getAccount_no(), gl.getOrganisation().getId(), gl.getOrgCoy().getId()).getCurr_balance());
+				/*} else {
+					gl.setBalance(0);
+					this.genLedgerBo.updateGLBalance(gl);
+				}*/
+			} catch (LedgerException e) {
+				e.printStackTrace();
+			}
 		}
 		List<Organisation> branches = this.organisationBo.fetchAll(org.getId());
 		List<PostCode> postCodes = this.postCodeDaoImpl.fetchAll();
+
 		
-		Gson gson = new Gson();
-		
-		model.addAttribute("posting", posting);
-		model.addAttribute("generalLedgers", generalLedgers);
-		model.addAttribute("generalLedgerss", generalLedgers.get(0));
+		model.addAttribute("posting", new GLPostingForm());
+		model.addAttribute("generalLedgers", ledgerAccounts);
 		model.addAttribute("postCodes", postCodes);
 		model.addAttribute("branches", branches);
 		return "/ledger/gen_ledger/postings/create";
@@ -104,16 +110,37 @@ public class GLPostingController {
 	
 	
 	@RequestMapping(value = {"/post"}, method=RequestMethod.POST)
-	public String postGl(@Valid @ModelAttribute("account") GenLedgerForm genLedgerForm, BindingResult result, Model model,
+	public String postGl(@Valid @ModelAttribute("account") GLPostingForm glPostingForm, BindingResult result, Model model,
 			RedirectAttributes redirectAttributes) {
 				
-		GeneralLedger account = this.genLedgerBo.save(genLedgerForm);
-		
-		alert.setAlert(redirectAttributes, Alert.SUCCESS,
-				"Success! New GeneralLedger Succesfully Added! GeneralLedger id:  "
-						+ account.getId());
+		/* begin Transaction */
+		Transaction tx = sessionFactory.openSession().beginTransaction();;
+				try {
 
-		model.addAttribute("account", account);
-		return "redirect:/ledger/gen_ledger/postings/index";
+					/*tx = sessionFactory.openSession().beginTransaction();*/
+					System.out.println("GLPostingController");
+					this.genLedgerBo.GLPosting(glPostingForm);
+					if (!tx.wasCommitted()){
+						tx.commit();
+					}
+				} catch (LedgerException e) {
+				    if(tx!=null){
+				        tx.rollback();
+				    }
+				    alert.setAlert(redirectAttributes, Alert.DANGER,
+							e.getExceptionMsg());
+
+				} catch (Exception e) {
+					 if(tx!=null){
+					        tx.rollback();
+					    }
+					 alert.setAlert(redirectAttributes, Alert.DANGER,
+								e.getMessage());
+				}
+	
+		
+		return "redirect:/ledger/ledger_acc/index";
 	}
+	
+	
 }

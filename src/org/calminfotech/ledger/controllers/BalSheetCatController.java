@@ -42,6 +42,23 @@ public class BalSheetCatController {
 	@Autowired
 	LedgerTypesImpl ledgerTypesImpl;
 	
+	@RequestMapping(value = {"/index"}, method=RequestMethod.GET)
+	public String indexBalSheetCat(Model model) {
+		List<BalSheetCat> balSheetCats = this.balSheetCatBo.fetchAll();
+		
+		for(BalSheetCat balSheetCat: balSheetCats) {
+			if(balSheetCat.getParent_id() != 0){
+				balSheetCat.setParent_name(this.balSheetCatBo.getLedgerById(balSheetCat.getParent_id()).getName());
+			} else {
+				balSheetCat.setParent_name("None");
+			}
+		}
+		
+		model.addAttribute("accounts", balSheetCats);
+		// model.addAttribute("id", id);
+		return "/ledger/bal_sheet_cat/index";
+	}
+	
 	/* SHOW ALL */
 	@RequestMapping(value = {"/view/{id}"}, method=RequestMethod.GET)
 	public String show(Model model, @PathVariable int id) {
@@ -57,7 +74,6 @@ public class BalSheetCatController {
 		
 		List<BalSheetCat> balSheetCats = this.balSheetCatBo.fetchAll();
 		
-		List<LedgerType> ledger_types = this.ledgerTypesImpl.fetchAll();
 		model.addAttribute("p_accounts", balSheetCats);
 		model.addAttribute("account", new BalSheetForm());
 		return "/ledger/bal_sheet_cat/create";
