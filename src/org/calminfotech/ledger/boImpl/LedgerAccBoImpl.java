@@ -3,19 +3,15 @@ package org.calminfotech.ledger.boImpl;
 import java.util.Date;
 import java.util.List;
 
-import org.calminfotech.ledger.boInterface.GenLedgerBo;
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
 import org.calminfotech.ledger.daoInterface.LedgerAccDao;
 import org.calminfotech.ledger.forms.LedgerAccForm;
 import org.calminfotech.ledger.models.LedgerAccount;
-import org.calminfotech.ledger.utiility.LedgerException;
 import org.calminfotech.user.utils.UserIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
 public class LedgerAccBoImpl implements LedgerAccBo {
 	public List<LedgerAccForm> generalLedgers;
 	public LedgerAccForm generalLedger;
@@ -26,8 +22,6 @@ public class LedgerAccBoImpl implements LedgerAccBo {
 	@Autowired
 	private UserIdentity userIdentity;
 	
-	@Autowired
-	private GenLedgerBo genLedgerBo;
 	
 	public List<LedgerAccount> fetchAll(int branch_id, int company_id){
 		return this.ledgerAccDao.fetchAll(branch_id, company_id);
@@ -62,15 +56,16 @@ public class LedgerAccBoImpl implements LedgerAccBo {
 		ledgerAccount.setCreated_by(userIdentity.getUser());
 		ledgerAccount.setCreate_date(new Date(System.currentTimeMillis()));
 		ledgerAccount.setIs_deleted(false);
+		ledgerAccount.setBalance(0);
 		
 		this.ledgerAccDao.save(ledgerAccount);
-
+/*
 		try {
 			this.genLedgerBo.updateGLBalance(ledgerAccount);
 		} catch (LedgerException e) {
 			e.printStackTrace();
 		}
-		
+		*/
 		return ledgerAccount;
 	}
 	

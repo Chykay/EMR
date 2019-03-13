@@ -106,22 +106,28 @@ public class SettingDaoImpl implements SettingDao {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public SettingsAssignment fetchsettings(String code, Integer orgId) {
 		// TODO Auto-generated method stub
 		// TODO Auto-generated method stub
+		
 		List<SettingsAssignment> list = this.sessionFactory
 				.getCurrentSession()
 				.createQuery(
 						"from SettingsAssignment where settings_code = ? and company_id=?")
 				.setParameter(0, code)
 				.setParameter(1,
-						userIdentity.getOrganisation().getOrgCoy().getId())
+						this.userIdentity.getOrganisation().getOrgCoy().getId())
 
 				.list();
 
+		System.out.println("GOT HERE IN SETTING " + code);
+		System.out.println(orgId + " : " + this.userIdentity.getOrganisation().getOrgCoy().getId());
 		if (list.size() > 0)
 			return list.get(0);
+		
+		System.out.println("GOT HERE IN SETTING bb " + code);
 		return null;
 
 	}

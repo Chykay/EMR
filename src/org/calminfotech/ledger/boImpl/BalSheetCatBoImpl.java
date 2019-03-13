@@ -10,10 +10,8 @@ import org.calminfotech.ledger.models.BalSheetCat;
 import org.calminfotech.user.utils.UserIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
 public class BalSheetCatBoImpl implements BalSheetCatBo {
 	public List<BalSheetForm> balSheetCats;
 	public BalSheetForm balSheetCat;
@@ -26,6 +24,10 @@ public class BalSheetCatBoImpl implements BalSheetCatBo {
 	
 	public List<BalSheetCat> fetchAll(){
 		return this.balSheetDao.fetchAll();
+	}
+	
+	public List<BalSheetCat> fetchParents(int id){
+		return this.balSheetDao.fetchParents(id);
 	}
 	
 	public BalSheetCat getLedgerById(int id){

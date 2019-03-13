@@ -18,4 +18,5 @@ public interface LedgerAccBo {
 	public void delete(LedgerAccount genLedgerAccount);
 	
 	public LedgerAccount update(LedgerAccForm ledgerAccForm, int id);
+	
 }

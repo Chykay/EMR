@@ -15,7 +15,8 @@ public class LedgerAccDaoImpl implements LedgerAccDao {
 	
 	@Autowired
 	private SessionFactory sessionFactory;
-	
+
+	@SuppressWarnings("unchecked")
 	public List<LedgerAccount> fetchAll(int branch_id, int company_id){
 		
 		List<LedgerAccount> ledgerAccounts = sessionFactory.getCurrentSession()
@@ -25,7 +26,8 @@ public class LedgerAccDaoImpl implements LedgerAccDao {
 				.list();
 		return ledgerAccounts;
 	}
-	
+
+	@SuppressWarnings("unchecked")
 	public LedgerAccount getLedgerById(int id){
 		List<LedgerAccount> list = this.sessionFactory.getCurrentSession()
 		.createQuery("FROM LedgerAccount WHERE id = ?")
@@ -37,6 +39,7 @@ public class LedgerAccDaoImpl implements LedgerAccDao {
 		return null;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public LedgerAccount getLedgerByAccount_no(String account_no){
 		List<LedgerAccount> list = this.sessionFactory.getCurrentSession()
 		.createQuery("FROM LedgerAccount WHERE account_no = ?")

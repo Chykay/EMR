@@ -17,6 +17,7 @@ public class BalSheetDaoImpl implements BalSheetDao {
 	@Autowired
 	private SessionFactory sessionFactory;
 	
+	@SuppressWarnings("unchecked")
 	public List<BalSheetCat> fetchAll(){
 		
 		List<BalSheetCat> balSheetCats = sessionFactory.getCurrentSession()
@@ -25,8 +26,19 @@ public class BalSheetDaoImpl implements BalSheetDao {
 		return balSheetCats;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public List<BalSheetCat> fetchParents(int id){
+		
+		List<BalSheetCat> balSheetCats = sessionFactory.getCurrentSession()
+				.createQuery(" from BalSheetCat WHERE id != ?")
+				.setParameter(0, id)
+				.list();
+		return balSheetCats;
+	}
+	
+	@SuppressWarnings("unchecked")
 	public BalSheetCat getLedgerById(int id){
-		List list = this.sessionFactory.getCurrentSession()
+		List<BalSheetCat> list = this.sessionFactory.getCurrentSession()
 		.createQuery("FROM BalSheetCat WHERE id = ?")
 		.setParameter(0, id).list();
 		

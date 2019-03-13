@@ -1,6 +1,6 @@
 <div class="page-header">
 	<h1>
-		Add New Account
+		PosAdd New Account
 	</h1>
 </div>
 
@@ -46,7 +46,7 @@
 				<div class="form-group">
 					<label for="p_account_no" class="col-sm-3 control-label no-padding-right">Posting Account:</label>
 					<div class="col-sm-9">
-						<input id="p_account_no_search"  name="p_account_no_search" class="col-xs-10 col-sm-5" style="margin-bottom:0px;margin-right: 500px;" onkeyup="filter()" onblur="selectAccount()" /> <br />
+						<input id="p_account_no_search"  name="p_account_no_search" class="col-xs-10 col-sm-7" style="margin-bottom:0px;margin-right: 500px;" onkeyup="filter()" onblur="selectAccount()" /> <br />
 						<select th:field="*{p_account_no}" size="" class="col-xs-10 col-sm-5" style="margin-top:0px;"  required="required">
 							
 							<option th:each="generalLedger: ${generalLedgers}" 
@@ -119,7 +119,6 @@
 					<div class="col-sm-9">
 						<input type="text" class="col-xs-10 col-sm-5" 
 							th:field="*{amount}"
-							th:value="${amount}" 
 							oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"
 						/> <span
 							class="text-danger" th:if="${#fields.hasErrors('amount')}"
@@ -157,17 +156,27 @@
 				<div class="form-group">
 					<label for="r_account_no" class="col-sm-3 control-label no-padding-right">Account:</label>
 					<div class="col-sm-9">
-					<input id="r_account_no_search"  name="r_account_no_search" class="col-xs-10 col-sm-5" style="margin-bottom:0px;margin-right: 500px;" onkeyup="filterR()" onblur="selectAccountR()" /> <br />
+					<input id="r_account_no_search"  name="r_account_no_search" class="col-xs-10 col-sm-7" style="margin-bottom:0px;margin-right: 500px;" onkeyup="filterR()" onblur="selectAccountR()" /> <br />
 					
 						<select th:field="*{r_account_no}" size="" style="margin-top:0px;" class="col-xs-10 col-sm-5"  required="required">
 							
 								<option th:each="generalLedger: ${generalLedgers}" 
 							th:value = "${generalLedger.account_no}" 
-							th:text="|${generalLedger.account_no}-${generalLedger.name} (${generalLedger.balance})|">Account</option>
+							th:text="|${generalLedger.account_no}-${generalLedger.name} |">Account</option>
 						</select>
 						<span class="text-danger" th:if="${#fields.hasErrors('r_account_no')}"
 							th:errors="*{r_account_no}">
 						</span>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label for="r_branch_bal" class="col-sm-3 control-label no-padding-right">Balance:</label>
+					<div class="col-sm-9">
+						<input type="text" class="col-xs-10 col-sm-5" 
+							th:field="*{r_branch_bal}" readonly="readonly" /> <span
+							class="text-danger" th:if="${#fields.hasErrors('r_branch_bal')}"
+							th:errors="*{r_branch_bal}"></span>
 					</div>
 				</div>
 				
@@ -266,27 +275,17 @@ $('#amount').focus(function(){
 	}
 });
 $('#amount').blur(function(){
-	var valuee = parseFloat(this.value.replace(/,/g, ""))
+	 var valuee = parseFloat(this.value.replace(/,/g, ""))
     .toFixed(2)
     .toString()
-    .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
 	
-	var selected_option = $('#p_post_code option:selected');
-	var balance = parseFloat($("#p_branch_bal").val());
-	if(balance < this.value && selected_option[0].value == "001") {
-			 $.gritter.add({
-					title : "Invalid input!",
-					text : "Insufficient funds, please enter a value lower than the balance",
-					time : 4000
-				}); 
-			 this.value = "0";
-		
-	} else {
-		this.value = valuee;
-		
-		$('#r_amount').attr('value', valuee);
-	}
-		
+	
+	this.value = valuee;
+	
+	$('#r_amount').attr('value', valuee);
+	
+	/* $('#r_amount').attr('value', this.value); */
 	
 	
 });
@@ -350,14 +349,17 @@ function selectAccount(){
         	document.getElementById("p_account_no_search").value = txt;
         	fleet.size = 0;
         	
-
-        	myFunction($("#p_branch_bal"), fleet.options[i].value);
-        	console.log( window.location.pathname.split('/'));
-        	// call ajax function
+        	var selected_branch = $('#p_branch_id option:selected');
+        	
+        	if(selected_branch[0].value != ""){
+        		myFunction($("#p_branch_bal"), fleet.options[i].value, selected_branch[0].value);
+        	}
             break;
         }
     }
 }
+
+
 
 function filterR() {
     var keyword = document.getElementById("r_account_no_search").value;
@@ -388,7 +390,12 @@ function selectAccountR(){
         	fleet.options[i].selected = true;
         	document.getElementById("r_account_no_search").value = txt;
         	fleet.size = 0;
-        	//myFunction($("#r_branch_bal"), fleet.options[i].value);
+        	
+			var selected_branch = $('#r_branch_id option:selected');
+        	
+        	if(selected_branch[0].value != ""){
+        		myFunction($("#r_branch_bal"), fleet.options[i].value, selected_branch[0].value);
+        	}
             break;
         }
     }
@@ -405,23 +412,57 @@ function selectAccountR(){
 $("#p_account_no").change(function(){
 	var selected_option = $('#p_account_no option:selected');
 	document.getElementById("p_account_no_search").value = selected_option.val(); 
-	myFunction($("#p_branch_bal"), selected_option[0].value);
+	
+	var selected_branch = $('#p_branch_id option:selected');
+	
+	if(selected_branch[0].value != ""){
+		myFunction($("#p_branch_bal"), selected_option[0].value, selected_branch[0].value);
+	}
 	// call ajax function
+});
+
+$('#p_branch_id').change(function() {
+	
+	var search_field = document.getElementById("p_account_no_search").value;
+	
+	var selected_option = $('#p_account_no option:selected');
+
+	var selected_branch = $('#p_branch_id option:selected');
+	
+	if(search_field != ""){
+		myFunction($("#p_branch_bal"), selected_option[0].value, selected_branch[0].value);
+	}
 });
 
 $("#r_account_no").change(function(){
 	var selected_option = $('#r_account_no option:selected');
 	document.getElementById("r_account_no_search").value = selected_option.val();
-	//myFunction($("#r_branch_bal"), selected_option[0].value);
+
+
+	var selected_branch = $('#r_branch_id option:selected');
+	
+	if(selected_branch[0].value != ""){
+		myFunction($("#r_branch_bal"), selected_option[0].value, selected_branch[0].value);
+	}
+});
+
+
+$('#r_branch_id').change(function() {
+	
+	var selected_option = $('#r_account_no option:selected');
+
+	var selected_branch = $('#r_branch_id option:selected');
+	
+	if(selected_option[0].value != ""){
+		myFunction($("#r_branch_bal"), selected_option[0].value, selected_branch[0].value);
+	}
 });
 
 	
-
-	
-function myFunction(elem, account_no) {
+function myFunction(elem, account_no, branch_id) {
 	$.ajax({
 		type : "GET",
-		url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/balance/'	+ account_no,
+		url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/balance/' + account_no + '/' + branch_id,
 		beforeSend : function() {
 			 $.gritter.add({
 				title : "Progress...",

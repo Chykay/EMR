@@ -6,7 +6,6 @@ import org.calminfotech.ledger.models.GPermission;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class PermImpl {
 	@Autowired
 	private SessionFactory sessionFactory;
-	
+
+	@SuppressWarnings("unchecked")
 	public List<GPermission> fetchAll() {
 		List<GPermission> gPermissions = sessionFactory.getCurrentSession()
 					  .createQuery("from GPermission")
@@ -24,7 +24,8 @@ public class PermImpl {
 		return gPermissions;
 	}
 	
-	
+
+	@SuppressWarnings({ "unchecked", "null" })
 	public List<GPermission> children(int id) {
 		
 		Session session = sessionFactory.getCurrentSession();
@@ -32,7 +33,6 @@ public class PermImpl {
 		
 		// Get All GPermissions
 		
-		Transaction tx = session.beginTransaction();
 		SQLQuery query = session.createSQLQuery("select * from GPermission where parent_id = '" + id + "'");
 		List<Object[]> rows = query.list();
 		

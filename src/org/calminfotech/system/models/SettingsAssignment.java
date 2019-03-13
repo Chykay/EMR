@@ -15,7 +15,7 @@ import org.hibernate.annotations.NamedNativeQuery;
 
 @Entity
 @NamedNativeQuery(name = "spGetSettings", query = "{CALL sp_settings_assignment(:orgid)}", callable = true, resultClass = SettingsAssignment.class)
-@Table(name = "sys_settings")
+@Table(name = "Sys_Settings")
 @org.hibernate.annotations.Entity(dynamicInsert = true)
 public class SettingsAssignment implements java.io.Serializable {
 

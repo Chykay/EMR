@@ -21,8 +21,6 @@ import org.calminfotech.system.models.Organisation;
 import org.calminfotech.user.utils.UserIdentity;
 import org.calminfotech.utils.Alert;
 import org.calminfotech.utils.annotations.Layout;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -57,9 +55,9 @@ public class GLPostingController {
 
 	@Autowired
 	private Alert alert;
-	
+	/*	
 	@Autowired
-	private SessionFactory sessionFactory;
+	private SessionFactory sessionFactory;*/
 
 	@Autowired
 	private UserIdentity userIdentity;
@@ -85,18 +83,18 @@ public class GLPostingController {
 	
 		List<LedgerAccount> ledgerAccounts = this.ledgerAccBo.fetchAll(org.getId(), org.getOrgCoy().getId());
 		
-		for(LedgerAccount gl : ledgerAccounts) {
+		/*for(LedgerAccount gl : ledgerAccounts) {
 			 try {
 				//if (this.genLedgerBo.getBalance(gl.getAccount_no(), gl.getOrganisation().getId(), gl.getOrgCoy().getId()) != null) {
 					gl.setBalance(this.genLedgerBo.getBalance(gl.getAccount_no(), gl.getOrganisation().getId(), gl.getOrgCoy().getId()).getCurr_balance());
-				/*} else {
+				} else {
 					gl.setBalance(0);
 					this.genLedgerBo.updateGLBalance(gl);
-				}*/
+				}
 			} catch (LedgerException e) {
 				e.printStackTrace();
 			}
-		}
+		}*/
 		List<Organisation> branches = this.organisationBo.fetchAll(org.getId());
 		List<PostCode> postCodes = this.postCodeDaoImpl.fetchAll();
 
@@ -113,19 +111,24 @@ public class GLPostingController {
 	public String postGl(@Valid @ModelAttribute("account") GLPostingForm glPostingForm, BindingResult result, Model model,
 			RedirectAttributes redirectAttributes) {
 				
-		/* begin Transaction */
-		Transaction tx = sessionFactory.openSession().beginTransaction();;
-				try {
+		/* begin Transaction 
+		Transaction tx = sessionFactory.getCurrentSession().beginTransaction();*/
+				/*try {*/
 
-					/*tx = sessionFactory.openSession().beginTransaction();*/
 					System.out.println("GLPostingController");
-					this.genLedgerBo.GLPosting(glPostingForm);
-					if (!tx.wasCommitted()){
+					try {
+						this.genLedgerBo.GLPosting(glPostingForm);
+					} catch (LedgerException e) {
+						// TODO Auto-generated catch block
+						alert.setAlert(redirectAttributes, Alert.DANGER, e.getExceptionMsg());
+					}
+/*					if (!tx.wasCommitted()){
 						tx.commit();
 					}
 				} catch (LedgerException e) {
 				    if(tx!=null){
 				        tx.rollback();
+				        System.out.println("Ledger Exception");
 				    }
 				    alert.setAlert(redirectAttributes, Alert.DANGER,
 							e.getExceptionMsg());
@@ -135,8 +138,8 @@ public class GLPostingController {
 					        tx.rollback();
 					    }
 					 alert.setAlert(redirectAttributes, Alert.DANGER,
-								e.getMessage());
-				}
+								e.getMessage() + " exception");
+				}*/
 	
 		
 		return "redirect:/ledger/ledger_acc/index";

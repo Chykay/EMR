@@ -9,4 +9,8 @@ public interface GenLedgerDao {
 	public void updateGLBalance(GenLedgBalance genLedgBalance);
 	
 	public void GLEntry(GLEntry glEntry);
+
+	public GenLedgBalance saveGLBalance(GenLedgBalance genLedgBalance);
+	
+	public boolean getLedgerStat(String account_no, int branch_id, int company_id);
 }

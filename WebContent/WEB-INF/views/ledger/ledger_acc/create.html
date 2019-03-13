@@ -112,8 +112,9 @@
 	</form>
 </div>
 
-<script>
-		/* Form Account Number*/
+<script type="text/javascript">
+/*<![CDATA[*/
+	/* Form Account Number*/
 		$('#totaling_code').change(function(){
 			var selElement = $(this);
 			var optValue = selElement[0].selectedOptions[0].innerText;
@@ -126,7 +127,27 @@
 		
 
 	$('#code').blur(function(){
+
 		var code = this.value;
+
+		if(code.length > 3) {
+			$.gritter.add({
+				title : "Invalid Action!",
+				text : "code cannot be MORE than 3 values",
+				time : 4000
+			}); 
+			code = "";
+			$('#code')[0].value = "";
+		} else if (code.length < 3){
+
+			var x = 3 - code.length;
+			for(i=0; i<x; i++){
+				code = "0" + code;
+			}
+
+			$('#code')[0].value = code;
+			
+		}
 		
 		var optValue = $('#totaling_code')[0].selectedOptions[0].innerText;
 		
@@ -135,5 +156,6 @@
 		 
 		$('#account_no')[0].value = account_no;
 	});
-	
+
+/*]]>*/
 </script>

@@ -11,10 +11,8 @@ import org.calminfotech.ledger.models.TotalingAccount;
 import org.calminfotech.user.utils.UserIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
 public class TotAccBoImpl implements  TotAccBo{
 	public List<TotalingForm> totalingAccounts;
 	public TotalingForm totalingAccount;
@@ -50,7 +48,6 @@ public class TotAccBoImpl implements  TotAccBo{
 		
 		
 		totalingAccount.setOrganisation(userIdentity.getOrganisation());
-		System.out.println(userIdentity.getOrganisation().getId() + " and " + userIdentity.getOrganisation().getOrgCoy().getId());
 		totalingAccount.setOrgCoy(userIdentity.getOrganisation().getOrgCoy());
 		totalingAccount.setCreated_by(userIdentity.getUser());
 		totalingAccount.setCreate_date(new Date(System.currentTimeMillis()));

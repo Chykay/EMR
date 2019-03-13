@@ -8,6 +8,8 @@ import org.calminfotech.ledger.models.BalSheetCat;
 
 public interface BalSheetCatBo {
 	public List<BalSheetCat> fetchAll();
+
+	public List<BalSheetCat> fetchParents(int id);
 	
 	public BalSheetCat getLedgerById(int id);
 	

@@ -61,7 +61,7 @@
 								class="fa fa-edit"></i>
 						</a> --> <a class="btn btn-xs btn-danger tooltips" 
 							title="Delete Item details"   th:id="${account.id}"  onclick="return Confirm(this.id)"
-							th:href="@{/ledger/gen_ledger/delete/{id}(id=${account.id}) }"> <i
+							href="#"> <i
 								class="fa fa-trash-o"></i>
 						</a>
 					</td>
@@ -72,3 +72,32 @@
 		<!-- End view content here -->
 	</div>
 </div>
+
+<script type="text/javascript">
+/*<![CDATA[*/
+$('#code').blur(function(){
+	var code = $(this).val();
+	
+	if(code.length > 4) {
+		$.gritter.add({
+			title : "Invalid Action!",
+			text : "code cannot be MORE than 4 values",
+			time : 4000
+		}); 
+		
+		$('#code')[0].value = "";
+	} else if (code.length < 4){
+
+		var x = 4 - code.length;
+		for(i=0; i<x; i++){
+			code = "0" + code;
+		}
+
+		$('#code')[0].value = code;
+	}
+	// check if length of val is less than 4, true, add 000, check if it is greater than 4, throw error.
+});
+
+
+/*]]>*/
+</script>

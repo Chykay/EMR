@@ -7,9 +7,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.SQLDelete;
+
 @Entity
 @org.hibernate.annotations.Entity(dynamicInsert = true)
-//@SQLDelete(sql = "UPDATE TotalingAccount SET is_deleted = 1 WHERE id = ?")
+@SQLDelete(sql = "UPDATE GL_balance_sheet_ledger SET is_active = 0 WHERE id = ?")
 @Table(name = "GL_balance_sheet_ledger")
 public class BalSheetCat extends CommonLedger{
 	@Id

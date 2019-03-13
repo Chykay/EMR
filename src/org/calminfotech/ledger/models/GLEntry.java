@@ -3,17 +3,18 @@ package org.calminfotech.ledger.models;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
 
 @Entity
 @Table(name="GL_entry")
 public class GLEntry extends CommonLedger {
-	
 	@Id
-	@GeneratedValue
-	@Column(name="id")
-	private Integer id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name ="id")
+	private int id;
 	
 	@Column(name="amount")
 	private float amount;
@@ -27,14 +28,20 @@ public class GLEntry extends CommonLedger {
 	@Column(name="account_no")
 	private String account_no;
 	
+	@Column(name="branch")
+	private Integer branch;
+	
 	@Column(name="description")
 	private String description;
+	
+	@Column(name="batch_no")
+	private String batch_no;
 
-	public Integer getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -77,4 +84,22 @@ public class GLEntry extends CommonLedger {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+	public Integer getBranch() {
+		return branch;
+	}
+
+	public void setBranch(Integer branch) {
+		this.branch = branch;
+	}
+
+	public String getBatch_no() {
+		return batch_no;
+	}
+
+	public void setBatch_no(String batch_no) {
+		this.batch_no = batch_no;
+	}
+	
+	
 }

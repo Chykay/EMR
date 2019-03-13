@@ -12,8 +12,10 @@ public class GLPostingForm {
 	private float p_branch_bal;
 	
 	private String p_description;
+
+	private String amount;
 	
-	private float amount;
+	private float r_amount;
 	
 	private String p_post_code;
 	
@@ -24,8 +26,6 @@ public class GLPostingForm {
 	private float r_branch_bal;
 	
 	private String r_description;
-	
-	private float r_amount;
 	
 	private String r_post_code;
 	
@@ -78,13 +78,6 @@ public class GLPostingForm {
 		this.p_description = p_description;
 	}
 
-	public float getP_amount() {
-		return amount;
-	}
-
-	public void setP_amount(float amount) {
-		this.amount = amount;
-	}
 
 	public String getP_post_code() {
 		return p_post_code;
@@ -126,14 +119,6 @@ public class GLPostingForm {
 		this.r_description = r_description;
 	}
 
-	public float getR_amount() {
-		return r_amount;
-	}
-
-	public void setR_amount(float r_amount) {
-		this.r_amount = r_amount;
-	}
-
 	public String getR_post_code() {
 		return r_post_code;
 	}
@@ -153,14 +138,6 @@ public class GLPostingForm {
 
 	public void setP_branch_id(Integer p_branch_id) {
 		this.p_branch_id = p_branch_id;
-	}
-
-	public float getAmount() {
-		return amount;
-	}
-
-	public void setAmount(float amount) {
-		this.amount = amount;
 	}
 
 	public String getRef_no1() {
@@ -189,6 +166,22 @@ public class GLPostingForm {
 
 	public void setCurrency(String currency) {
 		this.currency = currency;
+	}
+
+	public String getAmount() {
+		return amount;
+	}
+
+	public void setAmount(String amount) {
+		this.amount = amount;
+	}
+
+	public float getR_amount() {
+		return r_amount;
+	}
+
+	public void setR_amount(float r_amount) {
+		this.r_amount = r_amount;
 	}
 	
 	

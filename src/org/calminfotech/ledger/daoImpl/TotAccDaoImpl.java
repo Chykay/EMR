@@ -16,7 +16,8 @@ public class TotAccDaoImpl implements TotAccDao {
 	
 	@Autowired
 	private SessionFactory sessionFactory;
-	
+
+	@SuppressWarnings("unchecked")
 	public List<TotalingAccount> fetchAll(){
 		
 		List<TotalingAccount> totalingAccounts = sessionFactory.getCurrentSession()
@@ -24,9 +25,10 @@ public class TotAccDaoImpl implements TotAccDao {
 				.list();
 		return totalingAccounts;
 	}
-	
+
+	@SuppressWarnings("unchecked")
 	public TotalingAccount getLedgerById(int id){
-		List list = this.sessionFactory.getCurrentSession()
+		List<TotalingAccount> list = this.sessionFactory.getCurrentSession()
 		.createQuery("FROM TotalingAccount WHERE id = ?")
 		.setParameter(0, id).list();
 		

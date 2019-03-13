@@ -110,7 +110,7 @@ public class BalSheetCatController {
 		}
 		
 
-		List<BalSheetCat> balSheetCats = this.balSheetCatBo.fetchAll();
+		List<BalSheetCat> balSheetCats = this.balSheetCatBo.fetchParents(id);
 		List<LedgerType> ledger_types = this.ledgerTypesImpl.fetchAll();
 		
 

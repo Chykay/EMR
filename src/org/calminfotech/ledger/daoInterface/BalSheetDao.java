@@ -6,7 +6,9 @@ import org.calminfotech.ledger.models.BalSheetCat;
 
 public interface BalSheetDao {
 	public List<BalSheetCat> fetchAll();
-	
+
+	public List<BalSheetCat> fetchParents(int id);
+
 	public BalSheetCat getLedgerById(int id);
 	
 	public void save(BalSheetCat balSheetCat);

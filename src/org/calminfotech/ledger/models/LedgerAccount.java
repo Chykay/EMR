@@ -7,9 +7,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.SQLDelete;
+
 @Entity
 @org.hibernate.annotations.Entity(dynamicInsert = true)
-//@SQLDelete(sql = "UPDATE GeneralLedger SET is_deleted = 1 WHERE id = ?")
+@SQLDelete(sql = "UPDATE GeneralLedger SET is_active = 0 WHERE id = ?")
 @Table(name = "GL_setup_table")
 public class LedgerAccount extends CommonLedger{
 	
@@ -18,10 +20,10 @@ public class LedgerAccount extends CommonLedger{
 	@Column(name ="id")
 	private int id;
 	
-	@Column(name = "name")
+	@Column(name = "name", unique=true, nullable=false)
 	private String name;
 	
-	@Column(name = "account_no")
+	@Column(name = "account_no", unique=true, nullable=false)
 	private String account_no;
 	
 
@@ -41,6 +43,9 @@ public class LedgerAccount extends CommonLedger{
 	
 	@Transient
 	private float balance;
+	
+	@Transient
+	private float amount;
 
 	public int getId() {
 		return id;
@@ -105,6 +110,14 @@ public class LedgerAccount extends CommonLedger{
 
 	public void setBalance(float balance) {
 		this.balance = balance;
+	}
+
+	public float getAmount() {
+		return amount;
+	}
+
+	public void setAmount(float amount) {
+		this.amount = amount;
 	}
 
 	

@@ -94,7 +94,12 @@ $('#code').blur(function(){
 	var code = $(this).val();
 	
 	if(code.length > 4) {
-		alert("code cannot be MORE than 4 values");
+		$.gritter.add({
+			title : "Invalid Action!",
+			text : "code cannot be MORE than 4 values",
+			time : 4000
+		}); 
+		
 		$('#code')[0].value = "";
 	} else if (code.length < 4){
 

@@ -13,6 +13,7 @@ public class PostCodeDaoImpl {
 	@Autowired
 	private SessionFactory sessionFactory;
 
+	@SuppressWarnings("unchecked")
 	public List<PostCode> fetchAll() {
 		List<PostCode> postCodes = sessionFactory.getCurrentSession()
 				  .createQuery("from PostCode")
