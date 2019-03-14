@@ -78,12 +78,20 @@
 /*<![CDATA[*/
 $(".deleteBtn").click( function (){
 	var id = this.id;
-	var promise = isUsed(id);
-	var used = promise.success(function(data){
-		return data;
+	var status = null;
+	$.ajax({
+		type : "GET",
+		url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/status/'	+ id,
+		async: false,
+		success : function(value) {
+			//if value is true, then you can't delete 
+			status = value;
+		}
 	});
-	alert("used: " + used);
-	if(used){
+	console.log(typeof(status));
+	console.log(status);
+	
+	if(status.contains("true")){
 		alert("cannot delete ledger, it has a balance already");
 		/* $.gritter.add({
 			title : "Invalid Action!",
@@ -91,37 +99,11 @@ $(".deleteBtn").click( function (){
 			time : 4000
 		});  */
 	} else {
-
 		alert("delete ledger");
 		onDelete(id);
 	}
 	
 });
-
-function isUsed(id){
-	return $.ajax({
-		type : "GET",
-		url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/status/'	+ id,
-		beforeSend : function() {
-			/*  $.gritter.add({
-				title : "Progress...",
-				text : "Fetching Balance...",
-				time : 3000
-			});  */
-		},
-		success : function(value) {
-			//if value is true, then you can't delete 
-			return value;
-		},
-		error : function() {
-			/* $.gritter.add({
-				title : "Error!",
-				text : "Error!",
-				time : 4000
-			}); */
-		}
-});
-}
 
 function onDelete(id) {
 	$.ajax({

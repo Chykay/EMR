@@ -11,7 +11,7 @@ import org.hibernate.annotations.SQLDelete;
 
 @Entity
 @org.hibernate.annotations.Entity(dynamicInsert = true)
-@SQLDelete(sql = "UPDATE GeneralLedger SET is_active = 0 WHERE id = ?")
+@SQLDelete(sql = "UPDATE GL_setup_table SET is_active = 0 WHERE id = ?")
 @Table(name = "GL_setup_table")
 public class LedgerAccount extends CommonLedger{
 	

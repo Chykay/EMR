@@ -1,7 +1,6 @@
 package org.calminfotech.ledger.boImpl;
 
 import java.util.Date;
-import java.util.Random;
 
 import org.calminfotech.ledger.boInterface.GenLedgerBo;
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
@@ -11,6 +10,7 @@ import org.calminfotech.ledger.models.GLEntry;
 import org.calminfotech.ledger.models.GenLedgBalance;
 import org.calminfotech.ledger.models.LedgerAccount;
 import org.calminfotech.ledger.utiility.LedgerException;
+import org.calminfotech.ledger.utiility.LedgerUtility;
 import org.calminfotech.system.boInterface.OrganisationBo;
 import org.calminfotech.system.boInterface.SettingBo;
 import org.calminfotech.system.models.SettingsAssignment;
@@ -37,6 +37,9 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 	@Autowired
 	private SettingBo settingBo;
 	
+	/*@Autowired
+	private UserBo userBo;*/
+	
 	/*
 	@Autowired
 	private TotAccDao totAccDao;*/
@@ -57,25 +60,23 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		System.out.println("Post cods: " + glEntry.getPost_code());
 		ledgerAccount.setModified_by(this.userIdentity.getUser());
 		ledgerAccount.setModify_date(new Date(System.currentTimeMillis()));
-		
 		ledgerAccount.setAmount(this.getAmount(amount, glEntry.getAccount_no().charAt(0), glEntry.getPost_code()));
 		
 
-		System.out.println("Post codeee: " + glEntry.getPost_code());
-		if (glEntry.getPost_code().equals("001")) {
+		if (glEntry.getPost_code().contains("001")) {
 			glEntry.setPost_code("DR");
-		} else if (glEntry.getPost_code().equals("002")) {
+		} else if (glEntry.getPost_code().contains("002")) {
 			glEntry.setPost_code("CR");
 		}
 		
 		glEntry.setAmount(ledgerAccount.getAmount());
 		this.genLedgerDao.GLEntry(glEntry);
 		
-		this.updateGLBalance(ledgerAccount, glEntry.getOrganisation().getId());
+		this.updateGLBalance(ledgerAccount, glEntry.getBranch());
 
 		
-		if (glEntry.getBranch() == glEntry.getOrganisation().getId()) {
-			System.out.println("different branches");
+		if (glEntry.getBranch() != glEntry.getOrganisation().getId()) {
+			System.out.println("different branches: " + glEntry.getBranch() + " : " + glEntry.getOrganisation().getId());
 			this.interbankBalancing(glEntry);
 		}
 		
@@ -99,12 +100,13 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		GLEntry gLEntry1 = new GLEntry();
 		GLEntry gLEntry2 = new GLEntry();
 		
-		String batch_no = new Random(System.currentTimeMillis()).toString();
+		String batch_no = LedgerUtility.getBatchNo();
 		
 		gLEntry1.setCreate_date(new Date(System.currentTimeMillis()));
 		gLEntry1.setAccount_no(glPostingForm.getP_account_no());
 		gLEntry1.setOrganisation(this.userIdentity.getOrganisation());
 		gLEntry1.setBranch(this.organisationBo.getOrganisationById(glPostingForm.getP_branch_id()).getId());
+		gLEntry1.setOrgCoy(this.userIdentity.getOrganisation().getOrgCoy());
 		gLEntry1.setRef_no1(glPostingForm.getRef_no1());
 		gLEntry1.setPost_code(glPostingForm.getP_post_code());
 		gLEntry1.setAmount(Float.parseFloat(glPostingForm.getAmount().replace(",", "")));
@@ -117,6 +119,7 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		gLEntry2.setAccount_no(glPostingForm.getR_account_no());
 		gLEntry2.setOrganisation(this.userIdentity.getOrganisation());
 		gLEntry2.setBranch(this.organisationBo.getOrganisationById(glPostingForm.getR_branch_id()).getId());
+		gLEntry2.setOrgCoy(this.userIdentity.getOrganisation().getOrgCoy());
 		gLEntry2.setRef_no1(glPostingForm.getRef_no1());
 		gLEntry2.setPost_code(glPostingForm.getR_post_code());
 		gLEntry2.setAmount(Float.parseFloat(glPostingForm.getAmount().replace(",", "")));
@@ -150,7 +153,7 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		}*/
 		
 		// credit of credit
-		if (postCode.equals("002")) {
+		if (postCode.contains("002")) {
 			if ((ledgerType == '1' || ledgerType == '5')) {
 				// credit of debit
 				return amount *= -1;
@@ -175,12 +178,15 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		/*
 		 * Initialization
 		 */
+		/*SettingsAssignment settingsAssignment = new SettingsAssignment();
+		settingsAssignment.setSettings_code("interbank-GLP");
+		*/
 		float amount = glEntry.getAmount();
 		String glAccountNo = glEntry.getAccount_no();
-		SettingsAssignment settingsAssignment = this.settingBo.fetchsettings("interbank-GLP", glEntry.getOrgCoy().getId());
+		SettingsAssignment settingsAssignment = this.settingBo.fetchsettings("interbank-GLP", 2);
 		String sysAccountNo = settingsAssignment.getSettings_value();
 		User user = new User();
-		user.setUserId(0);
+		user.setUserId(1);
 		
 		GLEntry gLEntry1 = new GLEntry();
 		GLEntry gLEntry2 = new GLEntry();
@@ -195,19 +201,27 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		 * 
 		 */
 				
-		
+
+		System.out.println(glEntry.getPost_code() + " : working now");
 		gLEntry1.setAccount_no(sysAccountNo);
-		if (glEntry.getPost_code().equals("DR")) {
-			gLEntry1.setPost_code("CR");
+		if (glEntry.getPost_code().contains("DR")) {
+			System.out.println("contains DR");
+			gLEntry1.setPost_code("002");
 			gLEntry1.setAmount(this.getAmount(amount, glAccountNo.charAt(0), "002"));
 		} else {
-			gLEntry1.setPost_code("DR");
+			System.out.println("contains CR");
+			gLEntry1.setPost_code("001");
 			gLEntry1.setAmount(this.getAmount(amount, glAccountNo.charAt(0), "001"));
 		}
 		gLEntry1.setOrganisation(this.organisationBo.getOrganisationById(glEntry.getBranch()));
+		gLEntry1.setOrgCoy(this.userIdentity.getOrganisation().getOrgCoy());
 		gLEntry1.setBranch(glEntry.getBranch());
 		gLEntry1.setCreated_by(user);		
 		gLEntry1.setCreate_date(new Date(System.currentTimeMillis()));
+		gLEntry1.setBatch_no(glEntry.getBatch_no());
+		gLEntry1.setRef_no1(glEntry.getRef_no1());
+		gLEntry1.setDescription(glEntry.getDescription().concat("-ITB"));
+		System.out.println(gLEntry1.getPost_code() + " : please work");
 		
 		/*
 		 * 
@@ -222,16 +236,20 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		
 		gLEntry2.setAccount_no(sysAccountNo);
 		gLEntry2.setPost_code(glEntry.getPost_code());
-		if (gLEntry2.getPost_code().equals("DR")) {
+		if (glEntry.getPost_code().contains("DR")) {
 			gLEntry2.setAmount(this.getAmount(amount, glAccountNo.charAt(0), "001"));
 		} else {
 			gLEntry2.setAmount(this.getAmount(amount, glAccountNo.charAt(0), "002"));
 		}
-		gLEntry2.setOrganisation(this.organisationBo.getOrganisationById(glEntry.getBranch()));
+		gLEntry2.setOrganisation(glEntry.getOrganisation());
+		gLEntry2.setOrgCoy(this.userIdentity.getOrganisation().getOrgCoy());
 		gLEntry2.setBranch(glEntry.getOrganisation().getId());
 		gLEntry2.setCreated_by(user);
 		gLEntry2.setCreate_date(new Date(System.currentTimeMillis()));
-
+		gLEntry2.setBatch_no(glEntry.getBatch_no());
+		gLEntry2.setRef_no1(glEntry.getRef_no1());
+		gLEntry2.setDescription(glEntry.getDescription().concat("-ITB"));
+		
 		this.GLEntry(gLEntry1);
 		this.GLEntry(gLEntry2);
 	}

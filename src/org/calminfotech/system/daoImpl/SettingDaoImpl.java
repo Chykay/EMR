@@ -117,9 +117,7 @@ public class SettingDaoImpl implements SettingDao {
 				.createQuery(
 						"from SettingsAssignment where settings_code = ? and company_id=?")
 				.setParameter(0, code)
-				.setParameter(1,
-						this.userIdentity.getOrganisation().getOrgCoy().getId())
-
+				.setParameter(1, orgId)
 				.list();
 
 		System.out.println("GOT HERE IN SETTING " + code);
