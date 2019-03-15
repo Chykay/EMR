@@ -259,4 +259,29 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 	public List<GLEntry> getGLEntries() {
 		return this.genLedgerDao.getGLEntries();
 	}
+
+	public List<GLEntry> getGLEntriesByBatch_no(String batch_no) {
+		return this.genLedgerDao.getGLEntriesByBatch_no(batch_no);
+	}
+
+
+	public void reverseEntries(String batch_no) throws LedgerException {
+		List<GLEntry> glEntries = this.getGLEntriesByBatch_no(batch_no);
+
+		for(GLEntry glEntry: glEntries){
+			glEntry.setRef_no2("REVERSED");
+			glEntry.setDescription("REVERSED-".concat(glEntry.getDescription()));
+			
+			this.genLedgerDao.GLEntry(glEntry);
+			
+			if (glEntry.getPost_code().contains("DR")) {
+				glEntry.setPost_code("CR");
+			} else {
+				glEntry.setPost_code("DR");
+			}
+			
+			this.GLEntry(glEntry);
+		}
+		
+	}
 }

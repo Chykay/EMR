@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.calminfotech.ledger.daoInterface.LedgerAccDao;
 import org.calminfotech.ledger.models.LedgerAccount;
+import org.calminfotech.system.boInterface.SettingBo;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -15,14 +16,18 @@ public class LedgerAccDaoImpl implements LedgerAccDao {
 	
 	@Autowired
 	private SessionFactory sessionFactory;
+	
+	@Autowired
+	private SettingBo settingBo;
 
 	@SuppressWarnings("unchecked")
 	public List<LedgerAccount> fetchAll(int branch_id, int company_id){
 		
 		List<LedgerAccount> ledgerAccounts = sessionFactory.getCurrentSession()
-				.createQuery(" from LedgerAccount WHERE organisation_id = ? AND company_id = ?")
+				.createQuery(" from LedgerAccount WHERE organisation_id = ? AND company_id = ? AND account_no != ?")
 				.setParameter(0, branch_id)
 				.setParameter(1, company_id)
+				.setParameter(2, this.settingBo.fetchsettings("interbank-GLP", 2).getSettings_value())
 				.list();
 		return ledgerAccounts;
 	}

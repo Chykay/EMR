@@ -7,6 +7,7 @@ import org.calminfotech.ledger.daoInterface.GenLedgerDao;
 import org.calminfotech.ledger.models.GLEntry;
 import org.calminfotech.ledger.models.GenLedgBalance;
 import org.calminfotech.system.boInterface.OrganisationBo;
+import org.calminfotech.system.boInterface.SettingBo;
 import org.calminfotech.user.utils.UserIdentity;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class GenLedgerDaoImpl implements GenLedgerDao {
 	
 	@Autowired
 	private OrganisationBo organisationBo;
+
+	@Autowired
+	private SettingBo settingBo;
 	
 
 	@SuppressWarnings("unchecked")
@@ -76,7 +80,7 @@ public class GenLedgerDaoImpl implements GenLedgerDao {
 
 	@Override
 	public void GLEntry(GLEntry glEntry) {
-		this.sessionFactory.getCurrentSession().save(glEntry);
+		this.sessionFactory.getCurrentSession().saveOrUpdate(glEntry);
 		System.out.println("save");
 		this.sessionFactory.getCurrentSession().flush();
 		System.out.println("flush");
@@ -102,11 +106,26 @@ public class GenLedgerDaoImpl implements GenLedgerDao {
 	@SuppressWarnings("unchecked")
 	public List<GLEntry> getGLEntries(){
 		List<GLEntry> entries = sessionFactory.getCurrentSession()
-				.createQuery("FROM GLEntry WHERE company_id = ? AND organisation_id = ?")
+				.createQuery("FROM GLEntry WHERE company_id = ? AND organisation_id = ? AND account_no != ?")
 				.setParameter(0, userIdentity.getOrganisation().getOrgCoy().getId())
 				.setParameter(1, userIdentity.getOrganisation().getId())
+				.setParameter(2, this.settingBo.fetchsettings("interbank-GLP", 2).getSettings_value())
 				.list();
 		
 		return entries;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<GLEntry> getGLEntriesByBatch_no(String batch_no) {
+		// TODO Auto-generated method stub
+		
+		List<GLEntry> glEntries = sessionFactory.getCurrentSession()
+				.createQuery("FROM GLEntry WHERE batch_no = ? ")
+				.setParameter(0, batch_no)
+				.list();
+		
+		
+		return glEntries;
 	}
 }

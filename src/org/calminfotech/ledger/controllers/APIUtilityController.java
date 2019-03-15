@@ -49,7 +49,6 @@ public class APIUtilityController {
 		return balance;
 	}
 	
-	@SuppressWarnings("null")
 	@ResponseBody
 	@RequestMapping(value = {"/status/{id}"}, method=RequestMethod.GET, produces = "text/html")
 	public String ledgerStatus(@PathVariable("id") String id){
@@ -66,5 +65,7 @@ public class APIUtilityController {
 		}
 		return null;
 	}
+	
+	
 	
 }

@@ -78,7 +78,6 @@ public class StatesAndLGAController {
 		State state = statesList.getStateByCode(statecode);
 
 		if (state == null)
-
 			return lgasStr;
 
 		Set<LocalGovernmentArea> list = state.getLocalGovernmentArea();

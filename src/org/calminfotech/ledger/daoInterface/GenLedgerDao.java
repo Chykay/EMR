@@ -17,4 +17,6 @@ public interface GenLedgerDao {
 	public boolean getLedgerStat(String account_no, int branch_id, int company_id);
 	
 	public List<GLEntry> getGLEntries();
+
+	public List<GLEntry> getGLEntriesByBatch_no(String batch_no);
 }

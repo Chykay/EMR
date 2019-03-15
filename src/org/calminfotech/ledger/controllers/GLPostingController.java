@@ -22,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -60,7 +61,7 @@ public class GLPostingController {
 	private UserIdentity userIdentity;
 
 	
-	/* POST GL */
+	/* GET ALL GL ENTRIES*/
 	@RequestMapping(value = {"/index"}, method=RequestMethod.GET)
 	public String index(Model model) {		
 		
@@ -72,7 +73,21 @@ public class GLPostingController {
 			e.printStackTrace();
 		}
 		model.addAttribute("glEntries", glEntries);
-		return "/ledger/gen_ledger/direct/index";
+		return "/ledger/gen_ledger/index";
+	}
+	
+	/* REVERSE ENTRY */
+	@RequestMapping(value = {"/reversal/{id}"}, method=RequestMethod.GET)
+	public String reverse(@PathVariable("id") String id, Model model) {		
+		
+		try {
+			this.genLedgerBo.reverseEntries(id);
+		} catch (LedgerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return "/ledger/gen_ledger/index";
 	}
 	
 	@Layout(value = "layouts/form_wizard_layout")
@@ -104,6 +119,7 @@ public class GLPostingController {
 		model.addAttribute("branches", branches);
 		return "/ledger/gen_ledger/direct/create";
 	}
+
 	
 	@RequestMapping(value = {"/direct/post"}, method=RequestMethod.POST)
 	public String postGl(@Valid @ModelAttribute("account") GLPostingForm glPostingForm, BindingResult result, Model model,
@@ -140,7 +156,7 @@ public class GLPostingController {
 				}*/
 	
 		
-		return "redirect:/ledger/gen_ledger/direct/index";
+		return "redirect:/ledger/gen_ledger/index";
 	}
 
 }

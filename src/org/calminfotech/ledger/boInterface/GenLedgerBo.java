@@ -19,6 +19,10 @@ public interface GenLedgerBo {
 	public void updateGLBalance(LedgerAccount ledgerAccount, int branch_id) throws LedgerException;
 	
 	public boolean getLedgerStat(String account_no, int branch_id, int company_id) throws LedgerException;
-	
+
 	public List<GLEntry> getGLEntries() throws LedgerException;
+
+	public List<GLEntry> getGLEntriesByBatch_no(String batch_no) throws LedgerException;
+	
+	public void reverseEntries(String batch_no) throws LedgerException;
 }

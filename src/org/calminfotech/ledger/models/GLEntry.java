@@ -26,6 +26,9 @@ public class GLEntry extends CommonLedger {
 	@Column(name="ref_no1")
 	private String ref_no1;
 	
+	@Column(name="ref_no2")
+	private String ref_no2;
+	
 	@Column(name="post_code")
 	private String post_code;
 	
@@ -67,6 +70,15 @@ public class GLEntry extends CommonLedger {
 
 	public void setRef_no1(String ref_no1) {
 		this.ref_no1 = ref_no1;
+	}
+
+	
+	public String getRef_no2() {
+		return ref_no2;
+	}
+
+	public void setRef_no2(String ref_no2) {
+		this.ref_no2 = ref_no2;
 	}
 
 	public String getPost_code() {
