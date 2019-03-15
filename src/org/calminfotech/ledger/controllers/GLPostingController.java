@@ -28,7 +28,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 @Controller
-@RequestMapping(value = "/ledger/gen_ledger/postings")
+@RequestMapping(value = "/ledger/gen_ledger")
 public class GLPostingController {
 	@Autowired
 	private LedgerAccBo ledgerAccBo;
@@ -45,6 +45,7 @@ public class GLPostingController {
 
 	@Autowired
 	private Alert alert;
+
 	/*	
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -71,11 +72,11 @@ public class GLPostingController {
 			e.printStackTrace();
 		}
 		model.addAttribute("glEntries", glEntries);
-		return "/ledger/gen_ledger/postings/index";
+		return "/ledger/gen_ledger/direct/index";
 	}
 	
 	@Layout(value = "layouts/form_wizard_layout")
-	@RequestMapping(value = {"/post"}, method=RequestMethod.GET)
+	@RequestMapping(value = {"/direct/post"}, method=RequestMethod.GET)
 	public String postGl(Model model) {		
 		Organisation org = userIdentity.getOrganisation();
 	
@@ -101,11 +102,10 @@ public class GLPostingController {
 		model.addAttribute("generalLedgers", ledgerAccounts);
 		model.addAttribute("postCodes", postCodes);
 		model.addAttribute("branches", branches);
-		return "/ledger/gen_ledger/postings/create";
+		return "/ledger/gen_ledger/direct/create";
 	}
 	
-	
-	@RequestMapping(value = {"/post"}, method=RequestMethod.POST)
+	@RequestMapping(value = {"/direct/post"}, method=RequestMethod.POST)
 	public String postGl(@Valid @ModelAttribute("account") GLPostingForm glPostingForm, BindingResult result, Model model,
 			RedirectAttributes redirectAttributes) {
 				
@@ -140,8 +140,7 @@ public class GLPostingController {
 				}*/
 	
 		
-		return "redirect:/ledger/gen_ledger/postings/index";
+		return "redirect:/ledger/gen_ledger/direct/index";
 	}
-	
-	
+
 }
