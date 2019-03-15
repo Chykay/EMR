@@ -98,4 +98,15 @@ public class GenLedgerDaoImpl implements GenLedgerDao {
 	
 		return false;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<GLEntry> getGLEntries(){
+		List<GLEntry> entries = sessionFactory.getCurrentSession()
+				.createQuery("FROM GLEntry WHERE company_id = ? AND organisation_id = ?")
+				.setParameter(0, userIdentity.getOrganisation().getOrgCoy().getId())
+				.setParameter(1, userIdentity.getOrganisation().getId())
+				.list();
+		
+		return entries;
+	}
 }

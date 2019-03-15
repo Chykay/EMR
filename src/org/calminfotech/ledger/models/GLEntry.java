@@ -1,11 +1,15 @@
 package org.calminfotech.ledger.models;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 
 @Entity
@@ -36,6 +40,10 @@ public class GLEntry extends CommonLedger {
 	
 	@Column(name="batch_no")
 	private String batch_no;
+	
+	@Column(name="posting_date")
+	@Temporal(TemporalType.DATE)
+	private Date posting_date;
 
 	public int getId() {
 		return id;
@@ -100,6 +108,13 @@ public class GLEntry extends CommonLedger {
 	public void setBatch_no(String batch_no) {
 		this.batch_no = batch_no;
 	}
-	
+
+	public Date getPosting_date() {
+		return posting_date;
+	}
+
+	public void setPosting_date(Date posting_date) {
+		this.posting_date = posting_date;
+	}
 	
 }

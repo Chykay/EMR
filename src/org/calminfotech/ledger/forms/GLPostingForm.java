@@ -14,6 +14,8 @@ public class GLPostingForm {
 	private String p_description;
 
 	private String amount;
+
+	private String posting_date;
 	
 	private float r_amount;
 	
@@ -182,6 +184,14 @@ public class GLPostingForm {
 
 	public void setR_amount(float r_amount) {
 		this.r_amount = r_amount;
+	}
+
+	public String getPosting_date() {
+		return posting_date;
+	}
+
+	public void setPosting_date(String posting_date) {
+		this.posting_date = posting_date;
 	}
 	
 	

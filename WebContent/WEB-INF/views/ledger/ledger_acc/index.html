@@ -88,10 +88,8 @@ $(".deleteBtn").click( function (){
 			status = value;
 		}
 	});
-	console.log(typeof(status));
-	console.log(status);
 	
-	if(status.contains("true")){
+	if(status == "true"){
 		alert("cannot delete ledger, it has a balance already");
 		/* $.gritter.add({
 			title : "Invalid Action!",
@@ -99,7 +97,6 @@ $(".deleteBtn").click( function (){
 			time : 4000
 		});  */
 	} else {
-		alert("delete ledger");
 		onDelete(id);
 	}
 	

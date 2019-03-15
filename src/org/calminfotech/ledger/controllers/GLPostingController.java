@@ -4,17 +4,13 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.calminfotech.ledger.boInterface.BalSheetCatBo;
 import org.calminfotech.ledger.boInterface.GenLedgerBo;
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
-import org.calminfotech.ledger.boInterface.TotAccBo;
 import org.calminfotech.ledger.daoImpl.PostCodeDaoImpl;
 import org.calminfotech.ledger.forms.GLPostingForm;
-import org.calminfotech.ledger.forms.LedgerAccForm;
-import org.calminfotech.ledger.models.BalSheetCat;
+import org.calminfotech.ledger.models.GLEntry;
 import org.calminfotech.ledger.models.LedgerAccount;
 import org.calminfotech.ledger.models.PostCode;
-import org.calminfotech.ledger.models.TotalingAccount;
 import org.calminfotech.ledger.utiility.LedgerException;
 import org.calminfotech.system.boInterface.OrganisationBo;
 import org.calminfotech.system.models.Organisation;
@@ -38,12 +34,6 @@ public class GLPostingController {
 	private LedgerAccBo ledgerAccBo;
 	
 	@Autowired
-	private BalSheetCatBo balSheetCatBo;
-
-	@Autowired
-	private TotAccBo totAccBo;
-	
-	@Autowired
 	private OrganisationBo organisationBo;
 	
 	@Autowired
@@ -57,7 +47,13 @@ public class GLPostingController {
 	private Alert alert;
 	/*	
 	@Autowired
-	private SessionFactory sessionFactory;*/
+	private SessionFactory sessionFactory;
+	@Autowired
+	private BalSheetCatBo balSheetCatBo;
+
+	@Autowired
+	private TotAccBo totAccBo;
+	*/
 
 	@Autowired
 	private UserIdentity userIdentity;
@@ -67,13 +63,15 @@ public class GLPostingController {
 	@RequestMapping(value = {"/index"}, method=RequestMethod.GET)
 	public String index(Model model) {		
 		
-		List<TotalingAccount> totalingAccounts = this.totAccBo.fetchAll();
-		List<BalSheetCat> balSheetCats = this.balSheetCatBo.fetchAll();
-		
-		model.addAttribute("account", new LedgerAccForm());
-		model.addAttribute("balSheetCats", balSheetCats);
-		model.addAttribute("totalingAccounts", totalingAccounts);
-		return "/ledger/gen_ledger/postings/create";
+		List<GLEntry> glEntries = null;
+		try {
+			glEntries = this.genLedgerBo.getGLEntries();
+		} catch (LedgerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		model.addAttribute("glEntries", glEntries);
+		return "/ledger/gen_ledger/postings/index";
 	}
 	
 	@Layout(value = "layouts/form_wizard_layout")
@@ -142,7 +140,7 @@ public class GLPostingController {
 				}*/
 	
 		
-		return "redirect:/ledger/ledger_acc/index";
+		return "redirect:/ledger/gen_ledger/postings/index";
 	}
 	
 	

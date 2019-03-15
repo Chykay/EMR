@@ -120,12 +120,9 @@ public class SettingDaoImpl implements SettingDao {
 				.setParameter(1, orgId)
 				.list();
 
-		System.out.println("GOT HERE IN SETTING " + code);
-		System.out.println(orgId + " : " + this.userIdentity.getOrganisation().getOrgCoy().getId());
 		if (list.size() > 0)
 			return list.get(0);
 		
-		System.out.println("GOT HERE IN SETTING bb " + code);
 		return null;
 
 	}

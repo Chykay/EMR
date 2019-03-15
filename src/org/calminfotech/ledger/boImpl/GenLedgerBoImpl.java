@@ -1,6 +1,7 @@
 package org.calminfotech.ledger.boImpl;
 
 import java.util.Date;
+import java.util.List;
 
 import org.calminfotech.ledger.boInterface.GenLedgerBo;
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
@@ -16,6 +17,7 @@ import org.calminfotech.system.boInterface.SettingBo;
 import org.calminfotech.system.models.SettingsAssignment;
 import org.calminfotech.user.models.User;
 import org.calminfotech.user.utils.UserIdentity;
+import org.calminfotech.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,7 +59,6 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		float amount = glEntry.getAmount();
 		
 		
-		System.out.println("Post cods: " + glEntry.getPost_code());
 		ledgerAccount.setModified_by(this.userIdentity.getUser());
 		ledgerAccount.setModify_date(new Date(System.currentTimeMillis()));
 		ledgerAccount.setAmount(this.getAmount(amount, glEntry.getAccount_no().charAt(0), glEntry.getPost_code()));
@@ -76,7 +77,7 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 
 		
 		if (glEntry.getBranch() != glEntry.getOrganisation().getId()) {
-			System.out.println("different branches: " + glEntry.getBranch() + " : " + glEntry.getOrganisation().getId());
+			// System.out.println("different branches: " + glEntry.getBranch() + " : " + glEntry.getOrganisation().getId());
 			this.interbankBalancing(glEntry);
 		}
 		
@@ -113,7 +114,7 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		gLEntry1.setDescription(glPostingForm.getP_description());
 		gLEntry1.setCreated_by(userIdentity.getUser());
 		gLEntry1.setBatch_no(batch_no);
-		System.out.println(batch_no + " : " + gLEntry1.getPost_code());
+		gLEntry1.setPosting_date(DateUtils.formatStringToDate(glPostingForm.getPosting_date()));
 		
 		gLEntry2.setCreate_date(new Date(System.currentTimeMillis()));
 		gLEntry2.setAccount_no(glPostingForm.getR_account_no());
@@ -126,7 +127,7 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		gLEntry2.setDescription(glPostingForm.getR_description());
 		gLEntry2.setCreated_by(userIdentity.getUser());
 		gLEntry2.setBatch_no(batch_no);
-		System.out.println(batch_no + " : " + gLEntry2.getPost_code());
+		gLEntry2.setPosting_date(DateUtils.formatStringToDate(glPostingForm.getPosting_date()));
 
 		this.GLEntry(gLEntry1);
 		this.GLEntry(gLEntry2);
@@ -134,27 +135,27 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 	}
 	
 	
+	@SuppressWarnings("null")
 	public float getAmount(float amount, Character ledgerType, String postCode) throws LedgerException {
 
-		System.out.println( amount + " : " +  ledgerType + " : " +  postCode);
-		
+		/* debit */
 		if (postCode.contains("001")) {
-			if ((ledgerType == '1' || ledgerType == '5')) {
+			System.out.println("debit");
+			if (ledgerType == '1' || ledgerType == '5') {
+				System.out.println("debit of debit");
 				// debit of debit
 				return amount *= 1;
 			} else {
+				System.out.println("debit of credit");
 				//debit of credit 
 				return amount *= -1;
 			}
 		}
 		
-		/*if (postCode.equals("001") && !(ledgerType == '1' || ledgerType == '5')) {
-			
-		}*/
 		
-		// credit of credit
+		/* credit */
 		if (postCode.contains("002")) {
-			if ((ledgerType == '1' || ledgerType == '5')) {
+			if (ledgerType == '1' || ledgerType == '5') {
 				// credit of debit
 				return amount *= -1;
 			} else {
@@ -163,13 +164,9 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 			}
 		}
 		
-		//credit of debit
-		/*if (postCode.equals("002") && (ledgerType == '1' || ledgerType == '5')) {
-			return amount *= -1;
-		}*/
 		
-		//return (Float) null;
-		return 0;
+		
+		return (Float) null;
 	}
 	
 	public void interbankBalancing(GLEntry glEntry) throws LedgerException {
@@ -181,7 +178,7 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		/*SettingsAssignment settingsAssignment = new SettingsAssignment();
 		settingsAssignment.setSettings_code("interbank-GLP");
 		*/
-		float amount = glEntry.getAmount();
+		float amount = glEntry.getAmount() * -1;
 		String glAccountNo = glEntry.getAccount_no();
 		SettingsAssignment settingsAssignment = this.settingBo.fetchsettings("interbank-GLP", 2);
 		String sysAccountNo = settingsAssignment.getSettings_value();
@@ -202,14 +199,11 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		 */
 				
 
-		System.out.println(glEntry.getPost_code() + " : working now");
 		gLEntry1.setAccount_no(sysAccountNo);
 		if (glEntry.getPost_code().contains("DR")) {
-			System.out.println("contains DR");
 			gLEntry1.setPost_code("002");
 			gLEntry1.setAmount(this.getAmount(amount, glAccountNo.charAt(0), "002"));
 		} else {
-			System.out.println("contains CR");
 			gLEntry1.setPost_code("001");
 			gLEntry1.setAmount(this.getAmount(amount, glAccountNo.charAt(0), "001"));
 		}
@@ -221,7 +215,7 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		gLEntry1.setBatch_no(glEntry.getBatch_no());
 		gLEntry1.setRef_no1(glEntry.getRef_no1());
 		gLEntry1.setDescription(glEntry.getDescription().concat("-ITB"));
-		System.out.println(gLEntry1.getPost_code() + " : please work");
+		gLEntry1.setPosting_date(glEntry.getPosting_date());
 		
 		/*
 		 * 
@@ -237,8 +231,10 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		gLEntry2.setAccount_no(sysAccountNo);
 		gLEntry2.setPost_code(glEntry.getPost_code());
 		if (glEntry.getPost_code().contains("DR")) {
+			gLEntry2.setPost_code("001");
 			gLEntry2.setAmount(this.getAmount(amount, glAccountNo.charAt(0), "001"));
 		} else {
+			gLEntry2.setPost_code("002");
 			gLEntry2.setAmount(this.getAmount(amount, glAccountNo.charAt(0), "002"));
 		}
 		gLEntry2.setOrganisation(glEntry.getOrganisation());
@@ -249,6 +245,7 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		gLEntry2.setBatch_no(glEntry.getBatch_no());
 		gLEntry2.setRef_no1(glEntry.getRef_no1());
 		gLEntry2.setDescription(glEntry.getDescription().concat("-ITB"));
+		gLEntry2.setPosting_date(glEntry.getPosting_date());
 		
 		this.GLEntry(gLEntry1);
 		this.GLEntry(gLEntry2);
@@ -257,5 +254,9 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 	public boolean getLedgerStat(String account_no, int branch_id, int company_id) throws LedgerException{
 		
 		return this.genLedgerDao.getLedgerStat(account_no, branch_id, company_id);
+	}
+	
+	public List<GLEntry> getGLEntries() {
+		return this.genLedgerDao.getGLEntries();
 	}
 }

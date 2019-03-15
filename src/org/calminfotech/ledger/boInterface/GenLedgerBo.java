@@ -1,5 +1,7 @@
 package org.calminfotech.ledger.boInterface;
 
+import java.util.List;
+
 import org.calminfotech.ledger.forms.GLPostingForm;
 import org.calminfotech.ledger.models.GLEntry;
 import org.calminfotech.ledger.models.GenLedgBalance;
@@ -18,4 +20,5 @@ public interface GenLedgerBo {
 	
 	public boolean getLedgerStat(String account_no, int branch_id, int company_id) throws LedgerException;
 	
+	public List<GLEntry> getGLEntries() throws LedgerException;
 }
