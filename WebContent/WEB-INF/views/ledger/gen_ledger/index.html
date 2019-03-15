@@ -65,12 +65,10 @@
 								class="fa fa-edit"></i>
 						</a> --> 
 						
-						<a class="btn btn-xs btn-danger tooltips" 
-							title="Delete Item reverse"   th:id="${glEntry.batch_no}" 
+						<a class="btn btn-xs btn-danger tooltips reverse" 
+							title="Reverse Entry"   th:id="${glEntry.batch_no}" 
 							href="#"> <i
 								class="fa fa-reply"></i>
-								<i
-								class="fa fa-repeat-alt"></i>
 						</a>
 					</td>
 				</tr>
@@ -84,16 +82,14 @@
 <script type="text/javascript">
 /*<![CDATA[*/
 
-	$("reverse").click(function(){
+	$(".reverse").click(function(){
 		var batch_no = this.id;
 		
 		$.ajax({
 			type : "GET",
 			url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/gen_ledger/reversal/'	+ batch_no,
-			async: false,
 			success : function(value) {
 				//if value is true, then you can't delete 
-				status = value;
 			}
 		});
 	});

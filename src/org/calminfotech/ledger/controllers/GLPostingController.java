@@ -77,11 +77,11 @@ public class GLPostingController {
 	}
 	
 	/* REVERSE ENTRY */
-	@RequestMapping(value = {"/reversal/{id}"}, method=RequestMethod.GET)
-	public String reverse(@PathVariable("id") String id, Model model) {		
+	@RequestMapping(value = {"/reversal/{batch_no}"}, method=RequestMethod.GET)
+	public String reverse(@PathVariable("batch_no") String batch_no, Model model) {		
 		
 		try {
-			this.genLedgerBo.reverseEntries(id);
+			this.genLedgerBo.reverseEntries(batch_no);
 		} catch (LedgerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

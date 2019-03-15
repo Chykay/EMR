@@ -77,7 +77,7 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 
 		
 		if (glEntry.getBranch() != glEntry.getOrganisation().getId()) {
-			// System.out.println("different branches: " + glEntry.getBranch() + " : " + glEntry.getOrganisation().getId());
+			System.out.println("different branches: " + glEntry.getBranch() + " : " + glEntry.getOrganisation().getId());
 			this.interbankBalancing(glEntry);
 		}
 		
@@ -163,7 +163,6 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 				return amount *= 1;
 			}
 		}
-		
 		
 		
 		return (Float) null;
@@ -268,19 +267,40 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 	public void reverseEntries(String batch_no) throws LedgerException {
 		List<GLEntry> glEntries = this.getGLEntriesByBatch_no(batch_no);
 
+		String new_batch_no = LedgerUtility.getBatchNo();
+		System.out.println(glEntries.size() + " items");
+		User user = this.userIdentity.getUser();
+		
 		for(GLEntry glEntry: glEntries){
+			System.out.println(glEntry.getAccount_no());
 			glEntry.setRef_no2("REVERSED");
 			glEntry.setDescription("REVERSED-".concat(glEntry.getDescription()));
 			
 			this.genLedgerDao.GLEntry(glEntry);
 			
-			if (glEntry.getPost_code().contains("DR")) {
-				glEntry.setPost_code("CR");
-			} else {
-				glEntry.setPost_code("DR");
-			}
+			GLEntry glEntry1 = new GLEntry();
+			glEntry1.setAccount_no(glEntry.getAccount_no());
+			glEntry1.setAmount(glEntry.getAmount());
+			glEntry1.setOrganisation(this.organisationBo.getOrganisationById(glEntry.getBranch()));
+			glEntry1.setOrgCoy(user.getOrganisation().getOrgCoy());
+			glEntry1.setBranch(glEntry.getBranch());
+			glEntry1.setCreated_by(user);		
+			glEntry1.setCreate_date(new Date(System.currentTimeMillis()));
+			glEntry1.setBatch_no(new_batch_no);
+			glEntry1.setRef_no1(glEntry.getRef_no1());
+			glEntry1.setDescription(glEntry.getDescription());
+			glEntry1.setPosting_date(glEntry.getPosting_date());
 			
-			this.GLEntry(glEntry);
+			if (glEntry.getPost_code().contains("DR")) {
+				System.out.println("contains DR");
+				glEntry1.setPost_code("002");
+			} else {
+				System.out.println("contains CR");
+				glEntry1.setPost_code("001");
+			}
+
+			glEntry1.setRef_no2("REVERSAL");
+			this.GLEntry(glEntry1);
 		}
 		
 	}
