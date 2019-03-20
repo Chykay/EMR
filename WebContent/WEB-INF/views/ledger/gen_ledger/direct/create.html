@@ -43,7 +43,7 @@
 							</div>
 				</div> 
 				
-				<!--<div class="form-group">
+				<div class="form-group">
 					<label for="p_account_type" class="col-sm-3 control-label no-padding-right">Account Type:</label>
 					<div class="col-sm-9">
 						<select th:field="*{p_account_type}" size="" class="col-xs-10 col-sm-7" style="margin-top:0px;"  required="required">
@@ -55,7 +55,7 @@
 							th:errors="*{p_account_type}">
 						</span>
 					</div>
-				</div>-->
+				</div>
 						
 				<div class="form-group">
 					<label for="p_account_no" class="col-sm-3 control-label no-padding-right">Posting Account:</label>
@@ -63,9 +63,9 @@
 						<input id="p_account_no_search"  name="p_account_no_search" class="col-xs-10 col-sm-7" style="margin-bottom:0px;margin-right: 500px;" onkeyup="filter()" onblur="selectAccount()" /> <br />
 						<select th:field="*{p_account_no}" size="" class="col-xs-10 col-sm-7" style="margin-top:0px;"  required="required">
 							
-							<option th:each="generalLedger: ${generalLedgers}" 
+							<!-- <option th:each="generalLedger: ${generalLedgers}" 
 							th:value = "${generalLedger.account_no}" 
-							th:text="|${generalLedger.account_no}-${generalLedger.name}|">Posting Account</option>
+							th:text="|${generalLedger.account_no}-${generalLedger.name}|">Posting Account</option> -->
 						</select>
 						<span class="text-danger" th:if="${#fields.hasErrors('p_account_no')}"
 							th:errors="*{p_account_no}">
@@ -167,7 +167,7 @@
 		<!-- RECEIVING BRANCH -->
 		<div class="">
 			<div class="col-md-5 col-md-offset-1">
-			<!-- <div class="form-group">
+				<div class="form-group">
 					<label for="r_account_type" class="col-sm-3 control-label no-padding-right">Account Type:</label>
 					<div class="col-sm-9">
 						<select th:field="*{r_account_type}" size="" class="col-xs-10 col-sm-7" style="margin-top:0px;"  required="required">
@@ -180,7 +180,7 @@
 						</span>
 					</div>
 				</div>
-				 -->
+				 
 				<div class="form-group">
 					<label for="r_account_no" class="col-sm-3 control-label no-padding-right">Account:</label>
 					<div class="col-sm-9">
@@ -188,9 +188,9 @@
 					
 						<select th:field="*{r_account_no}" size="" style="margin-top:0px;" class="col-xs-10 col-sm-7"  required="required">
 							
-								<option th:each="generalLedger: ${generalLedgers}" 
+								<!-- <option th:each="generalLedger: ${generalLedgers}" 
 							th:value = "${generalLedger.account_no}" 
-							th:text="|${generalLedger.account_no}-${generalLedger.name} |">Account</option>
+							th:text="|${generalLedger.account_no}-${generalLedger.name} |">Account</option> -->
 						</select>
 						<span class="text-danger" th:if="${#fields.hasErrors('r_account_no')}"
 							th:errors="*{r_account_no}">
@@ -291,6 +291,17 @@
 
 <script type="text/javascript">
 /*<![CDATA[*/
+           
+$('#p_account_type').change(function() {
+	
+	var selected_option = $('#p_account_type option:selected');
+
+	
+	if(selected_option[0].value != ""){
+		getLedgers($("#p_account_no"), selected_option[0].value);
+	}
+});
+
 $('#amount').focus(function(){
 	var selected_option = $('#p_post_code option:selected');
 	if(selected_option[0].value == ""){
@@ -380,7 +391,7 @@ function selectAccount(){
         	var selected_branch = $('#p_branch_id option:selected');
         	
         	if(selected_branch[0].value != ""){
-        		myFunction($("#p_branch_bal"), fleet.options[i].value, selected_branch[0].value);
+        		getBalance($("#p_branch_bal"), fleet.options[i].value, selected_branch[0].value);
         	}
             break;
         }
@@ -422,7 +433,7 @@ function selectAccountR(){
 			var selected_branch = $('#r_branch_id option:selected');
         	
         	if(selected_branch[0].value != ""){
-        		myFunction($("#r_branch_bal"), fleet.options[i].value, selected_branch[0].value);
+        		getBalance($("#r_branch_bal"), fleet.options[i].value, selected_branch[0].value);
         	}
             break;
         }
@@ -444,7 +455,7 @@ $("#p_account_no").change(function(){
 	var selected_branch = $('#p_branch_id option:selected');
 	
 	if(selected_branch[0].value != ""){
-		myFunction($("#p_branch_bal"), selected_option[0].value, selected_branch[0].value);
+		getBalance($("#p_branch_bal"), selected_option[0].value, selected_branch[0].value);
 	}
 	// call ajax function
 });
@@ -458,7 +469,7 @@ $('#p_branch_id').change(function() {
 	var selected_branch = $('#p_branch_id option:selected');
 	
 	if(search_field != ""){
-		myFunction($("#p_branch_bal"), selected_option[0].value, selected_branch[0].value);
+		getBalance($("#p_branch_bal"), selected_option[0].value, selected_branch[0].value);
 	}
 });
 
@@ -470,7 +481,7 @@ $("#r_account_no").change(function(){
 	var selected_branch = $('#r_branch_id option:selected');
 	
 	if(selected_branch[0].value != ""){
-		myFunction($("#r_branch_bal"), selected_option[0].value, selected_branch[0].value);
+		getBalance($("#r_branch_bal"), selected_option[0].value, selected_branch[0].value);
 	}
 });
 
@@ -482,12 +493,12 @@ $('#r_branch_id').change(function() {
 	var selected_branch = $('#r_branch_id option:selected');
 	
 	if(selected_option[0].value != ""){
-		myFunction($("#r_branch_bal"), selected_option[0].value, selected_branch[0].value);
+		getBalance($("#r_branch_bal"), selected_option[0].value, selected_branch[0].value);
 	}
 });
 
 	
-function myFunction(elem, account_no, branch_id) {
+function getBalance(elem, account_no, branch_id) {
 	$.ajax({
 		type : "GET",
 		url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/balance/' + account_no + '/' + branch_id,
@@ -513,6 +524,39 @@ function myFunction(elem, account_no, branch_id) {
 			$.gritter.add({
 				title : "Error!",
 				text : "Error fetching Balance",
+				time : 4000
+			});
+
+		}
+});
+}
+
+function getLedgers(elem, account_type) {
+	$.ajax({
+		type : "GET",
+		url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/fetch/' + account_type,
+		beforeSend : function() {
+			 $.gritter.add({
+				title : "Progress...",
+				text : "Fetching Ledgers...",
+				time : 3000
+			}); 
+		},
+		success : function(value) {
+			elem.val(value);
+			elem.value=value;
+			elem.trigger("change");
+			//call a function passing in "value", that sets the value and also 'un'-disables both postcodes
+			 $.gritter.add({
+				title : "Success!",
+				text : "Ledgers Fetched",
+				time : 4000
+			}); 
+		},
+		error : function() {
+			$.gritter.add({
+				title : "Error!",
+				text : "Error fetching Ledgers",
 				time : 4000
 			});
 

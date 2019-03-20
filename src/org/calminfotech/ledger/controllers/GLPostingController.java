@@ -101,7 +101,7 @@ public class GLPostingController {
 
 		
 		model.addAttribute("posting", new GLPostingForm());
-		model.addAttribute("generalLedgers", ledgerAccounts);
+		/*model.addAttribute("generalLedgers", ledgerAccounts);*/
 		model.addAttribute("postCodes", postCodes);
 		model.addAttribute("branches", branches);
 		return "/ledger/gen_ledger/direct/create";
