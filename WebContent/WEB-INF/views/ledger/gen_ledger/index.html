@@ -55,21 +55,14 @@
 					
 						
 					<td>
-						<!-- <a class="btn btn-xs btn-primary tooltips"
-							title="view category" 		th:href="@{/ledger/gen_ledger/view/{id} (id=${glEntry.id}) }"> <i
-								class="fa fa-eye"></i>
-						</a> 
-						 <a class="btn btn-xs btn-warning tooltips"
-							title="Edit Item details"
-							th:href="@{/ledger/gen_ledger/edit/{id}(id=${glEntry.id}) }"> <i
-								class="fa fa-edit"></i>
-						</a> --> 
 						
-						<a class="btn btn-xs btn-danger tooltips reverse" 
-							title="Reverse Entry"   th:id="${glEntry.batch_no}" 
-							href="#"> <i
-								class="fa fa-reply"></i>
-						</a>
+						<span th:if="${glEntry.ref_no2 != 'REVERSED' and glEntry.ref_no2  != 'REVERSAL' }">
+							<a class="btn btn-xs btn-danger tooltips reverse" 
+								title="Reverse Entry"   th:id="${glEntry.batch_no}" 
+								href="#"> <i
+									class="fa fa-reply"></i>
+							</a>
+						</span>
 					</td>
 				</tr>
 			</tbody>

@@ -42,12 +42,26 @@
 								</div>
 							</div>
 				</div> 
+				
+				<!--<div class="form-group">
+					<label for="p_account_type" class="col-sm-3 control-label no-padding-right">Account Type:</label>
+					<div class="col-sm-9">
+						<select th:field="*{p_account_type}" size="" class="col-xs-10 col-sm-7" style="margin-top:0px;"  required="required">
+							<option value="">Select account type</option>
+							<option th:value="GL">GL</option>
+							<option th:value="CL">Customer</option>
+						</select>
+						<span class="text-danger" th:if="${#fields.hasErrors('p_account_type')}"
+							th:errors="*{p_account_type}">
+						</span>
+					</div>
+				</div>-->
 						
 				<div class="form-group">
 					<label for="p_account_no" class="col-sm-3 control-label no-padding-right">Posting Account:</label>
 					<div class="col-sm-9">
 						<input id="p_account_no_search"  name="p_account_no_search" class="col-xs-10 col-sm-7" style="margin-bottom:0px;margin-right: 500px;" onkeyup="filter()" onblur="selectAccount()" /> <br />
-						<select th:field="*{p_account_no}" size="" class="col-xs-10 col-sm-5" style="margin-top:0px;"  required="required">
+						<select th:field="*{p_account_no}" size="" class="col-xs-10 col-sm-7" style="margin-top:0px;"  required="required">
 							
 							<option th:each="generalLedger: ${generalLedgers}" 
 							th:value = "${generalLedger.account_no}" 
@@ -62,7 +76,7 @@
 				<div class="form-group">
 					<label for="p_branch_id" class="col-sm-3 control-label no-padding-right">Branch:</label>
 					<div class="col-sm-9">
-						<select th:field="*{p_branch_id}" class="col-xs-10 col-sm-5"  required="required">
+						<select th:field="*{p_branch_id}" class="col-xs-10 col-sm-7"  required="required">
 							<option value="">Select..</option>
 								<option th:each="branch : ${branches}" 
 							th:value = "${branch.Id}" 
@@ -78,7 +92,7 @@
 				<div class="form-group">
 					<label for="ref_no1" class="col-sm-3 control-label no-padding-right">Ref No:</label>
 					<div class="col-sm-9">
-						<input type="text" class="col-xs-10 col-sm-5" placeholder="Ref No:"
+						<input type="text" class="col-xs-10 col-sm-7" placeholder="Ref No:"
 							th:field="*{ref_no1}" required="required" /> <span
 							class="text-danger" th:if="${#fields.hasErrors('ref_no1')}"
 							th:errors="*{ref_no1}"></span>
@@ -87,7 +101,7 @@
 				<div class="form-group">
 					<label for="p_branch_bal" class="col-sm-3 control-label no-padding-right">Balance:</label>
 					<div class="col-sm-9">
-						<input type="text" class="col-xs-10 col-sm-5" 
+						<input type="text" class="col-xs-10 col-sm-7" 
 							th:field="*{p_branch_bal}" readonly="readonly" /> <span
 							class="text-danger" th:if="${#fields.hasErrors('p_branch_bal')}"
 							th:errors="*{p_branch_bal}"></span>
@@ -102,7 +116,7 @@
 				<div class="form-group">
 					<label for="p_post_code" class="col-sm-3 control-label no-padding-right">Post Code:</label>
 					<div class="col-sm-9">
-						<select th:field="*{p_post_code}" class="col-xs-10 col-sm-5"  required="required" id="p_post_code">
+						<select th:field="*{p_post_code}" class="col-xs-10 col-sm-7"  required="required" id="p_post_code">
 							<option value="">Select..</option>
 								<option th:each="postCode: ${postCodes}" 
 							th:value = "${postCode.code}" 
@@ -117,7 +131,7 @@
 				<div class="form-group">
 					<label for="amount" class="col-sm-3 control-label no-padding-right">Amount:</label>
 					<div class="col-sm-9">
-						<input type="text" class="col-xs-10 col-sm-5" 
+						<input type="text" class="col-xs-10 col-sm-7" 
 							th:field="*{amount}"
 							oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"
 						/> <span
@@ -132,7 +146,7 @@
 					<label for="p_description" class="col-sm-3 control-label no-padding-right">Description:</label>
 					<div class="col-sm-9">
 					
-						<textarea class="col-xs-10 col-sm-5" 
+						<textarea class="col-xs-10 col-sm-7" 
 							th:field="*{p_description}"
 							th:value="${p_description}"
 							onblur="setDesc()"  rows="4" style="width:220px">
@@ -153,12 +167,26 @@
 		<!-- RECEIVING BRANCH -->
 		<div class="">
 			<div class="col-md-5 col-md-offset-1">
+			<!-- <div class="form-group">
+					<label for="r_account_type" class="col-sm-3 control-label no-padding-right">Account Type:</label>
+					<div class="col-sm-9">
+						<select th:field="*{r_account_type}" size="" class="col-xs-10 col-sm-7" style="margin-top:0px;"  required="required">
+							<option value="">Select account type</option>
+							<option th:value="GL">GL</option>
+							<option th:value="CL">Customer</option>
+						</select>
+						<span class="text-danger" th:if="${#fields.hasErrors('r_account_type')}"
+							th:errors="*{r_account_type}">
+						</span>
+					</div>
+				</div>
+				 -->
 				<div class="form-group">
 					<label for="r_account_no" class="col-sm-3 control-label no-padding-right">Account:</label>
 					<div class="col-sm-9">
 					<input id="r_account_no_search"  name="r_account_no_search" class="col-xs-10 col-sm-7" style="margin-bottom:0px;margin-right: 500px;" onkeyup="filterR()" onblur="selectAccountR()" /> <br />
 					
-						<select th:field="*{r_account_no}" size="" style="margin-top:0px;" class="col-xs-10 col-sm-5"  required="required">
+						<select th:field="*{r_account_no}" size="" style="margin-top:0px;" class="col-xs-10 col-sm-7"  required="required">
 							
 								<option th:each="generalLedger: ${generalLedgers}" 
 							th:value = "${generalLedger.account_no}" 
@@ -173,7 +201,7 @@
 				<div class="form-group">
 					<label for="r_branch_bal" class="col-sm-3 control-label no-padding-right">Balance:</label>
 					<div class="col-sm-9">
-						<input type="text" class="col-xs-10 col-sm-5" 
+						<input type="text" class="col-xs-10 col-sm-7" 
 							th:field="*{r_branch_bal}" readonly="readonly" /> <span
 							class="text-danger" th:if="${#fields.hasErrors('r_branch_bal')}"
 							th:errors="*{r_branch_bal}"></span>
@@ -183,7 +211,7 @@
 				<div class="form-group">
 					<label for="r_branch_id" class="col-sm-3 control-label no-padding-right">Branch:</label>
 					<div class="col-sm-9">
-						<select th:field="*{r_branch_id}" class="col-xs-10 col-sm-5"  required="required">
+						<select th:field="*{r_branch_id}" class="col-xs-10 col-sm-7"  required="required">
 							<option value="">Select..</option>
 								<option th:each="branch : ${branches}" 
 							th:value = "${branch.Id}" 
@@ -204,7 +232,7 @@
 				<div class="form-group">
 					<label for="r_post_code" class="col-sm-3 control-label no-padding-right">Post Code:</label>
 					<div class="col-sm-9">
-						<select th:field="*{r_post_code}" class="col-xs-10 col-sm-5" readonly="readonly" required="required" id="r_post_code">
+						<select th:field="*{r_post_code}" class="col-xs-10 col-sm-7" readonly="readonly" required="required" id="r_post_code">
 							<option value="">Select..</option>
 								<option th:each="postCode: ${postCodes}" 
 							th:value = "${postCode.code}" 
@@ -219,7 +247,7 @@
 				<div class="form-group">
 					<label for="r_amount" class="col-sm-3 control-label no-padding-right">Amount:</label>
 					<div class="col-sm-9">
-						<input type="text" class="col-xs-10 col-sm-5" 
+						<input type="text" class="col-xs-10 col-sm-7" 
 							th:field="*{r_amount}"
 							th:value="${amount}"
 							readonly="readonly" /> <span
@@ -251,10 +279,6 @@
 			<div class="col-md-offset-4 col-md-6">
 				<button class="btn btn-primary" type="submit">
 					<i class="ace-icon fa fa-check bigger-110"></i> Add
-				</button>
-				
-				<button class="btn btn-success" type="button" onclick="onSave()">
-					<i class="ace-icon fa fa-check bigger-110"></i> Save
 				</button>
 
 				<button class="btn btn-danger" type="reset">
@@ -520,13 +544,13 @@ $('.datepicker').datepicker({
 	$(this).prev().focus();
 });
 
-function onSave(){
+/* function onSave(){
 	alert("save");
 	$("form").each(function(){
 		console.log($(this).find(':input'));
 	});
 }
-
+ */
 
 
 /* jQuery.fn.filterByText = function(textbox) {

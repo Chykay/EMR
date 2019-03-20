@@ -78,10 +78,10 @@ public class GLPostingController {
 	
 	/* REVERSE ENTRY */
 	@RequestMapping(value = {"/reversal/{batch_no}"}, method=RequestMethod.GET)
-	public String reverse(@PathVariable("batch_no") String batch_no, Model model) {		
+	public String GLReversal(@PathVariable("batch_no") String batch_no, Model model) {		
 		
 		try {
-			this.genLedgerBo.reverseEntries(batch_no);
+			this.genLedgerBo.GLReversal(batch_no);
 		} catch (LedgerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -96,19 +96,6 @@ public class GLPostingController {
 		Organisation org = userIdentity.getOrganisation();
 	
 		List<LedgerAccount> ledgerAccounts = this.ledgerAccBo.fetchAll(org.getId(), org.getOrgCoy().getId());
-		
-		/*for(LedgerAccount gl : ledgerAccounts) {
-			 try {
-				//if (this.genLedgerBo.getBalance(gl.getAccount_no(), gl.getOrganisation().getId(), gl.getOrgCoy().getId()) != null) {
-					gl.setBalance(this.genLedgerBo.getBalance(gl.getAccount_no(), gl.getOrganisation().getId(), gl.getOrgCoy().getId()).getCurr_balance());
-				} else {
-					gl.setBalance(0);
-					this.genLedgerBo.updateGLBalance(gl);
-				}
-			} catch (LedgerException e) {
-				e.printStackTrace();
-			}
-		}*/
 		List<Organisation> branches = this.organisationBo.fetchAll(org.getId());
 		List<PostCode> postCodes = this.postCodeDaoImpl.fetchAll();
 

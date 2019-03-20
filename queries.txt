@@ -1,0 +1,36 @@
+
+QUERIES
+ AND (ref_no2 IS NULL OR (ref_no2 != 'REVERSED' AND ref_no2 != 'REVERSAL'))
+
+
+
+
+
+
+
+
+/****** Script for SelectTopNRows command from SSMS  ******/
+SELECT TOP (1000) *
+  FROM [EMR].[dbo].[GL_balancing];
+
+  
+  DECLARE @branch_id INT
+  DECLARE my_cursor CURSOR FOR
+  SELECT id FROM [EMR].[dbo].organisations
+
+  OPEN my_cursor
+  FETCH NEXT FROM my_cursor INTO @branch_id
+  WHILE @@FETCH_STATUS = 0
+	BEGIN
+	  DECLARE @credit float
+	  DECLARE @debit float
+	  SELECT @credit=SUM(curr_balance) 
+	  FROM [EMR].[dbo].[GL_balancing] WHERE organisation_id = @branch_id AND gl_account_no LIKE '2%' AND gl_account_no != '1-0000-000';
+	   SELECT @debit=SUM(curr_balance)
+	  FROM [EMR].[dbo].[GL_balancing] WHERE organisation_id = @branch_id AND gl_account_no LIKE '1%' AND gl_account_no != '1-0000-000';
+	  SELECT @credit AS CREDIT,@debit  as DEBIT, @debit - @credit AS DIFF;
+  
+	  FETCH NEXT FROM my_cursor INTO @branch_id
+    END
+  CLOSE my_cursor
+  DEALLOCATE my_cursor

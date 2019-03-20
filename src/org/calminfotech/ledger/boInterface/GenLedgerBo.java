@@ -24,5 +24,5 @@ public interface GenLedgerBo {
 
 	public List<GLEntry> getGLEntriesByBatch_no(String batch_no) throws LedgerException;
 	
-	public void reverseEntries(String batch_no) throws LedgerException;
+	public void GLReversal(String batch_no) throws LedgerException;
 }

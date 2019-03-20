@@ -54,21 +54,19 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 	@Override
 	public void GLEntry(GLEntry glEntry) throws LedgerException 
 	{
-		
-		LedgerAccount ledgerAccount = this.ledgerAccBo.getLedgerByAccount_no(glEntry.getAccount_no());
+		LedgerAccount ledgerAccount = new LedgerAccount();
 		float amount = glEntry.getAmount();
-		
-		
-		ledgerAccount.setModified_by(this.userIdentity.getUser());
-		ledgerAccount.setModify_date(new Date(System.currentTimeMillis()));
-		ledgerAccount.setAmount(this.getAmount(amount, glEntry.getAccount_no().charAt(0), glEntry.getPost_code()));
-		
+		System.out.println(glEntry.getAccount_no());
+		try {
 
-		if (glEntry.getPost_code().contains("001")) {
-			glEntry.setPost_code("DR");
-		} else if (glEntry.getPost_code().contains("002")) {
-			glEntry.setPost_code("CR");
+			ledgerAccount = this.ledgerAccBo.getLedgerByAccount_no(glEntry.getAccount_no());
+			ledgerAccount.setAmount(this.getAmount(amount, glEntry.getAccount_no().charAt(0), glEntry.getPost_code()));
+			
+		} catch (Exception e) {
+			throw new LedgerException("Account number does not exist in Ledger accounts");
 		}
+		
+		
 		
 		glEntry.setAmount(ledgerAccount.getAmount());
 		this.genLedgerDao.GLEntry(glEntry);
@@ -78,6 +76,8 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		
 		if (glEntry.getBranch() != glEntry.getOrganisation().getId()) {
 			System.out.println("different branches: " + glEntry.getBranch() + " : " + glEntry.getOrganisation().getId());
+			System.out.println(Math.abs(glEntry.getAmount()));
+			glEntry.setAmount(Math.abs(glEntry.getAmount()));
 			this.interbankBalancing(glEntry);
 		}
 		
@@ -139,7 +139,7 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 	public float getAmount(float amount, Character ledgerType, String postCode) throws LedgerException {
 
 		/* debit */
-		if (postCode.contains("001")) {
+		if (postCode.contains("DR")) {
 			System.out.println("debit");
 			if (ledgerType == '1' || ledgerType == '5') {
 				System.out.println("debit of debit");
@@ -154,7 +154,7 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		
 		
 		/* credit */
-		if (postCode.contains("002")) {
+		if (postCode.contains("CR")) {
 			if (ledgerType == '1' || ledgerType == '5') {
 				// credit of debit
 				return amount *= -1;
@@ -177,10 +177,10 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		/*SettingsAssignment settingsAssignment = new SettingsAssignment();
 		settingsAssignment.setSettings_code("interbank-GLP");
 		*/
-		float amount = glEntry.getAmount() * -1;
-		String glAccountNo = glEntry.getAccount_no();
+		float amount = glEntry.getAmount();
 		SettingsAssignment settingsAssignment = this.settingBo.fetchsettings("interbank-GLP", 2);
 		String sysAccountNo = settingsAssignment.getSettings_value();
+		this.getBalance(sysAccountNo, this.userIdentity.getOrganisation().getId(), this.userIdentity.getOrganisation().getOrgCoy().getId());
 		User user = new User();
 		user.setUserId(1);
 		
@@ -198,14 +198,17 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		 */
 				
 
+		System.out.println(sysAccountNo);
 		gLEntry1.setAccount_no(sysAccountNo);
 		if (glEntry.getPost_code().contains("DR")) {
-			gLEntry1.setPost_code("002");
-			gLEntry1.setAmount(this.getAmount(amount, glAccountNo.charAt(0), "002"));
-		} else {
-			gLEntry1.setPost_code("001");
-			gLEntry1.setAmount(this.getAmount(amount, glAccountNo.charAt(0), "001"));
-		}
+			gLEntry1.setPost_code("CR");
+			gLEntry1.setAmount(amount);
+			/*System.out.println("amount two: " + this.getAmount(amount, sysAccountNo.charAt(0), "CR"));
+		*/} else {
+			gLEntry1.setPost_code("DR");
+			gLEntry1.setAmount(amount);
+			/*System.out.println("amount three: " + this.getAmount(amount, sysAccountNo.charAt(0), "DR"));
+		*/}
 		gLEntry1.setOrganisation(this.organisationBo.getOrganisationById(glEntry.getBranch()));
 		gLEntry1.setOrgCoy(this.userIdentity.getOrganisation().getOrgCoy());
 		gLEntry1.setBranch(glEntry.getBranch());
@@ -230,12 +233,14 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		gLEntry2.setAccount_no(sysAccountNo);
 		gLEntry2.setPost_code(glEntry.getPost_code());
 		if (glEntry.getPost_code().contains("DR")) {
-			gLEntry2.setPost_code("001");
-			gLEntry2.setAmount(this.getAmount(amount, glAccountNo.charAt(0), "001"));
-		} else {
-			gLEntry2.setPost_code("002");
-			gLEntry2.setAmount(this.getAmount(amount, glAccountNo.charAt(0), "002"));
-		}
+			gLEntry2.setPost_code("DR");
+			gLEntry2.setAmount(amount);
+			/*System.out.println("amount four: " + this.getAmount(amount, sysAccountNo.charAt(0), "DR"));
+		*/} else {
+			gLEntry2.setPost_code("CR");
+			gLEntry2.setAmount(amount);
+			/*System.out.println("amount five: " + this.getAmount(amount, sysAccountNo.charAt(0), "CR"));
+		*/}
 		gLEntry2.setOrganisation(glEntry.getOrganisation());
 		gLEntry2.setOrgCoy(this.userIdentity.getOrganisation().getOrgCoy());
 		gLEntry2.setBranch(glEntry.getOrganisation().getId());
@@ -264,7 +269,7 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 	}
 
 
-	public void reverseEntries(String batch_no) throws LedgerException {
+	public void GLReversal(String batch_no) throws LedgerException {
 		List<GLEntry> glEntries = this.getGLEntriesByBatch_no(batch_no);
 
 		String new_batch_no = LedgerUtility.getBatchNo();
@@ -273,8 +278,9 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		
 		for(GLEntry glEntry: glEntries){
 			System.out.println(glEntry.getAccount_no());
+			String desc = glEntry.getDescription();
 			glEntry.setRef_no2("REVERSED");
-			glEntry.setDescription("REVERSED-".concat(glEntry.getDescription()));
+			glEntry.setDescription("REVERSED-".concat(desc));
 			
 			this.genLedgerDao.GLEntry(glEntry);
 			
@@ -288,15 +294,15 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 			glEntry1.setCreate_date(new Date(System.currentTimeMillis()));
 			glEntry1.setBatch_no(new_batch_no);
 			glEntry1.setRef_no1(glEntry.getRef_no1());
-			glEntry1.setDescription(glEntry.getDescription());
+			glEntry1.setDescription("REVERSAL-".concat(desc));
 			glEntry1.setPosting_date(glEntry.getPosting_date());
 			
 			if (glEntry.getPost_code().contains("DR")) {
 				System.out.println("contains DR");
-				glEntry1.setPost_code("002");
+				glEntry1.setPost_code("CR");
 			} else {
 				System.out.println("contains CR");
-				glEntry1.setPost_code("001");
+				glEntry1.setPost_code("DR");
 			}
 
 			glEntry1.setRef_no2("REVERSAL");

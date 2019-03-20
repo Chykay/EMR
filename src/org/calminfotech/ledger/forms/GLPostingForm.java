@@ -36,6 +36,10 @@ public class GLPostingForm {
 	private String ref_no2;
 	
 	private String ref_no3;
+
+	private String p_account_type;
+
+	private String r_account_type;
 	
 	private String currency = "NGN";
 
@@ -193,6 +197,23 @@ public class GLPostingForm {
 	public void setPosting_date(String posting_date) {
 		this.posting_date = posting_date;
 	}
+
+	public String getP_account_type() {
+		return p_account_type;
+	}
+	
+	public void setP_account_type(String p_account_type) {
+		this.p_account_type = p_account_type;
+	}
+
+	public String getR_account_type() {
+		return r_account_type;
+	}
+
+	public void setR_account_type(String r_account_type) {
+		this.r_account_type = r_account_type;
+	}
+
 	
 	
 }

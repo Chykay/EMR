@@ -106,10 +106,10 @@ public class GenLedgerDaoImpl implements GenLedgerDao {
 	@SuppressWarnings("unchecked")
 	public List<GLEntry> getGLEntries(){
 		List<GLEntry> entries = sessionFactory.getCurrentSession()
-				.createQuery("FROM GLEntry WHERE company_id = ? AND organisation_id = ? AND account_no != ? AND ref_no2 != 'REVERSED' AND ref_no2 != 'REVERSAL'")
+				.createQuery("FROM GLEntry WHERE company_id = ? AND organisation_id = ? ")
 				.setParameter(0, userIdentity.getOrganisation().getOrgCoy().getId())
-				.setParameter(1, userIdentity.getOrganisation().getId())
-				.setParameter(2, this.settingBo.fetchsettings("interbank-GLP", 2).getSettings_value())
+				.setParameter(1, userIdentity.getOrganisation().getId())/*
+				.setParameter(2, this.settingBo.fetchsettings("interbank-GLP", 2).getSettings_value())*/
 				.list();
 		
 		return entries;
@@ -127,5 +127,15 @@ public class GenLedgerDaoImpl implements GenLedgerDao {
 		
 		
 		return glEntries;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Object> glTrialBalance(){
+		
+		List<Object> objects = sessionFactory.getCurrentSession()
+						.createQuery("FROM GenLedgBalance ")
+						.list();
+		
+		return objects;
 	}
 }
