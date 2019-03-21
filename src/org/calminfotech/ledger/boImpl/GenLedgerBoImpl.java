@@ -3,10 +3,13 @@ package org.calminfotech.ledger.boImpl;
 import java.util.Date;
 import java.util.List;
 
+import org.calminfotech.ledger.boInterface.CustomerAccBo;
 import org.calminfotech.ledger.boInterface.GenLedgerBo;
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
 import org.calminfotech.ledger.daoInterface.GenLedgerDao;
 import org.calminfotech.ledger.forms.GLPostingForm;
+import org.calminfotech.ledger.models.CustomerAccount;
+import org.calminfotech.ledger.models.CustomerEntry;
 import org.calminfotech.ledger.models.GLEntry;
 import org.calminfotech.ledger.models.GenLedgBalance;
 import org.calminfotech.ledger.models.LedgerAccount;
@@ -35,6 +38,9 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 
 	@Autowired
 	private LedgerAccBo ledgerAccBo;
+	
+	@Autowired
+	private CustomerAccBo cAccBo;
 	
 	@Autowired
 	private SettingBo settingBo;
@@ -102,11 +108,13 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		GLEntry gLEntry2 = new GLEntry();
 		
 		String batch_no = LedgerUtility.getBatchNo();
+		String account1 = glPostingForm.getP_account_type();
+		String account2 = glPostingForm.getR_account_type();
+		
 		
 		gLEntry1.setCreate_date(new Date(System.currentTimeMillis()));
 		gLEntry1.setAccount_no(glPostingForm.getP_account_no());
 		gLEntry1.setOrganisation(this.userIdentity.getOrganisation());
-		gLEntry1.setBranch(this.organisationBo.getOrganisationById(glPostingForm.getP_branch_id()).getId());
 		gLEntry1.setOrgCoy(this.userIdentity.getOrganisation().getOrgCoy());
 		gLEntry1.setRef_no1(glPostingForm.getRef_no1());
 		gLEntry1.setPost_code(glPostingForm.getP_post_code());
@@ -116,10 +124,11 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		gLEntry1.setBatch_no(batch_no);
 		gLEntry1.setPosting_date(DateUtils.formatStringToDate(glPostingForm.getPosting_date()));
 		
+		
+		
 		gLEntry2.setCreate_date(new Date(System.currentTimeMillis()));
 		gLEntry2.setAccount_no(glPostingForm.getR_account_no());
 		gLEntry2.setOrganisation(this.userIdentity.getOrganisation());
-		gLEntry2.setBranch(this.organisationBo.getOrganisationById(glPostingForm.getR_branch_id()).getId());
 		gLEntry2.setOrgCoy(this.userIdentity.getOrganisation().getOrgCoy());
 		gLEntry2.setRef_no1(glPostingForm.getRef_no1());
 		gLEntry2.setPost_code(glPostingForm.getR_post_code());
@@ -128,10 +137,69 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		gLEntry2.setCreated_by(userIdentity.getUser());
 		gLEntry2.setBatch_no(batch_no);
 		gLEntry2.setPosting_date(DateUtils.formatStringToDate(glPostingForm.getPosting_date()));
+		
+		
+		if (account1.contains("CL")) {
+			CustomerEntry customerEntry= new CustomerEntry();
+			customerEntry.setAccount_no(glPostingForm.getP_account_no());
+			customerEntry.setAmount(Float.parseFloat(glPostingForm.getAmount().replace(",", "")));
+			customerEntry.setBatch_no(batch_no);
+			customerEntry.setCreate_date(new Date(System.currentTimeMillis()));
+			customerEntry.setAccount_no(glPostingForm.getP_account_no());
+			customerEntry.setOrganisation(this.userIdentity.getOrganisation());
+			customerEntry.setOrgCoy(this.userIdentity.getOrganisation().getOrgCoy());
+			customerEntry.setPost_code(glPostingForm.getP_post_code());
+			customerEntry.setDescription(glPostingForm.getP_description());
+			customerEntry.setCreated_by(userIdentity.getUser());
+			customerEntry.setPosting_date(DateUtils.formatStringToDate(glPostingForm.getPosting_date()));
+			
+			this.cAccBo.CustEntry(customerEntry);
+
+			String customerGl = this.settingBo.fetchsettings("customer-GLP", 2).getSettings_value();
+			CustomerAccount customerAccount = this.cAccBo.getCustomerByAccount_no(glPostingForm.getP_account_no());
+			customerAccount.setCurr_balance(customerAccount.getCurr_balance() + Float.parseFloat(glPostingForm.getAmount().replace(",", "")));
+			
+			this.cAccBo.update(customerAccount);
+			
+			gLEntry1.setBranch(customerAccount.getOrganisation().getId());
+			gLEntry1.setProduct_id(glPostingForm.getP_account_no());
+			gLEntry1.setAccount_no(customerGl);
+		} else {
+			gLEntry1.setBranch(this.organisationBo.getOrganisationById(glPostingForm.getP_branch_id()).getId());
+		}
+		
+		if (account2.contains("CL")) {
+			CustomerEntry customerEntry= new CustomerEntry();
+			customerEntry.setAmount(Float.parseFloat(glPostingForm.getAmount().replace(",", "")));
+			customerEntry.setBatch_no(batch_no);
+			customerEntry.setCreate_date(new Date(System.currentTimeMillis()));
+			customerEntry.setAccount_no(glPostingForm.getR_account_no());
+			customerEntry.setOrganisation(this.userIdentity.getOrganisation());
+			customerEntry.setOrgCoy(this.userIdentity.getOrganisation().getOrgCoy());
+			customerEntry.setPost_code(glPostingForm.getR_post_code());
+			customerEntry.setDescription(glPostingForm.getR_description());
+			customerEntry.setCreated_by(userIdentity.getUser());
+			customerEntry.setPosting_date(DateUtils.formatStringToDate(glPostingForm.getPosting_date()));
+			
+			this.cAccBo.CustEntry(customerEntry);
+			
+			String customerGl = this.settingBo.fetchsettings("customer-GLP", 2).getSettings_value();
+			CustomerAccount customerAccount = this.cAccBo.getCustomerByAccount_no(glPostingForm.getR_account_no());
+			customerAccount.setCurr_balance(customerAccount.getCurr_balance() + Float.parseFloat(glPostingForm.getAmount().replace(",", "")));
+			
+			this.cAccBo.update(customerAccount);
+			
+			gLEntry2.setBranch(customerAccount.getOrganisation().getId());
+			gLEntry2.setProduct_id(glPostingForm.getP_account_no());
+			gLEntry2.setAccount_no(customerGl);
+		} else {
+
+			gLEntry2.setBranch(this.organisationBo.getOrganisationById(glPostingForm.getR_branch_id()).getId());
+		}
+
 
 		this.GLEntry(gLEntry1);
 		this.GLEntry(gLEntry2);
-		
 	}
 	
 	

@@ -46,16 +46,23 @@ public class APIUtilityController {
 	private CustomerAccBo customerAccBo;
 	
 	@ResponseBody
-	@RequestMapping(value = {"/balance/{account_no}/{branch_id}"}, method=RequestMethod.GET, produces = "text/html")
-	public String getBalance(@PathVariable("account_no") String account_no, @PathVariable("branch_id") int branch_id){
-		OrganisationCompany org = this.organisationBo.getOrganisationById(branch_id).getOrgCoy();
+	@RequestMapping(value = {"/balance/{account_no}/{branch_id}/{account_type}"}, method=RequestMethod.GET, produces = "text/html")
+	public String getBalance(@PathVariable("account_no") String account_no, @PathVariable("branch_id") int branch_id, @PathVariable("account_type") String account_type){
 		
 		String balance = null;
-		try {
-			balance = String.valueOf(this.genLedgerBo.getBalance(account_no, branch_id, org.getId()).getCurr_balance());
+		if (account_type.contains("CL")) {
+			// CALL A DIFFERENT GET BAL
+			Organisation org = this.customerAccBo.getCustomerByAccount_no(account_no).getOrganisation();
 			
-		} catch (LedgerException e) {
-			e.printStackTrace();
+			balance = String.valueOf(this.customerAccBo.getBalance(account_no, org.getId(), org.getOrgCoy().getId()).getCurr_balance());
+		} else {
+			OrganisationCompany org = this.organisationBo.getOrganisationById(branch_id).getOrgCoy();
+			try {
+				balance = String.valueOf(this.genLedgerBo.getBalance(account_no, branch_id, org.getId()).getCurr_balance());
+				
+			} catch (LedgerException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		return balance;

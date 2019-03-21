@@ -395,6 +395,8 @@
 		<!-- LEDGER--> 
 		 <mapping class="org.calminfotech.ledger.models.BalSheetCat" />
 		 <mapping class="org.calminfotech.ledger.models.CommonLedger" />
+		 <mapping class="org.calminfotech.ledger.models.CustomerAccount" />
+		 <mapping class="org.calminfotech.ledger.models.CustomerEntry" />
 		 <mapping class="org.calminfotech.ledger.models.GenLedgBalance" />
 		 <mapping class="org.calminfotech.ledger.models.GLEntry" />
 		 <mapping class="org.calminfotech.ledger.models.GLHistory" />

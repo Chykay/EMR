@@ -26,6 +26,21 @@
 			th:object="${posting}">
 		<div class="col-md-5 col-md-offset-1">
 			<!-- <div class="row"> -->
+			
+				<div class="form-group">
+					<label for="p_account_type" class="col-sm-3 control-label no-padding-right">Account Type:</label>
+					<div class="col-sm-9">
+						<select th:field="*{p_account_type}" size="" class="col-xs-10 col-sm-7" style="margin-top:0px;"  required="required">
+							<option value="">Select account type</option>
+							<option th:value="GL">GL</option>
+							<option th:value="CL">Customer</option>
+						</select>
+						<span class="text-danger" th:if="${#fields.hasErrors('p_account_type')}"
+							th:errors="*{p_account_type}">
+						</span>
+					</div>
+				</div>
+						
 							
 				 <div class="form-group">
 							<label class="control-label col-xs-12 col-sm-3 no-padding-right"
@@ -44,23 +59,11 @@
 				</div> 
 				
 				<div class="form-group">
-					<label for="p_account_type" class="col-sm-3 control-label no-padding-right">Account Type:</label>
-					<div class="col-sm-9">
-						<select th:field="*{p_account_type}" size="" class="col-xs-10 col-sm-7" style="margin-top:0px;"  required="required">
-							<option value="">Select account type</option>
-							<option th:value="GL">GL</option>
-							<option th:value="CL">Customer</option>
-						</select>
-						<span class="text-danger" th:if="${#fields.hasErrors('p_account_type')}"
-							th:errors="*{p_account_type}">
-						</span>
-					</div>
-				</div>
-						
-				<div class="form-group">
 					<label for="p_account_no" class="col-sm-3 control-label no-padding-right">Posting Account:</label>
 					<div class="col-sm-9">
-						<input id="p_account_no_search"  name="p_account_no_search" class="col-xs-10 col-sm-7" style="margin-bottom:0px;margin-right: 500px;" onkeyup="filter()" onblur="selectAccount()" /> <br />
+						<input id="p_account_no_search"  name="p_account_no_search" class="col-xs-10 col-sm-7" style="margin-bottom:0px;" onkeyup="filter()" onblur="selectAccount()" />
+						<button class="p_cust_search" hidden="hidden">searcn</button> 
+						<br />
 						<select th:field="*{p_account_no}" size="" class="col-xs-10 col-sm-7" style="margin-top:0px;"  required="required">
 							
 							<!-- <option th:each="generalLedger: ${generalLedgers}" 
@@ -184,8 +187,10 @@
 				<div class="form-group">
 					<label for="r_account_no" class="col-sm-3 control-label no-padding-right">Account:</label>
 					<div class="col-sm-9">
-					<input id="r_account_no_search"  name="r_account_no_search" class="col-xs-10 col-sm-7" style="margin-bottom:0px;margin-right: 500px;" onkeyup="filterR()" onblur="selectAccountR()" /> <br />
-					
+					<input id="r_account_no_search"  name="r_account_no_search" class="col-xs-10 col-sm-7" style="margin-bottom:0px;" onkeyup="filterR()" onblur="selectAccountR()" /> 
+					<button class="r_cust_search" hidden="hidden">searcn</button> 
+						<br />
+						
 						<select th:field="*{r_account_no}" size="" style="margin-top:0px;" class="col-xs-10 col-sm-7"  required="required">
 							
 								<!-- <option th:each="generalLedger: ${generalLedgers}" 
@@ -294,12 +299,53 @@
            
 $('#p_account_type').change(function() {
 	
-	var selected_option = $('#p_account_type option:selected');
+	var sel_acc_type = $('#p_account_type option:selected');
+	var acc_type = sel_acc_type[0].value;
+	$('#p_account_no_search').attr('value', "");
 
+	$("#p_branch_id").prop("disabled", false);
 	
-	if(selected_option[0].value != ""){
-		getLedgers($("#p_account_no"), selected_option[0].value);
+
+	if(acc_type != ""){
+		getLedgers($("#p_account_no"), acc_type);
+	} else {
+		$("#p_account_no").html("");
 	}
+	
+	if (acc_type == "CL") {
+		$(".p_cust_search").addClass("btn btn-primary btn-xs");
+		$(".p_cust_search").removeAttr("hidden");
+		$("#p_branch_id").prop("disabled", "disabled");
+		//remove hidden attr on p_cust_search OR add class="btn btn-primary btn-xs p_cust_search"
+	}
+	/* if(acc_type == "GL"){
+		//enable bracnh selection
+		
+		getLedgers($("#p_account_no"), acc_type);
+	} else if (acc_type == "CL") {
+		//remove hidden attr on p_cust_search OR add class="btn btn-primary btn-xs p_cust_search"
+	} */
+});
+
+$('#r_account_type').change(function() {
+	
+	var sel_acc_type = $('#r_account_type option:selected');
+	var acc_type = sel_acc_type[0].value;
+
+	$("#r_branch_id").prop("disabled", false);
+
+	getLedgers($("#r_account_no"), acc_type);
+	if (acc_type == "CL") {
+		$(".r_cust_search").addClass("btn btn-primary btn-xs");
+		$(".r_cust_search").removeAttr("hidden");
+		$("#r_branch_id").prop("disabled", "disabled");
+		//remove hidden attr on r_cust_search OR add class="btn btn-primary btn-xs r_cust_search"
+	}
+	/* if(acc_type == "GL"){
+		getLedgers($("#r_account_no"), acc_type);
+	} else if (acc_type == "CL") {
+		//remove hidden attr on r_cust_search OR add class="btn btn-primary btn-xs r_cust_search"
+	} */
 });
 
 $('#amount').focus(function(){
@@ -331,7 +377,6 @@ $('#amount').blur(function(){
 
 $('#p_post_code').change(function() {
 	
-	console.log($('#p_post_code'));
 	var selected_option = $('#p_post_code option:selected');
 	
 	$('#r_post_code option').each(function() {
@@ -389,9 +434,14 @@ function selectAccount(){
         	fleet.size = 0;
         	
         	var selected_branch = $('#p_branch_id option:selected');
+        	var sel_acc_type = $('#p_account_type option:selected');
+        	var acc_type = sel_acc_type[0].value;
         	
-        	if(selected_branch[0].value != ""){
-        		getBalance($("#p_branch_bal"), fleet.options[i].value, selected_branch[0].value);
+        	if(acc_type == 'CL'){
+        		getBalance($("#p_branch_bal"), fleet.options[i].value, "0", "CL");
+            }
+    		else if(selected_branch[0].value != ""){
+        		getBalance($("#p_branch_bal"), fleet.options[i].value, selected_branch[0].value, "GL");
         	}
             break;
         }
@@ -431,9 +481,14 @@ function selectAccountR(){
         	fleet.size = 0;
         	
 			var selected_branch = $('#r_branch_id option:selected');
+			var sel_acc_type = $('#r_account_type option:selected');
+        	var acc_type = sel_acc_type[0].value;
         	
-        	if(selected_branch[0].value != ""){
-        		getBalance($("#r_branch_bal"), fleet.options[i].value, selected_branch[0].value);
+        	if(acc_type == 'CL'){
+        		getBalance($("#r_branch_bal"), fleet.options[i].value, "0", "CL");
+        	}
+    		else if(selected_branch[0].value != ""){
+        		getBalance($("#r_branch_bal"), fleet.options[i].value, selected_branch[0].value, "GL");
         	}
             break;
         }
@@ -454,8 +509,14 @@ $("#p_account_no").change(function(){
 	
 	var selected_branch = $('#p_branch_id option:selected');
 	
-	if(selected_branch[0].value != ""){
-		getBalance($("#p_branch_bal"), selected_option[0].value, selected_branch[0].value);
+	var sel_acc_type = $('#p_account_type option:selected');
+	var acc_type = sel_acc_type[0].value;
+	
+	if(acc_type == 'CL'){
+		getBalance($("#p_branch_bal"), selected_option[0].value, "0", "CL");
+		}
+	else if(selected_branch[0].value != ""){
+		getBalance($("#p_branch_bal"), selected_option[0].value, selected_branch[0].value, "GL");
 	}
 	// call ajax function
 });
@@ -468,8 +529,14 @@ $('#p_branch_id').change(function() {
 
 	var selected_branch = $('#p_branch_id option:selected');
 	
-	if(search_field != ""){
-		getBalance($("#p_branch_bal"), selected_option[0].value, selected_branch[0].value);
+	var sel_acc_type = $('#p_account_type option:selected');
+	var acc_type = sel_acc_type[0].value;
+	
+	if(acc_type == 'CL'){
+		getBalance($("#p_branch_bal"), selected_option[0].value, "0", "CL");
+		}
+	else if(search_field != ""){
+		getBalance($("#p_branch_bal"), selected_option[0].value, selected_branch[0].value, "GL");
 	}
 });
 
@@ -480,8 +547,14 @@ $("#r_account_no").change(function(){
 
 	var selected_branch = $('#r_branch_id option:selected');
 	
-	if(selected_branch[0].value != ""){
-		getBalance($("#r_branch_bal"), selected_option[0].value, selected_branch[0].value);
+	var sel_acc_type = $('#r_account_type option:selected');
+	var acc_type = sel_acc_type[0].value;
+	
+	if(acc_type == 'CL'){
+		getBalance($("#r_branch_bal"), selected_option[0].value, "0", "CL");
+	}
+	else if(selected_branch[0].value != ""){
+		getBalance($("#r_branch_bal"), selected_option[0].value, selected_branch[0].value, "GL");
 	}
 });
 
@@ -492,16 +565,22 @@ $('#r_branch_id').change(function() {
 
 	var selected_branch = $('#r_branch_id option:selected');
 	
-	if(selected_option[0].value != ""){
-		getBalance($("#r_branch_bal"), selected_option[0].value, selected_branch[0].value);
+	var sel_acc_type = $('#r_account_type option:selected');
+	var acc_type = sel_acc_type[0].value;
+	
+	if(acc_type == 'CL'){
+		getBalance($("#r_branch_bal"), selected_option[0].value, "0", "CL");
+	}
+	else if(selected_option[0].value != ""){
+		getBalance($("#r_branch_bal"), selected_option[0].value, selected_branch[0].value, "GL");
 	}
 });
 
 	
-function getBalance(elem, account_no, branch_id) {
+function getBalance(elem, account_no, branch_id, account_type) {
 	$.ajax({
 		type : "GET",
-		url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/balance/' + account_no + '/' + branch_id,
+		url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/balance/' + account_no + '/' + branch_id + '/' + account_type,
 		beforeSend : function() {
 			 $.gritter.add({
 				title : "Progress...",
@@ -543,9 +622,7 @@ function getLedgers(elem, account_type) {
 			}); 
 		},
 		success : function(value) {
-			elem.val(value);
-			elem.value=value;
-			elem.trigger("change");
+			elem.html(value);
 			//call a function passing in "value", that sets the value and also 'un'-disables both postcodes
 			 $.gritter.add({
 				title : "Success!",
@@ -554,6 +631,7 @@ function getLedgers(elem, account_type) {
 			}); 
 		},
 		error : function() {
+			elem.html("");
 			$.gritter.add({
 				title : "Error!",
 				text : "Error fetching Ledgers",

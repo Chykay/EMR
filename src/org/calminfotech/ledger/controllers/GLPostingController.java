@@ -5,11 +5,9 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.calminfotech.ledger.boInterface.GenLedgerBo;
-import org.calminfotech.ledger.boInterface.LedgerAccBo;
 import org.calminfotech.ledger.daoImpl.PostCodeDaoImpl;
 import org.calminfotech.ledger.forms.GLPostingForm;
 import org.calminfotech.ledger.models.GLEntry;
-import org.calminfotech.ledger.models.LedgerAccount;
 import org.calminfotech.ledger.models.PostCode;
 import org.calminfotech.ledger.utiility.LedgerException;
 import org.calminfotech.system.boInterface.OrganisationBo;
@@ -30,10 +28,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping(value = "/ledger/gen_ledger")
-public class GLPostingController {
-	@Autowired
-	private LedgerAccBo ledgerAccBo;
-	
+public class GLPostingController {	
 	@Autowired
 	private OrganisationBo organisationBo;
 	
@@ -94,8 +89,8 @@ public class GLPostingController {
 	@RequestMapping(value = {"/direct/post"}, method=RequestMethod.GET)
 	public String postGl(Model model) {		
 		Organisation org = userIdentity.getOrganisation();
-	
-		List<LedgerAccount> ledgerAccounts = this.ledgerAccBo.fetchAll(org.getId(), org.getOrgCoy().getId());
+	/*
+		List<LedgerAccount> ledgerAccounts = this.ledgerAccBo.fetchAll(org.getId(), org.getOrgCoy().getId());*/
 		List<Organisation> branches = this.organisationBo.fetchAll(org.getId());
 		List<PostCode> postCodes = this.postCodeDaoImpl.fetchAll();
 

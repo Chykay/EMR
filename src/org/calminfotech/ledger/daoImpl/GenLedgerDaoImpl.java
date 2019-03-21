@@ -7,7 +7,6 @@ import org.calminfotech.ledger.daoInterface.GenLedgerDao;
 import org.calminfotech.ledger.models.GLEntry;
 import org.calminfotech.ledger.models.GenLedgBalance;
 import org.calminfotech.system.boInterface.OrganisationBo;
-import org.calminfotech.system.boInterface.SettingBo;
 import org.calminfotech.user.utils.UserIdentity;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +24,6 @@ public class GenLedgerDaoImpl implements GenLedgerDao {
 	@Autowired
 	private OrganisationBo organisationBo;
 
-	@Autowired
-	private SettingBo settingBo;
 	
 
 	@SuppressWarnings("unchecked")

@@ -56,7 +56,7 @@
 						
 					<td>
 						
-						<span th:if="${glEntry.ref_no2 != 'REVERSED' and glEntry.ref_no2  != 'REVERSAL' }">
+						<span th:if="${glEntry.ref_no2 != 'REVERSED' and glEntry.ref_no2  != 'REVERSAL' and glEntry.product_id == null}">
 							<a class="btn btn-xs btn-danger tooltips reverse" 
 								title="Reverse Entry"   th:id="${glEntry.batch_no}" 
 								href="#"> <i
