@@ -433,7 +433,7 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 			
 			GLEntry glEntry1 = new GLEntry();
 			glEntry1.setAccount_no(glEntry.getAccount_no());
-			glEntry1.setAmount(glEntry.getAmount());
+			glEntry1.setAmount(Math.abs(glEntry.getAmount()));
 			glEntry1.setOrganisation(this.organisationBo.getOrganisationById(glEntry.getBranch()));
 			glEntry1.setOrgCoy(user.getOrganisation().getOrgCoy());
 			glEntry1.setBranch(glEntry.getBranch());

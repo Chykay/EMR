@@ -64,6 +64,7 @@ public class CustomerAccBoImpl implements CustomerAccBo {
 		
 		CustomerAccount customerAccount = this.customerAccDao.getLedgerByAccount_no(cA.getAccount_no());
 		
+		customerAccount.setCurr_balance(cA.getCurr_balance());
 		customerAccount.setModified_by(userIdentity.getUser());
 		customerAccount.setModify_date(new Date(System.currentTimeMillis()));
 		
@@ -80,6 +81,11 @@ public class CustomerAccBoImpl implements CustomerAccBo {
 		}
 		this.customerAccDao.CustEntry(customerEntry);
 		
+		
+		CustomerAccount customerAccount = this.getCustomerByAccount_no(customerEntry.getAccount_no());
+		
+		customerAccount.setCurr_balance(customerAccount.getCurr_balance() + customerEntry.getAmount());
+		this.update(customerAccount);
 	}
 
 	@Override
