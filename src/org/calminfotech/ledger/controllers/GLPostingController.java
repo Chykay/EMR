@@ -73,7 +73,7 @@ public class GLPostingController {
 	
 	/* REVERSE ENTRY */
 	@RequestMapping(value = {"/reversal/{batch_no}"}, method=RequestMethod.GET)
-	public String GLReversal(@PathVariable("batch_no") String batch_no, Model model) {		
+	public String GLReversal(@PathVariable("batch_no") String batch_no, Model model) {
 		
 		try {
 			this.genLedgerBo.GLReversal(batch_no);

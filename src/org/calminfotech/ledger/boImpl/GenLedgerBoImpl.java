@@ -378,4 +378,89 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		}
 		
 	}
+
+	@Override
+	public List<CustomerEntry> getCustEntries() {
+
+		return this.genLedgerDao.getCustEntries();
+	}
+
+	@Override
+	public void CustReversal(String batch_no) throws LedgerException {
+		List<GLEntry> glEntries = this.getGLEntriesByBatch_no(batch_no);
+		List<CustomerEntry> customerEntries = this.getCustEntriesByBatch_no(batch_no);
+
+		String new_batch_no = LedgerUtility.getBatchNo();
+		User user = this.userIdentity.getUser();
+		
+		for(CustomerEntry customerEntry: customerEntries){
+			String desc = customerEntry.getDescription();
+			customerEntry.setRef_no2("REVERSED");
+			customerEntry.setDescription("REVERSED-".concat(desc));
+			
+			this.cAccBo.CustEntry(customerEntry);
+			
+			CustomerEntry customerEntry1 = new CustomerEntry();
+			customerEntry1.setAccount_no(customerEntry.getAccount_no());
+			customerEntry1.setAmount(customerEntry.getAmount());
+			customerEntry1.setOrganisation(this.organisationBo.getOrganisationById(customerEntry.getOrganisation().getId()));
+			customerEntry1.setOrgCoy(user.getOrganisation().getOrgCoy());
+			customerEntry1.setCreated_by(user);		
+			customerEntry1.setCreate_date(new Date(System.currentTimeMillis()));
+			customerEntry1.setBatch_no(new_batch_no);
+			customerEntry1.setDescription("REVERSAL-".concat(desc));
+			customerEntry1.setPosting_date(customerEntry.getPosting_date());
+			
+			if (customerEntry.getPost_code().contains("DR")) {
+				System.out.println("contains DR");
+				customerEntry1.setPost_code("CR");
+			} else {
+				System.out.println("contains CR");
+				customerEntry1.setPost_code("DR");
+			}
+
+			customerEntry1.setRef_no2("REVERSAL");
+			this.cAccBo.CustEntry(customerEntry1);
+		}
+		
+		for(GLEntry glEntry: glEntries){
+			System.out.println(glEntry.getAccount_no());
+			String desc = glEntry.getDescription();
+			glEntry.setRef_no2("REVERSED");
+			glEntry.setDescription("REVERSED-".concat(desc));
+			
+			this.genLedgerDao.GLEntry(glEntry);
+			
+			GLEntry glEntry1 = new GLEntry();
+			glEntry1.setAccount_no(glEntry.getAccount_no());
+			glEntry1.setAmount(glEntry.getAmount());
+			glEntry1.setOrganisation(this.organisationBo.getOrganisationById(glEntry.getBranch()));
+			glEntry1.setOrgCoy(user.getOrganisation().getOrgCoy());
+			glEntry1.setBranch(glEntry.getBranch());
+			glEntry1.setCreated_by(user);		
+			glEntry1.setCreate_date(new Date(System.currentTimeMillis()));
+			glEntry1.setBatch_no(new_batch_no);
+			glEntry1.setRef_no1(glEntry.getRef_no1());
+			glEntry1.setDescription("REVERSAL-".concat(desc));
+			glEntry1.setPosting_date(glEntry.getPosting_date());
+			
+			if (glEntry.getPost_code().contains("DR")) {
+				System.out.println("contains DR");
+				glEntry1.setPost_code("CR");
+			} else {
+				System.out.println("contains CR");
+				glEntry1.setPost_code("DR");
+			}
+
+			glEntry1.setRef_no2("REVERSAL");
+			this.GLEntry(glEntry1);
+		}
+		
+		
+		
+	}
+
+	private List<CustomerEntry> getCustEntriesByBatch_no(String batch_no) {
+		return this.genLedgerDao.getCustEntriesByBatch_no(batch_no);
+	}
 }

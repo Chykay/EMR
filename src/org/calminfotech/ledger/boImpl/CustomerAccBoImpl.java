@@ -73,7 +73,11 @@ public class CustomerAccBoImpl implements CustomerAccBo {
 
 	@Override
 	public void CustEntry(CustomerEntry customerEntry) {
-
+		if (customerEntry.getPost_code().contains("DR")) {
+			customerEntry.setAmount(Math.abs(customerEntry.getAmount()) * -1);
+		} else {
+			customerEntry.setAmount(Math.abs(customerEntry.getAmount()));
+		}
 		this.customerAccDao.CustEntry(customerEntry);
 		
 	}

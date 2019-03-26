@@ -35,6 +35,9 @@ public class CustomerEntry extends CommonLedger {
 	@Column(name="batch_no")
 	private String batch_no;
 	
+	@Column(name="ref_no2")
+	private String ref_no2;
+	
 	@Column(name="posting_date")
 	@Temporal(TemporalType.DATE)
 	private Date posting_date;
@@ -94,5 +97,15 @@ public class CustomerEntry extends CommonLedger {
 	public void setPosting_date(Date posting_date) {
 		this.posting_date = posting_date;
 	}
+
+	public String getRef_no2() {
+		return ref_no2;
+	}
+
+	public void setRef_no2(String ref_no2) {
+		this.ref_no2 = ref_no2;
+	}
+	
+	
 	
 }

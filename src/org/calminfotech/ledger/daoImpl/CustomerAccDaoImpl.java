@@ -78,8 +78,7 @@ public class CustomerAccDaoImpl implements CustomerAccDao {
 
 	@Override
 	public void CustEntry(CustomerEntry customerEntry) {
-		// TODO Auto-generated method stub
-		this.sessionFactory.getCurrentSession().save(customerEntry);
+		this.sessionFactory.getCurrentSession().saveOrUpdate(customerEntry);
 	}
 
 	@SuppressWarnings("unchecked")

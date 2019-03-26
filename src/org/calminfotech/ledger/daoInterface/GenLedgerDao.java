@@ -2,6 +2,7 @@ package org.calminfotech.ledger.daoInterface;
 
 import java.util.List;
 
+import org.calminfotech.ledger.models.CustomerEntry;
 import org.calminfotech.ledger.models.GLEntry;
 import org.calminfotech.ledger.models.GenLedgBalance;
 
@@ -19,4 +20,8 @@ public interface GenLedgerDao {
 	public List<GLEntry> getGLEntries();
 
 	public List<GLEntry> getGLEntriesByBatch_no(String batch_no);
+
+	public List<CustomerEntry> getCustEntries();
+
+	public List<CustomerEntry> getCustEntriesByBatch_no(String batch_no);
 }

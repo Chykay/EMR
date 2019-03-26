@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.calminfotech.ledger.daoInterface.GenLedgerDao;
+import org.calminfotech.ledger.models.CustomerEntry;
 import org.calminfotech.ledger.models.GLEntry;
 import org.calminfotech.ledger.models.GenLedgBalance;
 import org.calminfotech.system.boInterface.OrganisationBo;
@@ -134,5 +135,31 @@ public class GenLedgerDaoImpl implements GenLedgerDao {
 						.list();
 		
 		return objects;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<CustomerEntry> getCustEntries() {
+		List<CustomerEntry> entries = sessionFactory.getCurrentSession()
+				.createQuery("FROM CustomerEntry WHERE company_id = ? AND organisation_id = ? ")
+				.setParameter(0, userIdentity.getOrganisation().getOrgCoy().getId())
+				.setParameter(1, userIdentity.getOrganisation().getId())/*
+				.setParameter(2, this.settingBo.fetchsettings("interbank-GLP", 2).getSettings_value())*/
+				.list();
+		
+		return entries;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<CustomerEntry> getCustEntriesByBatch_no(String batch_no) {
+
+		List<CustomerEntry> customerEntries = sessionFactory.getCurrentSession()
+				.createQuery("FROM CustomerEntry WHERE batch_no = ? ")
+				.setParameter(0, batch_no)
+				.list();
+		
+		
+		return customerEntries;
 	}
 }

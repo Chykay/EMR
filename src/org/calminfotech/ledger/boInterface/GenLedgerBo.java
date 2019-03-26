@@ -3,6 +3,7 @@ package org.calminfotech.ledger.boInterface;
 import java.util.List;
 
 import org.calminfotech.ledger.forms.GLPostingForm;
+import org.calminfotech.ledger.models.CustomerEntry;
 import org.calminfotech.ledger.models.GLEntry;
 import org.calminfotech.ledger.models.GenLedgBalance;
 import org.calminfotech.ledger.models.LedgerAccount;
@@ -25,4 +26,8 @@ public interface GenLedgerBo {
 	public List<GLEntry> getGLEntriesByBatch_no(String batch_no) throws LedgerException;
 	
 	public void GLReversal(String batch_no) throws LedgerException;
+
+	public List<CustomerEntry> getCustEntries() throws LedgerException;
+
+	public void CustReversal(String batch_no) throws LedgerException;
 }

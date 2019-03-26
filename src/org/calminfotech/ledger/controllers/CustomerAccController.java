@@ -6,13 +6,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.calminfotech.ledger.boInterface.BalSheetCatBo;
+import org.calminfotech.ledger.boInterface.GenLedgerBo;
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
 import org.calminfotech.ledger.boInterface.TotAccBo;
 import org.calminfotech.ledger.forms.LedgerAccForm;
 import org.calminfotech.ledger.models.BalSheetCat;
+import org.calminfotech.ledger.models.CustomerEntry;
 import org.calminfotech.ledger.models.LedgerAccount;
 import org.calminfotech.ledger.models.TotalingAccount;
-import org.calminfotech.system.models.Organisation;
+import org.calminfotech.ledger.utiility.LedgerException;
 import org.calminfotech.user.utils.UserIdentity;
 import org.calminfotech.utils.Alert;
 import org.calminfotech.utils.Auditor;
@@ -49,13 +51,33 @@ public class CustomerAccController {
 	@Autowired
 	private Auditor auditor;
 	
+	@Autowired
+	private GenLedgerBo genLedgerBo;
+	
 	@RequestMapping(value = {"/index"}, method=RequestMethod.GET)
-	public String indexGenLedgert(Model model) {
-		Organisation org = userIdentity.getOrganisation();
-		List<LedgerAccount> ledgerAccounts = this.ledgerAccBo.fetchAll(org.getId(), org.getOrgCoy().getId());
-		model.addAttribute("accounts", ledgerAccounts);
-		// model.addAttribute("id", id);
-		return "/ledger/ledger_acc/index";
+	public String index(Model model) {
+		List<CustomerEntry> customerEntries = null;
+		try {
+			customerEntries = this.genLedgerBo.getCustEntries();
+		} catch (LedgerException e) {
+			e.printStackTrace();
+		}
+		model.addAttribute("custEntries", customerEntries);
+		return "/ledger/customer_acc/index";
+	}
+	
+	/* REVERSE ENTRY */
+	@RequestMapping(value = {"/reversal/{batch_no}"}, method=RequestMethod.GET)
+	public String GLReversal(@PathVariable("batch_no") String batch_no, Model model) {
+		
+		try {
+			this.genLedgerBo.CustReversal(batch_no);
+		} catch (LedgerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return "/ledger/gen_ledger/index";
 	}
 	
 	/* SHOW ALL */
