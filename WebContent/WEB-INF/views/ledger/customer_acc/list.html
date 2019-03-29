@@ -1,0 +1,126 @@
+<div class="page-header">
+	<h1>
+		All Account
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/ledger/gen_ledger/index}">
+			<i class="fa fa-home"></i> System Dashboard
+		</a> 
+		<a class="btn btn-xs btn-primary" th:href="@{/ledger/gen_ledger/create}">
+			<i class="fa fa-plus-circle"></i> Add Account 
+		</a>
+	
+ 		<span   id="imgId" hidden="hidden" > 
+ 			<img th:src="@{/resources/assets/images/ajax-loader.gif}" id="loading_img" />  
+ 		</span>      
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<form role="form" class="form-horizontal" method="get" style="margin-top:20px;">
+			<div class="form-group">
+				
+				<label for="product_type" class="col-sm-1 control-label no-padding">Product Type:</label>
+				<div class="col-sm-2">
+					<select id="product_type" size="" class="col-xs-12 col-sm-12" style="margin-top:0px;"  required="required">
+							<option value="">Select account type</option>
+							<option th:value="CL">Customer</option>
+					</select>
+				</div>
+				<div class="col-sm-3">
+					<label for="account_no" style="padding-right:10px;">Account No:</label>
+					<input id="account_no"  name="account_no"  style="margin-bottom:0px;"   />
+				</div>
+				<div class="col-sm-5">
+					<label for="start_date" style="padding-right: 10px;">From:</label>
+					<input id="start_date"  name="start_date"  style="margin-bottom:0px;" placeholder="yyyy-MM-dd" />
+					<label for="end_date" style="padding: 0px 10px;">To:</label>
+					<input id="end_date"  name="end_date_search" style="margin-bottom:0px;" placeholder="yyyy-MM-dd" />
+				</div>
+				
+				<a class="btn btn-xs btn-primary tooltips search" 
+								title="Search"   id="search" 
+								href="#">Searcn</a>	
+			</div>
+		</form>
+		<div class="table-header">List of Entries </div>
+		<table id="dTable"
+			class="table table-striped table-bordered table-hover">
+			<!-- Table heading -->
+			 <thead>
+				<tr>
+					<th>Account Number</th>
+					<th>Amount</th>
+					<th>Post Code</th>
+					<th>Batch No</th>
+					<th>Ref No</th>
+					<th>Description</th>
+					
+					<th><i class="glyphicon glyphicon-asterisk"></i></th>
+				</tr>
+			</thead>
+
+			<!-- Table body -->
+			<tbody id="tbody">
+				<!-- <tr th:each="glEntry : ${glEntries">
+					<td th:text="${glEntry.account_no">Account Number</td>
+					<td th:text="${glEntry.amount">Amount</td>
+					<td th:text="${glEntry.post_code">Post Code</td>
+					<td th:text="${glEntry.branch">Branch ID</td>
+					<td th:text="${glEntry.batch_no">Batch No</td>
+					<td th:text="${glEntry.ref_no1">Ref No</td>
+					<td th:text="${glEntry.description">Description</td>
+					
+						
+					<td>
+						
+						<span th:if="${glEntry.ref_no2 != 'REVERSED' and glEntry.ref_no2  != 'REVERSAL' and glEntry.product_id == null">
+							<a class="btn btn-xs btn-danger tooltips reverse" 
+								title="Reverse Entry"   th:id="${glEntry.batch_no" 
+								href="#"> <i
+									class="fa fa-reply"></i>
+							</a>
+						</span>
+					</td>
+				</tr> -->
+			</tbody>
+			<!--  Table body END -->
+		</table>
+		<!-- End view content here -->
+	</div>
+</div>
+
+<script type="text/javascript">
+/*<![CDATA[*/
+
+	$(".search").click(function(){
+		alert('now now');
+		var account_no = $('#account_no').val();
+		var start_date = $('#start_date').val();
+		var end_date = $('#end_date').val();
+		var sel_product_type = $('#product_type option:selected');
+		var prod_type = sel_product_type[0].value;
+
+		if(account_no == "" || start_date == "" || end_date == ""){
+			alert('you must select');
+		} else {
+			$.ajax({
+				type : "GET",
+				url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/customer_acc/listings/' + prod_type + '/'+ account_no + '/' + start_date + '/'	+ end_date,
+				success : function(value) {
+					$('#tbody').html(value);
+				}
+			});
+		 }
+	});
+
+
+/*]]>*/
+</script>

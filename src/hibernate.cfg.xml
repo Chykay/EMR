@@ -399,7 +399,7 @@
 		 <mapping class="org.calminfotech.ledger.models.CustomerEntry" />
 		 <mapping class="org.calminfotech.ledger.models.GenLedgBalance" />
 		 <mapping class="org.calminfotech.ledger.models.GLEntry" />
-		 <mapping class="org.calminfotech.ledger.models.GLHistory" />
+		 <mapping class="org.calminfotech.ledger.models.JournalEntry" />
 		 <mapping class="org.calminfotech.ledger.models.GPermission" />
 		 <mapping class="org.calminfotech.ledger.models.LedgerAccount" />
 		 <mapping class="org.calminfotech.ledger.models.LedgerType" />

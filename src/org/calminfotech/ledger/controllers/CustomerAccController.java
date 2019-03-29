@@ -66,6 +66,19 @@ public class CustomerAccController {
 		return "/ledger/customer_acc/index";
 	}
 	
+
+	@RequestMapping(value = {"/listings"}, method=RequestMethod.GET)
+	public String listings(Model model) {
+		/*List<CustomerEntry> customerEntries = null;
+		try {
+			customerEntries = this.genLedgerBo.getCustEntries();
+		} catch (LedgerException e) {
+			e.printStackTrace();
+		}
+		model.addAttribute("custEntries", customerEntries);*/
+		return "/ledger/customer_acc/list";
+	}
+	
 	/* REVERSE ENTRY */
 	@RequestMapping(value = {"/reversal/{batch_no}"}, method=RequestMethod.GET)
 	public String GLReversal(@PathVariable("batch_no") String batch_no, Model model) {

@@ -6,6 +6,7 @@ import org.calminfotech.ledger.forms.GLPostingForm;
 import org.calminfotech.ledger.models.CustomerEntry;
 import org.calminfotech.ledger.models.GLEntry;
 import org.calminfotech.ledger.models.GenLedgBalance;
+import org.calminfotech.ledger.models.JournalEntry;
 import org.calminfotech.ledger.models.LedgerAccount;
 import org.calminfotech.ledger.utiility.LedgerException;
 
@@ -30,4 +31,10 @@ public interface GenLedgerBo {
 	public List<CustomerEntry> getCustEntries() throws LedgerException;
 
 	public void CustReversal(String batch_no) throws LedgerException;
+
+	public List<JournalEntry> getJournalEntries() throws LedgerException;
+
+	public List<GLEntry> getGLEntriesByAccount_no(String account_no) throws LedgerException;
+
+	public List<CustomerEntry> getCustEntriesByAccount_no(String account_no, String start_date, String end_date) throws LedgerException;
 }

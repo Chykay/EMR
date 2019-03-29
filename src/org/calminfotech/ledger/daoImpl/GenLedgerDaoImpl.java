@@ -7,6 +7,7 @@ import org.calminfotech.ledger.daoInterface.GenLedgerDao;
 import org.calminfotech.ledger.models.CustomerEntry;
 import org.calminfotech.ledger.models.GLEntry;
 import org.calminfotech.ledger.models.GenLedgBalance;
+import org.calminfotech.ledger.models.JournalEntry;
 import org.calminfotech.system.boInterface.OrganisationBo;
 import org.calminfotech.user.utils.UserIdentity;
 import org.hibernate.SessionFactory;
@@ -161,5 +162,48 @@ public class GenLedgerDaoImpl implements GenLedgerDao {
 		
 		
 		return customerEntries;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<JournalEntry> getJournalEntries() {
+		List<JournalEntry> entries = sessionFactory.getCurrentSession()
+				.createQuery("FROM JournalEntry WHERE company_id = ? AND organisation_id = ? ")
+				.setParameter(0, userIdentity.getOrganisation().getOrgCoy().getId())
+				.setParameter(1, userIdentity.getOrganisation().getId())/*
+				.setParameter(2, this.settingBo.fetchsettings("interbank-GLP", 2).getSettings_value())*/
+				.list();
+
+		return entries;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<GLEntry> getGLEntriesByAccount_no(String account_no) {
+		List<GLEntry> entries = sessionFactory.getCurrentSession()
+				.createQuery("FROM GLEntry WHERE company_id = ? AND organisation_id = ? AND account_no = ? ")
+				.setParameter(0, userIdentity.getOrganisation().getOrgCoy().getId())
+				.setParameter(1, userIdentity.getOrganisation().getId())
+				.setParameter(2, account_no)
+				/*
+				.setParameter(2, this.settingBo.fetchsettings("interbank-GLP", 2).getSettings_value())*/
+				.list();
+		
+		return entries;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<CustomerEntry> getCustEntriesByAccount_no(String account_no, String start_date, String end_date) {
+		System.out.println(account_no + " : " + start_date + " : " + end_date);
+		List<CustomerEntry> entries = sessionFactory.getCurrentSession()
+				.createQuery("FROM CustomerEntry WHERE company_id = ? AND organisation_id = ? AND account_no = ? AND posting_date >= '" + start_date + "'  AND posting_date < '" + end_date + "'")
+				.setParameter(0, userIdentity.getOrganisation().getOrgCoy().getId())
+				.setParameter(1, userIdentity.getOrganisation().getId())
+				.setParameter(2, account_no)
+				.list();
+		
+		System.out.println(entries.size() + "what now");
+		return entries;
 	}
 }

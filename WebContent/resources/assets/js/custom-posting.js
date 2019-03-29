@@ -1,10 +1,9 @@
 /*<![CDATA[*/
            
 $('#p_account_type').change(function() {
-	
+	document.getElementById("p_account_no_search").value = "";
 	var sel_acc_type = $('#p_account_type option:selected');
 	var acc_type = sel_acc_type[0].value;
-	$('#p_account_no_search').attr('value', "");
 
 	$("#p_branch_id").prop("disabled", false);
 	
@@ -31,18 +30,22 @@ $('#p_account_type').change(function() {
 });
 
 $('#r_account_type').change(function() {
-	
+	document.getElementById("r_account_no_search").value = "";
 	var sel_acc_type = $('#r_account_type option:selected');
 	var acc_type = sel_acc_type[0].value;
 
 	$("#r_branch_id").prop("disabled", false);
 
-	getLedgers($("#r_account_no"), acc_type);
+	if(acc_type != ""){
+		getLedgers($("#r_account_no"), acc_type);
+	} else {
+		$("#r_account_no").html("");
+	}
+	
 	if (acc_type == "CL") {
 		$(".r_cust_search").addClass("btn btn-primary btn-xs");
 		$(".r_cust_search").removeAttr("hidden");
 		$("#r_branch_id").prop("disabled", "disabled");
-		//remove hidden attr on r_cust_search OR add class="btn btn-primary btn-xs r_cust_search"
 	}
 	/* if(acc_type == "GL"){
 		getLedgers($("#r_account_no"), acc_type);
@@ -59,6 +62,8 @@ $('#amount').focus(function(){
 			text : "You must select the post code first",
 			time : 4000
 		}); 
+		
+		this.val("");
 		$('#amount').trigger("blur");
 	}
 });

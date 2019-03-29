@@ -12,6 +12,7 @@ import org.calminfotech.ledger.models.CustomerAccount;
 import org.calminfotech.ledger.models.CustomerEntry;
 import org.calminfotech.ledger.models.GLEntry;
 import org.calminfotech.ledger.models.GenLedgBalance;
+import org.calminfotech.ledger.models.JournalEntry;
 import org.calminfotech.ledger.models.LedgerAccount;
 import org.calminfotech.ledger.utiility.LedgerException;
 import org.calminfotech.ledger.utiility.LedgerUtility;
@@ -69,7 +70,7 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 			ledgerAccount.setAmount(this.getAmount(amount, glEntry.getAccount_no().charAt(0), glEntry.getPost_code()));
 			
 		} catch (Exception e) {
-			throw new LedgerException("Account number does not exist in Ledger accounts");
+			throw new LedgerException("Account number '" + glEntry.getAccount_no() + "' does not exist in Ledger accounts");
 		}
 		
 		
@@ -156,8 +157,14 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 			this.cAccBo.CustEntry(customerEntry);
 
 			String customerGl = this.settingBo.fetchsettings("customer-GLP", 2).getSettings_value();
+			float amount;
+			if (glPostingForm.getP_post_code().contains("DR")) {
+				amount = Float.parseFloat(glPostingForm.getAmount().replace(",", "")) * -1;
+			} else {
+				amount = Float.parseFloat(glPostingForm.getAmount().replace(",", ""));
+			}
 			CustomerAccount customerAccount = this.cAccBo.getCustomerByAccount_no(glPostingForm.getP_account_no());
-			customerAccount.setCurr_balance(customerAccount.getCurr_balance() + Float.parseFloat(glPostingForm.getAmount().replace(",", "")));
+			customerAccount.setCurr_balance(customerAccount.getCurr_balance() + amount);
 			
 			this.cAccBo.update(customerAccount);
 			
@@ -232,7 +239,7 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 			}
 		}
 		
-		
+		System.out.print("this is the wahala");
 		return (Float) null;
 	}
 	
@@ -462,5 +469,20 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 
 	private List<CustomerEntry> getCustEntriesByBatch_no(String batch_no) {
 		return this.genLedgerDao.getCustEntriesByBatch_no(batch_no);
+	}
+
+	@Override
+	public List<JournalEntry> getJournalEntries() throws LedgerException {
+		return this.genLedgerDao.getJournalEntries();
+	}
+
+	@Override
+	public List<GLEntry> getGLEntriesByAccount_no(String account_no) throws LedgerException {
+		return this.genLedgerDao.getGLEntriesByAccount_no(account_no);
+	}
+
+	@Override
+	public List<CustomerEntry> getCustEntriesByAccount_no(String account_no, String start_date, String end_date) throws LedgerException {
+		return this.genLedgerDao.getCustEntriesByAccount_no(account_no, start_date, end_date);
 	}
 }

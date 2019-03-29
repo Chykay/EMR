@@ -1,11 +1,16 @@
 package org.calminfotech.ledger.controllers;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.calminfotech.ledger.boInterface.CustomerAccBo;
 import org.calminfotech.ledger.boInterface.GenLedgerBo;
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
 import org.calminfotech.ledger.models.CustomerAccount;
+import org.calminfotech.ledger.models.CustomerEntry;
+import org.calminfotech.ledger.models.GLEntry;
 import org.calminfotech.ledger.models.LedgerAccount;
 import org.calminfotech.ledger.utiility.LedgerException;
 import org.calminfotech.system.boInterface.OrganisationBo;
@@ -109,6 +114,70 @@ public class APIUtilityController {
 		return accounts;
 	}
 	
+	@ResponseBody
+	@RequestMapping(value = {"/gen_ledger/listings/{account_no}/{start_date}/{end_date}"}, method=RequestMethod.GET, produces = "text/html")
+	public String getGLListings(@PathVariable("account_no") String account_no, @PathVariable("start_date") String start_date, @PathVariable("end_date") String end_date){
+		List<GLEntry>  glEntries = null;
+		try {
+			 glEntries = this.genLedgerBo.getGLEntriesByAccount_no(account_no);
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.err.println("error oo");
+		}
+		
+		String accounts = "<tr>";
+		for (GLEntry glEntry : glEntries) {
+			accounts += "<td>"
+					+ glEntry.getAccount_no().concat("</td><td>") 
+					+ Float.toString(glEntry.getAmount()).concat("</td><td>") 
+					+ glEntry.getPost_code().concat("</td><td>") 
+					+ Integer.toString(glEntry.getBranch()).concat("</td><td>") 
+					+ glEntry.getBatch_no().concat("</td><td>") 
+					+ glEntry.getRef_no1().concat("</td><td>") 
+					+ glEntry.getDescription().concat("</td>");
+		}
+		return accounts.concat("</tr>");
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = {"/customer_acc/listings/{prod_type}/{account_no}/{start_date}/{end_date}"}, method=RequestMethod.GET, produces = "text/html")
+	public String getCustListings(@PathVariable("prod_type") String prod_type, @PathVariable("account_no") String account_no, @PathVariable("start_date") String start_date, @PathVariable("end_date") String end_date){
+		System.out.println("API: " + prod_type.concat(" : ") + account_no.concat(" : ") + start_date.concat(" : "));
+		
+		try {
+			Date sDate = new SimpleDateFormat("dd/MM/yyyy").parse(start_date);
+			Date eDate = new SimpleDateFormat("dd/MM/yyyy").parse(end_date);
+			
+			System.out.println(sDate + " : " + eDate);
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		List<CustomerEntry>  customerEntries = null;
+		try {
+			customerEntries = this.genLedgerBo.getCustEntriesByAccount_no(account_no, start_date, end_date);
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.err.println("error oo");
+		}
+		
+		
+		String accounts = "";
+		for (CustomerEntry customerEntry : customerEntries) {
+			if (customerEntry.getRef_no2() == null) {
+				customerEntry.setRef_no2("");
+			}
+			accounts += "<tr><td>"
+					+ customerEntry.getAccount_no().concat("</td><td>") 
+					+ Float.toString(customerEntry.getAmount()).concat("</td><td>") 
+					+ customerEntry.getPost_code().concat("</td><td>") 
+					+ customerEntry.getBatch_no().concat("</td><td>") 
+					+ customerEntry.getRef_no2().concat("</td><td>") 
+					+ customerEntry.getDescription().concat("</td></tr>");
+		}
+		return accounts.concat("");
+	}
 	
 	
 }

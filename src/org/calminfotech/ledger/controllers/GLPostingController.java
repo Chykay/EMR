@@ -8,6 +8,7 @@ import org.calminfotech.ledger.boInterface.GenLedgerBo;
 import org.calminfotech.ledger.daoImpl.PostCodeDaoImpl;
 import org.calminfotech.ledger.forms.GLPostingForm;
 import org.calminfotech.ledger.models.GLEntry;
+import org.calminfotech.ledger.models.JournalEntry;
 import org.calminfotech.ledger.models.PostCode;
 import org.calminfotech.ledger.utiility.LedgerException;
 import org.calminfotech.system.boInterface.OrganisationBo;
@@ -70,6 +71,12 @@ public class GLPostingController {
 		model.addAttribute("glEntries", glEntries);
 		return "/ledger/gen_ledger/index";
 	}
+	
+	@RequestMapping(value = {"/listings"}, method=RequestMethod.GET)
+	public String listings(Model model) {
+		return "/ledger/gen_ledger/list";
+	}
+	
 	
 	/* REVERSE ENTRY */
 	@RequestMapping(value = {"/reversal/{batch_no}"}, method=RequestMethod.GET)
@@ -140,5 +147,21 @@ public class GLPostingController {
 		
 		return "redirect:/ledger/gen_ledger/index";
 	}
+	
+	/* GET ALL JOURNAL ENTRIES*/
+	@RequestMapping(value = {"/journal/index"}, method=RequestMethod.GET)
+	public String indexJ(Model model) {		
+		
+		List<JournalEntry> journalEntries = null;
+		try {
+			journalEntries = this.genLedgerBo.getJournalEntries();
+		} catch (LedgerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		model.addAttribute("journalEntries", journalEntries);
+		return "/ledger/gen_ledger/journal/index";
+	}
+	
 
 }
