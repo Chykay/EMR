@@ -25,55 +25,80 @@
 <div class="row">
 	<div class="col-xs-12">
 		<div class="table-header">List of Entries </div>
-		<table id="dTable"
-			class="table table-striped table-bordered table-hover">
-			<!-- Table heading -->
-			 <thead>
-				<tr>
-					<th>Posting Acc Type</th>
-					<th>Posting Acc No</th>
-					<th>P Post Code</th>
-					<th>P Branch ID</th>
-					<th>Amount</th>
-					<th>Ref No</th>
-					<th>Rec Acc Type</th>
-					<th>R Acc No</th>
-					<th>R Branch ID</th>
-					
-					<th><i class="glyphicon glyphicon-asterisk"></i></th>
-				</tr>
-			</thead>
-
-			<!-- Table body -->
-			<tbody>
-				<tr th:each="journalEntry : ${journalEntries}">
-					<td th:text="${journalEntry.p_account_type}">P Account Type</td>
-					<td th:text="${journalEntry.p_account_no}">P Account Number</td>
-					<td th:text="${journalEntry.p_post_code}">P Post Code</td>
-					<td th:text="${journalEntry.p_branch_id}">P Branch ID</td>
-					<td th:text="${journalEntry.amount}">Amount</td>
-					<td th:text="${journalEntry.ref_no}">Ref No</td>
-					<td th:text="${journalEntry.r_account_type}">R Account Type</td>
-					<td th:text="${journalEntry.r_account_no}">R Account Number</td>
-					<td th:text="${journalEntry.r_post_code}">R Post Code</td>
-					<td th:text="${journalEntry.r_branch_id}">R Branch ID</td>
-					
+		
+		<form th:action="@{/ledger/gen_ledger/journal/add}"  method="POST">
+			<table id="dTable"
+				class="table table-striped table-bordered table-hover">
+				<!-- Table heading -->
+				 <thead>
+					<tr>
+						<th>Account Type</th>
+						<th>Account No</th>
+						<th>Post Code</th>
+						<th>Branch ID</th>
+						<th>Amount</th>
+						<th>Ref No</th>
+						<th>Desc</th>
 						
-					<td>
+						<th><i class="glyphicon glyphicon-asterisk"></i></th>
+					</tr>
+				</thead>
+	
+				<!-- Table body -->
+				<tbody>
+					<tr th:each="journalEntry : ${journalEntries}">
+						<td th:text="${journalEntry.account_type}">Account Type</td>
+						<td th:text="${journalEntry.account_no}">Account Number</td>
+						<td th:text="${journalEntry.post_code}">Post Code</td>
+						<td th:text="${journalEntry.branch_id}">Branch ID</td>
+						<td th:text="${journalEntry.amount}">Amount</td>
+						<td th:text="${journalEntry.ref_no}">Ref No</td>
+						<td th:text="${journalEntry.description}">Description</td>
 						
-						<!-- <span th:if="${journalEntry.ref_no2 != 'REVERSED' and journalEntry.ref_no2  != 'REVERSAL' and journalEntry.product_id == null}">
-						 -->	
-						 <a class="btn btn-xs btn-danger tooltips" 
-								title="Reverse Entry"   th:id="${journalEntry.id}" 
-								href="#"> <i
-									class="fa fa-reply"></i>
-							</a>
-						<!-- </span> -->
-					</td>
-				</tr>
-			</tbody>
-			<!--  Table body END -->
-		</table>
+							
+						<td>
+							
+							<!-- <span th:if="${journalEntry.ref_no2 != 'REVERSED' and journalEntry.ref_no2  != 'REVERSAL' and journalEntry.product_id == null}">
+							 -->	
+							 <a class="btn btn-xs btn-danger tooltips" 
+									title="Reverse Entry"   th:id="${journalEntry.id}" 
+									href="#"> <i
+										class="fa fa-thrash"></i>
+								</a>
+							<!-- </span> -->
+						</td>
+					</tr>
+					<!-- 
+					<tr>
+						
+							<td >
+								<select>
+									<option value=""></option>
+									<option value="CA">Customer</option>
+								</select>
+							</td>
+							<td ><input type="text}"/></td>
+							<td >
+								<select>
+									<option value="DR">GL Debit</option>
+									<option value="CR">GL Credit</option>
+								</select>
+							</td>
+							<td ><select>
+									<option value="DR">GL Debit</option>
+									<option value="CR">GL Credit</option>
+								</select></td>
+							<td ><input type="text}"/></td>
+							<td ><input type="text}"/></td>
+							<td ><input type="text}"/></td>
+							<td> <input type="submit" value="add" class="}"/></td>
+					</tr>
+					 -->
+					
+				</tbody>
+				<!--  Table body END -->
+			</table>
+		</form>
 		<!-- End view content here -->
 		
 		<!-- <form>
@@ -85,7 +110,7 @@
 <script type="text/javascript">
 /*<![CDATA[*/
 
-	$(".reverse").click(function(){
+	/* $(".reverse").click(function(){
 		var batch_no = this.id;
 		
 		$.ajax({
@@ -96,7 +121,16 @@
 			}
 		});
 	});
-
-
+ */
+ 
+ $(document).ready(function(){
+	 
+	 //do an api call to return a markup of the branches 
+	 var markup= '<tr><td ><select th:field="*{account_type}"><option value=""></option><option value="CA">Customer</option></select></td><td ><input type="text"  th:field="*{account_no}"/></td><td ><select th:field="*{post_code}"><option value="DR">GL Debit</option><option value="CR">GL Credit</option></select></td><td ><select th:field="*{branch_id}"><option value="">Select..</option> <option th:each="branch : ${branches}" th:value = "${branch.Id}" th:text="${branch.name}">Branch</option></select></td><td ><input type="text"  th:field="*{amount}"/></td><td ><input type="text"  th:field="*{ref_no}"/></td><td ><input type="text"  th:field="*{description}"/></td><td> <input type="submit" value="add" class="btn btn-success btn-xs"/></td></tr>';
+ 
+	 $('#dTable tr:last').after(markup);
+ });
+ 
+ 
 /*]]>*/
 </script>

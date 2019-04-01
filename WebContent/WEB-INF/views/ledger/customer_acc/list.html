@@ -119,6 +119,18 @@
 			});
 		 }
 	}); */
+	
+	$(".reverse").click(function(){
+		var batch_no = this.id;
+		
+		$.ajax({
+			type : "GET",
+			url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/customer_acc/reversal/'	+ batch_no,
+			success : function(value) {
+				//if value is true, then you can't delete 
+			}
+		});
+	});
 
 
 /*]]>*/

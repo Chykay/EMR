@@ -8,7 +8,6 @@ import org.calminfotech.ledger.boInterface.GenLedgerBo;
 import org.calminfotech.ledger.daoImpl.PostCodeDaoImpl;
 import org.calminfotech.ledger.forms.GLPostingForm;
 import org.calminfotech.ledger.models.GLEntry;
-import org.calminfotech.ledger.models.JournalEntry;
 import org.calminfotech.ledger.models.PostCode;
 import org.calminfotech.ledger.utiility.LedgerException;
 import org.calminfotech.system.boInterface.OrganisationBo;
@@ -117,7 +116,7 @@ public class GLPostingController {
 		Organisation org = userIdentity.getOrganisation();
 	/*
 		List<LedgerAccount> ledgerAccounts = this.ledgerAccBo.fetchAll(org.getId(), org.getOrgCoy().getId());*/
-		List<Organisation> branches = this.organisationBo.fetchAll(org.getId());
+		List<Organisation> branches = this.organisationBo.fetchAll(org.getOrgCoy().getId());
 		List<PostCode> postCodes = this.postCodeDaoImpl.fetchAll();
 
 		
@@ -167,7 +166,7 @@ public class GLPostingController {
 		return "redirect:/ledger/gen_ledger/index";
 	}
 	
-	/* GET ALL JOURNAL ENTRIES*/
+/*	 GET ALL JOURNAL ENTRIES
 	@RequestMapping(value = {"/journal/index"}, method=RequestMethod.GET)
 	public String indexJ(Model model) {		
 		
@@ -180,7 +179,7 @@ public class GLPostingController {
 		}
 		model.addAttribute("journalEntries", journalEntries);
 		return "/ledger/gen_ledger/journal/index";
-	}
+	}*/
 	
 
 }
