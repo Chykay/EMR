@@ -33,8 +33,10 @@ public interface GenLedgerBo {
 	public void CustReversal(String batch_no) throws LedgerException;
 
 	public List<JournalEntry> getJournalEntries() throws LedgerException;
+/*
+	public List<GLEntry> getGLEntriesByAccount_no(String account_no) throws LedgerException;*/
 
-	public List<GLEntry> getGLEntriesByAccount_no(String account_no) throws LedgerException;
+	public List<GLEntry> getGLEntriesListing(String account_no, String start_date, String end_date) throws LedgerException;
 
-	public List<CustomerEntry> getCustEntriesByAccount_no(String account_no, String start_date, String end_date) throws LedgerException;
+	public List<CustomerEntry> getCustEntriesListing(String account_no, String start_date, String end_date) throws LedgerException;
 }

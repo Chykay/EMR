@@ -28,7 +28,7 @@ public interface GenLedgerDao {
 
 	public List<JournalEntry> getJournalEntries();
 
-	public List<GLEntry> getGLEntriesByAccount_no(String account_no);
+	public List<GLEntry> getGLEntriesListing(String account_no, String start_date, String end_date);
 
-	public List<CustomerEntry> getCustEntriesByAccount_no(String account_no, String start_date, String end_date);
+	public List<CustomerEntry> getCustEntriesListing(String account_no, String start_date, String end_date);
 }

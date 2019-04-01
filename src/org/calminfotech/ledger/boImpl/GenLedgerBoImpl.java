@@ -477,12 +477,12 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 	}
 
 	@Override
-	public List<GLEntry> getGLEntriesByAccount_no(String account_no) throws LedgerException {
-		return this.genLedgerDao.getGLEntriesByAccount_no(account_no);
+	public List<GLEntry> getGLEntriesListing(String account_no, String start_date, String end_date) throws LedgerException {
+		return this.genLedgerDao.getGLEntriesListing(account_no, start_date, end_date);
 	}
 
 	@Override
-	public List<CustomerEntry> getCustEntriesByAccount_no(String account_no, String start_date, String end_date) throws LedgerException {
-		return this.genLedgerDao.getCustEntriesByAccount_no(account_no, start_date, end_date);
+	public List<CustomerEntry> getCustEntriesListing(String account_no, String start_date, String end_date) throws LedgerException {
+		return this.genLedgerDao.getCustEntriesListing(account_no, start_date, end_date);
 	}
 }

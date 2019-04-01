@@ -24,14 +24,14 @@
 
 <div class="row">
 	<div class="col-xs-12">
-		<form role="form" class="form-horizontal" method="get" style="margin-top:20px;">
+		<form role="form" class="form-horizontal" method="post" style="margin-top:20px;">
 			<div class="form-group">
 				
 				<label for="product_type" class="col-sm-1 control-label no-padding">Product Type:</label>
 				<div class="col-sm-2">
-					<select id="product_type" size="" class="col-xs-12 col-sm-12" style="margin-top:0px;"  required="required">
+					<select id="product_type" name="product_type" size="" class="col-xs-12 col-sm-12" style="margin-top:0px;"  required="required">
 							<option value="">Select account type</option>
-							<option th:value="CL">Customer</option>
+							<option value="CA">Customer</option>
 					</select>
 				</div>
 				<div class="col-sm-3">
@@ -42,12 +42,10 @@
 					<label for="start_date" style="padding-right: 10px;">From:</label>
 					<input id="start_date"  name="start_date"  style="margin-bottom:0px;" placeholder="yyyy-MM-dd" />
 					<label for="end_date" style="padding: 0px 10px;">To:</label>
-					<input id="end_date"  name="end_date_search" style="margin-bottom:0px;" placeholder="yyyy-MM-dd" />
+					<input id="end_date"  name="end_date" style="margin-bottom:0px;" placeholder="yyyy-MM-dd" />
 				</div>
 				
-				<a class="btn btn-xs btn-primary tooltips search" 
-								title="Search"   id="search" 
-								href="#">Searcn</a>	
+				<button type="submit" class="btn btn-xs btn-primary">Searcn</button>	
 			</div>
 		</form>
 		<div class="table-header">List of Entries </div>
@@ -58,7 +56,8 @@
 				<tr>
 					<th>Account Number</th>
 					<th>Amount</th>
-					<th>Post Code</th>
+					<th>Post Code</th><!-- 
+					<th>Branch ID</th> -->
 					<th>Batch No</th>
 					<th>Ref No</th>
 					<th>Description</th>
@@ -68,28 +67,28 @@
 			</thead>
 
 			<!-- Table body -->
-			<tbody id="tbody">
-				<!-- <tr th:each="glEntry : ${glEntries">
-					<td th:text="${glEntry.account_no">Account Number</td>
-					<td th:text="${glEntry.amount">Amount</td>
-					<td th:text="${glEntry.post_code">Post Code</td>
-					<td th:text="${glEntry.branch">Branch ID</td>
-					<td th:text="${glEntry.batch_no">Batch No</td>
-					<td th:text="${glEntry.ref_no1">Ref No</td>
-					<td th:text="${glEntry.description">Description</td>
+			<tbody>
+				<tr th:each="custEntry : ${custEntries}">
+					<td th:text="${custEntry.account_no}">Account Number</td>
+					<td th:text="${custEntry.amount}">Amount</td>
+					<td th:text="${custEntry.post_code}">Post Code</td><!-- 
+					<td th:text="${custEntry.organisation_id}">Branch ID</td> -->
+					<td th:text="${custEntry.batch_no}">Batch No</td>
+					<td th:text="${custEntry.ref_no2}">Ref No</td>
+					<td th:text="${custEntry.description}">Description</td>
 					
 						
 					<td>
 						
-						<span th:if="${glEntry.ref_no2 != 'REVERSED' and glEntry.ref_no2  != 'REVERSAL' and glEntry.product_id == null">
+						<span th:if="${custEntry.ref_no2 != 'REVERSED' and custEntry.ref_no2  != 'REVERSAL'}">
 							<a class="btn btn-xs btn-danger tooltips reverse" 
-								title="Reverse Entry"   th:id="${glEntry.batch_no" 
+								title="Reverse Entry"   th:id="${custEntry.batch_no}" 
 								href="#"> <i
 									class="fa fa-reply"></i>
 							</a>
 						</span>
 					</td>
-				</tr> -->
+				</tr>
 			</tbody>
 			<!--  Table body END -->
 		</table>
@@ -100,7 +99,7 @@
 <script type="text/javascript">
 /*<![CDATA[*/
 
-	$(".search").click(function(){
+	/* $(".search").click(function(){
 		alert('now now');
 		var account_no = $('#account_no').val();
 		var start_date = $('#start_date').val();
@@ -119,7 +118,7 @@
 				}
 			});
 		 }
-	});
+	}); */
 
 
 /*]]>*/

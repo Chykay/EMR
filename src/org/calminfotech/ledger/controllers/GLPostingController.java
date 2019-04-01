@@ -74,6 +74,25 @@ public class GLPostingController {
 	
 	@RequestMapping(value = {"/listings"}, method=RequestMethod.GET)
 	public String listings(Model model) {
+		model.addAttribute("glEntries");
+		return "/ledger/gen_ledger/list";
+	}
+	
+	@RequestMapping(value = {"/listings/"}, method=RequestMethod.POST)
+	public String postListings(Model model, @Valid @ModelAttribute("account_no") String account_no,  
+			@Valid @ModelAttribute("start_date") String start_date, @Valid @ModelAttribute("end_date") String end_date) {
+		
+		
+		List<GLEntry>  glEntries = null;
+		try {
+			glEntries = this.genLedgerBo.getGLEntriesListing(account_no, start_date, end_date);
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.err.println("error oo");
+		}
+		model.addAttribute("glEntries", glEntries);
+		
+		
 		return "/ledger/gen_ledger/list";
 	}
 	

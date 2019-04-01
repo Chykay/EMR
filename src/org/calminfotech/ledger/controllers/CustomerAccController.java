@@ -68,14 +68,40 @@ public class CustomerAccController {
 	
 
 	@RequestMapping(value = {"/listings"}, method=RequestMethod.GET)
-	public String listings(Model model) {
-		/*List<CustomerEntry> customerEntries = null;
-		try {
-			customerEntries = this.genLedgerBo.getCustEntries();
-		} catch (LedgerException e) {
-			e.printStackTrace();
+	public String getListings(Model model) {
+		
+		model.addAttribute("custEntries");
+		return "/ledger/customer_acc/list";
+	}
+	
+	
+	@RequestMapping(value = {"/listings"}, method=RequestMethod.POST)
+	public String postListings(Model model, @Valid @ModelAttribute("product_type") String product_type,
+			@Valid @ModelAttribute("account_no") String account_no,  @Valid @ModelAttribute("start_date") String start_date,
+			@Valid @ModelAttribute("end_date") String end_date) {
+		
+		System.out.println(product_type + "got here : " + start_date );
+		if (product_type.contains("CA")) {
+			System.out.println(product_type + "got here  2 : " );
+			List<CustomerEntry>  customerEntries = null;
+			try {
+				customerEntries = this.genLedgerBo.getCustEntriesListing(account_no, start_date, end_date);
+			} catch (Exception e) {
+				// TODO: handle exception
+				System.err.println("error oo");
+			}
+			model.addAttribute("custEntries", customerEntries);
 		}
-		model.addAttribute("custEntries", customerEntries);*/
+		
+		List<CustomerEntry>  customerEntries = null;
+		try {
+			customerEntries = this.genLedgerBo.getCustEntriesListing(account_no, start_date, end_date);
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.err.println("error oo");
+		}
+		model.addAttribute("custEntries", customerEntries);
+		
 		return "/ledger/customer_acc/list";
 	}
 	

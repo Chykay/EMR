@@ -119,7 +119,7 @@ public class APIUtilityController {
 	public String getGLListings(@PathVariable("account_no") String account_no, @PathVariable("start_date") String start_date, @PathVariable("end_date") String end_date){
 		List<GLEntry>  glEntries = null;
 		try {
-			 glEntries = this.genLedgerBo.getGLEntriesByAccount_no(account_no);
+			 glEntries = this.genLedgerBo.getGLEntriesListing(account_no, start_date, end_date);
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.err.println("error oo");
@@ -156,7 +156,7 @@ public class APIUtilityController {
 		
 		List<CustomerEntry>  customerEntries = null;
 		try {
-			customerEntries = this.genLedgerBo.getCustEntriesByAccount_no(account_no, start_date, end_date);
+			customerEntries = this.genLedgerBo.getCustEntriesListing(account_no, start_date, end_date);
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.err.println("error oo");
