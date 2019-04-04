@@ -21,10 +21,15 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import net.sf.json.JSONArray;
+/*
+import org.json.simple.JSONObject;*/
+import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping(value = "/ledger/gen_ledger")
@@ -164,6 +169,24 @@ public class GLPostingController {
 	
 		
 		return "redirect:/ledger/gen_ledger/index";
+	}
+	
+	@RequestMapping(value = {"/direct/dummy"}, method=RequestMethod.POST)
+	public Object dummy(@RequestBody Object jsonObject){
+		
+		JSONArray array = (JSONArray)jsonObject;
+		//List <String> names = null;
+		
+		System.out.println(jsonObject);
+		System.out.println(array.get(0));
+		
+		JSONObject jObject = (JSONObject)array.get(0);
+		
+
+		System.out.println(jObject.get("age"));
+		return jsonObject;
+	
+		
 	}
 	
 /*	 GET ALL JOURNAL ENTRIES

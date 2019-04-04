@@ -1,0 +1,15 @@
+.kolade label {
+	margin:10px;
+}
+
+.kolade select{
+	width:150px;
+}
+
+.kolade2 input,label{
+	vertical-align: top;
+}
+
+.my-row {
+	margin-bottom:10px;
+}

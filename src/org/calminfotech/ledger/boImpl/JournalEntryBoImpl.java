@@ -26,7 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class GenLedgerBoImpl implements GenLedgerBo{
+public class JournalEntryBoImpl implements GenLedgerBo{
 
 	@Autowired
 	private GenLedgerDao genLedgerDao;

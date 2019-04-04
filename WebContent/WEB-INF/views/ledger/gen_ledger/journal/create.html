@@ -1,80 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<title>jQuery Add / Remove Table Rows Dynamically</title>
-<style type="text/css">
-    form{
-        margin: 20px 0;
-    }
-    form input, button{
-        padding: 5px;
-    }
-    table{
-        width: 100%;
-        margin-bottom: 20px;
-		border-collapse: collapse;
-    }
-    table, th, td{
-        border: 1px solid #cdcdcd;
-    }
-    table th, table td{
-        padding: 10px;
-        text-align: left;
-    }
-</style>
-<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-<script type="text/javascript">
-    $(document).ready(function(){
-        $(".add-row").click(function(){
-            var name = $("#name").val();
-            var email = $("#email").val();
-            var markup = "<tr><td><input type='checkbox' name='record'></td><td>" + name + "</td><td>" + email + "</td></tr>";
-            $("table tbody").append(markup);
-        });
-        
-        // Find and remove selected table rows
-        $(".delete-row").click(function(){
-            $("table tbody").find('input[name="record"]').each(function(){
-            	if($(this).is(":checked")){
-                    $(this).parents("tr").remove();
-                }
-            });
-        });
-    });    
-</script>
-</head>
-<body>
-    <form>
-        <input type="text" id="name" placeholder="Name">
-        <input type="text" id="email" placeholder="Email Address">
-    	<input type="button" class="add-row" value="Add Row">
-    </form>
-    <table>
-        <thead>
-            <tr>
-                <th>Select</th>
-                <th>Name</th>
-                <th>Email</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><input type="checkbox" name="record"></td>
-                <td>Peter Parker</td>
-                <td>peterparker@mail.com</td>
-            </tr>
-        </tbody>
-    </table>
-    <button type="button" class="delete-row">Delete Row</button>
-</body> 
-</html>                            
-
-
-
-
-
-
 <div class="page-header">
 	<h1>
 		Posting
@@ -99,553 +22,103 @@
 
 
 <div>
-	<form role="form" class="form-horizontal" method="POST" style="margin-top:20px;"
-			th:object="${posting}">
-		<div class="col-md-5 col-md-offset-1">
-			<!-- <div class="row"> -->
-							
-				 <div class="form-group">
-							<label class="control-label col-xs-12 col-sm-3 no-padding-right"
-								for="date-picker">Date to:</label>
-
-							<div class="col-xs-12 col-sm-9">
-								<div class="clearfix">
-
-									<input type="text" class="col-xs-12 col-sm-3 date-picker" required="required"
-										id="date-picker-2" th:field="*{posting_date}"
-										data-date-format="yyyy-mm-dd" /> <span class="text-danger"
-										th:if="${#fields.hasErrors('posting_date')}" th:errors="posting_date"></span>
-
-								</div>
-							</div>
-				</div> 
-						
-				<div class="form-group">
-					<label for="p_account_no" class="col-sm-3 control-label no-padding-right">Posting Account:</label>
-					<div class="col-sm-9">
-						<input id="p_account_no_search"  name="p_account_no_search" class="col-xs-10 col-sm-7" style="margin-bottom:0px;margin-right: 500px;" onkeyup="filter()" onblur="selectAccount()" /> <br />
-						<select th:field="*{p_account_no}" size="" class="col-xs-10 col-sm-5" style="margin-top:0px;"  required="required">
-							
-							<option th:each="generalLedger: ${generalLedgers}" 
-							th:value = "${generalLedger.account_no}" 
-							th:text="|${generalLedger.account_no}-${generalLedger.name}|">Posting Account</option>
-						</select>
-						<span class="text-danger" th:if="${#fields.hasErrors('p_account_no')}"
-							th:errors="*{p_account_no}">
-						</span>
-					</div>
-				</div>
-				
-				<div class="form-group">
-					<label for="p_branch_id" class="col-sm-3 control-label no-padding-right">Branch:</label>
-					<div class="col-sm-9">
-						<select th:field="*{p_branch_id}" class="col-xs-10 col-sm-5"  required="required">
-							<option value="">Select..</option>
-								<option th:each="branch : ${branches}" 
-							th:value = "${branch.Id}" 
-							th:text="${branch.name}">Receiving Branch</option>
-						</select>
-						<span class="text-danger" th:if="${#fields.hasErrors('p_branch_id')}"
-							th:errors="*{p_branch_id}">
-						</span>
-					</div>
-				</div>
-				
+	<button class="btn btn-primary add">New Entry</button>
+	<form role="form" class="form-horizontal" method="POST" style="margin-top:20px;">
+		 <div class="form-group journal">
+			<div class="container kolade">
+			    <div class="my-row">
+				    <label class="" for="account_type" >Account type:</label>
+				    <select id="account_type">
+				        <option value=""></option>
+				        <option value="CA">Customer</option>
+				    </select>
+				    <label class="" for="account_no" >Account No</label>
+				    <input type="text" id="account_no" />
+				    <label class="" for="post_code" >Post code</label>
+				    <select id="post_code">
+				        <option value="DR">GL Debit</option>
+				        <option value="CR">GL Credit</option>
+				    </select>
+				    <label class="" for="branch_id" >Branch ID</label>
+				    <select id="branch_id">
+				        <option value="">Select..</option>
+				    </select>
+				    
+				    <a class="btn btn-xs btn-default delete"><i class="fa fa-trash-o"></i></a>
 					
-				<div class="form-group">
-					<label for="ref_no1" class="col-sm-3 control-label no-padding-right">Ref No:</label>
-					<div class="col-sm-9">
-						<input type="text" class="col-xs-10 col-sm-5" placeholder="Ref No:"
-							th:field="*{ref_no1}" required="required" /> <span
-							class="text-danger" th:if="${#fields.hasErrors('ref_no1')}"
-							th:errors="*{ref_no1}"></span>
-					</div>
 				</div>
-				<div class="form-group">
-					<label for="p_branch_bal" class="col-sm-3 control-label no-padding-right">Balance:</label>
-					<div class="col-sm-9">
-						<input type="text" class="col-xs-10 col-sm-5" 
-							th:field="*{p_branch_bal}" readonly="readonly" /> <span
-							class="text-danger" th:if="${#fields.hasErrors('p_branch_bal')}"
-							th:errors="*{p_branch_bal}"></span>
-					</div>
+				<div class="kolade2">
+				    
+				    
+				    <label for="amount">Amount</label>
+				    <input type="text" id="amount" />
+				    <label for="ref_no">Ref No</label>
+				    <input type="text" id="ref_no" />
+				    <label for="desc">Desc</label>
+				    <textarea cols="30" rows="5" id="desc"></textarea>
+								
 				</div>
-			<!-- </div> -->
-		</div>
-		
-		
-		<div class="row">
-			<div class="col-md-6">
-				<div class="form-group">
-					<label for="p_post_code" class="col-sm-3 control-label no-padding-right">Post Code:</label>
-					<div class="col-sm-9">
-						<select th:field="*{p_post_code}" class="col-xs-10 col-sm-5"  required="required" id="p_post_code">
-							<option value="">Select..</option>
-								<option th:each="postCode: ${postCodes}" 
-							th:value = "${postCode.code}" 
-							th:text="${postCode.description}">Post Code</option>
-						</select>
-						<span class="text-danger" th:if="${#fields.hasErrors('p_post_code')}"
-							th:errors="*{p_post_code}">
-						</span>
-					</div>
-				</div>
-				
-				<div class="form-group">
-					<label for="amount" class="col-sm-3 control-label no-padding-right">Amount:</label>
-					<div class="col-sm-9">
-						<input type="text" class="col-xs-10 col-sm-5" 
-							th:field="*{amount}"
-							oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"
-						/> <span
-							class="text-danger" th:if="${#fields.hasErrors('amount')}"
-							th:errors="*{amount}"></span>
-					</div>
-				</div>
-				
-				
-				
-				<div class="form-group">
-					<label for="p_description" class="col-sm-3 control-label no-padding-right">Description:</label>
-					<div class="col-sm-9">
-					
-						<textarea class="col-xs-10 col-sm-5" 
-							th:field="*{p_description}"
-							th:value="${p_description}"
-							onblur="setDesc()"  rows="4" style="width:220px">
-						
-						</textarea>
-						<span
-							class="text-danger" th:if="${#fields.hasErrors('p_description')}"
-							th:errors="*{p_description}"></span>
-					</div>
-				</div>
-			</div>
-		</div>
-		
-		
-		<div class="row" style="border-top: 3px double #E5E5E5;margin-bottom: 10px;"></div> 
-		
-		
-		<!-- RECEIVING BRANCH -->
-		<div class="">
-			<div class="col-md-5 col-md-offset-1">
-				<div class="form-group">
-					<label for="r_account_no" class="col-sm-3 control-label no-padding-right">Account:</label>
-					<div class="col-sm-9">
-					<input id="r_account_no_search"  name="r_account_no_search" class="col-xs-10 col-sm-7" style="margin-bottom:0px;margin-right: 500px;" onkeyup="filterR()" onblur="selectAccountR()" /> <br />
-					
-						<select th:field="*{r_account_no}" size="" style="margin-top:0px;" class="col-xs-10 col-sm-5"  required="required">
-							
-								<option th:each="generalLedger: ${generalLedgers}" 
-							th:value = "${generalLedger.account_no}" 
-							th:text="|${generalLedger.account_no}-${generalLedger.name} |">Account</option>
-						</select>
-						<span class="text-danger" th:if="${#fields.hasErrors('r_account_no')}"
-							th:errors="*{r_account_no}">
-						</span>
-					</div>
-				</div>
-				
-				<div class="form-group">
-					<label for="r_branch_bal" class="col-sm-3 control-label no-padding-right">Balance:</label>
-					<div class="col-sm-9">
-						<input type="text" class="col-xs-10 col-sm-5" 
-							th:field="*{r_branch_bal}" readonly="readonly" /> <span
-							class="text-danger" th:if="${#fields.hasErrors('r_branch_bal')}"
-							th:errors="*{r_branch_bal}"></span>
-					</div>
-				</div>
-				
-				<div class="form-group">
-					<label for="r_branch_id" class="col-sm-3 control-label no-padding-right">Branch:</label>
-					<div class="col-sm-9">
-						<select th:field="*{r_branch_id}" class="col-xs-10 col-sm-5"  required="required">
-							<option value="">Select..</option>
-								<option th:each="branch : ${branches}" 
-							th:value = "${branch.Id}" 
-							th:text="${branch.name}">Receiving Branch</option>
-						</select>
-						<span class="text-danger" th:if="${#fields.hasErrors('r_branch_id')}"
-							th:errors="*{r_branch_id}">
-						</span>
-					</div>
-				</div>
-				
-			</div>
-		</div>
-		<div class="col-md-6">
-			<div class="row">				
-				
-				
-				<div class="form-group">
-					<label for="r_post_code" class="col-sm-3 control-label no-padding-right">Post Code:</label>
-					<div class="col-sm-9">
-						<select th:field="*{r_post_code}" class="col-xs-10 col-sm-5" readonly="readonly" required="required" id="r_post_code">
-							<option value="">Select..</option>
-								<option th:each="postCode: ${postCodes}" 
-							th:value = "${postCode.code}" 
-							th:text="${postCode.description}">Post Code</option>
-						</select>
-						<span class="text-danger" th:if="${#fields.hasErrors('r_post_code')}"
-							th:errors="*{r_post_code}">
-						</span>
-					</div>
-				</div>
-				
-				<div class="form-group">
-					<label for="r_amount" class="col-sm-3 control-label no-padding-right">Amount:</label>
-					<div class="col-sm-9">
-						<input type="text" class="col-xs-10 col-sm-5" 
-							th:field="*{r_amount}"
-							th:value="${amount}"
-							readonly="readonly" /> <span
-							class="text-danger" th:if="${#fields.hasErrors('r_amount')}"
-							th:errors="*{r_amount}"></span>
-					</div>
-				</div>
-				
-				<div class="form-group">
-					<label for="r_description" class="col-sm-3 control-label no-padding-right">Description:</label>
-					<div class="col-sm-9">
-					
-						<textarea class="col-xs-10 col-sm-5" 
-							th:field="*{r_description}"
-							th:value="${r_description}" rows="4" style="width:220px">
-						
-						</textarea>
-						<span
-							class="text-danger" th:if="${#fields.hasErrors('r_description')}"
-							th:errors="*{r_description}"></span>
-					</div>
-				</div>
-			</div>
-		</div>
-		
-		<input type="hidden" id="generalLedgerss" value="${generalLedgerss}" /> 
-		
-		<div class="clearfix">
-			<div class="col-md-offset-4 col-md-6">
-				<button class="btn btn-primary" type="submit">
-					<i class="ace-icon fa fa-check bigger-110"></i> Add
-				</button>
-				
-				<button class="btn btn-success" type="button" onclick="onSave()">
-					<i class="ace-icon fa fa-check bigger-110"></i> Save
-				</button>
-
-				<button class="btn btn-danger" type="reset">
-					<i class="ace-icon fa fa-undo bigger-110"></i> Reset
-				</button>
 			</div>
 		</div>
 	</form>
+	
+	<button class="btn btn-success post">Post Entries</button>
 </div>
 
 <script type="text/javascript">
 /*<![CDATA[*/
-$('#amount').focus(function(){
-	var selected_option = $('#p_post_code option:selected');
-	if(selected_option[0].value == ""){
-		$.gritter.add({
-			title : "Invalid Action!",
-			text : "You must select the post code first",
-			time : 4000
-		}); 
-		$('#amount').trigger("blur");
-	}
-});
-$('#amount').blur(function(){
-	 var valuee = parseFloat(this.value.replace(/,/g, ""))
-    .toFixed(2)
-    .toString()
-    .replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
-	
-	
-	this.value = valuee;
-	
-	$('#r_amount').attr('value', valuee);
-	
-	/* $('#r_amount').attr('value', this.value); */
-	
-	
-});
-
-$('#p_post_code').change(function() {
-	
-	console.log($('#p_post_code'));
-	var selected_option = $('#p_post_code option:selected');
-	
-	$('#r_post_code option').each(function() {
-	    if($(this)[0].value != selected_option[0].value ) {
-	    	$(this)[0].selected = true;
-	    } 
-	});
-});
-
-$('#r_post_code').change(function() {
-	var selected_option = $('#r_post_code option:selected');
-	
-	$('#p_post_code option').each(function() {
-	    if($(this)[0].value != selected_option[0].value ) {
-	    	$(this)[0].selected = true;
-	    } 
-	});
-});
-
-function setDesc() {
-	$("#r_description")[0].value = $("#p_description")[0].value;
-}
-
-
-
-
-function filter() {
-	
-    var keyword = document.getElementById("p_account_no_search").value;
-    var fleet = document.getElementById("p_account_no");
-    var selSize = 0;
-    for (var i = 0; i < fleet.length; i++) {
-        var txt = fleet.options[i].text.toLowerCase();
-        if (!txt.includes(keyword.toLowerCase())) {
-            fleet.options[i].style.display = 'none';
-        } else {
-            fleet.options[i].style.display = 'list-item';
-            selSize++;
-            fleet.style.width="200px";
-			fleet.size = selSize;
-        }
-    }
-}
-
-function selectAccount(){
-	var keyword = document.getElementById("p_account_no_search").value;
-    var fleet = document.getElementById("p_account_no");
-    for (var i = 0; i < fleet.length; i++) {
-        var txt = fleet.options[i].text.toLowerCase();
-        if (!txt.includes(keyword.toLowerCase())) {
-            fleet.options[i].style.display = 'none';
-        } else {
-        	fleet.options[i].selected = true;
-        	document.getElementById("p_account_no_search").value = txt;
-        	fleet.size = 0;
-        	
-        	var selected_branch = $('#p_branch_id option:selected');
-        	
-        	if(selected_branch[0].value != ""){
-        		myFunction($("#p_branch_bal"), fleet.options[i].value, selected_branch[0].value);
-        	}
-            break;
-        }
-    }
-}
-
-
-
-function filterR() {
-    var keyword = document.getElementById("r_account_no_search").value;
-    var fleet = document.getElementById("r_account_no");
-    var selSize = 0;
-    for (var i = 0; i < fleet.length; i++) {
-        var txt = fleet.options[i].text.toLowerCase();
-        if (!txt.includes(keyword.toLowerCase())) {
-            fleet.options[i].style.display = 'none';
-        } else { 
-        	fleet.options[i].style.display = 'list-item';
-	        selSize++;
-	        fleet.style.width="200px";
-			fleet.size = selSize;
-        }
-    }
-}
-
-
-function selectAccountR(){
-	var keyword = document.getElementById("r_account_no_search").value;
-    var fleet = document.getElementById("r_account_no");
-    for (var i = 0; i < fleet.length; i++) {
-        var txt = fleet.options[i].text.toLowerCase();
-        if (!txt.includes(keyword.toLowerCase())) {
-            fleet.options[i].style.display = 'none';
-        } else {
-        	fleet.options[i].selected = true;
-        	document.getElementById("r_account_no_search").value = txt;
-        	fleet.size = 0;
-        	
-			var selected_branch = $('#r_branch_id option:selected');
-        	
-        	if(selected_branch[0].value != ""){
-        		myFunction($("#r_branch_bal"), fleet.options[i].value, selected_branch[0].value);
-        	}
-            break;
-        }
-    }
-	
-	/*
-		collect the text
-		use it to loop thryogh the options's text
-		select the first one.
-		get the inner html and set it to the text box.
-		set selected = true
-	*/
-}
-
-$("#p_account_no").change(function(){
-	var selected_option = $('#p_account_no option:selected');
-	document.getElementById("p_account_no_search").value = selected_option.val(); 
-	
-	var selected_branch = $('#p_branch_id option:selected');
-	
-	if(selected_branch[0].value != ""){
-		myFunction($("#p_branch_bal"), selected_option[0].value, selected_branch[0].value);
-	}
-	// call ajax function
-});
-
-$('#p_branch_id').change(function() {
-	
-	var search_field = document.getElementById("p_account_no_search").value;
-	
-	var selected_option = $('#p_account_no option:selected');
-
-	var selected_branch = $('#p_branch_id option:selected');
-	
-	if(search_field != ""){
-		myFunction($("#p_branch_bal"), selected_option[0].value, selected_branch[0].value);
-	}
-});
-
-$("#r_account_no").change(function(){
-	var selected_option = $('#r_account_no option:selected');
-	document.getElementById("r_account_no_search").value = selected_option.val();
-
-
-	var selected_branch = $('#r_branch_id option:selected');
-	
-	if(selected_branch[0].value != ""){
-		myFunction($("#r_branch_bal"), selected_option[0].value, selected_branch[0].value);
-	}
-});
-
-
-$('#r_branch_id').change(function() {
-	
-	var selected_option = $('#r_account_no option:selected');
-
-	var selected_branch = $('#r_branch_id option:selected');
-	
-	if(selected_option[0].value != ""){
-		myFunction($("#r_branch_bal"), selected_option[0].value, selected_branch[0].value);
-	}
-});
-
-	
-function myFunction(elem, account_no, branch_id) {
-	$.ajax({
-		type : "GET",
-		url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/balance/' + account_no + '/' + branch_id,
-		beforeSend : function() {
-			 $.gritter.add({
-				title : "Progress...",
-				text : "Fetching Balance...",
-				time : 3000
-			}); 
-		},
-		success : function(value) {
-			elem.val(value);
-			elem.value=value;
-			elem.trigger("change");
-			//call a function passing in "value", that sets the value and also 'un'-disables both postcodes
-			 $.gritter.add({
-				title : "Success!",
-				text : "Balance Fetched",
-				time : 4000
-			}); 
-		},
-		error : function() {
-			$.gritter.add({
-				title : "Error!",
-				text : "Error fetching Balance",
-				time : 4000
-			});
-
-		}
-});
-}
-
-function filterP() {
-    /* var keyword = $("#p_account_no_search").val();
-    console.log(keyword);
-
-	$("#p_account_no option").each(function() {
-    	var txt = $(this).toLowerCase();
-        console.log(txt);
-        console.log($(this)[0]);
-        if (!txt.includes(keyword.toLowerCase())) {
-        	$(this)[0].style.display = 'none';
-        } else {
-        	$(this)[0].style.display = 'list-item';
-        }
-    }); */
-}
-$('.datepicker').datepicker({
-	autoclose : true,
-	format: 'yyyy-mm-dd',
-	todayHighlight : true
-})//show datepicker when clicking on the icon
-.next().on(ace.click_event, function() {
-	$(this).prev().focus();
-});
-
-function onSave(){
-	alert("save");
-	$("form").each(function(){
-		console.log($(this).find(':input'));
-	});
-}
-
-
-
-/* jQuery.fn.filterByText = function(textbox) {
-	  return this.each(function() {
-	    var select = this;
-	    var options = [];
-	    $(select).find('option').each(function() {
-	      options.push({
-	        value: $(this).val(),
-	        text: $(this).text()
-	      });
-	    });
-	    $(select).data('options', options);
-
-	    $(textbox).bind('change keyup', function() {
-	      var options = $(select).empty().data('options');
-	      var search = $.trim($(this).val());
-	      var regex = new RegExp(search, "gi");
-
-	      $.each(options, function(i) {
-	        var option = options[i];
-	        if (option.text.match(regex) !== null) {
-	        	
-	        	
-	           $(select).append(
-	           '<option value="'+ option.value +'">' + option.text + '</option>'
-	          );
-	        }
-	      });
-	    });
-	  });
-	};
-
-	// You could use it like this:
-
-	$(function() {
-	  $('#p_account_no').filterByText($('#p_account_no_search'));
-	});
-	
-	$(function() {
-		  $('#r_account_no').filterByText($('#r_account_no_search'));
-		}); */
+           
+     $('.add').click(function(){
+    	 div = document.createElement('div');
+    	 markup = '<div class="container kolade"><div class="my-row"><label class="" for="account_type" >Account type:</label><select id="account_type"><option value=""></option><option value="CA">Customer</option></select><label class="" for="account_no" >Account No</label><input type="text" id="account_no" /><label class="" for="post_code" >Post code</label><select id="post_code"><option value="DR">GL Debit</option><option value="CR">GL Credit</option></select><label class="" for="branch_id" >Branch ID</label><select id="branch_id"><option value="">Select..</option></select><a class="btn btn-xs btn-default delete"><i class="fa fa-trash-o"></i></a></div><div class="kolade2"><label for="amount">Amount</label><input type="text" id="amount" /><label for="ref_no">Ref No</label><input type="text" id="ref_no" /><label for="desc">Desc</label><textarea cols="30" rows="5" id="desc"></textarea></div></div>';
+         $(div).addClass("form-group journal").html(markup);
+    	 $('form').append(div);
+     });
+     
+     
+     $(document.body).on("click", ".delete", function(){
+    	 $(this).parent().parent().parent().remove();
+     });
+     
+     $('.post').click(function(){
+    	 var journalEntries = {};
+    	  //var entries = [];
+    	 journalEntries.entries = []; 
+    	 /*var jsonData = {};*/
+    	 $('.kolade').each(function(){
+    		 /*jsonData[columnName] = column.value;
+    		 */
+    		 console.log($(this).find('#account_type option:selected').value);
+    		 console.log($(this).find('#account_type option:selected')[0].value);
+    		 var entry = {
+    			"account_type": $(this).find('#account_type option:selected').value,
+    			"account_no": $(this).find('#account_no').value,
+    			"post_code": $(this).find('#post_code option:selected').value,
+    			"branch_id": $(this).find('#branch_id option:selected').value,
+    			"amount": $(this).find('#amount').value,
+    			"ref_no": $(this).find('#ref_no').value,
+    			"desc": $(this).find('#desc').value,
+    			"nitel": 'lslssl'
+    		 }
+    		 
+    		 journalEntries.entries.push(entry);
+    	 });
+    	 
+    	console.log(journalEntries);
+ 		/*
+ 		 
+ 		 $.ajax({
+       type: "POST",
+       contentType: "application/json",
+       url: '/Hello',
+        data: JSON.stringify({ Name: playersShip.name, Credits: playersShip.credits }),
+       dataType: "json"
+    });
+    
+    
+    
+ 		 */
+     });
 		
-		/*]]>*/
+/*]]>*/
 </script>

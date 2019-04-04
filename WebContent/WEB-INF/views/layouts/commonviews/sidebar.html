@@ -1142,19 +1142,12 @@
 				<a href="#" class="dropdown-toggle"> 
 					<i class="menu-icon fa fa-caret-right"></i> 
 					<span class="menu-text">
-						General Ledger
+						GL postings
 					</span> 
 					<b class="arrow fa fa-angle-down"></b>
 				</a>
 					
 				<ul class="submenu">
-					 
-					<li class="">
-					 	<a th:href="@{/ledger/gen_ledger/journal/index}"> 
-					 		<i class="menu-icon fa fa-caret-right"></i> Journal entries
-						</a> 
-						<b class="arrow"></b>
-					</li>
 					<li class="">
 					 	<a th:href="@{/ledger/gen_ledger/listings}"> 
 					 		<i class="menu-icon fa fa-caret-right"></i> View All GL Listings
@@ -1167,7 +1160,8 @@
 						</a> 
 						<b class="arrow"></b>
 					</li> 
-					<li class="">
+					
+					<!-- <li class="">
 					 	<a th:href="@{/ledger/gen_ledger/index}"> 
 					 		<i class="menu-icon fa fa-caret-right"></i> View All GL Postings
 						</a> 
@@ -1178,7 +1172,7 @@
 					 		<i class="menu-icon fa fa-caret-right"></i> View All Customer Postings
 						</a> 
 						<b class="arrow"></b>
-					</li> 
+					</li>  -->
 					 
 					<li class="">
 					 	<a th:href="@{/ledger/gen_ledger/direct/post}"> 
@@ -1188,6 +1182,31 @@
 					</li> 
 				</ul>		
 			</li>
+			
+			<li class="">
+				<a href="#" class="dropdown-toggle"> 
+					<i class="menu-icon fa fa-caret-right"></i> 
+					<span class="menu-text">
+						GL Journals
+					</span> 
+					<b class="arrow fa fa-angle-down"></b>
+				</a>
+					
+				<ul class="submenu">
+					 <li class="">
+					 	<a th:href="@{/ledger/gen_ledger/journal/index}"> 
+					 		<i class="menu-icon fa fa-caret-right"></i>View Journal batches
+						</a> 
+						<b class="arrow"></b>
+					</li>
+					<li class="">
+					 	<a th:href="@{/ledger/gen_ledger/journal/add}"> 
+					 		<i class="menu-icon fa fa-caret-right"></i>Add new Journal batches
+						</a> 
+						<b class="arrow"></b>
+					</li>
+				</ul>		
+			</li>	
 			
 			<li class="">
 				<a href="#" class="dropdown-toggle"> 

@@ -11,6 +11,7 @@ import org.calminfotech.ledger.utiility.LedgerException;
 import org.calminfotech.system.boInterface.OrganisationBo;
 import org.calminfotech.system.models.Organisation;
 import org.calminfotech.user.utils.UserIdentity;
+import org.calminfotech.utils.annotations.Layout;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -66,6 +67,14 @@ public class JournalController {
 		model.addAttribute("journal", new JournalForm());
 		model.addAttribute("branches", branches);
 		return "/ledger/gen_ledger/journal/index";
+	}
+	
+	/* GET ALL JOURNAL ENTRIES*/
+
+	@Layout(value = "layouts/form_wizard_layout")
+	@RequestMapping(value = {"/journal/add"}, method=RequestMethod.GET)
+	public String add(Model model) {		
+		return "/ledger/gen_ledger/journal/create";
 	}
 	
 	/* GET ALL JOURNAL ENTRIES*/
