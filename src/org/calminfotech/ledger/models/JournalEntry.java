@@ -34,6 +34,9 @@ public class JournalEntry extends CommonLedger {
 
 	@Column(name="ref_no")
 	private String ref_no;
+	
+	@Column(name="journal_id")
+	private String journal_id;
 
 	public Integer getId() {
 		return id;
@@ -43,47 +46,45 @@ public class JournalEntry extends CommonLedger {
 		this.id = id;
 	}
 
-	public String getaccount_type() {
+	public String getAccount_type() {
 		return account_type;
 	}
 
-	public void setaccount_type(String account_type) {
+	public void setAccount_type(String account_type) {
 		this.account_type = account_type;
 	}
 
-	public String getaccount_no() {
+	public String getAccount_no() {
 		return account_no;
 	}
 
-	public void setaccount_no(String account_no) {
+	public void setAccount_no(String account_no) {
 		this.account_no = account_no;
 	}
 
-	public Integer getbranch_id() {
+	public Integer getBranch_id() {
 		return branch_id;
 	}
 
-	public void setbranch_id(Integer branch_id) {
+	public void setBranch_id(Integer branch_id) {
 		this.branch_id = branch_id;
 	}
 
-	public String getpost_code() {
+	public String getPost_code() {
 		return post_code;
 	}
 
-	public void setpost_code(String post_code) {
+	public void setPost_code(String post_code) {
 		this.post_code = post_code;
 	}
 
-	public String getdescription() {
+	public String getDescription() {
 		return description;
 	}
 
-	public void setdescription(String description) {
+	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	
 
 	public float getAmount() {
 		return amount;
@@ -93,14 +94,20 @@ public class JournalEntry extends CommonLedger {
 		this.amount = amount;
 	}
 
-	
-	public String getRef_no1() {
+	public String getRef_no() {
 		return ref_no;
 	}
 
-	public void setRef_no1(String ref_no) {
+	public void setRef_no(String ref_no) {
 		this.ref_no = ref_no;
 	}
 
+	public String getJournal_id() {
+		return journal_id;
+	}
+
+	public void setJournal_id(String journal_id) {
+		this.journal_id = journal_id;
+	}
 }
 

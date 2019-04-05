@@ -22,43 +22,30 @@
 
 
 <div>
-	<button class="btn btn-primary add">New Entry</button>
-	<form role="form" class="form-horizontal" method="POST" style="margin-top:20px;">
-		 <div class="form-group journal">
-			<div class="container kolade">
-			    <div class="my-row">
-				    <label class="" for="account_type" >Account type:</label>
-				    <select id="account_type">
-				        <option value=""></option>
-				        <option value="CA">Customer</option>
-				    </select>
-				    <label class="" for="account_no" >Account No</label>
-				    <input type="text" id="account_no" />
-				    <label class="" for="post_code" >Post code</label>
-				    <select id="post_code">
-				        <option value="DR">GL Debit</option>
-				        <option value="CR">GL Credit</option>
-				    </select>
-				    <label class="" for="branch_id" >Branch ID</label>
-				    <select id="branch_id">
-				        <option value="">Select..</option>
-				    </select>
-				    
-				    <a class="btn btn-xs btn-default delete"><i class="fa fa-trash-o"></i></a>
-					
-				</div>
-				<div class="kolade2">
-				    
-				    
-				    <label for="amount">Amount</label>
-				    <input type="text" id="amount" />
-				    <label for="ref_no">Ref No</label>
-				    <input type="text" id="ref_no" />
-				    <label for="desc">Desc</label>
-				    <textarea cols="30" rows="5" id="desc"></textarea>
-								
-				</div>
-			</div>
+	<form role="form" class="form-horizontal" style="margin-top:20px;">
+		<div class="form-group container">
+		    <label for="journal_desc">Journal Description</label>
+		    <input type="text" id="journal_desc" />
+		</div>
+		<button type="button" class="btn btn-primary add">New Entry</button>
+		 <div class="form-group container journal">
+		    <select id="account_type">
+		        <option value="">Select..</option>
+		        <option value="CA">Customer</option>
+		    </select>
+		    <input type="text" id="account_no" placeholder="account no" />
+		    <select id="post_code">
+		        <option value="">Select..</option>
+		        <option value="DR">GL Debit</option>
+		        <option value="CR">GL Credit</option>
+		    </select>
+		    <select id="branch_id">
+		        <option value="1">Select..</option>
+		    </select>
+		    <input type="text" id="amount"  placeholder="amount" />
+		    <input type="text" id="ref_no"  placeholder="ref no" />
+		    <input type="text" id="desc"  placeholder="description" />	
+		    <button type="button" class="btn btn-xs btn-default delete"><i class="fa fa-trash-o"></i></button>		    	
 		</div>
 	</form>
 	
@@ -70,54 +57,61 @@
            
      $('.add').click(function(){
     	 div = document.createElement('div');
-    	 markup = '<div class="container kolade"><div class="my-row"><label class="" for="account_type" >Account type:</label><select id="account_type"><option value=""></option><option value="CA">Customer</option></select><label class="" for="account_no" >Account No</label><input type="text" id="account_no" /><label class="" for="post_code" >Post code</label><select id="post_code"><option value="DR">GL Debit</option><option value="CR">GL Credit</option></select><label class="" for="branch_id" >Branch ID</label><select id="branch_id"><option value="">Select..</option></select><a class="btn btn-xs btn-default delete"><i class="fa fa-trash-o"></i></a></div><div class="kolade2"><label for="amount">Amount</label><input type="text" id="amount" /><label for="ref_no">Ref No</label><input type="text" id="ref_no" /><label for="desc">Desc</label><textarea cols="30" rows="5" id="desc"></textarea></div></div>';
-         $(div).addClass("form-group journal").html(markup);
+    	 markup = '<select id="account_type"><option value="">Select..</option><option value="CA">Customer</option></select><input type="text" id="account_no" placeholder="account no" /><select id="post_code"><option value="">Select..</option><option value="DR">GL Debit</option><option value="CR">GL Credit</option></select><select id="branch_id"><option value="1">Select..</option></select><input type="text" id="amount"  placeholder="amount" /><input type="text" id="ref_no"  placeholder="ref no" /><input type="text" id="desc"  placeholder="description" /><button type="button" class="btn btn-xs btn-default delete"><i class="fa fa-trash-o"></i></button>';
+    	 $(div).addClass("form-group container journal").html(markup);
     	 $('form').append(div);
      });
      
      
      $(document.body).on("click", ".delete", function(){
-    	 $(this).parent().parent().parent().remove();
+    	 $(this).parent().remove();
      });
      
      $('.post').click(function(){
-    	 var journalEntries = {};
-    	  //var entries = [];
-    	 journalEntries.entries = []; 
-    	 /*var jsonData = {};*/
-    	 $('.kolade').each(function(){
-    		 /*jsonData[columnName] = column.value;
-    		 */
-    		 console.log($(this).find('#account_type option:selected').value);
-    		 console.log($(this).find('#account_type option:selected')[0].value);
+    	 
+
+    	 var journalEntries = [];
+    	 $('.journal').each(function(){
     		 var entry = {
-    			"account_type": $(this).find('#account_type option:selected').value,
-    			"account_no": $(this).find('#account_no').value,
-    			"post_code": $(this).find('#post_code option:selected').value,
-    			"branch_id": $(this).find('#branch_id option:selected').value,
-    			"amount": $(this).find('#amount').value,
-    			"ref_no": $(this).find('#ref_no').value,
-    			"desc": $(this).find('#desc').value,
-    			"nitel": 'lslssl'
+    			"account_type": $(this).find('#account_type option:selected')[0].value,
+    			"account_no": $(this).find('#account_no')[0].value,
+    			"post_code": $(this).find('#post_code option:selected')[0].value,
+    			"branch_id": $(this).find('#branch_id option:selected')[0].value,
+    			"amount": $(this).find('#amount')[0].value,
+    			"ref_no": $(this).find('#ref_no')[0].value,
+    			"desc": $(this).find('#desc')[0].value
     		 }
     		 
-    		 journalEntries.entries.push(entry);
+    		 journalEntries.push(entry);
     	 });
     	 
-    	console.log(journalEntries);
- 		/*
+    	 journal = {
+    		"journalDesc": $('#journal_desc')[0].value,
+    		"journalEntries": journalEntries
+    	 }
+ 		
  		 
- 		 $.ajax({
-       type: "POST",
-       contentType: "application/json",
-       url: '/Hello',
-        data: JSON.stringify({ Name: playersShip.name, Credits: playersShip.credits }),
-       dataType: "json"
-    });
-    
-    
-    
- 		 */
+		$.ajax({
+			type: "POST",
+			contentType: "application/json",
+			'processData': false,
+			url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/gen_ledger/journal/add',
+			beforeSend : function() {
+				$.gritter.add({
+				title : "Progress...",
+				text : "Saving Journal Entry...",
+				time : 3000
+				}); 
+			},
+			data: JSON.stringify(journal),
+			dataType: "json",
+			
+			success: function(response, data){
+			     alert("yuppie");
+			     window.location = '/../'+ window.location.pathname.split('/')[1] + '/ledger/gen_ledger/journal/index';
+			      
+			}
+		});
      });
 		
 /*]]>*/

@@ -2,11 +2,8 @@ package org.calminfotech.ledger.controllers;
 
 import java.util.List;
 
-import javax.validation.Valid;
-
-import org.calminfotech.ledger.boInterface.GenLedgerBo;
-import org.calminfotech.ledger.forms.JournalForm;
-import org.calminfotech.ledger.models.JournalEntry;
+import org.calminfotech.ledger.boInterface.JournalEntryBo;
+import org.calminfotech.ledger.models.JournalHeader;
 import org.calminfotech.ledger.utiility.LedgerException;
 import org.calminfotech.system.boInterface.OrganisationBo;
 import org.calminfotech.system.models.Organisation;
@@ -15,7 +12,7 @@ import org.calminfotech.utils.annotations.Layout;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -27,7 +24,7 @@ public class JournalController {
 	private OrganisationBo organisationBo;
 	
 	@Autowired
-	private GenLedgerBo genLedgerBo;
+	private JournalEntryBo journalEntryBo;
 
 	/*	
 	
@@ -54,17 +51,15 @@ public class JournalController {
 	@RequestMapping(value = {"/journal/index"}, method=RequestMethod.GET)
 	public String index(Model model) {		
 		
-		List<JournalEntry> journalEntries = null;
+		List<JournalHeader> journalHeaders = null;
 		try {
-			journalEntries = this.genLedgerBo.getJournalEntries();
+			journalHeaders = this.journalEntryBo.getJournalHeaders();
 		} catch (LedgerException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		List<Organisation> branches = this.organisationBo.fetchAll(this.userIdentity.getOrganisation().getOrgCoy().getId());
-		model.addAttribute("journalEntries", journalEntries);
-		model.addAttribute("journal", new JournalForm());
+		model.addAttribute("journalHeaders", journalHeaders);
 		model.addAttribute("branches", branches);
 		return "/ledger/gen_ledger/journal/index";
 	}
@@ -73,15 +68,17 @@ public class JournalController {
 
 	@Layout(value = "layouts/form_wizard_layout")
 	@RequestMapping(value = {"/journal/add"}, method=RequestMethod.GET)
-	public String add(Model model) {		
+	public String add(Model model) {
+		
 		return "/ledger/gen_ledger/journal/create";
 	}
 	
 	/* GET ALL JOURNAL ENTRIES*/
-	@RequestMapping(value = {"/journal/add"}, method=RequestMethod.POST)
-	public String add(Model model, @Valid @ModelAttribute("journal") JournalForm journalForm) {		
+	@RequestMapping(value = {"/journal/add"}, method=RequestMethod.POST, consumes = "application/json")
+	public String add(@RequestBody Object journal) {
+		this.journalEntryBo.journalEntry(journal);
 		
-		System.out.println(journalForm.getAccount_no() + " : " + journalForm.getPost_code());
+		System.out.println("oya redirect oo");
 		return "redirect:/ledger/gen_ledger/journal/index";
 	}
 	
