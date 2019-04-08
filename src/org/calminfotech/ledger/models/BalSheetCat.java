@@ -25,7 +25,7 @@ public class BalSheetCat extends CommonLedger{
 	@Column(name = "parent_id")
 	private int parentID;
 	
-	@Column(name = "isActive")
+	@Column(name = "is_active")
 	private boolean isActive;
 	
 	@Transient

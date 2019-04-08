@@ -39,10 +39,10 @@
 					<input id="account_no"  name="account_no"  style="margin-bottom:0px;"   />
 				</div>
 				<div class="col-sm-5">
-					<label for="start_date" style="padding-right: 10px;">From:</label>
-					<input id="start_date"  name="start_date"  style="margin-bottom:0px;" placeholder="yyyy-MM-dd" />
-					<label for="end_date" style="padding: 0px 10px;">To:</label>
-					<input id="end_date"  name="end_date" style="margin-bottom:0px;" placeholder="yyyy-MM-dd" />
+					<label for="startDate" style="padding-right: 10px;">From:</label>
+					<input id="startDate"  name="startDate"  style="margin-bottom:0px;" placeholder="yyyy-MM-dd" />
+					<label for="endDate" style="padding: 0px 10px;">To:</label>
+					<input id="endDate"  name="endDate" style="margin-bottom:0px;" placeholder="yyyy-MM-dd" />
 				</div>
 				
 				<button type="submit" class="btn btn-xs btn-primary">Searcn</button>	
@@ -73,16 +73,16 @@
 					<td th:text="${custEntry.amount}">Amount</td>
 					<td th:text="${custEntry.post_code}">Post Code</td><!-- 
 					<td th:text="${custEntry.organisation_id}">Branch ID</td> -->
-					<td th:text="${custEntry.batch_no}">Batch No</td>
-					<td th:text="${custEntry.ref_no2}">Ref No</td>
+					<td th:text="${custEntry.batchNo}">Batch No</td>
+					<td th:text="${custEntry.refNo2}">Ref No</td>
 					<td th:text="${custEntry.description}">Description</td>
 					
 						
 					<td>
 						
-						<span th:if="${custEntry.ref_no2 != 'REVERSED' and custEntry.ref_no2  != 'REVERSAL'}">
+						<span th:if="${custEntry.refNo2 != 'REVERSED' and custEntry.refNo2  != 'REVERSAL'}">
 							<a class="btn btn-xs btn-danger tooltips reverse" 
-								title="Reverse Entry"   th:id="${custEntry.batch_no}" 
+								title="Reverse Entry"   th:id="${custEntry.batchNo}" 
 								href="#"> <i
 									class="fa fa-reply"></i>
 							</a>
@@ -102,17 +102,17 @@
 	/* $(".search").click(function(){
 		alert('now now');
 		var account_no = $('#account_no').val();
-		var start_date = $('#start_date').val();
-		var end_date = $('#end_date').val();
+		var startDate = $('#startDate').val();
+		var endDate = $('#endDate').val();
 		var sel_product_type = $('#product_type option:selected');
 		var prod_type = sel_product_type[0].value;
 
-		if(account_no == "" || start_date == "" || end_date == ""){
+		if(account_no == "" || startDate == "" || endDate == ""){
 			alert('you must select');
 		} else {
 			$.ajax({
 				type : "GET",
-				url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/customer_acc/listings/' + prod_type + '/'+ account_no + '/' + start_date + '/'	+ end_date,
+				url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/customer_acc/listings/' + prod_type + '/'+ account_no + '/' + startDate + '/'	+ endDate,
 				success : function(value) {
 					$('#tbody').html(value);
 				}
@@ -121,11 +121,11 @@
 	}); */
 	
 	$(".reverse").click(function(){
-		var batch_no = this.id;
+		var batchNo = this.id;
 		
 		$.ajax({
 			type : "GET",
-			url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/customer_acc/reversal/'	+ batch_no,
+			url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/customer_acc/reversal/'	+ batchNo,
 			success : function(value) {
 				//if value is true, then you can't delete 
 			}

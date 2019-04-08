@@ -43,12 +43,12 @@
 			<!-- Table body -->
 			<tbody>
 				<tr th:each="account : ${accounts}">
-					<td th:text="${account.ledger_type.name}">Ledger Type</td>
+					<td th:text="${account.ledgerType.name}">Ledger Type</td>
 					<td th:text="${account.code}">Code</td>
 					<td th:text="${account.name}">Name</td>
 					<td>
-					    <span th:if="${account.is_active}">Active</span>
-					    <span th:if="${!account.is_active}">Inactive</span>
+					    <span th:if="${account.isActive}">Active</span>
+					    <span th:if="${!account.isActive}">Inactive</span>
 					</td>
 						
 					<td>

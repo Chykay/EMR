@@ -167,7 +167,7 @@ public class CustomerAccController {
 		ledgerAccForm.setName(genLedger.getName());
 		ledgerAccForm.setCode(genLedger.getCode());
 		ledgerAccForm.setAccountNo(genLedger.getAccountNo());
-		if (genLedger.isActive()) {
+		if (genLedger.getIsActive()) {
 			ledgerAccForm.setIsActive(1);
 		} else {
 			ledgerAccForm.setIsActive(0);

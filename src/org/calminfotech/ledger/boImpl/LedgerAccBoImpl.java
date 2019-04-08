@@ -44,9 +44,9 @@ public class LedgerAccBoImpl implements LedgerAccBo {
 		ledgerAccount.setBalSheetCatID(ledgerAccForm.getBalSheetCatID());
 		ledgerAccount.setName(ledgerAccForm.getName());
 		if (ledgerAccForm.getIsActive() == 1) {
-			ledgerAccount.setActive(true);
+			ledgerAccount.setIsActive(true);
 		} else {
-			ledgerAccount.setActive(false);
+			ledgerAccount.setIsActive(false);
 		}
 		
 		
@@ -84,9 +84,9 @@ public class LedgerAccBoImpl implements LedgerAccBo {
 		ledgerAccount.setBalSheetCatID(ledgerAccForm.getBalSheetCatID());
 		ledgerAccount.setName(ledgerAccForm.getName());
 		if (ledgerAccForm.getIsActive() == 1) {
-			ledgerAccount.setActive(true);
+			ledgerAccount.setIsActive(true);
 		} else {
-			ledgerAccount.setActive(false);
+			ledgerAccount.setIsActive(false);
 		}
 		
 		ledgerAccount.setModified_by(userIdentity.getUser());

@@ -43,10 +43,10 @@
 				<tr th:each="account : ${accounts}">
 					<td th:text="${account.name}">Name</td>
 					<td>
-					    <span th:if="${account.is_active}">Active</span>
-					    <span th:if="${!account.is_active}">Inactive</span>
+					    <span th:if="${account.isActive}">Active</span>
+					    <span th:if="${!account.isActive}">Inactive</span>
 					</td>	
-					<td th:text="${account.parent_name}">Parent Name</td>
+					<td th:text="${account.parentName}">Parent Name</td>
 					
 					<td>
 						<a class="btn btn-xs btn-primary tooltips"

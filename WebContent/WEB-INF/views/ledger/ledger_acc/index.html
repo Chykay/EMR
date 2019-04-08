@@ -42,12 +42,12 @@
 			<!-- Table body -->
 			<tbody>
 				<tr th:each="account : ${accounts}">
-					<td th:text="${account.account_no}">Account Number</td>
-					<td th:text="${account.totaling_code}">Code</td>
+					<td th:text="${account.accountNo}">Account Number</td>
+					<td th:text="${account.totalingCode}">Code</td>
 					<td th:text="${account.name}">Name</td>
 					<td>
-					    <span th:if="${account.is_active}">Active</span>
-					    <span th:if="${!account.is_active}">Inactive</span>
+					    <span th:if="${account.isActive}">Active</span>
+					    <span th:if="${!account.isActive}">Inactive</span>
 					</td>
 						
 					<td>

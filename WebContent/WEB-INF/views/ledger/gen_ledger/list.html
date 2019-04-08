@@ -26,26 +26,17 @@
 	<div class="col-xs-12">
 		<form role="form" class="form-horizontal" method="get" style="margin-top:20px;">
 			<div class="form-group">
-				<label for="account_no" class="col-sm-2 control-label no-padding-right">GL Account No:</label>
+				<label for="accountNo" class="col-sm-2 control-label no-padding-right">GL Account No:</label>
 				<div class="col-sm-3">
-					<input id="account_no"  name="account_no"  style="margin-bottom:0px;"   />
-					<span class="text-danger" th:if="${#fields.hasErrors('account_no')}"
-						th:errors="*{account_no}">
-					</span>
+					<input id="accountNo"  name="accountNo"  style="margin-bottom:0px;"   />
 				</div>
-				<label for="start_date" class="col-sm-1 control-label no-padding-right">From:</label>
+				<label for="startDate" class="col-sm-1 control-label no-padding-right">From:</label>
 				<div class="col-sm-2">
-					<input id="start_date"  name="start_date"  style="margin-bottom:0px;"   />
-					<span class="text-danger" th:if="${#fields.hasErrors('start_date')}"
-						th:errors="*{start_date}">
-					</span>
+					<input id="startDate"  name="startDate"  style="margin-bottom:0px;" />
 				</div>
-				<label for="end_date" class="col-sm-1 control-label no-padding-right">To:</label>
+				<label for="endDate" class="col-sm-1 control-label no-padding-right">To:</label>
 				<div class="col-sm-2">
-					<input id="end_date"  name="end_date_search" style="margin-bottom:0px;"   />
-					<span class="text-danger" th:if="${#fields.hasErrors('end_date')}"
-						th:errors="*{end_date}">
-					</span>
+					<input id="endDate"  name="endDate_search" style="margin-bottom:0px;" />
 				</div>
 				<button type="submit" class="btn btn-xs btn-primary">Searcn</button>
 			</div>
@@ -71,7 +62,7 @@
 			<!-- Table body -->
 			<tbody id="tbody">
 				<!-- <tr th:each="glEntry : ${glEntries}">
-					<td th:text="${glEntry.account_no}">Account Number</td>
+					<td th:text="${glEntry.accountNo}">Account Number</td>
 					<td th:text="${glEntry.amount}">Amount</td>
 					<td th:text="${glEntry.post_code}">Post Code</td>
 					<td th:text="${glEntry.branch}">Branch ID</td>
@@ -102,17 +93,17 @@
 /*<![CDATA[*/
 
 	$(".search").click(function(){
-		var account_no = $("#account_no").val();
-		var start_date = $("#start_date").val();
-		var end_date = $("#end_date").val();
+		var accountNo = $("#accountNo").val();
+		var startDate = $("#startDate").val();
+		var endDate = $("#endDate").val();
 
-		if(account_no || start_date || end_date){
+		if(accountNo || startDate || endDate){
 			alert("you must select");
 		} else {
 			alert("selected all ");
 			$.ajax({
 				type : "GET",
-				url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/gen_ledger/listings/' + account_no + "/" + start_date + "/"	+ end_date,
+				url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/gen_ledger/listings/' + accountNo + "/" + startDate + "/"	+ endDate,
 				success : function(value) {
 					$("#tbody").html(value);
 				}

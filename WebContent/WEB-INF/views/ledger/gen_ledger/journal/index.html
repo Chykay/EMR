@@ -45,16 +45,24 @@
 						
 						<td th:text="${journalHeader.description}">Description</td>
 						<td th:text="${journalHeader.date}">Date</td>
-						<td th:text="${journalHeader.journal_id}">Journal ID</td>
+						<td th:text="${journalHeader.journalID}">Journal ID</td>
 						
 						<td>
 							<a class="btn btn-xs btn-primary tooltips"
-								title="post" th:href="@{/ledger/totaling/view/{id} (id=${journalHeader.id}) }"> <i
-									class="fa fa-eye"></i>
+								title="Post Item Details"  th:id="${journalHeader.id}"
+								th:href="@{/ledger/totaling/post/{id}(id=${journalHeader.journalID}) }"> <i
+									class="fa fa-checked"></i>
 							</a> 
+							
+							 
+						 <a class="btn btn-xs btn-warning tooltips"
+							title="Manage Item details"  th:id="${journalHeader.id}"
+							th:href="@{/ledger/totaling/edit/{id}(id=${journalHeader.journalID}) }"> <i
+								class="fa fa-edit"></i>
+							</a>
 							<a class="btn btn-xs btn-danger tooltips" 
 								title="Delete Item details"   th:id="${journalHeader.id}"  onclick="return Confirm(this.id)"
-								th:href="@{/ledger/totaling/delete/{id}(id=${journalHeader.id}) }"> <i
+								th:href="@{/ledger/totaling/delete/{id}(id=${journalHeader.journalID}) }"> <i
 									class="fa fa-trash-o"></i>
 							</a>
 						</td>
