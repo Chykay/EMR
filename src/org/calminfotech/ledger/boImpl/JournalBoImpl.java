@@ -4,12 +4,13 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.calminfotech.ledger.boInterface.JournalEntryBo;
-import org.calminfotech.ledger.daoInterface.JournalEntryDao;
+import org.calminfotech.ledger.boInterface.JournalBo;
+import org.calminfotech.ledger.daoInterface.JournalDao;
 import org.calminfotech.ledger.models.JournalEntry;
 import org.calminfotech.ledger.models.JournalHeader;
 import org.calminfotech.ledger.utiility.LedgerException;
 import org.calminfotech.ledger.utiility.LedgerUtility;
+import org.calminfotech.user.models.User;
 import org.calminfotech.user.utils.UserIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,10 +22,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 @Service
-public class JournalEntryBoImpl implements JournalEntryBo{
+public class JournalBoImpl implements JournalBo{
 
 	@Autowired
-	private JournalEntryDao journalEntryDao;
+	private JournalDao journalDao;
 	
 	@Autowired
 	private UserIdentity userIdentity;
@@ -51,7 +52,7 @@ public class JournalEntryBoImpl implements JournalEntryBo{
 	@Override
 	public List<JournalEntry> getJournalEntries() throws LedgerException {
 		System.out.println(this.userIdentity.getUser().getUserId() + " get journal BO");	
-		return this.journalEntryDao.getJournalEntries();
+		return this.journalDao.getJournalEntries();
 	}
 	
 	@Override
@@ -102,18 +103,39 @@ public class JournalEntryBoImpl implements JournalEntryBo{
 
 	@Override
 	public JournalHeader saveHeader(JournalHeader journalHeader) throws LedgerException {
-		this.journalEntryDao.saveHeader(journalHeader);
+		User user = this.userIdentity.getUser();
+		journalHeader.setCreated_by(user);
+		journalHeader.setJournalID(LedgerUtility.getBatchNo());
+		journalHeader.setDate(new Date(System.currentTimeMillis()));
+		journalHeader.setCreate_date(new Date(System.currentTimeMillis()));
+		journalHeader.setOrganisation(user.getOrganisation());
+		journalHeader.setOrgCoy(user.getOrganisation().getOrgCoy());
+		journalHeader.setTotCredit(0);
+		journalHeader.setTotDebit(0);
+		journalHeader.setStatus("NOT POSTED");
+		
+		this.journalDao.saveHeader(journalHeader);
 		return journalHeader;
 	}
 
 	@Override
 	public JournalEntry saveJournalEntry(JournalEntry journalEntry) throws LedgerException {
-		this.journalEntryDao.saveJournalEntry(journalEntry);
+		this.journalDao.saveJournalEntry(journalEntry);
 		return journalEntry;
 	}
 
 	@Override
-	public List<JournalHeader> getJournalHeaders() throws LedgerException {
-		return this.journalEntryDao.getJournalHeaders();
+	public List<JournalHeader> fetchJournalHeaders() throws LedgerException {
+		return this.journalDao.getJournalHeaders();
+	}
+
+	@Override
+	public JournalHeader getJournalHeader(String id) throws LedgerException {
+		return this.journalDao.getJournalHeader(id);
+	}
+
+	@Override
+	public List<JournalEntry> getJournalEntriesByJournalID(String id) throws LedgerException {
+		return this.journalDao.getJournalEntriesByJournalID(id);
 	}
 }

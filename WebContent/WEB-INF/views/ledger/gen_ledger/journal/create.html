@@ -24,14 +24,23 @@
 <div>
 	<form role="form" method="POST" class="form-horizontal" style="margin-top:20px;" th:object="${journalHeader}">
 		<div class="form-group">
-		    <label for="journal_desc" class="col-sm-3 control-label no-padding-right">Journal Description: </label>
-		    <div class="col-sm-9 col-md-9">
-		    	<input type="text" id="journal_desc" />
-			</div>	    	
+		    <label for="description" class="col-sm-3 control-label no-padding-right">Journal Description: </label>
+		    <div class="col-sm-9">
+				<input type="text" class="col-xs-10 col-sm-5" placeholder="description"
+					th:field="*{description}" required="required" /> <span
+					class="text-danger" th:if="${#fields.hasErrors('description')}"
+					th:errors="*{description}"></span>
+			</div>   	
+		</div>
+		<div class="clearfix form-actions">
+			<div class="col-md-offset-3 col-md-9">
+				<button class="btn btn-primary" type="submit">
+					<i class="ace-icon fa fa-check bigger-110"></i> Add Header
+				</button>
+			</div>
 		</div>
 	</form>
 	
-	<button type="submit" class="btn btn-success post">Add Header</button>
 </div>
 
 <script type="text/javascript">

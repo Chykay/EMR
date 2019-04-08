@@ -5,7 +5,7 @@ import java.util.List;
 import org.calminfotech.ledger.models.JournalEntry;
 import org.calminfotech.ledger.models.JournalHeader;
 
-public interface JournalEntryDao {
+public interface JournalDao {
 	
 	public List<JournalEntry> getJournalEntries();
 	
@@ -14,5 +14,9 @@ public interface JournalEntryDao {
 	public void saveJournalEntry(JournalEntry journalEntry);
 
 	public List<JournalHeader> getJournalHeaders();
+
+	public JournalHeader getJournalHeader(String id);
+
+	public List<JournalEntry> getJournalEntriesByJournalID(String id);
 
 }
