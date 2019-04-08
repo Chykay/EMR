@@ -35,15 +35,15 @@ public class TotAccBoImpl implements  TotAccBo{
 		TotalingAccount totalingAccount = new TotalingAccount();
 		
 		LedgerType ledgerType = new LedgerType();
-		ledgerType.setId(totalingForm.getLedger_type());
+		ledgerType.setId(totalingForm.getLedgerType());
 		
-		totalingAccount.setLedger_type(ledgerType);
+		totalingAccount.setLedgerType(ledgerType);
 		totalingAccount.setCode(totalingForm.getCode());
 		totalingAccount.setName(totalingForm.getName());
-		if (totalingForm.getIs_active() == 1) {
-			totalingAccount.setIs_active(true);
+		if (totalingForm.getIsActive() == 1) {
+			totalingAccount.setIsActive(true);
 		} else {
-			totalingAccount.setIs_active(false);
+			totalingAccount.setIsActive(false);
 		}
 		
 		
@@ -67,15 +67,15 @@ public class TotAccBoImpl implements  TotAccBo{
 		
 
 		LedgerType ledgerType = new LedgerType();
-		ledgerType.setId(totalingForm.getLedger_type());
+		ledgerType.setId(totalingForm.getLedgerType());
 		
-		totalingAccount.setLedger_type(ledgerType);
+		totalingAccount.setLedgerType(ledgerType);
 		totalingAccount.setCode(totalingForm.getCode());
 		totalingAccount.setName(totalingForm.getName());
-		if (totalingForm.getIs_active() == 1) {
-			totalingAccount.setIs_active(true);
+		if (totalingForm.getIsActive() == 1) {
+			totalingAccount.setIsActive(true);
 		} else {
-			totalingAccount.setIs_active(false);
+			totalingAccount.setIsActive(false);
 		}
 		
 		totalingAccount.setModified_by(userIdentity.getUser());

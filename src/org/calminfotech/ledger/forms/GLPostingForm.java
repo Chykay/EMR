@@ -5,41 +5,41 @@ public class GLPostingForm {
 	
 	private String create_date;
 	
-	private String p_account_no;
+	private String pAccountNo;
 	
-	private Integer p_branch_id;
+	private Integer pBranchID;
 	
-	private float p_branch_bal;
+	private float pBranchBal;
 	
-	private String p_description;
+	private String pDescription;
 
 	private String amount;
 
 	private String posting_date;
 	
-	private float r_amount;
+	private float rAmount;
 	
-	private String p_post_code;
+	private String pPostCode;
 	
-	private String r_account_no;
+	private String rAccountNo;
 	
-	private Integer r_branch_id;
+	private Integer rBranchID;
 	
-	private float r_branch_bal;
+	private float rBranchBal;
 	
-	private String r_description;
+	private String rDescription;
 	
-	private String r_post_code;
+	private String rPostCode;
 	
-	private String ref_no1;
+	private String refNo1;
 		
-	private String ref_no2;
+	private String refNo2;
 	
-	private String ref_no3;
+	private String refNo3;
 
-	private String p_account_type;
+	private String pAccountType;
 
-	private String r_account_type;
+	private String rAccountType;
 	
 	private String currency = "NGN";
 
@@ -52,7 +52,7 @@ public class GLPostingForm {
 	}
 	
 
-	public String getCreate_date() {
+	public String getCreateDate() {
 		return create_date;
 	}
 
@@ -60,77 +60,77 @@ public class GLPostingForm {
 		this.create_date = create_date;
 	}
 
-	public String getP_account_no() {
-		return p_account_no;
+	public String getPAccountNo() {
+		return pAccountNo;
 	}
 
-	public void setP_account_no(String p_account_no) {
-		this.p_account_no = p_account_no;
+	public void setPAccountNo(String pAccountNo) {
+		this.pAccountNo = pAccountNo;
 	}
 
-	public float getP_branch_bal() {
-		return p_branch_bal;
+	public float getPBranchBal() {
+		return pBranchBal;
 	}
 
-	public void setP_branch_bal(float p_branch_bal) {
-		this.p_branch_bal = p_branch_bal;
+	public void setPBranchBal(float pBranchBal) {
+		this.pBranchBal = pBranchBal;
 	}
 
-	public String getP_description() {
-		return p_description;
+	public String getPDescription() {
+		return pDescription;
 	}
 
-	public void setP_description(String p_description) {
-		this.p_description = p_description;
+	public void setPDescription(String p_description) {
+		this.pDescription = p_description;
 	}
 
 
-	public String getP_post_code() {
-		return p_post_code;
+	public String getPPostCode() {
+		return pPostCode;
 	}
 
-	public void setP_post_code(String p_post_code) {
-		this.p_post_code = p_post_code;
+	public void setPPostCode(String pPostCode) {
+		this.pPostCode = pPostCode;
 	}
 
-	public String getR_account_no() {
-		return r_account_no;
+	public String getRAccountNo() {
+		return rAccountNo;
 	}
 
-	public void setR_account_no(String r_account_no) {
-		this.r_account_no = r_account_no;
+	public void setRAccountNo(String rAccountNo) {
+		this.rAccountNo = rAccountNo;
 	}
 
-	public Integer getR_branch_id() {
-		return r_branch_id;
+	public Integer getRBranchID() {
+		return rBranchID;
 	}
 
-	public void setR_branch_id(Integer r_branch_id) {
-		this.r_branch_id = r_branch_id;
+	public void setRBranchID(Integer rBranchID) {
+		this.rBranchID = rBranchID;
 	}
 
-	public float getR_branch_bal() {
-		return r_branch_bal;
+	public float getRBranchBal() {
+		return rBranchBal;
 	}
 
-	public void setR_branch_bal(float r_branch_bal) {
-		this.r_branch_bal = r_branch_bal;
+	public void setRBranchBal(float rBranchBal) {
+		this.rBranchBal = rBranchBal;
 	}
 
-	public String getR_description() {
-		return r_description;
+	public String getRDescription() {
+		return rDescription;
 	}
 
-	public void setR_description(String r_description) {
-		this.r_description = r_description;
+	public void setRDescription(String rDescription) {
+		this.rDescription = rDescription;
 	}
 
-	public String getR_post_code() {
-		return r_post_code;
+	public String getRPostCode() {
+		return rPostCode;
 	}
 
-	public void setR_post_code(String r_post_code) {
-		this.r_post_code = r_post_code;
+	public void setRPostCode(String rPostCode) {
+		this.rPostCode = rPostCode;
 	}
 
 	public String getCurrency() {
@@ -138,36 +138,36 @@ public class GLPostingForm {
 	}
 
 
-	public Integer getP_branch_id() {
-		return p_branch_id;
+	public Integer getPBranchID() {
+		return pBranchID;
 	}
 
-	public void setP_branch_id(Integer p_branch_id) {
-		this.p_branch_id = p_branch_id;
+	public void setPBranchID(Integer pBranchID) {
+		this.pBranchID = pBranchID;
 	}
 
-	public String getRef_no1() {
-		return ref_no1;
+	public String getRefNo1() {
+		return refNo1;
 	}
 
-	public void setRef_no1(String ref_no1) {
-		this.ref_no1 = ref_no1;
+	public void setRefNo1(String refNo1) {
+		this.refNo1 = refNo1;
 	}
 
-	public String getRef_no2() {
-		return ref_no2;
+	public String getRefNo2() {
+		return refNo2;
 	}
 
-	public void setRef_no2(String ref_no2) {
-		this.ref_no2 = ref_no2;
+	public void setRefNo2(String refNo2) {
+		this.refNo2 = refNo2;
 	}
 
-	public String getRef_no3() {
-		return ref_no3;
+	public String getRefNo3() {
+		return refNo3;
 	}
 
-	public void setRef_no3(String ref_no3) {
-		this.ref_no3 = ref_no3;
+	public void setRefNo3(String refNo3) {
+		this.refNo3 = refNo3;
 	}
 
 	public void setCurrency(String currency) {
@@ -182,15 +182,15 @@ public class GLPostingForm {
 		this.amount = amount;
 	}
 
-	public float getR_amount() {
-		return r_amount;
+	public float getRAmount() {
+		return rAmount;
 	}
 
-	public void setR_amount(float r_amount) {
-		this.r_amount = r_amount;
+	public void setRAmount(float rAmount) {
+		this.rAmount = rAmount;
 	}
 
-	public String getPosting_date() {
+	public String getPostingDate() {
 		return posting_date;
 	}
 
@@ -198,20 +198,20 @@ public class GLPostingForm {
 		this.posting_date = posting_date;
 	}
 
-	public String getP_account_type() {
-		return p_account_type;
+	public String getPAccountType() {
+		return pAccountType;
 	}
 	
-	public void setP_account_type(String p_account_type) {
-		this.p_account_type = p_account_type;
+	public void setPAccountType(String pAccountType) {
+		this.pAccountType = pAccountType;
 	}
 
-	public String getR_account_type() {
-		return r_account_type;
+	public String getRAccountType() {
+		return rAccountType;
 	}
 
-	public void setR_account_type(String r_account_type) {
-		this.r_account_type = r_account_type;
+	public void setRAccountType(String rAccountType) {
+		this.rAccountType = rAccountType;
 	}
 
 	

@@ -37,12 +37,12 @@ public class BalSheetCatBoImpl implements BalSheetCatBo {
 	public BalSheetCat save(BalSheetForm balSheetForm){
 		BalSheetCat balSheetCat = new BalSheetCat();
 		
-		balSheetCat.setParent_id(balSheetForm.getParent_id());
+		balSheetCat.setParentID(balSheetForm.getParentID());
 		balSheetCat.setName(balSheetForm.getName());
-		if (balSheetForm.getIs_active() == 1) {
-			balSheetCat.setIs_active(true);
+		if (balSheetForm.getIsActive() == 1) {
+			balSheetCat.setIsActive(true);
 		} else {
-			balSheetCat.setIs_active(false);
+			balSheetCat.setIsActive(false);
 		}
 		
 		
@@ -65,12 +65,12 @@ public class BalSheetCatBoImpl implements BalSheetCatBo {
 		
 		BalSheetCat balSheetCat = this.balSheetDao.getLedgerById(id);
 	
-		balSheetCat.setParent_id(balSheetForm.getParent_id());
+		balSheetCat.setParentID(balSheetForm.getParentID());
 		balSheetCat.setName(balSheetForm.getName());
-		if (balSheetForm.getIs_active() == 1) {
-			balSheetCat.setIs_active(true);
+		if (balSheetForm.getIsActive() == 1) {
+			balSheetCat.setIsActive(true);
 		} else {
-			balSheetCat.setIs_active(false);
+			balSheetCat.setIsActive(false);
 		}
 		
 		balSheetCat.setModified_by(userIdentity.getUser());

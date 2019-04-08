@@ -63,7 +63,7 @@ public class APIUtilityController {
 		} else {
 			OrganisationCompany org = this.organisationBo.getOrganisationById(branch_id).getOrgCoy();
 			try {
-				balance = String.valueOf(this.genLedgerBo.getBalance(account_no, branch_id, org.getId()).getCurr_balance());
+				balance = String.valueOf(this.genLedgerBo.getBalance(account_no, branch_id, org.getId()).getCurrBalance());
 				
 			} catch (LedgerException e) {
 				e.printStackTrace();
@@ -77,7 +77,7 @@ public class APIUtilityController {
 	@RequestMapping(value = {"/status/{id}"}, method=RequestMethod.GET, produces = "text/html")
 	public String ledgerStatus(@PathVariable("id") String id){
 		LedgerAccount ledgerAccount = this.ledgerAccBo.getLedgerById(Integer.parseInt(id));
-		String account_no = ledgerAccount.getAccount_no();
+		String account_no = ledgerAccount.getAccountNo();
 		Organisation org = ledgerAccount.getOrganisation();
 		Integer branch_id = org.getId();
 		Integer company_id = org.getOrgCoy().getId();
@@ -100,15 +100,15 @@ public class APIUtilityController {
 			List<LedgerAccount> ledgerAccounts = this.ledgerAccBo.fetchAll(org.getId(), org.getOrgCoy().getId());
 			
 			for (LedgerAccount ledgerAccount : ledgerAccounts) {
-				accounts += "<option value='" + ledgerAccount.getAccount_no() + "'>"
-						+ ledgerAccount.getAccount_no().concat("-") + ledgerAccount.getName() + "</option>";
+				accounts += "<option value='" + ledgerAccount.getAccountNo() + "'>"
+						+ ledgerAccount.getAccountNo().concat("-") + ledgerAccount.getName() + "</option>";
 			}
 			
 		} else {
 			List<CustomerAccount> customerAccounts = this.customerAccBo.fetchAll(org.getId(), org.getOrgCoy().getId());
 			for (CustomerAccount customerAccount : customerAccounts) {
-				accounts += "<option value='" + customerAccount.getAccount_no() + "'>"
-						+ customerAccount.getAccount_no() + "</option>";
+				accounts += "<option value='" + customerAccount.getAccountNo() + "'>"
+						+ customerAccount.getAccountNo() + "</option>";
 			}
 		}
 		return accounts;
@@ -128,12 +128,12 @@ public class APIUtilityController {
 		String accounts = "<tr>";
 		for (GLEntry glEntry : glEntries) {
 			accounts += "<td>"
-					+ glEntry.getAccount_no().concat("</td><td>") 
+					+ glEntry.getAccountNo().concat("</td><td>") 
 					+ Float.toString(glEntry.getAmount()).concat("</td><td>") 
-					+ glEntry.getPost_code().concat("</td><td>") 
+					+ glEntry.getPostCode().concat("</td><td>") 
 					+ Integer.toString(glEntry.getBranch()).concat("</td><td>") 
-					+ glEntry.getBatch_no().concat("</td><td>") 
-					+ glEntry.getRef_no1().concat("</td><td>") 
+					+ glEntry.getBatchNo().concat("</td><td>") 
+					+ glEntry.getRefNo1().concat("</td><td>") 
 					+ glEntry.getDescription().concat("</td>");
 		}
 		return accounts.concat("</tr>");
@@ -165,15 +165,15 @@ public class APIUtilityController {
 		
 		String accounts = "";
 		for (CustomerEntry customerEntry : customerEntries) {
-			if (customerEntry.getRef_no2() == null) {
-				customerEntry.setRef_no2("");
+			if (customerEntry.getRefNo2() == null) {
+				customerEntry.setRefNo2("");
 			}
 			accounts += "<tr><td>"
-					+ customerEntry.getAccount_no().concat("</td><td>") 
+					+ customerEntry.getAccountNo().concat("</td><td>") 
 					+ Float.toString(customerEntry.getAmount()).concat("</td><td>") 
-					+ customerEntry.getPost_code().concat("</td><td>") 
-					+ customerEntry.getBatch_no().concat("</td><td>") 
-					+ customerEntry.getRef_no2().concat("</td><td>") 
+					+ customerEntry.getPostCode().concat("</td><td>") 
+					+ customerEntry.getBatchNo().concat("</td><td>") 
+					+ customerEntry.getRefNo2().concat("</td><td>") 
 					+ customerEntry.getDescription().concat("</td></tr>");
 		}
 		return accounts.concat("");

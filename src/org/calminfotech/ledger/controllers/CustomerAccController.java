@@ -166,11 +166,11 @@ public class CustomerAccController {
 		LedgerAccForm ledgerAccForm = new LedgerAccForm();
 		ledgerAccForm.setName(genLedger.getName());
 		ledgerAccForm.setCode(genLedger.getCode());
-		ledgerAccForm.setAccount_no(genLedger.getAccount_no());
-		if (genLedger.getIs_active()) {
-			ledgerAccForm.setIs_active(1);
+		ledgerAccForm.setAccountNo(genLedger.getAccountNo());
+		if (genLedger.isActive()) {
+			ledgerAccForm.setIsActive(1);
 		} else {
-			ledgerAccForm.setIs_active(0);
+			ledgerAccForm.setIsActive(0);
 		}
 
 		model.addAttribute("account", ledgerAccForm);

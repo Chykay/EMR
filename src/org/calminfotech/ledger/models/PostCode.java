@@ -17,7 +17,7 @@ public class PostCode {
 	private String description;
 	
 	@Column(name="post_type_id")
-	private Integer post_type_id;
+	private Integer postTypeID;
 
 	public String getCode() {
 		return code;
@@ -35,12 +35,12 @@ public class PostCode {
 		this.description = description;
 	}
 
-	public Integer getPost_type_id() {
-		return post_type_id;
+	public Integer getPostTypeID() {
+		return postTypeID;
 	}
 
-	public void setPost_type_id(Integer post_type_id) {
-		this.post_type_id = post_type_id;
+	public void setPostTypeID(Integer post_type_id) {
+		this.postTypeID = post_type_id;
 	}
 	
 	

@@ -17,10 +17,10 @@ public class GenLedgBalance extends CommonLedger{
 	private Integer id;
 	
 	@Column(name="gl_account_no")
-	private String gl_account_no;
+	private String gLAccountNo;
 	
 	@Column(name="curr_balance")
-	private float curr_balance;
+	private float currBalance;
 	
 	@Column(name="currency")
 	private String currency;
@@ -40,20 +40,20 @@ public class GenLedgBalance extends CommonLedger{
 		this.id = id;
 	}
 
-	public String getGl_account_no() {
-		return gl_account_no;
+	public String getGLAccountNo() {
+		return gLAccountNo;
 	}
 
-	public void setGl_account_no(String gl_account_no) {
-		this.gl_account_no = gl_account_no;
+	public void setGLAccountNo(String gLAccountNo) {
+		this.gLAccountNo = gLAccountNo;
 	}
 
-	public float getCurr_balance() {
-		return curr_balance;
+	public float getCurrBalance() {
+		return currBalance;
 	}
 
-	public void setCurr_balance(float curr_balance) {
-		this.curr_balance = curr_balance;
+	public void setCurrBalance(float currBalance) {
+		this.currBalance = currBalance;
 	}
 
 	public String getCurrency() {

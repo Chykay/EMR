@@ -47,10 +47,10 @@ public class BalSheetCatController {
 		List<BalSheetCat> balSheetCats = this.balSheetCatBo.fetchAll();
 		
 		for(BalSheetCat balSheetCat: balSheetCats) {
-			if(balSheetCat.getParent_id() != 0){
-				balSheetCat.setParent_name(this.balSheetCatBo.getLedgerById(balSheetCat.getParent_id()).getName());
+			if(balSheetCat.getParentID() != 0){
+				balSheetCat.setParentName(this.balSheetCatBo.getLedgerById(balSheetCat.getParentID()).getName());
 			} else {
-				balSheetCat.setParent_name("None");
+				balSheetCat.setParentName("None");
 			}
 		}
 		
@@ -103,10 +103,10 @@ public class BalSheetCatController {
 		
 		BalSheetForm balSheetForm = new BalSheetForm();
 		balSheetForm.setName(balSheetCat.getName());
-		if (balSheetCat.getIs_active()) {
-			balSheetForm.setIs_active(1);
+		if (balSheetCat.getIsActive()) {
+			balSheetForm.setIsActive(1);
 		} else {
-			balSheetForm.setIs_active(0);
+			balSheetForm.setIsActive(0);
 		}
 		
 

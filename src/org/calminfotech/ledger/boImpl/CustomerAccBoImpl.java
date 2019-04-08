@@ -43,7 +43,7 @@ public class CustomerAccBoImpl implements CustomerAccBo {
 		customerAccount.setCreated_by(userIdentity.getUser());
 		customerAccount.setCreate_date(new Date(System.currentTimeMillis()));
 		customerAccount.setIs_deleted(false);
-		customerAccount.setCurr_balance(0);
+		customerAccount.setCurrBalance(0);
 		
 		this.customerAccDao.save(customerAccount);
 /*
@@ -62,9 +62,9 @@ public class CustomerAccBoImpl implements CustomerAccBo {
 	
 	public CustomerAccount update(CustomerAccount cA){
 		
-		CustomerAccount customerAccount = this.customerAccDao.getLedgerByAccount_no(cA.getAccount_no());
+		CustomerAccount customerAccount = this.customerAccDao.getLedgerByAccount_no(cA.getAccountNo());
 		
-		customerAccount.setCurr_balance(cA.getCurr_balance());
+		customerAccount.setCurrBalance(cA.getCurr_balance());
 		customerAccount.setModified_by(userIdentity.getUser());
 		customerAccount.setModify_date(new Date(System.currentTimeMillis()));
 		
@@ -74,7 +74,7 @@ public class CustomerAccBoImpl implements CustomerAccBo {
 
 	@Override
 	public void CustEntry(CustomerEntry customerEntry) {
-		if (customerEntry.getPost_code().contains("DR")) {
+		if (customerEntry.getPostCode().contains("DR")) {
 			customerEntry.setAmount(Math.abs(customerEntry.getAmount()) * -1);
 		} else {
 			customerEntry.setAmount(Math.abs(customerEntry.getAmount()));
@@ -82,9 +82,9 @@ public class CustomerAccBoImpl implements CustomerAccBo {
 		this.customerAccDao.CustEntry(customerEntry);
 		
 		
-		CustomerAccount customerAccount = this.getCustomerByAccount_no(customerEntry.getAccount_no());
+		CustomerAccount customerAccount = this.getCustomerByAccount_no(customerEntry.getAccountNo());
 		
-		customerAccount.setCurr_balance(customerAccount.getCurr_balance() + customerEntry.getAmount());
+		customerAccount.setCurrBalance(customerAccount.getCurr_balance() + customerEntry.getAmount());
 		this.update(customerAccount);
 	}
 

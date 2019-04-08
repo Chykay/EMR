@@ -6,22 +6,22 @@ public class LedgerAccForm {
 	
 	private String name;
 	
-	private String account_no;
+	private String accountNo;
 	
 	private String code;
 	
-	private String totaling_code;
+	private String totalingCode;
 	
-	private Integer bal_sheet_cat_id;
+	private Integer balSheetCatID;
 	
-	private Integer is_active;
+	private Integer isActive;
 	
-	public String getAccount_no() {
-		return account_no;
+	public String getAccountNo() {
+		return accountNo;
 	}
 
-	public void setAccount_no(String account_no) {
-		this.account_no = account_no;
+	public void setAccountNo(String accountNo) {
+		this.accountNo = accountNo;
 	}
 
 	public String getCode() {
@@ -33,28 +33,28 @@ public class LedgerAccForm {
 	}
 
 
-	public String getTotaling_code() {
-		return totaling_code;
+	public String getTotalingCode() {
+		return totalingCode;
 	}
 
-	public void setTotaling_code(String totaling_code) {
-		this.totaling_code = totaling_code;
+	public void setTotalingCode(String totalingCode) {
+		this.totalingCode = totalingCode;
 	}
 
-	public Integer getBal_sheet_cat_id() {
-		return bal_sheet_cat_id;
+	public Integer getBalSheetCatID() {
+		return balSheetCatID;
 	}
 
-	public void setBal_sheet_cat_id(Integer bal_sheet_cat_id) {
-		this.bal_sheet_cat_id = bal_sheet_cat_id;
+	public void setBalSheetCatID(Integer balSheetCatID) {
+		this.balSheetCatID = balSheetCatID;
 	}
 	
-	public Integer getIs_active() {
-		return is_active;
+	public Integer getIsActive() {
+		return isActive;
 	}
 	
-	public void setIs_active(Integer is_active) {
-		this.is_active = is_active;
+	public void setIsActive(Integer isActive) {
+		this.isActive = isActive;
 	}
 
 	public String getName() {

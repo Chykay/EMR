@@ -24,19 +24,19 @@ public class GLEntry extends CommonLedger {
 	private float amount;
 	
 	@Column(name="ref_no1")
-	private String ref_no1;
+	private String refNo1;
 	
 	@Column(name="ref_no2")
-	private String ref_no2;
+	private String refNo2;
 	
 	@Column(name="ref_no3")
-	private String ref_no3;
+	private String refNo3;
 	
 	@Column(name="post_code")
-	private String post_code;
+	private String postCode;
 	
 	@Column(name="account_no")
-	private String account_no;
+	private String accountNo;
 	
 	@Column(name="branch")
 	private Integer branch;
@@ -45,17 +45,17 @@ public class GLEntry extends CommonLedger {
 	private String description;
 	
 	@Column(name="batch_no")
-	private String batch_no;
+	private String batchNo;
 	
 	@Column(name="posting_date")
 	@Temporal(TemporalType.DATE)
-	private Date posting_date;
+	private Date postingDate;
 	
 	@Column(name="product_id")
-	private String product_id;
+	private String productID;
 	
 	@Column(name="product_type")
-	private String product_type;
+	private String productType;
 
 	public int getId() {
 		return id;
@@ -73,46 +73,46 @@ public class GLEntry extends CommonLedger {
 		this.amount = amount;
 	}
 
-	public String getRef_no1() {
-		return ref_no1;
+	public String getRefNo1() {
+		return refNo1;
 	}
 
-	public void setRef_no1(String ref_no1) {
-		this.ref_no1 = ref_no1;
+	public void setRefNo1(String refNo1) {
+		this.refNo1 = refNo1;
 	}
 
 	
-	public String getRef_no2() {
-		return ref_no2;
+	public String getRefNo2() {
+		return refNo2;
 	}
 
-	public void setRef_no2(String ref_no2) {
-		this.ref_no2 = ref_no2;
+	public void setRefNo2(String refNo2) {
+		this.refNo2 = refNo2;
 	}
 	
 
-	public String getRef_no3() {
-		return ref_no3;
+	public String getRefNo3() {
+		return refNo3;
 	}
 
-	public void setRef_no3(String ref_no3) {
-		this.ref_no3 = ref_no3;
+	public void setRef_no3(String refNo3) {
+		this.refNo3 = refNo3;
 	}
 
-	public String getPost_code() {
-		return post_code;
+	public String getPostCode() {
+		return postCode;
 	}
 
-	public void setPost_code(String post_code) {
-		this.post_code = post_code;
+	public void setPostCode(String postCode) {
+		this.postCode = postCode;
 	}
 
-	public String getAccount_no() {
-		return account_no;
+	public String getAccountNo() {
+		return accountNo;
 	}
 
-	public void setAccount_no(String account_no) {
-		this.account_no = account_no;
+	public void setAccountNo(String accountNo) {
+		this.accountNo = accountNo;
 	}
 
 	public String getDescription() {
@@ -131,35 +131,35 @@ public class GLEntry extends CommonLedger {
 		this.branch = branch;
 	}
 
-	public String getBatch_no() {
-		return batch_no;
+	public String getBatchNo() {
+		return batchNo;
 	}
 
-	public void setBatch_no(String batch_no) {
-		this.batch_no = batch_no;
+	public void setBatchNo(String batchNo) {
+		this.batchNo = batchNo;
 	}
 
-	public Date getPosting_date() {
-		return posting_date;
+	public Date getPostingDate() {
+		return postingDate;
 	}
 
-	public void setPosting_date(Date posting_date) {
-		this.posting_date = posting_date;
+	public void setPostingDate(Date postingDate) {
+		this.postingDate = postingDate;
 	}
 
-	public String getProduct_id() {
-		return product_id;
+	public String getProductID() {
+		return productID;
 	}
 
-	public void setProduct_id(String product_id) {
-		this.product_id = product_id;
+	public void setProductID(String productID) {
+		this.productID = productID;
 	}
 
 	public String getProduct_type() {
-		return product_type;
+		return productType;
 	}
 
-	public void setProduct_type(String product_type) {
-		this.product_type = product_type;
+	public void setProduct_type(String productType) {
+		this.productType = productType;
 	}
 }

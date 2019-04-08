@@ -12,7 +12,7 @@ import org.calminfotech.utils.annotations.Layout;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -70,15 +70,20 @@ public class JournalController {
 	@RequestMapping(value = {"/journal/add"}, method=RequestMethod.GET)
 	public String add(Model model) {
 		
+		model.addAttribute("journalHeader", new JournalHeader());
 		return "/ledger/gen_ledger/journal/create";
 	}
 	
 	/* GET ALL JOURNAL ENTRIES*/
 	@RequestMapping(value = {"/journal/add"}, method=RequestMethod.POST, consumes = "application/json")
-	public String add(@RequestBody Object journal) {
-		this.journalEntryBo.journalEntry(journal);
+	public String add(@ModelAttribute("journalHeader") JournalHeader journal) {
+		try {
+			this.journalEntryBo.saveHeader(journal);
+		} catch (LedgerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		System.out.println("oya redirect oo");
 		return "redirect:/ledger/gen_ledger/journal/index";
 	}
 	

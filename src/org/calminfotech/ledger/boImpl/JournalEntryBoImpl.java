@@ -71,7 +71,7 @@ public class JournalEntryBoImpl implements JournalEntryBo{
 		JournalHeader journalHeader = new JournalHeader();
 		journalHeader.setDescription(description);
 		journalHeader.setDate(new Date(System.currentTimeMillis()));
-		journalHeader.setJournal_id(journalID);
+		journalHeader.setJournalID(journalID);
 		try {
 			this.saveHeader(journalHeader);
 		} catch (LedgerException e) {
@@ -81,16 +81,16 @@ public class JournalEntryBoImpl implements JournalEntryBo{
 		for (JsonElement jsonElement : entries) {
 			JournalEntry journalEntry = new JournalEntry();
 			JsonObject jEntryObj = jsonElement.getAsJsonObject();
-			journalEntry.setAccount_type(jEntryObj.get("account_type").getAsString());
-			journalEntry.setAccount_no(jEntryObj.get("account_no").getAsString());
+			journalEntry.setAccountType(jEntryObj.get("account_type").getAsString());
+			journalEntry.setAccountNo(jEntryObj.get("account_no").getAsString());
 			journalEntry.setAmount(Float.parseFloat(jEntryObj.get("amount").getAsString().replace(",", "")));
-			journalEntry.setPost_code(jEntryObj.get("post_code").getAsString());
-			journalEntry.setBranch_id(Integer.parseInt(jEntryObj.get("branch_id").getAsString()));
-			journalEntry.setRef_no(jEntryObj.get("ref_no").getAsString());
+			journalEntry.setPostCode(jEntryObj.get("post_code").getAsString());
+			journalEntry.setBranchID(Integer.parseInt(jEntryObj.get("branch_id").getAsString()));
+			journalEntry.setRefNo(jEntryObj.get("ref_no").getAsString());
 			journalEntry.setDescription(jEntryObj.get("desc").getAsString());
 			journalEntry.setCreate_date(new Date(System.currentTimeMillis()));
 			journalEntry.setCreated_by(this.userIdentity.getUser());
-			journalEntry.setJournal_id(journalID);
+			journalEntry.setJournalID(journalID);
 			
 			try {
 				this.saveJournalEntry(journalEntry);

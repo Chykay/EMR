@@ -11,7 +11,7 @@ import org.hibernate.annotations.SQLDelete;
 
 @Entity
 @org.hibernate.annotations.Entity(dynamicInsert = true)
-@SQLDelete(sql = "UPDATE GL_balance_sheet_ledger SET is_active = 0 WHERE id = ?")
+@SQLDelete(sql = "UPDATE GL_balance_sheet_ledger SET isActive = 0 WHERE id = ?")
 @Table(name = "GL_balance_sheet_ledger")
 public class BalSheetCat extends CommonLedger{
 	@Id
@@ -23,13 +23,13 @@ public class BalSheetCat extends CommonLedger{
 	private String name;
 	
 	@Column(name = "parent_id")
-	private int parent_id;
+	private int parentID;
 	
-	@Column(name = "is_active")
-	private boolean is_active;
+	@Column(name = "isActive")
+	private boolean isActive;
 	
 	@Transient
-	private String parent_name;
+	private String parentName;
 
 	
 
@@ -49,26 +49,26 @@ public class BalSheetCat extends CommonLedger{
 		this.name = name;
 	}	
 
-	public int getParent_id() {
-		return parent_id;
+	public int getParentID() {
+		return parentID;
 	}
 
-	public void setParent_id(int parent_id) {
-		this.parent_id = parent_id;
+	public void setParentID(int parentID) {
+		this.parentID = parentID;
 	}
-	public String getParent_name() {
-		return parent_name;
-	}
-
-	public void setParent_name(String parent_name) {
-		this.parent_name = parent_name;
-	}
-	public boolean getIs_active() {
-		return is_active;
+	public String getParentName() {
+		return parentName;
 	}
 
-	public void setIs_active(boolean is_active) {
-		this.is_active = is_active;
+	public void setParentName(String parent_name) {
+		this.parentName = parent_name;
+	}
+	public boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(boolean isActive) {
+		this.isActive = isActive;
 	}
 
 	

@@ -39,14 +39,14 @@ public class LedgerAccBoImpl implements LedgerAccBo {
 		LedgerAccount ledgerAccount = new LedgerAccount();
 		
 		ledgerAccount.setCode(ledgerAccForm.getCode());
-		ledgerAccount.setTotaling_code(ledgerAccForm.getTotaling_code());
-		ledgerAccount.setAccount_no(ledgerAccForm.getAccount_no());
-		ledgerAccount.setBal_sheet_cat_id(ledgerAccForm.getBal_sheet_cat_id());
+		ledgerAccount.setTotalingCode(ledgerAccForm.getTotalingCode());
+		ledgerAccount.setAccountNo(ledgerAccForm.getAccountNo());
+		ledgerAccount.setBalSheetCatID(ledgerAccForm.getBalSheetCatID());
 		ledgerAccount.setName(ledgerAccForm.getName());
-		if (ledgerAccForm.getIs_active() == 1) {
-			ledgerAccount.setIs_active(true);
+		if (ledgerAccForm.getIsActive() == 1) {
+			ledgerAccount.setActive(true);
 		} else {
-			ledgerAccount.setIs_active(false);
+			ledgerAccount.setActive(false);
 		}
 		
 		
@@ -79,14 +79,14 @@ public class LedgerAccBoImpl implements LedgerAccBo {
 		
 
 		ledgerAccount.setCode(ledgerAccForm.getCode());
-		ledgerAccount.setTotaling_code(ledgerAccForm.getTotaling_code());
-		ledgerAccount.setAccount_no(ledgerAccForm.getAccount_no());
-		ledgerAccount.setBal_sheet_cat_id(ledgerAccForm.getBal_sheet_cat_id());
+		ledgerAccount.setTotalingCode(ledgerAccForm.getTotalingCode());
+		ledgerAccount.setAccountNo(ledgerAccForm.getAccountNo());
+		ledgerAccount.setBalSheetCatID(ledgerAccForm.getBalSheetCatID());
 		ledgerAccount.setName(ledgerAccForm.getName());
-		if (ledgerAccForm.getIs_active() == 1) {
-			ledgerAccount.setIs_active(true);
+		if (ledgerAccForm.getIsActive() == 1) {
+			ledgerAccount.setActive(true);
 		} else {
-			ledgerAccount.setIs_active(false);
+			ledgerAccount.setActive(false);
 		}
 		
 		ledgerAccount.setModified_by(userIdentity.getUser());

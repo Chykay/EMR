@@ -97,12 +97,12 @@ public class TotAccController {
 		
 		totalingForm.setCode(totalingAccount.getCode());
 		/*totalingForm.setLedger_type(totalingAccount.getLedger_type().getId());*/
-		totalingForm.setLedger_type("2");
+		totalingForm.setLedgerType("2");
 		totalingForm.setName(totalingAccount.getName());
-		if (totalingAccount.getIs_active()) {
-			totalingForm.setIs_active(1);
+		if (totalingAccount.getIsActive()) {
+			totalingForm.setIsActive(1);
 		} else {
-			totalingForm.setIs_active(0);
+			totalingForm.setIsActive(0);
 		}
 		
 

@@ -4,19 +4,19 @@ public class JournalForm {
 
 	private Integer id;
 	
-	private String account_type;
+	private String accountType;
 	
-	private String account_no;
+	private String accountNo;
 	
-	private Integer branch_id;
+	private Integer branchID;
 	
-	private String post_code;
+	private String postCode;
 	
 	private String description;
 	
 	private float amount;
 	
-	private String ref_no;
+	private String refNo;
 
 	
 	public Integer getId() {
@@ -27,36 +27,36 @@ public class JournalForm {
 		this.id = id;
 	}
 
-	public String getAccount_type() {
-		return account_type;
+	public String getAccountType() {
+		return accountType;
 	}
 
-	public void setAccount_type(String account_type) {
-		this.account_type = account_type;
+	public void setAccountType(String accountType) {
+		this.accountType = accountType;
 	}
 
-	public String getAccount_no() {
-		return account_no;
+	public String getAccountNo() {
+		return accountNo;
 	}
 
-	public void setAccount_no(String account_no) {
-		this.account_no = account_no;
+	public void setAccountNo(String accountNo) {
+		this.accountNo = accountNo;
 	}
 
-	public Integer getBranch_id() {
-		return branch_id;
+	public Integer getBranchID() {
+		return branchID;
 	}
 
-	public void setBranch_id(Integer branch_id) {
-		this.branch_id = branch_id;
+	public void setBranchID(Integer branchID) {
+		this.branchID = branchID;
 	}
 
-	public String getPost_code() {
-		return post_code;
+	public String getPostCode() {
+		return postCode;
 	}
 
-	public void setPost_code(String post_code) {
-		this.post_code = post_code;
+	public void setPostCode(String postCode) {
+		this.postCode = postCode;
 	}
 
 	public String getDescription() {
@@ -75,12 +75,12 @@ public class JournalForm {
 		this.amount = amount;
 	}
 
-	public String getRef_no() {
-		return ref_no;
+	public String getRefNo() {
+		return refNo;
 	}
 
-	public void setRef_no(String ref_no) {
-		this.ref_no = ref_no;
+	public void setRefNo(String refNo) {
+		this.refNo = refNo;
 	}
 	
 	

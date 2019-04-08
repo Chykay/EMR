@@ -6,18 +6,18 @@ public class TotalingForm {
 	
 	private String name;
 	
-	private String ledger_type;
+	private String ledgerType;
 	
 	private String code;
 	
-	private Integer is_active;
+	private Integer isActive;
 	
-	public String getLedger_type() {
-		return ledger_type;
+	public String getLedgerType() {
+		return ledgerType;
 	}
 
-	public void setLedger_type(String ledger_type) {
-		this.ledger_type = ledger_type;
+	public void setLedgerType(String ledgerType) {
+		this.ledgerType = ledgerType;
 	}
 
 	public String getCode() {
@@ -31,12 +31,12 @@ public class TotalingForm {
 	
 
 
-	public Integer getIs_active() {
-		return is_active;
+	public Integer getIsActive() {
+		return isActive;
 	}
 
-	public void setIs_active(Integer is_active) {
-		this.is_active = is_active;
+	public void setIsActive(Integer isActive) {
+		this.isActive = isActive;
 	}
 
 	public String getName() {

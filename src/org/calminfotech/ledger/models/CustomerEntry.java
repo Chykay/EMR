@@ -24,23 +24,23 @@ public class CustomerEntry extends CommonLedger {
 	private float amount;
 	
 	@Column(name="post_code")
-	private String post_code;
+	private String postCode;
 	
 	@Column(name="account_no")
-	private String account_no;
+	private String accountNo;
 	
 	@Column(name="description")
 	private String description;
 	
 	@Column(name="batch_no")
-	private String batch_no;
+	private String batchNo;
 	
 	@Column(name="ref_no2")
-	private String ref_no2;
+	private String refNo2;
 	
 	@Column(name="posting_date")
 	@Temporal(TemporalType.DATE)
-	private Date posting_date;
+	private Date postingDate;
 
 	public int getId() {
 		return id;
@@ -58,20 +58,20 @@ public class CustomerEntry extends CommonLedger {
 		this.amount = amount;
 	}
 
-	public String getPost_code() {
-		return post_code;
+	public String getPostCode() {
+		return postCode;
 	}
 
-	public void setPost_code(String post_code) {
-		this.post_code = post_code;
+	public void setPostCode(String postCode) {
+		this.postCode = postCode;
 	}
 
-	public String getAccount_no() {
-		return account_no;
+	public String getAccountNo() {
+		return accountNo;
 	}
 
-	public void setAccount_no(String account_no) {
-		this.account_no = account_no;
+	public void setAccountNo(String accountNo) {
+		this.accountNo = accountNo;
 	}
 
 	public String getDescription() {
@@ -82,28 +82,28 @@ public class CustomerEntry extends CommonLedger {
 		this.description = description;
 	}
 
-	public String getBatch_no() {
-		return batch_no;
+	public String getBatchNo() {
+		return batchNo;
 	}
 
-	public void setBatch_no(String batch_no) {
-		this.batch_no = batch_no;
+	public void setBatchNo(String batchNo) {
+		this.batchNo = batchNo;
 	}
 
-	public Date getPosting_date() {
-		return posting_date;
+	public Date getPostingDate() {
+		return postingDate;
 	}
 
-	public void setPosting_date(Date posting_date) {
-		this.posting_date = posting_date;
+	public void setPostingDate(Date postingDate) {
+		this.postingDate = postingDate;
 	}
 
-	public String getRef_no2() {
-		return ref_no2;
+	public String getRefNo2() {
+		return refNo2;
 	}
 
-	public void setRef_no2(String ref_no2) {
-		this.ref_no2 = ref_no2;
+	public void setRefNo2(String refNo2) {
+		this.refNo2 = refNo2;
 	}
 	
 	

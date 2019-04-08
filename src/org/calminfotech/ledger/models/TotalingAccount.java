@@ -24,14 +24,14 @@ public class TotalingAccount extends CommonLedger{
 
 	@ManyToOne
 	@JoinColumn(name = "ledger_type")
-	private LedgerType ledger_type;
+	private LedgerType ledgerType;
 	 
 	
 	@Column(name = "code")
 	private String code;
 	
 	@Column(name = "is_active")
-	private boolean is_active;
+	private boolean isActive;
 
 	public Integer getId() {
 		return id;
@@ -49,12 +49,12 @@ public class TotalingAccount extends CommonLedger{
 		this.name = name;
 	}
 
-	public LedgerType getLedger_type() {
-		return ledger_type;
+	public LedgerType getLedgerType() {
+		return ledgerType;
 	}
 
-	public void setLedger_type(LedgerType ledger_type) {
-		this.ledger_type = ledger_type;
+	public void setLedgerType(LedgerType ledgerType) {
+		this.ledgerType = ledgerType;
 	}
 
 	public String getCode() {
@@ -65,12 +65,12 @@ public class TotalingAccount extends CommonLedger{
 		this.code = code;
 	}
 
-	public boolean getIs_active() {
-		return is_active;
+	public boolean getIsActive() {
+		return isActive;
 	}
 
-	public void setIs_active(boolean is_active) {
-		this.is_active = is_active;
+	public void setIsActive(boolean isActive) {
+		this.isActive = isActive;
 	}
 
 	

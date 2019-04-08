@@ -21,16 +21,16 @@ public class CustomerAccount extends CommonLedger{
 	private int id;
 	
 	@Column(name = "patient_id")
-	private String patient_id;
+	private String patientID;
 	
 	@Column(name = "account_no", unique=true, nullable=false)
-	private String account_no;
+	private String accountNo;
 	
 	@Column(name="curr_balance")
-	private float curr_balance;
+	private float currBalance;
 
 	@Column(name = "is_active")
-	private boolean is_active;
+	private boolean isActive;
 	
 	@Transient
 	private float amount;
@@ -43,29 +43,29 @@ public class CustomerAccount extends CommonLedger{
 		this.id = id;
 	}	
 
-	public String getPatient_id() {
-		return patient_id;
+	public String getPatientID() {
+		return patientID;
 	}
 
-	public void setPatient_id(String patient_id) {
-		this.patient_id = patient_id;
+	public void setPatientID(String patientID) {
+		this.patientID = patientID;
 	}
 
-	public String getAccount_no() {
-		return account_no;
+	public String getAccountNo() {
+		return accountNo;
 	}
 
-	public void setAccount_no(String account_no) {
-		this.account_no = account_no;
+	public void setAccountNo(String accountNo) {
+		this.accountNo = accountNo;
 	}
 
 
-	public boolean getIs_active() {
-		return is_active;
+	public boolean getIsActive() {
+		return isActive;
 	}
 
-	public void setIs_active(boolean is_active) {
-		this.is_active = is_active;
+	public void setIsActive(boolean isActive) {
+		this.isActive = isActive;
 	}
 
 	public float getAmount() {
@@ -77,11 +77,11 @@ public class CustomerAccount extends CommonLedger{
 	}
 
 	public float getCurr_balance() {
-		return curr_balance;
+		return currBalance;
 	}
 
-	public void setCurr_balance(float curr_balance) {
-		this.curr_balance = curr_balance;
+	public void setCurrBalance(float curr_balance) {
+		this.currBalance = curr_balance;
 	}
 
 	

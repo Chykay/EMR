@@ -45,10 +45,10 @@ public class GenLedgerDaoImpl implements GenLedgerDao {
 		
 		genLedgBalance.setCreate_date(new Date(System.currentTimeMillis()));
 		genLedgBalance.setCreated_by(this.userIdentity.getUser());
-		genLedgBalance.setCurr_balance(0);
+		genLedgBalance.setCurrBalance(0);
 		genLedgBalance.setOrganisation(this.organisationBo.getOrganisationById(branch_id));
 		genLedgBalance.setOrgCoy(this.organisationBo.getOrganisationById(branch_id).getOrgCoy());
-		genLedgBalance.setGl_account_no(account_no);
+		genLedgBalance.setGLAccountNo(account_no);
 		genLedgBalance.setCurrency("NGN");
 		
 		
@@ -58,8 +58,8 @@ public class GenLedgerDaoImpl implements GenLedgerDao {
 	@Override
 	public void updateGLBalance(GenLedgBalance genLedgBalance) {
 
-		System.out.println("dao balance: " + genLedgBalance.getCurr_balance());
-		System.out.println("dao account_no: " + genLedgBalance.getGl_account_no());
+		System.out.println("dao balance: " + genLedgBalance.getCurrBalance());
+		System.out.println("dao account_no: " + genLedgBalance.getGLAccountNo());
 		System.out.println("dao organ: " + genLedgBalance.getOrganisation().getId());
 		this.sessionFactory.getCurrentSession().update(genLedgBalance);
 		System.out.println("save");

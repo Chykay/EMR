@@ -21,7 +21,7 @@ public class JournalHeader extends CommonLedger{
 	private int id;
 	
 	@Column(name = "journal_id")
-	private String journal_id;
+	private String journalID;
 	
 	@Column(name = "description")
 	private String description;
@@ -30,6 +30,14 @@ public class JournalHeader extends CommonLedger{
 	@Temporal(TemporalType.DATE)
 	private Date date;
 	
+	@Column(name="tot_credit")
+	private float totCredit;
+	
+	@Column(name="tot_debiit")
+	private float totDebit;
+
+	@Column(name="status")
+	private String status = "NOT POSTED";
 
 	public int getId() {
 		return id;
@@ -39,12 +47,12 @@ public class JournalHeader extends CommonLedger{
 		this.id = id;
 	}
 
-	public String getJournal_id() {
-		return journal_id;
+	public String getJournalID() {
+		return journalID;
 	}
 
-	public void setJournal_id(String journal_id) {
-		this.journal_id = journal_id;
+	public void setJournalID(String journalID) {
+		this.journalID = journalID;
 	}
 
 	public String getDescription() {
@@ -62,4 +70,30 @@ public class JournalHeader extends CommonLedger{
 	public void setDate(Date date) {
 		this.date = date;
 	}
+
+	public float getTotCredit() {
+		return totCredit;
+	}
+
+	public void setTotCredit(float totCredit) {
+		this.totCredit = totCredit;
+	}
+
+	public float getTotDebit() {
+		return totDebit;
+	}
+
+	public void setTotDebit(float totDebit) {
+		this.totDebit = totDebit;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
+	
 }

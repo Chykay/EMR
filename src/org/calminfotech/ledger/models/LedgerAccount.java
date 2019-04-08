@@ -24,22 +24,22 @@ public class LedgerAccount extends CommonLedger{
 	private String name;
 	
 	@Column(name = "account_no", unique=true, nullable=false)
-	private String account_no;
+	private String accountNo;
 	
 
 	@Column(name = "totaling_code")
-	private String totaling_code;
+	private String totalingCode;
 	
 
 	@Column(name = "bal_sheet_cat_id")
-	private Integer bal_sheet_cat_id;
+	private Integer balSheetCatID;
 	 
 	
 	@Column(name = "code")
 	private String code;
 	
 	@Column(name = "is_active")
-	private boolean is_active;
+	private boolean isActive;
 	
 	@Transient
 	private float balance;
@@ -63,7 +63,30 @@ public class LedgerAccount extends CommonLedger{
 		this.name = name;
 	}
 
-	
+	public String getAccountNo() {
+		return accountNo;
+	}
+
+	public void setAccountNo(String accountNo) {
+		this.accountNo = accountNo;
+	}
+
+	public String getTotalingCode() {
+		return totalingCode;
+	}
+
+	public void setTotalingCode(String totalingCode) {
+		this.totalingCode = totalingCode;
+	}
+
+	public Integer getBalSheetCatID() {
+		return balSheetCatID;
+	}
+
+	public void setBalSheetCatID(Integer balSheetCatID) {
+		this.balSheetCatID = balSheetCatID;
+	}
+
 	public String getCode() {
 		return code;
 	}
@@ -72,36 +95,12 @@ public class LedgerAccount extends CommonLedger{
 		this.code = code;
 	}
 
-	public String getAccount_no() {
-		return account_no;
+	public boolean isActive() {
+		return isActive;
 	}
 
-	public void setAccount_no(String account_no) {
-		this.account_no = account_no;
-	}
-
-	public String getTotaling_code() {
-		return totaling_code;
-	}
-
-	public void setTotaling_code(String totaling_code) {
-		this.totaling_code = totaling_code;
-	}
-
-	public Integer getBal_sheet_cat_id() {
-		return bal_sheet_cat_id;
-	}
-
-	public void setBal_sheet_cat_id(Integer bal_sheet_cat_id) {
-		this.bal_sheet_cat_id = bal_sheet_cat_id;
-	}
-
-	public boolean getIs_active() {
-		return is_active;
-	}
-
-	public void setIs_active(boolean is_active) {
-		this.is_active = is_active;
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
 	}
 
 	public float getBalance() {
@@ -120,6 +119,6 @@ public class LedgerAccount extends CommonLedger{
 		this.amount = amount;
 	}
 
-	
 
+	
 }

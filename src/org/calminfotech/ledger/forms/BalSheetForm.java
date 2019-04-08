@@ -6,16 +6,16 @@ public class BalSheetForm {
 	
 	private String name;
 	
-	private Integer parent_id;
+	private Integer parentID;
 	
-	private Integer is_active;
+	private Integer isActive;
 
-	public Integer getIs_active() {
-		return is_active;
+	public Integer getIsActive() {
+		return isActive;
 	}
 
-	public void setIs_active(Integer is_active) {
-		this.is_active = is_active;
+	public void setIsActive(Integer isActive) {
+		this.isActive = isActive;
 	}
 
 
@@ -27,12 +27,12 @@ public class BalSheetForm {
 		this.name = name;
 	}
 
-	public Integer getParent_id() {
-		return parent_id;
+	public Integer getParentID() {
+		return parentID;
 	}
 
-	public void setParent_id(Integer parent_id) {
-		this.parent_id = parent_id;
+	public void setParentID(Integer parentID) {
+		this.parentID = parentID;
 	}
 
 	public Integer getId() {
