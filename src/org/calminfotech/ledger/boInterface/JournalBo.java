@@ -21,4 +21,6 @@ public interface JournalBo {
 	public JournalHeader getJournalHeader(String id) throws LedgerException;
 
 	public List<JournalEntry> getJournalEntriesByJournalID(String id) throws LedgerException;
+
+	public void manageJournal(Object journal) throws LedgerException;
 }

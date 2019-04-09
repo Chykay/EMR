@@ -17,8 +17,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 
 @Controller
@@ -114,16 +116,21 @@ public class JournalController {
 		return "/ledger/gen_ledger/journal/edit";
 	}
 	
-	@RequestMapping(value = {"/edit"}, method=RequestMethod.POST)
-	public String edit(@Valid @ModelAttribute("journalHeader") Object journal) {
+	@ResponseBody
+	@RequestMapping(value = {"/journal/add"}, method=RequestMethod.POST, consumes = "application/json", produces="text/html")
+	public String edit(@RequestBody Object journal) {
 		try {
-			System.out.println("here");
-			this.journalBo.saveHeader(journal);
+			this.journalBo.manageJournal(journal);
 		} catch (LedgerException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		return "redirect:/ledger/journal/index";
+		System.out.println("oya redirect oo");
+		
+		return "success";/*
+		redirect:/ledger/gen_ledger/journal/index*/
 	}
+	
 }
 

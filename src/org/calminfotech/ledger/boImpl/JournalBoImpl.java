@@ -138,4 +138,25 @@ public class JournalBoImpl implements JournalBo{
 	public List<JournalEntry> getJournalEntriesByJournalID(String id) throws LedgerException {
 		return this.journalDao.getJournalEntriesByJournalID(id);
 	}
+
+	@Override
+	public void manageJournal(Object journal) throws LedgerException {
+		Gson gson = new Gson();
+		JsonParser parser = new JsonParser();
+		
+        String json = gson.toJson(journal, LinkedHashMap.class);
+		JsonElement jsonTree = parser.parse(json);
+		//String journalID = LedgerUtility.getBatchNo();
+
+		JsonArray header = jsonTree.getAsJsonObject().get("journalHeader").getAsJsonArray();
+		JsonArray entries = jsonTree.getAsJsonObject().get("journalEntries").getAsJsonArray();
+
+		System.out.println("id: " + header.get(0).getAsString());
+		System.out.println("description: " + header.get(1).getAsString());
+		
+		for (JsonElement jsonElement : entries) {
+			System.out.println(jsonElement.getAsJsonObject().get("account_no").getAsString());
+		}
+		
+	}
 }

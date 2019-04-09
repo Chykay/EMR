@@ -1,0 +1,15 @@
+JOURNAL HTML 
+add "manage" button to journal index page.
+
+create a show journal page
+
+
+VALIDATION
+no of days to be able to backdate
+
+
+no duplicate account no, totaling ledger, and balacance sheet cat for branch 
+from database indexing
+
+
+
