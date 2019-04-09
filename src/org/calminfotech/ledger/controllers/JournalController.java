@@ -91,6 +91,7 @@ public class JournalController {
 	}
 
 
+	@Layout(value = "layouts/form_wizard_layout")
 	@RequestMapping(value = {"/edit/{id}"}, method=RequestMethod.GET)
 	public String edit(Model model, @PathVariable("id") String id) {
 		JournalHeader journalHeader = null;
@@ -111,6 +112,18 @@ public class JournalController {
 		
 		model.addAttribute("journalHeader", journalHeader);
 		return "/ledger/gen_ledger/journal/edit";
+	}
+	
+	@RequestMapping(value = {"/edit"}, method=RequestMethod.POST)
+	public String edit(@Valid @ModelAttribute("journalHeader") Object journal) {
+		try {
+			System.out.println("here");
+			this.journalBo.saveHeader(journal);
+		} catch (LedgerException e) {
+			e.printStackTrace();
+		}
+		
+		return "redirect:/ledger/journal/index";
 	}
 }
 
