@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 
 @Controller
@@ -116,8 +115,8 @@ public class JournalController {
 		return "/ledger/gen_ledger/journal/edit";
 	}
 	
-	@ResponseBody
-	@RequestMapping(value = {"/journal/add"}, method=RequestMethod.POST, consumes = "application/json", produces="text/html")
+	
+	@RequestMapping(value = {"/edit"}, method=RequestMethod.POST, consumes = "application/json", produces="text/html")
 	public String edit(@RequestBody Object journal) {
 		try {
 			this.journalBo.manageJournal(journal);

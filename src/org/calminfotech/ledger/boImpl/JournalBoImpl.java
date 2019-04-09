@@ -143,16 +143,23 @@ public class JournalBoImpl implements JournalBo{
 	public void manageJournal(Object journal) throws LedgerException {
 		Gson gson = new Gson();
 		JsonParser parser = new JsonParser();
+		String id, description;
 		
         String json = gson.toJson(journal, LinkedHashMap.class);
 		JsonElement jsonTree = parser.parse(json);
 		//String journalID = LedgerUtility.getBatchNo();
 
-		JsonArray header = jsonTree.getAsJsonObject().get("journalHeader").getAsJsonArray();
+		JsonObject header = jsonTree.getAsJsonObject().get("journalHeader").getAsJsonObject();
 		JsonArray entries = jsonTree.getAsJsonObject().get("journalEntries").getAsJsonArray();
-
-		System.out.println("id: " + header.get(0).getAsString());
-		System.out.println("description: " + header.get(1).getAsString());
+		
+		id = header.get("id").getAsString();
+		System.out.println(id + " id");
+		description = header.get("description").getAsString();
+		System.out.println(description + " description");
+		
+		JournalHeader journalHeader = this.getJournalHeader(id);
+		journalHeader.setDescription(description);
+		this.saveHeader(journalHeader);
 		
 		for (JsonElement jsonElement : entries) {
 			System.out.println(jsonElement.getAsJsonObject().get("account_no").getAsString());

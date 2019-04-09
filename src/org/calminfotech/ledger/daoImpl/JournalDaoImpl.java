@@ -38,7 +38,7 @@ public class JournalDaoImpl implements JournalDao {
 	@Override
 	public void saveHeader(JournalHeader journalHeader) {
 		System.out.println(this.userIdentity.getUser().getUserId() + "  journal header");	
-		this.sessionFactory.getCurrentSession().save(journalHeader);
+		this.sessionFactory.getCurrentSession().saveOrUpdate(journalHeader);
 	}
 
 

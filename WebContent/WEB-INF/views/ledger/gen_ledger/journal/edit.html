@@ -77,12 +77,13 @@
      
      $('.post').click(function(){
     	 
-		 var journalHeader = [];
     	 var journalEntries = [];
     	 var header = {
-    		"id": $('#description')[0].id,
-    		"description": $('#description')[0].value
-    	 };
+    		"id": $('[name="description"]')[1].id,
+    		"description": $('[name="description"]')[1].value
+    	 }; 
+    	 
+    	 
     	 $('.journal').each(function(){
     		 var entry = {
     			"account_type": $(this).find('#account_type option:selected')[0].value,
@@ -98,7 +99,7 @@
     	 });
     	 
     	 journal = {
-    		"journalHeader": journalHeader,
+    		"journalHeader": header,
     		"journalEntries": journalEntries
     	 }
  		
@@ -107,7 +108,7 @@
 			type: "POST",
 			contentType: "application/json",
 			'processData': false,
-			url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/gen_ledger/journal/add',
+			url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/journal/edit',
 			beforeSend : function() {
 				$.gritter.add({
 				title : "Progress...",
@@ -120,10 +121,10 @@
 			
 			success: function(response, data){
 			     alert("yuppie");
-			     window.location = '/../'+ window.location.pathname.split('/')[1] + '/ledger/gen_ledger/journal/index';
+			     window.location = '/../'+ window.location.pathname.split('/')[1] + '/ledger/journal/index';
 			      
 			}
-		});
+		}); 
      });
 		
 /*]]>*/
