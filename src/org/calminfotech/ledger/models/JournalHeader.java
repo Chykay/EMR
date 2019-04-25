@@ -33,7 +33,7 @@ public class JournalHeader extends CommonLedger{
 	@Column(name="tot_credit")
 	private float totCredit;
 	
-	@Column(name="tot_debiit")
+	@Column(name="tot_debit")
 	private float totDebit;
 
 	@Column(name="status")

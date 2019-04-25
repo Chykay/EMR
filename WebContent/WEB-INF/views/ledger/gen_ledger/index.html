@@ -45,20 +45,20 @@
 			<!-- Table body -->
 			<tbody>
 				<tr th:each="glEntry : ${glEntries}">
-					<td th:text="${glEntry.account_no}">Account Number</td>
+					<td th:text="${glEntry.accountNo}">Account Number</td>
 					<td th:text="${glEntry.amount}">Amount</td>
-					<td th:text="${glEntry.post_code}">Post Code</td>
+					<td th:text="${glEntry.postCode}">Post Code</td>
 					<td th:text="${glEntry.branch}">Branch ID</td>
-					<td th:text="${glEntry.batch_no}">Batch No</td>
-					<td th:text="${glEntry.ref_no1}">Ref No</td>
+					<td th:text="${glEntry.batchNo}">Batch No</td>
+					<td th:text="${glEntry.refNo1}">Ref No</td>
 					<td th:text="${glEntry.description}">Description</td>
 					
 						
 					<td>
 						
-						<span th:if="${glEntry.ref_no2 != 'REVERSED' and glEntry.ref_no2  != 'REVERSAL' and glEntry.product_id == null}">
+						<span th:if="${glEntry.refNo2 != 'REVERSED' and glEntry.refNo2  != 'REVERSAL' and glEntry.productID == null}">
 							<a class="btn btn-xs btn-danger tooltips reverse" 
-								title="Reverse Entry"   th:id="${glEntry.batch_no}" 
+								title="Reverse Entry"   th:id="${glEntry.batchNo}" 
 								href="#"> <i
 									class="fa fa-reply"></i>
 							</a>
@@ -76,11 +76,11 @@
 /*<![CDATA[*/
 
 	$(".reverse").click(function(){
-		var batch_no = this.id;
+		var batchNo = this.id;
 		
 		$.ajax({
 			type : "GET",
-			url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/gen_ledger/reversal/'	+ batch_no,
+			url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/gen_ledger/reversal/'	+ batchNo,
 			success : function(value) {
 				//if value is true, then you can't delete 
 			}

@@ -55,7 +55,7 @@ public class APIUtilityController {
 	public String getBalance(@PathVariable("account_no") String account_no, @PathVariable("branch_id") int branch_id, @PathVariable("account_type") String account_type){
 		
 		String balance = null;
-		if (account_type.contains("CL")) {
+		if (account_type.contains("CA")) {
 			// CALL A DIFFERENT GET BAL
 			Organisation org = this.customerAccBo.getCustomerByAccount_no(account_no).getOrganisation();
 			
@@ -96,7 +96,7 @@ public class APIUtilityController {
 		Organisation org = this.userIdentity.getOrganisation();
 		
 		String accounts = "";
-		if (account_type.contains("GL")) {
+		if (account_type.contains("GA")) {
 			List<LedgerAccount> ledgerAccounts = this.ledgerAccBo.fetchAll(org.getId(), org.getOrgCoy().getId());
 			
 			for (LedgerAccount ledgerAccount : ledgerAccounts) {
@@ -179,5 +179,20 @@ public class APIUtilityController {
 		return accounts.concat("");
 	}
 	
+	@ResponseBody
+	@RequestMapping(value = {"/branches"}, method=RequestMethod.GET, produces = "text/html")
+	public String getBranches(){
+		List<Organisation> organisations = this.organisationBo.fetchAll(this.userIdentity.getOrganisation().getOrgCoy().getId());
+		
+		String branches = "[";
+		
+			
+		for (Organisation organisation: organisations) {
+			branches += "{\"id\":" + organisation.getId() + ", \"name\": \""
+					+  organisation.getName() + "\"},";
+		}
+			
+		return branches.substring(0, branches.length() - 1).concat("]");
+	}
 	
 }

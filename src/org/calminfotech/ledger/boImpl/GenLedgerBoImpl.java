@@ -140,13 +140,12 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		gLEntry2.setPostingDate(DateUtils.formatStringToDate(glPostingForm.getPostingDate()));
 		
 		
-		if (account1.contains("CL")) {
+		if (account1.contains("CA")) {
 			CustomerEntry customerEntry= new CustomerEntry();
 			customerEntry.setAccountNo(glPostingForm.getPAccountNo());
 			customerEntry.setAmount(Float.parseFloat(glPostingForm.getAmount().replace(",", "")));
 			customerEntry.setBatchNo(batch_no);
 			customerEntry.setCreate_date(new Date(System.currentTimeMillis()));
-			customerEntry.setAccountNo(glPostingForm.getPAccountNo());
 			customerEntry.setOrganisation(this.userIdentity.getOrganisation());
 			customerEntry.setOrgCoy(this.userIdentity.getOrganisation().getOrgCoy());
 			customerEntry.setPostCode(glPostingForm.getPPostCode());
@@ -175,7 +174,7 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 			gLEntry1.setBranch(this.organisationBo.getOrganisationById(glPostingForm.getPBranchID()).getId());
 		}
 		
-		if (account2.contains("CL")) {
+		if (account2.contains("CA")) {
 			CustomerEntry customerEntry= new CustomerEntry();
 			customerEntry.setAmount(Float.parseFloat(glPostingForm.getAmount().replace(",", "")));
 			customerEntry.setBatchNo(batch_no);

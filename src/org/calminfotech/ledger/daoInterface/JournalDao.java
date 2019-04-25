@@ -13,10 +13,14 @@ public interface JournalDao {
 
 	public void saveJournalEntry(JournalEntry journalEntry);
 
-	public List<JournalHeader> getJournalHeaders();
+	public List<JournalHeader> fetchJournalHeaders();
 
-	public JournalHeader getJournalHeader(String id);
+	public JournalHeader getJournalHeader(String journalID);
 
-	public List<JournalEntry> getJournalEntriesByJournalID(String id);
+	public List<JournalEntry> getJournalEntriesByJournalID(String journalID);
+
+	public void removeEntries(String journalID);
+
+	void updateHeader(JournalHeader journalHeader);
 
 }

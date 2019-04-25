@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.calminfotech.ledger.boInterface.JournalBo;
+import org.calminfotech.ledger.forms.JournalForm;
 import org.calminfotech.ledger.models.JournalEntry;
 import org.calminfotech.ledger.models.JournalHeader;
 import org.calminfotech.ledger.utiility.LedgerException;
@@ -73,7 +74,6 @@ public class JournalController {
 	@Layout(value = "layouts/form_wizard_layout")
 	@RequestMapping(value = {"/add"}, method=RequestMethod.GET)
 	public String add(Model model) {
-		
 		model.addAttribute("journalHeader", new JournalHeader());
 		return "/ledger/gen_ledger/journal/create";
 	}
@@ -91,23 +91,42 @@ public class JournalController {
 		return "redirect:/ledger/journal/index";
 	}
 
+	
+	@RequestMapping(value = {"/post/{id}"}, method=RequestMethod.GET)
+	public String post(Model model, @PathVariable("id") String journalID) {
+		
+		try {
+			this.journalBo.postJournal(journalID);
+			} catch (LedgerException e) {
+			e.printStackTrace();
+		}
+		
+		return "redirect:/ledger/journal/index";
+	}
 
 	@Layout(value = "layouts/form_wizard_layout")
 	@RequestMapping(value = {"/edit/{id}"}, method=RequestMethod.GET)
-	public String edit(Model model, @PathVariable("id") String id) {
+	public String edit(Model model, @PathVariable("id") String journalID) {
+		JournalForm journalForm = new JournalForm();
 		JournalHeader journalHeader = null;
 		List<JournalEntry> journalEntries = null;
 		try {
-			journalHeader = this.journalBo.getJournalHeader(id);
-			journalEntries = this.journalBo.getJournalEntriesByJournalID(id);
+			journalHeader = this.journalBo.getJournalHeader(journalID);
+			System.out.println("Ok now cmon");
+			journalEntries = this.journalBo.getJournalEntriesByJournalID(journalID);
 		} catch (LedgerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
+		
+		
+		journalForm.setJournalHeader(journalHeader);
 		if (journalEntries == null) {
+			
 			model.addAttribute("journalEntries", new JournalEntry());
 		} else {
+
 			model.addAttribute("journalEntries", journalEntries);
 		}
 		
@@ -116,8 +135,8 @@ public class JournalController {
 	}
 	
 	
-	@RequestMapping(value = {"/edit"}, method=RequestMethod.POST, consumes = "application/json", produces="text/html")
-	public String edit(@RequestBody Object journal) {
+	@RequestMapping(value = {"/edit"}, method=RequestMethod.POST, consumes = "application/json")
+	public void edit(@RequestBody Object journal) {
 		try {
 			this.journalBo.manageJournal(journal);
 		} catch (LedgerException e) {
@@ -127,8 +146,7 @@ public class JournalController {
 		
 		System.out.println("oya redirect oo");
 		
-		return "success";/*
-		redirect:/ledger/gen_ledger/journal/index*/
+		/*return "redirect:/ledger/journal/index";*/
 	}
 	
 }

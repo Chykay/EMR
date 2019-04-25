@@ -31,8 +31,8 @@
 					<div class="col-sm-9">
 						<select th:field="*{pAccountType}" size="" class="col-xs-10 col-sm-7" style="margin-top:0px;"  required="required">
 							<option value="">Select account type</option>
-							<option th:value="GL">GL</option>
-							<option th:value="CL">Customer</option>
+							<option th:value="GA">GL</option>
+							<option th:value="CA">Customer</option>
 						</select>
 						<span class="text-danger" th:if="${#fields.hasErrors('pAccountType')}"
 							th:errors="*{pAccountType}">
@@ -180,8 +180,8 @@
 					<div class="col-sm-9">
 						<select th:field="*{rAccountType}" size="" class="col-xs-10 col-sm-7" style="margin-top:0px;"  required="required">
 							<option value="">Select account type</option>
-							<option th:value="GL">GL</option>
-							<option th:value="CL">Customer</option>
+							<option th:value="GA">GL</option>
+							<option th:value="CA">Customer</option>
 						</select>
 						<span class="text-danger" th:if="${#fields.hasErrors('rAccountType')}"
 							th:errors="*{rAccountType}">

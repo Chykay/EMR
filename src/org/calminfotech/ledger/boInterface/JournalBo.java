@@ -9,18 +9,24 @@ import org.calminfotech.ledger.utiility.LedgerException;
 public interface JournalBo {
 	
 	public List<JournalEntry> getJournalEntries() throws LedgerException;
-	
+
 	public JournalHeader saveHeader(JournalHeader journalHeader) throws LedgerException;
+	
+	public void updateHeader(JournalHeader journalHeader) throws LedgerException;
 
 	public JournalEntry saveJournalEntry(JournalEntry journalEntry) throws LedgerException;
 
 	public List<JournalHeader> fetchJournalHeaders() throws LedgerException;
 
-	public void journalEntry(Object journal);
+	/*public void journalEntry(Object journal);*/
 
-	public JournalHeader getJournalHeader(String id) throws LedgerException;
+	public JournalHeader getJournalHeader(String journalID) throws LedgerException;
 
-	public List<JournalEntry> getJournalEntriesByJournalID(String id) throws LedgerException;
+	public List<JournalEntry> getJournalEntriesByJournalID(String journalID) throws LedgerException;
 
 	public void manageJournal(Object journal) throws LedgerException;
+	
+	public void removeEntries(String journalID) throws LedgerException;
+
+	public void postJournal(String journalID) throws LedgerException;
 }

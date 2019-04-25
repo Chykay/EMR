@@ -6,6 +6,7 @@ import org.calminfotech.ledger.daoInterface.JournalDao;
 import org.calminfotech.ledger.models.JournalEntry;
 import org.calminfotech.ledger.models.JournalHeader;
 import org.calminfotech.user.utils.UserIdentity;
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -40,6 +41,13 @@ public class JournalDaoImpl implements JournalDao {
 		System.out.println(this.userIdentity.getUser().getUserId() + "  journal header");	
 		this.sessionFactory.getCurrentSession().saveOrUpdate(journalHeader);
 	}
+	
+	@Override
+	public void updateHeader(JournalHeader journalHeader) {
+		System.out.println("updating journal header");	
+		this.sessionFactory.getCurrentSession().update(journalHeader);
+		this.sessionFactory.getCurrentSession().flush();
+	}
 
 
 
@@ -48,10 +56,11 @@ public class JournalDaoImpl implements JournalDao {
 	public void saveJournalEntry(JournalEntry journalEntry) {
 		System.out.println(this.userIdentity.getUser().getUserId() + "  journal entry");	
 		this.sessionFactory.getCurrentSession().save(journalEntry);
+		this.sessionFactory.getCurrentSession().flush();
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<JournalHeader> getJournalHeaders() {
+	public List<JournalHeader> fetchJournalHeaders() {
 
 		System.out.println(this.userIdentity.getUser().getUserId() + " get journal headers");
 		List<JournalHeader> entries = sessionFactory.getCurrentSession()
@@ -65,12 +74,12 @@ public class JournalDaoImpl implements JournalDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public JournalHeader getJournalHeader(String id) {
+	public JournalHeader getJournalHeader(String journalID) {
 		List<JournalHeader> list = sessionFactory.getCurrentSession()
 				.createQuery("FROM JournalHeader WHERE company_id = ? AND organisation_id = ? AND journal_id = ?")
 				.setParameter(0, userIdentity.getOrganisation().getOrgCoy().getId())
 				.setParameter(1, userIdentity.getOrganisation().getId())
-				.setParameter(2, id)/*
+				.setParameter(2, journalID)/*
 				.setParameter(2, this.settingBo.fetchsettings("interbank-GLP", 2).getSettings_value())*/
 				.list();
 		
@@ -81,13 +90,13 @@ public class JournalDaoImpl implements JournalDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<JournalEntry> getJournalEntriesByJournalID(String id) {
+	public List<JournalEntry> getJournalEntriesByJournalID(String journalID) {
 		
 			List<JournalEntry> entries = sessionFactory.getCurrentSession()
 					.createQuery("FROM JournalEntry WHERE company_id = ? AND organisation_id = ? AND journal_id = ?")
 					.setParameter(0, userIdentity.getOrganisation().getOrgCoy().getId())
 					.setParameter(1, userIdentity.getOrganisation().getId())
-					.setParameter(2, id)/*
+					.setParameter(2, journalID)/*
 					.setParameter(2, this.settingBo.fetchsettings("interbank-GLP", 2).getSettings_value())*/
 					.list();
 
@@ -95,6 +104,17 @@ public class JournalDaoImpl implements JournalDao {
 				return entries;
 			
 		return null;			
+	}
+
+	@Override
+	public void removeEntries(String journalID) {
+
+		this.sessionFactory.getCurrentSession().flush();
+		this.sessionFactory.getCurrentSession().clear();
+
+		Query query = this.sessionFactory.getCurrentSession().createQuery("DELETE JournalEntry WHERE journal_id = ?");
+		//this.sessionFactory.getCurrentSession().createSQLQuery()
+		query.setParameter(0, journalID).executeUpdate();
 	}
 
 	

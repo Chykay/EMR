@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="GL_journal_table")
+@Table(name="GL_journal_entry")
 public class JournalEntry extends CommonLedger {
 	@Id
 	@GeneratedValue
