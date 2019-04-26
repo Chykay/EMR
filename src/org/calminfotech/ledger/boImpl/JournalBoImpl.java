@@ -130,7 +130,7 @@ public class JournalBoImpl implements JournalBo{
 	public void manageJournal(Object journal) throws LedgerException {
 		Gson gson = new Gson();
 		JsonParser parser = new JsonParser();
-		String journalID, description;
+		String journalID, description, action;
 		
         String json = gson.toJson(journal, LinkedHashMap.class);
 		JsonElement jsonTree = parser.parse(json);
@@ -140,7 +140,7 @@ public class JournalBoImpl implements JournalBo{
 		
 		journalID = header.get("journalID").getAsString();
 		description = header.get("description").getAsString();
-		System.out.println(description + " description");
+		action = header.get("action").getAsString();
 		
 		JournalHeader journalHeader = this.getJournalHeader(journalID);
 		journalHeader.setDescription(description);
@@ -168,6 +168,10 @@ public class JournalBoImpl implements JournalBo{
 			} catch (LedgerException e) {
 				e.printStackTrace();
 			}
+		}
+		
+		if (action.contains("post")) {
+			this.postJournal(journalID);
 		}
 		
 	}

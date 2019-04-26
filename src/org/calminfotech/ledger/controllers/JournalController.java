@@ -112,7 +112,6 @@ public class JournalController {
 		List<JournalEntry> journalEntries = null;
 		try {
 			journalHeader = this.journalBo.getJournalHeader(journalID);
-			System.out.println("Ok now cmon");
 			journalEntries = this.journalBo.getJournalEntriesByJournalID(journalID);
 		} catch (LedgerException e) {
 			// TODO Auto-generated catch block
@@ -123,10 +122,8 @@ public class JournalController {
 		
 		journalForm.setJournalHeader(journalHeader);
 		if (journalEntries == null) {
-			
 			model.addAttribute("journalEntries", new JournalEntry());
 		} else {
-
 			model.addAttribute("journalEntries", journalEntries);
 		}
 		

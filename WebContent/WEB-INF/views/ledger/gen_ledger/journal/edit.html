@@ -40,18 +40,19 @@
 	 	<button type="submit" class="btn btn-default" id="post">Post Entries</button>
 	
 		 <div th:each="journalEntry : ${journalEntries}" class="form-group container journal">
-		    <select id="accountType" required="required">
+		    <select class="accountType" required="required">
 		        <option th:value="${journalEntry.accountType}">Select..</option>
 		        <option value="CA">Customer</option>
 		        <option value="GA">GL</option>
 		    </select>
 		    <div style="display:inline-table;"> 
 		    	<input type="text" id="accountNoSearch" placeholder="account no" th:value="${journalEntry.accountNo}" required="required"/> <br />
-		    	<select id="accountNo" size="" style="margin-top:0px;"  required="required">
+		    	<select id="accountNo" size="" style="margin-top:0px;"  required="required"  hidden="hidden">
 							<!-- <option th:each="generalLedger: ${generalLedgers}" 
 							th:value = "${generalLedger.accountNo}" 
 							th:text="|${generalLedger.accountNo}-${generalLedger.name}|">Posting Account</option> -->
 				</select>
+				<button class="custSearch" hidden="hidden">searcn</button> 
 		   	</div>
 		    <select id="postCode" required="required">
 		        <option th:value="${journalEntry.postCode}">Select..</option>
@@ -73,28 +74,37 @@
 
 <script type="text/javascript">
 /*<![CDATA[*/
-     const form = document.getElementById('form');
-     form.addEventListener('submit', onSubmit);
-     window.branches;
+     const saveBtn = document.getElementById('save');
+     const postBtn = document.getElementById('post');
+     //I'll actually get the button add an event listener to two separate functions which passes an argument to the
+     // onSubmit function which attaches a description to the header, parsed to know whether to post or manageJou
+     // at the back.
+     saveBtn.addEventListener('click', () => onSubmit('save') );
+     
+     //if the post button is clicked, call the onSubmit method with the post para
+     postBtn.addEventListener('click', () => onSubmit('post') );
+     
      $(document).ready(function(){
     	 getBranches();
     	 
-    	 
-    	 selectOptions();
+
     	 $('.journal').each(function(){
-    		 getAccounts($(this).find('#accountNo'), $(this).find('#accountType option:selected')[0].value);
+    		 acc_type = $(this).find('.accountType option:selected')[0].value;
+    	 	 accountSetup($(this), acc_type);
     	 });
     	 
      });
      
-     $('#accountType').change(function(){
-    	 var selectedValue = $(this)[0].value;
-    	 getAccounts($(this).parent().find('#accountNo'), selectedValue);
+     $('.accountType').change(function(){
+    	 var acc_type = $(this)[0].value;
+    	 accountSetup($(this).parent(), acc_type);
      });
      
      $('.add').click(function(){
     	 div = document.createElement('div');
-    	 markup = '<select id="accountType"  required="required"><option value="">Select..</option><option value="CA">Customer</option><option value="GA">General Ledger</option></select><input type="text" id="accountNo" placeholder="account no"  required="required" /><select id="postCode"  required="required"><option value="">Select..</option><option value="DR">GL Debit</option><option value="CR">GL Credit</option></select><select id="branchID"  required="required"><option value="1">Select..</option></select><input type="text" id="amount"  placeholder="amount"  required="required" /><input type="text" id="refNo"  placeholder="ref no"  required="required" /><input type="text" id="description"  placeholder="description"  required="required" /><button type="button" class="btn btn-xs btn-default delete"><i class="fa fa-trash-o"></i></button>';
+    	 console.log(window.branches);
+    	 
+    	 markup = '<select lass="accountType"  required="required"><option value="">Select..</option><option value="CA">Customer</option><option value="GA">GL</option></select><input type="text" id="accountNo" placeholder="account no"  required="required" /><select id="postCode"  required="required"><option value="">Select..</option><option value="DR">GL Debit</option><option value="CR">GL Credit</option></select><select id="branchID"  required="required">' + window.branches + '</select><input type="text" id="amount"  placeholder="amount"  required="required" /><input type="text" id="refNo"  placeholder="ref no"  required="required" /><input type="text" id="description"  placeholder="description"  required="required" /><button type="button" class="btn btn-xs btn-default delete"><i class="fa fa-trash-o"></i></button>';
     	 $(div).addClass("form-group container journal").html(markup);
     	 $('form').append(div);
      });
@@ -106,19 +116,19 @@
      
      
      
-     function onSubmit(event){
-    	 console.log(event.target);
-    	 alert(event);
+     function onSubmit(action){
+    	 
     	 var journalEntries = [];
     	 var header = {
     		"journalID": $('[name="description"]')[1].id,
-    		"description": $('[name="description"]')[1].value
+    		"description": $('[name="description"]')[1].value,
+    		"action": action
     	 }; 
     	 
     	 
     	 $('.journal').each(function(){
     		 var entry = {
-    			"account_type": $(this).find('#accountType option:selected')[0].value,
+    			"account_type": $(this).find('.accountType option:selected')[0].value,
     			"account_no": $(this).find('#accountNo option:selected')[0].value,
     			"post_code": $(this).find('#postCode option:selected')[0].value,
     			"branch_id": $(this).find('#branchID option:selected')[0].value,
@@ -135,8 +145,7 @@
     		"journalEntries": journalEntries
     	 }
  		
- 		 console.log(journal);
-		/* $.ajax({
+		 $.ajax({
 			type: "POST",
 			contentType: "application/json",
 			'processData': false,
@@ -154,14 +163,14 @@
 			success: function(response, data){
 			     alert("yuppie");
 			     console.log(response, data);
-			     /* window.location = '/../'+ window.location.pathname.split('/')[1] + '/ledger/journal/index'; */
+			     window.location = '/../'+ window.location.pathname.split('/')[1] + '/ledger/journal/index';
 			      
-			/*},
+			},
 			error: function(response){
 				alert("nopppiee");
-				/* window.location = '/../'+ window.location.pathname.split('/')[1] + '/ledger/journal/index'; */
-			/*}
-		});  */
+				window.location = '/../'+ window.location.pathname.split('/')[1] + '/ledger/journal/index';
+			}
+		});  
      }
      
      function getBranches() {
@@ -173,13 +182,19 @@
     				
     				$("select[id='branchID']").each(function() {
     					selectElement = this;
+    					window.branches = "";
     					for (let branch of branches) {
     						let option = document.createElement('option');
     						option.value = branch["id"];
     						option.textContent = branch["name"];
     						selectElement.appendChild(option);
+    						
+    						window.branches += '<option value="' + branch["id"] + '">' + branch["name"] + '</option>';
+     			    		
     					}
     				});
+    				
+    		    	selectOptions();
     			}
     		});
     	}
@@ -194,21 +209,21 @@
 			    	this.selected = true;
 			    } 
 			});
-			 
-			 /* var arra y = this)[0].options */
-			/*  $(this)[0].option.each(function(){
-	    		 console.log($(this)[0].value);
-			 }); */
-			 /* console.log($(this)[0]['attributes']['value'].value);
-			 console.log($(this));
-			  $(this)[0].options.each(function() {
-				    if($(this)[0].value == selected_option[0].value ) {
-				    	$(this)[0].selected = true;
-				    } 
-				}); */
 		 });
      }
-		
+     
+     function accountSetup(journalElem, acc_type) {
+    		 
+   		 if(acc_type == 'GA') {
+   			 accNoElem = journalElem.find('#accountNo');
+   			 accNoElem.removeAttr("hidden");
+   	    	 getAccounts(accNoElem, "GA");
+   		 } else {
+   			 searchElem = journalElem.find('#custSearch');
+   			 searchElem.removeAttr("hidden");
+   		 }
+     }
+     
      function getAccounts(elem, account_type) {
     		if(account_type != ''){
     			$.ajax({
@@ -220,7 +235,6 @@
         			},
         			error : function() {
         				elem.html("");
-
         			}
         		});
     		}

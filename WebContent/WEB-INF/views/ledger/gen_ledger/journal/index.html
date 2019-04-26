@@ -48,7 +48,7 @@
 						<td th:text="${journalHeader.journalID}">Journal ID</td>
 						
 						<td>
-							<span th:if="${journalHeader.status  != 'POSTED' or journalHeader.status  != null}">
+							<span th:if="${journalHeader.status  != 'POSTED' }">
 							<a class="btn btn-xs btn-primary tooltips"
 								title="Post Item Details"  th:id="${journalHeader.id}"
 								th:href="@{/ledger/journal/post/{id}(id=${journalHeader.journalID}) }"

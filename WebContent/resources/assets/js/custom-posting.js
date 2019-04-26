@@ -1,56 +1,56 @@
 /*<![CDATA[*/
            
-$('#p_account_type').change(function() {
-	document.getElementById("p_account_no_search").value = "";
-	var sel_acc_type = $('#p_account_type option:selected');
+$('#pAccountType').change(function() {
+	document.getElementById("pAccountNoSearch").value = "";
+	var sel_acc_type = $('#pAccountType option:selected');
 	var acc_type = sel_acc_type[0].value;
 
-	$("#p_branch_id").prop("disabled", false);
+	$("#rBranchID").prop("disabled", false);
 	
 
 	if(acc_type != ""){
-		getLedgers($("#p_account_no"), acc_type);
+		getLedgers($("#pAccountNo"), acc_type);
 	} else {
-		$("#p_account_no").html("");
+		$("#pAccountNo").html("");
 	}
 	
 	if (acc_type == "CL") {
-		$(".p_cust_search").addClass("btn btn-primary btn-xs");
-		$(".p_cust_search").removeAttr("hidden");
-		$("#p_branch_id").prop("disabled", "disabled");
-		//remove hidden attr on p_cust_search OR add class="btn btn-primary btn-xs p_cust_search"
+		$(".pCustSearch").addClass("btn btn-primary btn-xs");
+		$(".pCustSearch").removeAttr("hidden");
+		$("#rBranchID").prop("disabled", "disabled");
+		//remove hidden attr on pCustSearch OR add class="btn btn-primary btn-xs pCustSearch"
 	}
 	/* if(acc_type == "GL"){
 		//enable bracnh selection
 		
-		getLedgers($("#p_account_no"), acc_type);
+		getLedgers($("#pAccountNo"), acc_type);
 	} else if (acc_type == "CL") {
-		//remove hidden attr on p_cust_search OR add class="btn btn-primary btn-xs p_cust_search"
+		//remove hidden attr on pCustSearch OR add class="btn btn-primary btn-xs pCustSearch"
 	} */
 });
 
-$('#r_account_type').change(function() {
-	document.getElementById("r_account_no_search").value = "";
-	var sel_acc_type = $('#r_account_type option:selected');
+$('#rAccountType').change(function() {
+	document.getElementById("rAccountNoSearch").value = "";
+	var sel_acc_type = $('#rAccountType option:selected');
 	var acc_type = sel_acc_type[0].value;
 
-	$("#r_branch_id").prop("disabled", false);
+	$("#rBranchID").prop("disabled", false);
 
 	if(acc_type != ""){
-		getLedgers($("#r_account_no"), acc_type);
+		getLedgers($("#rAccountNo"), acc_type);
 	} else {
-		$("#r_account_no").html("");
+		$("#rAccountNo").html("");
 	}
 	
 	if (acc_type == "CL") {
-		$(".r_cust_search").addClass("btn btn-primary btn-xs");
-		$(".r_cust_search").removeAttr("hidden");
-		$("#r_branch_id").prop("disabled", "disabled");
+		$(".rCustSearch").addClass("btn btn-primary btn-xs");
+		$(".rCustSearch").removeAttr("hidden");
+		$("#rBranchID").prop("disabled", "disabled");
 	}
 	/* if(acc_type == "GL"){
-		getLedgers($("#r_account_no"), acc_type);
+		getLedgers($("#rAccountNo"), acc_type);
 	} else if (acc_type == "CL") {
-		//remove hidden attr on r_cust_search OR add class="btn btn-primary btn-xs r_cust_search"
+		//remove hidden attr on rCustSearch OR add class="btn btn-primary btn-xs rCustSearch"
 	} */
 });
 
@@ -113,8 +113,8 @@ function setDesc() {
 
 function filter() {
 	
-    var keyword = document.getElementById("p_account_no_search").value;
-    var fleet = document.getElementById("p_account_no");
+    var keyword = document.getElementById("pAccountNoSearch").value;
+    var fleet = document.getElementById("pAccountNo");
     var selSize = 0;
     for (var i = 0; i < fleet.length; i++) {
         var txt = fleet.options[i].text.toLowerCase();
@@ -130,19 +130,19 @@ function filter() {
 }
 
 function selectAccount(){
-	var keyword = document.getElementById("p_account_no_search").value;
-    var fleet = document.getElementById("p_account_no");
+	var keyword = document.getElementById("pAccountNoSearch").value;
+    var fleet = document.getElementById("pAccountNo");
     for (var i = 0; i < fleet.length; i++) {
         var txt = fleet.options[i].text.toLowerCase();
         if (!txt.includes(keyword.toLowerCase())) {
             fleet.options[i].style.display = 'none';
         } else {
         	fleet.options[i].selected = true;
-        	document.getElementById("p_account_no_search").value = txt;
+        	document.getElementById("pAccountNoSearch").value = txt;
         	fleet.size = 0;
         	
-        	var selected_branch = $('#p_branch_id option:selected');
-        	var sel_acc_type = $('#p_account_type option:selected');
+        	var selected_branch = $('#rBranchID option:selected');
+        	var sel_acc_type = $('#pAccountType option:selected');
         	var acc_type = sel_acc_type[0].value;
         	
         	if(acc_type == 'CL'){
@@ -159,8 +159,8 @@ function selectAccount(){
 
 
 function filterR() {
-    var keyword = document.getElementById("r_account_no_search").value;
-    var fleet = document.getElementById("r_account_no");
+    var keyword = document.getElementById("rAccountNoSearch").value;
+    var fleet = document.getElementById("rAccountNo");
     var selSize = 0;
     for (var i = 0; i < fleet.length; i++) {
         var txt = fleet.options[i].text.toLowerCase();
@@ -177,26 +177,26 @@ function filterR() {
 
 
 function selectAccountR(){
-	var keyword = document.getElementById("r_account_no_search").value;
-    var fleet = document.getElementById("r_account_no");
+	var keyword = document.getElementById("rAccountNoSearch").value;
+    var fleet = document.getElementById("rAccountNo");
     for (var i = 0; i < fleet.length; i++) {
         var txt = fleet.options[i].text.toLowerCase();
         if (!txt.includes(keyword.toLowerCase())) {
             fleet.options[i].style.display = 'none';
         } else {
         	fleet.options[i].selected = true;
-        	document.getElementById("r_account_no_search").value = txt;
+        	document.getElementById("rAccountNoSearch").value = txt;
         	fleet.size = 0;
         	
-			var selected_branch = $('#r_branch_id option:selected');
-			var sel_acc_type = $('#r_account_type option:selected');
+			var selected_branch = $('#rBranchID option:selected');
+			var sel_acc_type = $('#rAccountType option:selected');
         	var acc_type = sel_acc_type[0].value;
         	
         	if(acc_type == 'CL'){
-        		getBalance($("#r_branch_bal"), fleet.options[i].value, "0", "CL");
+        		getBalance($("#rBranchBal"), fleet.options[i].value, "0", "CL");
         	}
     		else if(selected_branch[0].value != ""){
-        		getBalance($("#r_branch_bal"), fleet.options[i].value, selected_branch[0].value, "GL");
+        		getBalance($("#rBranchBal"), fleet.options[i].value, selected_branch[0].value, "GL");
         	}
             break;
         }
@@ -211,13 +211,13 @@ function selectAccountR(){
 	*/
 }
 
-$("#p_account_no").change(function(){
-	var selected_option = $('#p_account_no option:selected');
-	document.getElementById("p_account_no_search").value = selected_option.val(); 
+$("#pAccountNo").change(function(){
+	var selected_option = $('#pAccountNo option:selected');
+	document.getElementById("pAccountNoSearch").value = selected_option.val(); 
 	
-	var selected_branch = $('#p_branch_id option:selected');
+	var selected_branch = $('#rBranchID option:selected');
 	
-	var sel_acc_type = $('#p_account_type option:selected');
+	var sel_acc_type = $('#pAccountType option:selected');
 	var acc_type = sel_acc_type[0].value;
 	
 	if(acc_type == 'CL'){
@@ -229,15 +229,15 @@ $("#p_account_no").change(function(){
 	// call ajax function
 });
 
-$('#p_branch_id').change(function() {
+$('#rBranchID').change(function() {
 	
-	var search_field = document.getElementById("p_account_no_search").value;
+	var search_field = document.getElementById("pAccountNoSearch").value;
 	
-	var selected_option = $('#p_account_no option:selected');
+	var selected_option = $('#pAccountNo option:selected');
 
-	var selected_branch = $('#p_branch_id option:selected');
+	var selected_branch = $('#rBranchID option:selected');
 	
-	var sel_acc_type = $('#p_account_type option:selected');
+	var sel_acc_type = $('#pAccountType option:selected');
 	var acc_type = sel_acc_type[0].value;
 	
 	if(acc_type == 'CL'){
@@ -248,39 +248,39 @@ $('#p_branch_id').change(function() {
 	}
 });
 
-$("#r_account_no").change(function(){
-	var selected_option = $('#r_account_no option:selected');
-	document.getElementById("r_account_no_search").value = selected_option.val();
+$("#rAccountNo").change(function(){
+	var selected_option = $('#rAccountNo option:selected');
+	document.getElementById("rAccountNoSearch").value = selected_option.val();
 
 
-	var selected_branch = $('#r_branch_id option:selected');
+	var selected_branch = $('#rBranchID option:selected');
 	
-	var sel_acc_type = $('#r_account_type option:selected');
+	var sel_acc_type = $('#rAccountType option:selected');
 	var acc_type = sel_acc_type[0].value;
 	
 	if(acc_type == 'CL'){
-		getBalance($("#r_branch_bal"), selected_option[0].value, "0", "CL");
+		getBalance($("#rBranchBal"), selected_option[0].value, "0", "CL");
 	}
 	else if(selected_branch[0].value != ""){
-		getBalance($("#r_branch_bal"), selected_option[0].value, selected_branch[0].value, "GL");
+		getBalance($("#rBranchBal"), selected_option[0].value, selected_branch[0].value, "GL");
 	}
 });
 
 
-$('#r_branch_id').change(function() {
+$('#rBranchID').change(function() {
 	
-	var selected_option = $('#r_account_no option:selected');
+	var selected_option = $('#rAccountNo option:selected');
 
-	var selected_branch = $('#r_branch_id option:selected');
+	var selected_branch = $('#rBranchID option:selected');
 	
-	var sel_acc_type = $('#r_account_type option:selected');
+	var sel_acc_type = $('#rAccountType option:selected');
 	var acc_type = sel_acc_type[0].value;
 	
 	if(acc_type == 'CL'){
-		getBalance($("#r_branch_bal"), selected_option[0].value, "0", "CL");
+		getBalance($("#rBranchBal"), selected_option[0].value, "0", "CL");
 	}
 	else if(selected_option[0].value != ""){
-		getBalance($("#r_branch_bal"), selected_option[0].value, selected_branch[0].value, "GL");
+		getBalance($("#rBranchBal"), selected_option[0].value, selected_branch[0].value, "GL");
 	}
 });
 
@@ -351,10 +351,10 @@ function getLedgers(elem, account_type) {
 }
 
 function filterP() {
-    /* var keyword = $("#p_account_no_search").val();
+    /* var keyword = $("#pAccountNoSearch").val();
     console.log(keyword);
 
-	$("#p_account_no option").each(function() {
+	$("#pAccountNo option").each(function() {
     	var txt = $(this).toLowerCase();
         console.log(txt);
         console.log($(this)[0]);
@@ -417,11 +417,11 @@ $('.datepicker').datepicker({
 	// You could use it like this:
 
 	$(function() {
-	  $('#p_account_no').filterByText($('#p_account_no_search'));
+	  $('#pAccountNo').filterByText($('#pAccountNoSearch'));
 	});
 	
 	$(function() {
-		  $('#r_account_no').filterByText($('#r_account_no_search'));
+		  $('#rAccountNo').filterByText($('#rAccountNoSearch'));
 		}); */
 		
 		/*]]>*/
