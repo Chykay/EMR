@@ -6,15 +6,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.calminfotech.ledger.boInterface.BalSheetCatBo;
+import org.calminfotech.ledger.boInterface.CustomerAccBo;
 import org.calminfotech.ledger.boInterface.GenLedgerBo;
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
 import org.calminfotech.ledger.boInterface.TotAccBo;
 import org.calminfotech.ledger.forms.LedgerAccForm;
 import org.calminfotech.ledger.models.BalSheetCat;
+import org.calminfotech.ledger.models.CustomerAccount;
 import org.calminfotech.ledger.models.CustomerEntry;
 import org.calminfotech.ledger.models.LedgerAccount;
 import org.calminfotech.ledger.models.TotalingAccount;
 import org.calminfotech.ledger.utiility.LedgerException;
+import org.calminfotech.system.models.Organisation;
 import org.calminfotech.user.utils.UserIdentity;
 import org.calminfotech.utils.Alert;
 import org.calminfotech.utils.Auditor;
@@ -53,6 +56,9 @@ public class CustomerAccController {
 	
 	@Autowired
 	private GenLedgerBo genLedgerBo;
+	
+	@Autowired
+	private CustomerAccBo customerAccBo;
 	
 	@RequestMapping(value = {"/index"}, method=RequestMethod.GET)
 	public String index(Model model) {
@@ -212,5 +218,15 @@ public class CustomerAccController {
 		
 		this.ledgerAccBo.delete(genLedger);
 		return "redirect:/ledger/ledger_acc/index";
+	}
+	
+
+	@RequestMapping(value = "/search", method = RequestMethod.GET)
+	@Layout(value = "layouts/blank")
+	public String custAccSearch( Model model) {
+		Organisation org = this.userIdentity.getOrganisation();
+		model.addAttribute("customerAccounts", this.customerAccBo.fetchAll(org.getId(), org.getOrgCoy().getId()));
+		model.addAttribute("customerAcc", new CustomerAccount());
+		return "ledger/customer_acc/search";
 	}
 }
