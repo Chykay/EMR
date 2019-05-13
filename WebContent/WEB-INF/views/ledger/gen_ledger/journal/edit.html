@@ -74,6 +74,7 @@
 
 <script type="text/javascript">
 /*<![CDATA[*/
+            window.branches = "";
      const saveBtn = document.getElementById('save');
      const postBtn = document.getElementById('post');
      const searchButtons = document.querySelectorAll('.custSearch');
@@ -85,7 +86,7 @@
      
      for (const searchButton of searchButtons) {
     	 searchButton.addEventListener('click', function(event) {
-         custSearch();
+         custSearch(searchButton);
        });
      }
      
@@ -100,16 +101,18 @@
     	 
      });
      
-     $('.accountType').change(function(){
+     $(document.body).on("change", ".accountType", function(){
+     //$('.accountType').change(function(){
+    	 console.log($(this)[0]);
     	 var acc_type = $(this)[0].value;
     	 accountSetup($(this).parent(), acc_type);
      });
      
      $('.add').click(function(){
     	 div = document.createElement('div');
-    	 console.log(window.branches);
     	 
-    	 markup = '<select lass="accountType"  required="required"><option value="">Select..</option><option value="CA">Customer</option><option value="GA">GL</option></select><div style="display:inline-table;"> <input type="text" id="accountNoSearch" placeholder="account no" th:value="${journalEntry.accountNo}" required="required"/> <br /><select id="accountNo" size="" style="margin-top:0px;"  required="required"  hidden="hidden"></select><button type="button" class="custSearch" hidden="hidden">searcn</button></div><select id="postCode"  required="required"><option value="">Select..</option><option value="DR">GL Debit</option><option value="CR">GL Credit</option></select><select id="branchID"  required="required">' + window.branches + '</select><input type="text" id="amount"  placeholder="amount"  required="required" /><input type="text" id="refNo"  placeholder="ref no"  required="required" /><input type="text" id="description"  placeholder="description"  required="required" /><button type="button" class="btn btn-xs btn-default delete"><i class="fa fa-trash-o"></i></button>';
+    	 markup = '<select class="accountType"  required="required"><option value="">Select..</option><option value="CA">Customer</option><option value="GA">GL</option></select><div style="display:inline-table;"> <input type="text" id="accountNoSearch" placeholder="account no" th:value="${journalEntry.accountNo}" required="required"/> <br /><select id="accountNo" size="" style="margin-top:0px;"  required="required"  hidden="hidden"></select><button type="button" class="custSearch btn btn-xs btn-primary" hidden="hidden">searcn</button></div> <select id="postCode"  required="required"><option value="">Select..</option><option value="DR">GL Debit</option><option value="CR">GL Credit</option></select><select id="branchID"  required="required">' + window.branches + '</select><input type="text" id="amount"  placeholder="amount"  required="required" /><input type="text" id="refNo"  placeholder="ref no"  required="required" /><input type="text" id="description"  placeholder="description"  required="required" /><button type="button" class="btn btn-xs btn-default delete"><i class="fa fa-trash-o"></i></button>';
+    	 
     	 $(div).addClass("form-group container journal").html(markup);
     	 $('form').append(div);
      });
@@ -183,22 +186,24 @@
     			type : "GET",
     			url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/branches/',
     			success : function(value) {
-    				branches = jQuery.parseJSON(value);
+    				value = '{"branches":' + value + '}';
+    				var branches = JSON.parse(value).branches;
     				
-    				$("select[id='branchID']").each(function() {
-    					selectElement = this;
-    					window.branches = "";
-    					for (let branch of branches) {
+    				
+    				selectBranches = document.querySelectorAll('#branchID');
+    				
+    				for(let selBranch of selectBranches) {
+    					
+    					branches.forEach( (branch) => {
     						let option = document.createElement('option');
     						option.value = branch["id"];
     						option.textContent = branch["name"];
-    						selectElement.appendChild(option);
-    						
+    						selBranch.appendChild(option);
     						window.branches += '<option value="' + branch["id"] + '">' + branch["name"] + '</option>';
-     			    		
-    					}
-    				});
+    					});
+    				}
     				
+    				console.log(window.branches, "window");
     		    	selectOptions();
     			}
     		});
@@ -221,14 +226,22 @@
 
 		accNoElem = journalElem.find('#accountNo');
   		searchBtn = journalElem.find('.custSearch')[0];
+  		accNoSearchElem = journalElem.find('#accountNoSearch')[0];
+  		brElem = journalElem.find('br')[0];
     	//console.log(journalElem, acc_type, accNoElem, searchElem);
   		
 		if(acc_type == 'GA') {
 		 	accNoElem[0].removeAttribute("hidden");
-		 	searchBtn.style.display="none";
+		 	searchBtn.style.display = "none";
+		 	accNoSearchElem.style.display = "none";
+		 	brElem.style.display = "none";
+		 	
 		  	getAccounts(accNoElem, "GA");
 		} else {
+		 	accNoSearchElem.style.display="inline-block";
+		 	accNoSearchElem.setAttribute("disabled", true);
 		 	searchBtn.style.display="inline-block";
+		 	brElem.style.display="inline-block";
 			accNoElem[0].setAttribute("hidden", true);
 		}
      }
@@ -249,11 +262,12 @@
    		}
    	}
      
-     function custSearch() {
-    	   var myWindow = window.open("/../" + window.location.pathname.split('/')[1] + "/ledger/customer_acc/search", "MsgWindow", "width=500, height=500");
-    	  //  myWindow.document.write("<p>This window's name is: " + myWindow.name + "</p>");
-    	    myWindow.focus();
-    	    return false
+     function custSearch(searchBtn) {
+    	// console.log(searchBtn, searchBtn.parentNode);
+    	   var myWindow = window.open("/../" + window.location.pathname.split('/')[1] + "/search/customer_acc/", "MsgWindow", "width=500, height=500");
+    	   //myWindow.document.write("<p>This window's name is: " + myWindow.name + "</p>");
+    	   myWindow.focus();
+    	   return false
     	  
     	}
 /*]]>*/
