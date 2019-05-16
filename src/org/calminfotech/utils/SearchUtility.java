@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 import org.calminfotech.hrunit.forms.PersonnelSearchForm;
 import org.calminfotech.hrunit.models.StaffRegistration;
 import org.calminfotech.ledger.forms.CustAccSearchForm;
+import org.calminfotech.ledger.models.CustomerAccount;
 /*import org.calminfotech.inventory.models.StockCurrentBalance;*/
 import org.calminfotech.patient.forms.PatientSearchForm;
 import org.calminfotech.system.forms.AdmissionSearchForm;
@@ -860,16 +861,17 @@ public class SearchUtility {
 		String sqlct = "";
 		String hsql = "";
 
-		sqlct = "select count(*) as num from vw_patient_list v inner join organisations o on v.organisation_id=o.id where v.name like '%' + ? + '%' and o.company_id=? ";
-		hsql = "from Patientwinsearch where name  like '%' + ? + '%' and organisation.orgCoy.Id =?";
+		/*sqlct = "select count(*) as num from vw_patient_list v inner join organisations o on v.organisation_id=o.id where v.name like '%' + ? + '%' and o.company_id=? ";
+		*/
+		hsql = "from CustomerAccount where account_no  like '%' + ? + '%' and organisation.orgCoy.Id =?";
 
-		Query count = sessionFactory.getCurrentSession().createSQLQuery(sqlct)
+		/*Query count = sessionFactory.getCurrentSession().createSQLQuery(sqlct)
 				.addEntity(Count.class);
 		count.setParameter(0, custAccSearchForm.getMycriteriavalue().trim());
 		count.setParameter(1, userIdentity.getOrganisation().getOrgCoy()
 				.getId());
 
-		List<Count> clist = count.list();
+		List<Count> clist = count.list();*/
 
 		Query query = sessionFactory
 				.getCurrentSession()
@@ -881,13 +883,13 @@ public class SearchUtility {
 				.setMaxResults(batch)
 
 				.setFirstResult(custAccSearchForm.getMysp());
-		List<Patientwinsearch> list = query.list();
+		List<CustomerAccount> list = query.list();
 
 		custAccSearchForm.setMysp(custAccSearchForm.getMysp() + batch);
 
-		if (custAccSearchForm.getMysp() > clist.get(0).getNum()) {
+		/*if (custAccSearchForm.getMysp() > clist.get(0).getNum()) {
 			custAccSearchForm.setMysp(0);
-		}
+		}*/
 
 		return list;
 	}

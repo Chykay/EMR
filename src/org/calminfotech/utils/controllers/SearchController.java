@@ -6,6 +6,7 @@ import javax.servlet.http.HttpSession;
 
 import org.calminfotech.hrunit.forms.PersonnelSearchForm;
 import org.calminfotech.ledger.forms.CustAccSearchForm;
+import org.calminfotech.ledger.models.CustomerAccount;
 import org.calminfotech.patient.forms.PatientSearchForm;
 import org.calminfotech.system.forms.AdmissionSearchForm;
 import org.calminfotech.system.forms.AllergySearchForm;
@@ -577,21 +578,22 @@ public class SearchController {
 		return "search/cust_acc_search_win";
 	}
 
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = { "/customer_acc" }, method = RequestMethod.POST)
 	@Layout("layouts/blank")
 	public String custAccSearch(
 			Model model,
 			HttpSession session,
-			@ModelAttribute("patientSearch") CustAccSearchForm patientSearchForm,
+			@ModelAttribute("custAccSearch") CustAccSearchForm custAccSearch,
 			BindingResult result, RedirectAttributes redirectAttributes) {
 
 		// List patientList = searchBo.searchPatient(searchForm, session);
-		List custAccList = searchUtilBo.searchCustAccWin(patientSearchForm,
+		List<CustomerAccount> custAccList = searchUtilBo.searchCustAccWin(custAccSearch,
 				session);
 
-		model.addAttribute("custAccounts", custAccList);
+		model.addAttribute("customerAccs", custAccList);
 
-		return "search/patientsearchwin";
+		return "search/cust_acc_search_win";
 	}
 
 }
