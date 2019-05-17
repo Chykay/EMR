@@ -46,12 +46,10 @@
 		        <option value="GA">GL</option>
 		    </select>
 		    <div style="display:inline-table;"> 
-		    	<input type="text" id="accountNoSearch" placeholder="account no" th:value="${journalEntry.accountNo}" required="required"/> <br />
+		    	<input type="text" id="accountNoSearch" placeholder="account no" th:value="${journalEntry.accountNo}" required="required" disabled="disabled"/> <br />
 		    	<select id="accountNo"  style="margin-top:0px;"  required="required"  th:value="${journalEntry.accountNo}"  hidden="hidden">
 		    		<option th:value="${journalEntry.accountNo}" selected="selected">Select..</option>
-							<!-- <option th:each="generalLedger: ${generalLedgers}" 
-							th:value = "${generalLedger.accountNo}" 
-							th:text="|${generalLedger.accountNo}-${generalLedger.name}|">Posting Account</option> -->
+							
 				</select>
 				
 				<button type="button" class="custSearch btn btn-xs btn-primary" hidden="hidden">searcn</button> 
@@ -76,7 +74,9 @@
 	
 </div>
 
-<script type="text/javascript">
+
+<script th:src="@{/resources/assets/js/custom-j.posting.js}"></script>
+<!-- <script type="text/javascript">
 /*<![CDATA[*/
 window.branches = "";
 const saveBtn = document.getElementById('save');
@@ -264,15 +264,16 @@ function accountSetup(journalElem, acc_type) {
 	if(acc_type == 'GA') {
 		accNoElem[0].removeAttribute("hidden");
 		searchBtn.style.display = "none";
-		accNoSearchElem.style.display = "none";
+		//accNoSearchElem.style.display = "none";
+		accNoSearchElem.setAttribute("disabled", false);
 		brElem.style.display = "none";
 		
-		if(accNoSearchElem.value.length < 1)
-			accNoSearchElem.value = "account no";
+		/* if(accNoSearchElem.value.length < 1)
+			accNoSearchElem.value = "account no"; */
 
 		accNoElem.html(window.generalLedgers);
 	} else {
-		accNoSearchElem.style.display="inline-block";
+		//accNoSearchElem.style.display="inline-block";
 		accNoSearchElem.setAttribute("disabled", true);
 		searchBtn.style.display="inline-block";
 		brElem.style.display="inline-block";
@@ -285,26 +286,26 @@ function accountSetup(journalElem, acc_type) {
    
 function getAccounts(elem, account_type) {
 	
-	$.ajax({
-		type : "GET",
-		url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/fetch/' + account_type,
-		
-		success : function(value) {
-			/* elem.html(value); */
-			window.generalLedgers = value;
+		$.ajax({
+			type : "GET",
+			url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/fetch/' + account_type,
 			
-			selectLedgers = document.querySelectorAll('#accountNo');
-			
-			for(let selectLedger of selectLedgers) {
-				selectLedger.html(window.generalLedgers);
+			success : function(value) {
+				/* elem.html(value); */
+				window.generalLedgers = value;
+				
+				selectLedgers = document.querySelectorAll('#accountNo');
+				
+				for(let selectLedger of selectLedgers) {
+					selectLedger.append(window.generalLedgers);
+				}
+				
+				getBranches();
+			},
+			error : function() {
+				window.genLedgers = "";
 			}
-			
-			getBranches();
-		},
-		error : function() {
-			window.genLedgers = "";
-		}
-	});
+		});
 	
 }
    
@@ -321,4 +322,4 @@ function updateAccNo(customerAccNo){
 	accNoSearch.value = customerAccNo;
 }
 /*]]>*/
-</script>
+</script> -->
