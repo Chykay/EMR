@@ -16,7 +16,7 @@ import org.calminfotech.ledger.models.CustomerAccount;
 import org.calminfotech.ledger.models.CustomerEntry;
 import org.calminfotech.ledger.models.LedgerAccount;
 import org.calminfotech.ledger.models.TotalingAccount;
-import org.calminfotech.ledger.utiility.LedgerException;
+import org.calminfotech.ledger.utility.LedgerException;
 import org.calminfotech.system.models.Organisation;
 import org.calminfotech.user.utils.UserIdentity;
 import org.calminfotech.utils.Alert;

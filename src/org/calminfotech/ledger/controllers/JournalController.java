@@ -8,7 +8,7 @@ import org.calminfotech.ledger.boInterface.JournalBo;
 import org.calminfotech.ledger.forms.JournalForm;
 import org.calminfotech.ledger.models.JournalEntry;
 import org.calminfotech.ledger.models.JournalHeader;
-import org.calminfotech.ledger.utiility.LedgerException;
+import org.calminfotech.ledger.utility.LedgerException;
 import org.calminfotech.system.boInterface.OrganisationBo;
 import org.calminfotech.system.models.Organisation;
 import org.calminfotech.user.utils.UserIdentity;

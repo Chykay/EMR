@@ -1,4 +1,4 @@
-package org.calminfotech.ledger.utiility;
+package org.calminfotech.ledger.utility;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

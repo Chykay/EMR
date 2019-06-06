@@ -1,4 +1,4 @@
-package org.calminfotech.ledger.utiility;
+package org.calminfotech.ledger.utility;
 
 public class LedgerException extends Exception {
 

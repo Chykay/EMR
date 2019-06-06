@@ -14,8 +14,8 @@ import org.calminfotech.ledger.models.GLEntry;
 import org.calminfotech.ledger.models.GenLedgBalance;
 import org.calminfotech.ledger.models.JournalEntry;
 import org.calminfotech.ledger.models.LedgerAccount;
-import org.calminfotech.ledger.utiility.LedgerException;
-import org.calminfotech.ledger.utiility.LedgerUtility;
+import org.calminfotech.ledger.utility.LedgerException;
+import org.calminfotech.ledger.utility.LedgerUtility;
 import org.calminfotech.system.boInterface.OrganisationBo;
 import org.calminfotech.system.boInterface.SettingBo;
 import org.calminfotech.system.models.SettingsAssignment;
@@ -334,8 +334,8 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		return this.genLedgerDao.getLedgerStat(account_no, branch_id, company_id);
 	}
 	
-	public List<GLEntry> getGLEntries() {
-		return this.genLedgerDao.getGLEntries();
+	public List<GLEntry> getGLEntries(int org_id) {
+		return this.genLedgerDao.getGLEntries(org_id);
 	}
 
 	public List<GLEntry> getGLEntriesByBatch_no(String batch_no) {

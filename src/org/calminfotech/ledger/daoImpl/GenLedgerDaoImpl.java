@@ -103,11 +103,11 @@ public class GenLedgerDaoImpl implements GenLedgerDao {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<GLEntry> getGLEntries(){
+	public List<GLEntry> getGLEntries(int org_id){
 		List<GLEntry> entries = sessionFactory.getCurrentSession()
 				.createQuery("FROM GLEntry WHERE company_id = ? AND organisation_id = ? ")
 				.setParameter(0, userIdentity.getOrganisation().getOrgCoy().getId())
-				.setParameter(1, userIdentity.getOrganisation().getId())/*
+				.setParameter(1, org_id)/*
 				.setParameter(2, this.settingBo.fetchsettings("interbank-GLP", 2).getSettings_value())*/
 				.list();
 		

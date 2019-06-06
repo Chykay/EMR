@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import org.calminfotech.ledger.boInterface.TotAccBo;
 import org.calminfotech.ledger.models.TotalingAccount;
+import org.calminfotech.ledger.utility.ReportsBo;
 /*
 import org.calminfotech.patient.forms.PatientreportsearchForm;*/
 import org.calminfotech.report.models.ConsultationCount;
@@ -26,6 +27,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -48,10 +50,9 @@ public class ReportsController {
 	private TotAccBo totAccBo;
 
 	@Autowired
-	private TopPrescribedDrug prescribedDrug;
+	private ReportsBo reportsBo;
+	
 
-	@Autowired
-	private ConsultationCountDao consultationCountDao;
 
 	@Layout("layouts/reportblank")
 	@RequestMapping(value = "/sample", method = RequestMethod.GET)
@@ -66,22 +67,38 @@ public class ReportsController {
 		}
 		return "ledger/reports/sample";
 	}
+	
+	@Layout("layouts/reportblank")
+	@RequestMapping(value = "/TB/{branch}", method = RequestMethod.GET)
+	public String branchTB(Model model, @PathVariable int branchID) {
 
-	// this is to show invoice / bill list by due date form
+		model.addAttribute("branchTB", this.reportsBo.getBranchTB(branchID));
+		return "ledger/reports/tb/branch";
+	}
+	
+	@Layout("layouts/reportblank")
+	@RequestMapping(value = "/TB/{company}", method = RequestMethod.GET)
+	public String companyTB(Model model, @PathVariable int companyID) {
+
+		model.addAttribute("companyTB", this.reportsBo.getCompanyTB(companyID));
+		return "ledger/reports/tb/company";
+	}
+
+	/*// this is to show invoice / bill list by due date form
 	@SuppressWarnings({ "unused", "null" })
 	@Layout(value = "layouts/form_wizard_layout")
 	@RequestMapping(value = "/searchcount")
 	public String searchcountteform(Model model,
 			RedirectAttributes redirectAttributes) {
-/*
-		PatientreportsearchForm ctform = new PatientreportsearchForm();*/
+
+		PatientreportsearchForm ctform = new PatientreportsearchForm();
 
 		Calendar cal = GregorianCalendar.getInstance();
 		cal.add(Calendar.DAY_OF_YEAR, -30);
 
 		cal.add(Calendar.DAY_OF_YEAR, +30);
-/*
-		model.addAttribute("ctform", ctform);*/
+
+		model.addAttribute("ctform", ctform);
 
 		return "report/general/consultioncount";
 	}
@@ -93,10 +110,10 @@ public class ReportsController {
 			@PathVariable("dateto") String dateto, Model model,
 			HttpSession session, RedirectAttributes redirectAttributes) {
 
-		/*
+		
 		 * System.out.println("My first date " +datefrom);
 		 * System.out.println("My second  date " +dateto);
-		 */
+		 
 		List<ConsultationCount> cnsultationCount = this.consultationCountDao
 				.fetchAllconsultationcount(DateUtils.formatStringToDate(
 						datefrom, "yyyy-MM-dd hh:mm"), DateUtils
@@ -108,11 +125,11 @@ public class ReportsController {
 
 		model.addAttribute("datefrom", datefrom);
 		model.addAttribute("dateto", dateto);
-		/*
+		
 		 * int r; if (r == 0) { }
-		 */
+		 
 		return "report/general/consultioncounprint";
 
 	}
-
+*/
 }

@@ -9,7 +9,7 @@ import org.calminfotech.ledger.daoImpl.PostCodeDaoImpl;
 import org.calminfotech.ledger.forms.GLPostingForm;
 import org.calminfotech.ledger.models.GLEntry;
 import org.calminfotech.ledger.models.PostCode;
-import org.calminfotech.ledger.utiility.LedgerException;
+import org.calminfotech.ledger.utility.LedgerException;
 import org.calminfotech.system.boInterface.OrganisationBo;
 import org.calminfotech.system.models.Organisation;
 import org.calminfotech.user.utils.UserIdentity;
@@ -67,7 +67,7 @@ public class GLPostingController {
 		
 		List<GLEntry> glEntries = null;
 		try {
-			glEntries = this.genLedgerBo.getGLEntries();
+			glEntries = this.genLedgerBo.getGLEntries(this.userIdentity.getOrganisation().getId());
 		} catch (LedgerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

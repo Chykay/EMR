@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.calminfotech.ledger.models.JournalEntry;
 import org.calminfotech.ledger.models.JournalHeader;
-import org.calminfotech.ledger.utiility.LedgerException;
+import org.calminfotech.ledger.utility.LedgerException;
 
 public interface JournalBo {
 	
