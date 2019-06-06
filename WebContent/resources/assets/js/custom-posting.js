@@ -1,7 +1,12 @@
 /*<![CDATA[*/
+
+$(document).ready(function() {
+    $('#pAccountNo').select2();
+    $('#rAccountNo').select2();
+});
            
 $('#pAccountType').change(function() {
-	document.getElementById("pAccountNoSearch").value = "";
+	// document.getElementById("pAccountNoSearch").value = "";
 	var sel_acc_type = $('#pAccountType option:selected');
 	var acc_type = sel_acc_type[0].value;
 
@@ -213,7 +218,7 @@ function selectAccountR(){
 
 $("#pAccountNo").change(function(){
 	var selected_option = $('#pAccountNo option:selected');
-	document.getElementById("pAccountNoSearch").value = selected_option.val(); 
+	//document.getElementById("pAccountNoSearch").value = selected_option.val(); 
 	
 	var selected_branch = $('#rBranchID option:selected');
 	
@@ -231,7 +236,7 @@ $("#pAccountNo").change(function(){
 
 $('#rBranchID').change(function() {
 	
-	var search_field = document.getElementById("pAccountNoSearch").value;
+	// var search_field = document.getElementById("pAccountNoSearch").value;
 	
 	var selected_option = $('#pAccountNo option:selected');
 
@@ -243,7 +248,7 @@ $('#rBranchID').change(function() {
 	if(acc_type == 'CL'){
 		getBalance($("#p_branch_bal"), selected_option[0].value, "0", "CL");
 		}
-	else if(search_field != ""){
+	else/* if(search_field != "")*/{
 		getBalance($("#p_branch_bal"), selected_option[0].value, selected_branch[0].value, "GL");
 	}
 });

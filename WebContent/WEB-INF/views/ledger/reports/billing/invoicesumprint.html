@@ -1,0 +1,65 @@
+
+<div class="container">
+
+
+ <button style="float: right;" onclick="printDiv()">Print</button>
+ 
+ <button><a download="report.csv" href="#" onclick="return ExcellentExport.csv(this, 'printableArea');">Export to CSV</a> </button>
+ 
+
+<!--   <a href="#" onclick="printDiv();">Print</a>
+
+   <a download="report.csv" href="#" onclick="return ExcellentExport.csv(this, 'printableArea');">Export to CSV</a> -->
+    <br/>
+</div>
+
+
+
+<div class="container" id="printableArea">
+
+  <span style="float: left;"> 
+								<img th:if="${@userIdentity.getOrganisation().getOrgCoy().getLogo() == null}" id="avatar2"
+									th:src="@{/resources/img/nhis.png}" alt=""
+									class="img-responsive" style="width:100px; height:100px"/> 
+									
+									<img th:if="${@userIdentity.getOrganisation().getOrgCoy().getLogo() != null}" id="avatar2"
+									th:src="@{/system/organisationscompany/image/{id}(id=${@userIdentity.getOrganisation().getOrgCoy().getId()})}"
+									alt="" class="img-responsive" style="width:100px; height:100px"/>
+								</span>
+
+<div style="padding-top: 25px">  <span style="float: left;"> <h2><span th:text="${@userIdentity.getOrganisation().getOrgCoy().getName()}"></span></h2> </span></div>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+
+<span style="float: left;"> <h4>Income Generated between:  <span
+		th:text="${datefrom}"></span> and 	<span
+		th:text="${dateto}"></span></h4></span>
+
+
+  <table class="table table-condensed" id="printtable">
+    <thead>
+      <tr>
+     
+
+				
+					<th>Due Date</th>
+						
+				<th>Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+     	<tr th:each="billreport : ${BillingInvoiceSum}">
+     	
+     		<td	th:text="${billreport.Monthname} + ' ,' + ${billreport.yearname}">Lastname</td>
+<!-- 					
+<td>$ <span th:text="${#numbers.formatDecimal(abc.value, 0, 'COMMA', 2, 'POINT')}">10.00</span></td> -->
+ 	<td th:text="${billreport.Grandtotal != null} ? ${billreport.Grandtotal}">Email</td> 
+
+		
+     		      </tr>
+    </tbody>
+  </table>
+  </div>
+  	

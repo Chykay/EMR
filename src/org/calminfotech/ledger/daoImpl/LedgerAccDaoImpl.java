@@ -29,7 +29,12 @@ public class LedgerAccDaoImpl implements LedgerAccDao {
 				.setParameter(1, company_id)
 				.setParameter(2, this.settingBo.fetchsettings("interbank-GLP", 2).getSettings_value())
 				.list();
-		return ledgerAccounts;
+		
+		
+		if (ledgerAccounts.size() > 0)
+			return ledgerAccounts;
+		
+		return null;
 	}
 
 	@SuppressWarnings("unchecked")

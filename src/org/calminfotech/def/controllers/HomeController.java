@@ -29,6 +29,7 @@ public class HomeController {
 		User user = this.userBo.getUserById(2);
 		
 		this.userIdentity.setUser(user);
+		System.out.println(user.getOrganisation());
 		this.userIdentity.setOrganisation(user.getOrganisation());
 		
 		return "default/index";

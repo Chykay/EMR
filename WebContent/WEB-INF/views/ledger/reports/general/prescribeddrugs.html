@@ -1,0 +1,58 @@
+
+<div class="container">
+
+ <button style="float: right;" onclick="printDiv()">Print</button>
+
+<!--   <a href="#" onclick="printDiv();">Print</a>
+
+   <a download="report.csv" href="#" onclick="return ExcellentExport.csv(this, 'printableArea');">Export to CSV</a> -->
+    <br/>
+</div>
+
+
+
+<div class="container" id="printableArea">
+
+  <span style="float: left;"> 
+								<img th:if="${@userIdentity.getOrganisation().getOrgCoy().getLogo() == null}" id="avatar2"
+									th:src="@{/resources/img/nhis.png}" alt=""
+									class="img-responsive" style="width:100px; height:100px"/> 
+									
+									<img th:if="${@userIdentity.getOrganisation().getOrgCoy().getLogo() != null}" id="avatar2"
+									th:src="@{/system/organisationscompany/image/{id}(id=${@userIdentity.getOrganisation().getOrgCoy().getId()})}"
+									alt="" class="img-responsive" style="width:100px; height:100px"/>
+								</span>
+
+<div style="padding-top: 25px">  <span style="float: left;"> <h2><span th:text="${@userIdentity.getOrganisation().getOrgCoy().getName()}"></span></h2> </span></div>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<p style="float: center;"><h4>Top 10 prescribed drug List </h4></p>
+
+	
+	
+
+  <table class="table table-condensed" id="printtable">
+    <thead>
+      <tr>
+    				
+					<th>Drug Name</th>
+					<th>Appearances</th>
+				
+					 
+      </tr>
+    </thead>
+    <tbody>
+     	<tr th:each="s : ${drug}">
+ 	
+					
+					<td th:text="${s.drugname != null ? s.drugname : ''}"></td> 
+					<td th:text="${s.Appearances != null ? s.Appearances: ''}" ></td>
+			
+					 
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  	

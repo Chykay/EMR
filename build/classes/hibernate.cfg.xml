@@ -393,7 +393,6 @@
 		-->
 		
 		<!-- LEDGER--> 
-		 <mapping class="org.calminfotech.ledger.models.BalSheetCat" />
 		 <mapping class="org.calminfotech.ledger.models.CommonLedger" />
 		 <mapping class="org.calminfotech.ledger.models.CustomerAccount" />
 		 <mapping class="org.calminfotech.ledger.models.CustomerEntry" />
@@ -403,6 +402,7 @@
 		 <mapping class="org.calminfotech.ledger.models.JournalHeader" />
 		 <mapping class="org.calminfotech.ledger.models.GPermission" />
 		 <mapping class="org.calminfotech.ledger.models.LedgerAccount" />
+		 <mapping class="org.calminfotech.ledger.models.LedgerCategory" />
 		 <mapping class="org.calminfotech.ledger.models.LedgerType" />
 		 <mapping class="org.calminfotech.ledger.models.PostCode" />
 		 <mapping class="org.calminfotech.ledger.models.TotalingAccount" />

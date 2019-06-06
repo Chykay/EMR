@@ -24,7 +24,14 @@ public class LedgerAccBoImpl implements LedgerAccBo {
 	
 	
 	public List<LedgerAccount> fetchAll(int branch_id, int company_id){
-		return this.ledgerAccDao.fetchAll(branch_id, company_id);
+		List<LedgerAccount> list = null;
+		try {
+			list = this.ledgerAccDao.fetchAll(branch_id, company_id);	
+		} catch (Exception e) {
+			System.out.println("null");
+		}
+		
+		return list;
 	}
 	
 	public LedgerAccount getLedgerById(int id){
@@ -41,7 +48,7 @@ public class LedgerAccBoImpl implements LedgerAccBo {
 		ledgerAccount.setCode(ledgerAccForm.getCode());
 		ledgerAccount.setTotalingCode(ledgerAccForm.getTotalingCode());
 		ledgerAccount.setAccountNo(ledgerAccForm.getAccountNo());
-		ledgerAccount.setBalSheetCatID(ledgerAccForm.getBalSheetCatID());
+		ledgerAccount.setLedgerCatID(ledgerAccForm.getLedgerCatID());
 		ledgerAccount.setName(ledgerAccForm.getName());
 		if (ledgerAccForm.getIsActive() == 1) {
 			ledgerAccount.setIsActive(true);
@@ -51,7 +58,6 @@ public class LedgerAccBoImpl implements LedgerAccBo {
 		
 		
 		ledgerAccount.setOrganisation(userIdentity.getOrganisation());
-		System.out.println(userIdentity.getOrganisation().getId() + " and " + userIdentity.getOrganisation().getOrgCoy().getId());
 		ledgerAccount.setOrgCoy(userIdentity.getOrganisation().getOrgCoy());
 		ledgerAccount.setCreated_by(userIdentity.getUser());
 		ledgerAccount.setCreate_date(new Date(System.currentTimeMillis()));
@@ -81,7 +87,7 @@ public class LedgerAccBoImpl implements LedgerAccBo {
 		ledgerAccount.setCode(ledgerAccForm.getCode());
 		ledgerAccount.setTotalingCode(ledgerAccForm.getTotalingCode());
 		ledgerAccount.setAccountNo(ledgerAccForm.getAccountNo());
-		ledgerAccount.setBalSheetCatID(ledgerAccForm.getBalSheetCatID());
+		ledgerAccount.setLedgerCatID(ledgerAccForm.getLedgerCatID());
 		ledgerAccount.setName(ledgerAccForm.getName());
 		if (ledgerAccForm.getIsActive() == 1) {
 			ledgerAccount.setIsActive(true);

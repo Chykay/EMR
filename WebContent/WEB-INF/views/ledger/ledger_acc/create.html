@@ -60,16 +60,16 @@
 		</div>
 		
 		<div class="form-group">
-			<label for="gender" class="col-sm-3 control-label no-padding-right">Balance Sheet Category:</label>
+			<label for="gender" class="col-sm-3 control-label no-padding-right">Ledger Category:</label>
 			<div class="col-sm-9">
-				<select th:field="*{balSheetCatID}" class="col-xs-10 col-sm-5"  required="required" id="balSheetCatID">
+				<select th:field="*{ledgerCatID}" class="col-xs-10 col-sm-5"  required="required" id="ledgerCatID">
 					<option value="">Select..</option>
-						<option th:each="balSheetCat: ${balSheetCats}" 
-					th:value = "${balSheetCat.id}" 
-					th:text="${balSheetCat.name}">Balance Sheet Category</option>
+						<option th:each="ledgerCat: ${ledgerCats}" 
+					th:value = "${ledgerCat.id}" 
+					th:text="${ledgerCat.name}">Balance Sheet Category</option>
 				</select>
-				<span class="text-danger" th:if="${#fields.hasErrors('balSheetCatID')}"
-					th:errors="*{balSheetCatID}">
+				<span class="text-danger" th:if="${#fields.hasErrors('ledgerCatID')}"
+					th:errors="*{ledgerCatID}">
 				</span>
 			</div>
 		</div>

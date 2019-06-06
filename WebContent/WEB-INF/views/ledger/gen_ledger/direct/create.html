@@ -60,14 +60,11 @@
 				<div class="form-group">
 					<label for="pAccountNo" class="col-sm-3 control-label no-padding-right">Posting Account:</label>
 					<div class="col-sm-9">
-						<input id="pAccountNoSearch"  name="pAccountNoSearch" class="col-xs-10 col-sm-7" style="margin-bottom:0px;" onkeyup="filter()" onblur="selectAccount()" />
+						<input id="pAccountNoSearch"  name="pAccountNoSearch" class="col-xs-10 col-sm-7" style="margin-bottom:0px;" disabled="disabled"/>
 						<button class="pCustSearch" hidden="hidden">searcn</button> 
 						<br />
-						<select th:field="*{pAccountNo}" size="" class="col-xs-10 col-sm-7" style="margin-top:0px;"  required="required">
+						<select th:field="*{pAccountNo}" id="pAccountNo" size="" class="col-xs-10 col-sm-7" style="margin-top:0px;"  required="required">
 							
-							<!-- <option th:each="generalLedger: ${generalLedgers}" 
-							th:value = "${generalLedger.accountNo}" 
-							th:text="|${generalLedger.accountNo}-${generalLedger.name}|">Posting Account</option> -->
 						</select>
 						<span class="text-danger" th:if="${#fields.hasErrors('pAccountNo')}"
 							th:errors="*{pAccountNo}">

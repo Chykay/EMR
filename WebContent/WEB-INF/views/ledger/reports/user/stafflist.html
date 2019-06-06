@@ -1,0 +1,79 @@
+
+<div class="container">
+
+ <button style="float: right;" onclick="printDiv()">Print</button>
+
+<!--   <a href="#" onclick="printDiv();">Print</a>
+
+   <a download="report.csv" href="#" onclick="return ExcellentExport.csv(this, 'printableArea');">Export to CSV</a> -->
+    <br/>
+</div>
+
+
+
+<div class="container" id="printableArea">
+
+  <span style="float: left;"> 
+								<img th:if="${@userIdentity.getOrganisation().getOrgCoy().getLogo() == null}" id="avatar2"
+									th:src="@{/resources/img/nhis.png}" alt=""
+									class="img-responsive" style="width:100px; height:100px"/> 
+									
+									<img th:if="${@userIdentity.getOrganisation().getOrgCoy().getLogo() != null}" id="avatar2"
+									th:src="@{/system/organisationscompany/image/{id}(id=${@userIdentity.getOrganisation().getOrgCoy().getId()})}"
+									alt="" class="img-responsive" style="width:100px; height:100px"/>
+								</span>
+
+<div style="padding-top: 25px">  <span style="float: left;"> <h2><span th:text="${@userIdentity.getOrganisation().getOrgCoy().getName()}"></span></h2> </span></div>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<p style="float: center;"><h4>Staff List </h4></p>
+
+	
+	
+
+  <table class="table table-condensed" id="printtable">
+    <thead>
+      <tr>
+    		<th>Staff Code</th>
+					<th>Staff Name</th>
+					<th>Staff Email</th>
+					 <th>Hr Unit </th>
+					 <th>Designation</th>
+					 
+					 <th>Telephone</th>
+					 <th>Staff Mode</th>
+					  <th>Medical Group</th>
+					 <th>Medical Rank</th>
+					 <th>Specialization</th>
+					 <th>Staff Status</th>
+					 
+      </tr>
+    </thead>
+    <tbody>
+     	<tr th:each="s : ${staffreg}">
+     		<td th:text="${s.staffCode}"> Code</td>
+					<td th:text="${s.lastName} + ' ' + ${s.firstName} + ' ' + ${s.otherName}"></td>
+					
+					<td th:text="${s.email}"> </td>
+						
+					
+					 
+					 <td th:text="${s.hrunitcategory != null ? s.hrunitcategory.categoryName:''}"> </td> 
+				<td th:text="${s.designation != null ? s.designation.designationName : ''}"></td> 
+		
+					 <td th:text="${s.telephone}"> </td> 
+					
+					<td th:text="${s.staffmode.name}"> </td> 
+					
+					<td th:text="${s.staffgroup != null ? s.staffgroup.name : ''}"></td> 
+					<td th:text="${s.staffranking != null ? s.staffranking.name : ''}"></td>
+					<td th:text="${s.staffspecialization != null ? s.staffspecialization.name : ''}"></td>
+					 <td th:text="${s.staffstatus.name}"></td>
+					 
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  	

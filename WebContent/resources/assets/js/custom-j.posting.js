@@ -1,6 +1,5 @@
 /*<![CDATA[*/
            
-
 window.branches = "";
 const saveBtn = document.getElementById('save');
 const postBtn = document.getElementById('post');
@@ -25,6 +24,7 @@ custSearch(searchButton);
  
 $(document).ready(function(){
 	getAccounts("GET GL", "GA");
+    $('.accountNo').select2();
 });
    
 $(document.body).on("change", ".accountType", function(){
@@ -33,11 +33,11 @@ $(document.body).on("change", ".accountType", function(){
 });
 
 
-$(document.body).on("change", ".accountNo", function(){
+/*$(document.body).on("change", ".accountNo", function(){
 	var accNo = $(this)[0].value;
 	console.log($(this).prev().prev());
 	$(this).prev().prev()[0].value = accNo;
-});
+});*/
 
 
 
@@ -59,7 +59,7 @@ $(document.body).on("click", ".custSearch", function(){
 });
 
 
-$(document.body).on("keyup", ".accountNoSearch", function(){
+/*$(document.body).on("keyup", ".accountNoSearch", function(){
 	var text = $(this)[0].value;
 	filter($(this), text);
 });
@@ -68,7 +68,7 @@ $(document.body).on("blur", ".accountNoSearch", function(){
 	var text = $(this)[0].value;
 	selectAccount($(this), text);
 });
-
+*/
 
 function onSubmit(action){
 	var isFormValid = true;
@@ -90,7 +90,7 @@ function onSubmit(action){
 			} else if($(this)[0].id == "accountNoSearch") {
 				if($(this).parent().parent().find('.accountType option:selected')[0].value != 'GA') {
 					isFormValid = false;
-					/* console.log("no value: IT IS account no IT IS NOT CUSTOMERSELECTED"); */
+					 console.log("no value: IT IS account no IT IS NOT CUSTOMERSELECTED"); 
 				}
 			} else {
 
@@ -219,33 +219,32 @@ function selectOptions() {
    
 function accountSetup(journalElem, acc_type) {
 
-	accNoElem = journalElem.find('#accountNo');
+	accNoElem = journalElem.find('.select2-container');
+	console.log(accNoElem);
+	
+	accNoElem2 = journalElem.querySelector('.select2');
+	console.log("acc No 2", accNoElem2);
+	
 	searchBtn = journalElem.find('.custSearch')[0];
 	accNoSearchElem = journalElem.find('#accountNoSearch')[0];
-	brElem = journalElem.find('br')[0];
 	//console.log(journalElem, acc_type, accNoElem, searchElem);
 			
 	if(acc_type == 'GA') {
-		accNoElem[0].removeAttribute("hidden");
+		accNoElem[0].style.display = "inline-block";
 		searchBtn.style.display = "none";
-		//accNoSearchElem.style.display = "none";
-		accNoSearchElem.removeAttribute("disabled");
-		/*brElem.style.display = "none";
-		
+		accNoSearchElem.style.display = "none";
+		/*
 		 if(accNoSearchElem.value.length < 1)
 			accNoSearchElem.value = "account no"; */
 
 		accNoElem.html(window.generalLedgers);
-		console.log(accNoElem, "doig it now");
 	} else {
-		//accNoSearchElem.style.display="inline-block";
-		accNoSearchElem.setAttribute("disabled", true);
+		accNoElem[0].style.display = "none";
+		accNoSearchElem.style.display="inline-block";
 		searchBtn.style.display="inline-block";
-		/*brElem.style.display="inline-block";*/
-		accNoElem[0].setAttribute("hidden", true);
 
-		if(accNoSearchElem.value.length < 1)
-			accNoSearchElem.value = "";
+		/*if(accNoSearchElem.value.length < 1)
+			accNoSearchElem.value = "";*/
 	}
 }
    
@@ -282,16 +281,16 @@ function custSearch(searchBtn) {
 	return false
 }
 
-function updateAccNo(customerAccNo){
-	const accNoSearch = window.searchBtn.parent().find('#accountNoSearch')[0];
+function updateAccNo(customerAccNo){/*
+	const accNoSearch = window.searchBtn.parent().find('#accountNoSearch')[0];*/
 	accNoSearch.value = customerAccNo;
 }
 
-function filter(elem, keyword) {
+/*function filter(elem, keyword) {
 	var fleet = elem.next().next()[0];
-	/*console.log(element, text);
+	console.log(element, text);
     var keyword = document.getElementById("pAccountNoSearch").value;
-    var fleet = document.getElementById("pAccountNo");*/
+    var fleet = document.getElementById("pAccountNo");
     var selSize = 0;
     for (var i = 0; i < fleet.length; i++) {
         var txt = fleet.options[i].text.toLowerCase();
@@ -320,7 +319,7 @@ function selectAccount(elem, keyword){
             break;
         }
     }
-}
+}*/
 
 
 

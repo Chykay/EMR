@@ -1,0 +1,68 @@
+
+<div class="container">
+
+
+
+ <button style="float: right;" onclick="printDiv()">Print</button>
+    <br/>
+</div>
+
+ 
+
+<div class="container" id="printableArea" >
+
+  <span style="float: left;"> 
+								<img th:if="${@userIdentity.getOrganisation().getOrgCoy().getLogo() == null}" id="avatar2"
+									th:src="@{/resources/img/nhis.png}" alt=""
+									class="img-responsive" style="width:100px; height:100px"/> 
+									
+									<img th:if="${@userIdentity.getOrganisation().getOrgCoy().getLogo() != null}" id="avatar2"
+									th:src="@{/system/organisationscompany/image/{id}(id=${@userIdentity.getOrganisation().getOrgCoy().getId()})}"
+									alt="" class="img-responsive" style="width:100px; height:100px"/>
+								</span>
+
+<div style="padding-top: 25px">  <span style="float: left;"> <h2><span th:text="${@userIdentity.getOrganisation().getOrgCoy().getName()}"></span></h2> </span></div>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<span style="float: left;font-size:11px; font-weight: bold"> Inventory Report : <span
+		th:text="${headr}"></span> </span>
+	
+
+  <table class="table table-condensed" id="printtable" style="font-size:11px">
+    <thead>
+      <tr>
+     		<th>Item name</th>
+					
+					<th >Type</th>
+							<th>Quantity</th>
+					
+					<th >Measure</th>
+					
+			
+			
+      </tr>
+    </thead>
+    <tbody>
+		<th:block th:each=" stock : ${inventoryreportlist}" >
+		
+				<tr th:each=" g : ${stock.prescriptionmeasurements} ">
+				
+					<td style="max-width:180px;" th:text="${stock.globalItem.GlobalitemName}"> Name</td>
+					
+					 <td th:text="${stock.globalItem.globalitemtype != null ? stock.globalItem.globalitemtype.globalitemtypename : ' '}"> Global Type</td> 
+						<td th:text="${g.quantity}"> Quantity</td>
+					<td th:text="${g.measurename}"> Measure Name</td>
+					
+				
+						
+					
+					
+				</tr>
+		
+		</th:block>
+    </tbody>
+  </table>
+  </div>
+ 	

@@ -1,0 +1,70 @@
+<div class="page-header">
+	<h1>
+		All Account
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/ledger/ledger_cat/index}">
+			<i class="fa fa-home"></i> System Dashboard
+		</a> 
+		<a class="btn btn-xs btn-primary" th:href="@{/ledger/ledger_cat/create}">
+			<i class="fa fa-plus-circle"></i> Add Category
+		</a>
+	
+ 		<span   id="imgId" hidden="hidden" > 
+ 			<img th:src="@{/resources/assets/images/ajax-loader.gif}" id="loading_img" />  
+ 		</span>      
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<div class="table-header">List of Categories </div>
+		<table id="dTable"
+			class="table table-striped table-bordered table-hover">
+			<!-- Table heading -->
+			<thead>
+				<tr>
+					<!-- <th>Item name</th> -->
+					<th>Name</th>
+					<th>Active</th>
+					<th>Parent Name</th>
+					<th><i class="glyphicon glyphicon-asterisk"></i></th>
+				</tr>
+			</thead>
+
+			<!-- Table body -->
+			<tbody>
+				<tr th:each="account : ${accounts}">
+					<td th:text="${account.name}">Name</td>
+					<td>
+					    <span th:if="${account.isActive}">Active</span>
+					    <span th:if="${!account.isActive}">Inactive</span>
+					</td>	
+					<td th:text="${account.parentName}">Parent Name</td>
+					
+					<td>
+						<a class="btn btn-xs btn-primary tooltips"
+							title="view category details" 		th:href="@{/ledger/ledger_cat/view/{id} (id=${account.id}) }"> <i
+								class="fa fa-eye"></i>
+						</a> 
+						 <a class="btn btn-xs btn-warning tooltips"
+							title="Edit Item details"
+							th:href="@{/ledger/ledger_cat/edit/{id}(id=${account.id}) }"> <i
+								class="fa fa-edit"></i>
+						</a> <a class="btn btn-xs btn-danger tooltips" 
+							title="Delete Item details"   th:id="${account.id}"  onclick="return Confirm(this.id)"
+							th:href="@{/ledger/ledger_cat/delete/{id}(id=${account.id}) }"> <i
+								class="fa fa-trash-o"></i>
+						</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

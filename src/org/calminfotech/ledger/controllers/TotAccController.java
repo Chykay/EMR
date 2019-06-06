@@ -66,8 +66,9 @@ public class TotAccController {
 		model.addAttribute("account", new TotalingForm());
 		
 		List<LedgerType> ledger_types = this.ledgerTypesImpl.fetchAll();
-		System.out.println(ledger_types.get(0));
-		model.addAttribute("ledger_types", ledger_types);
+		
+		
+		model.addAttribute("ledgerTypes", ledger_types);
 		return "/ledger/totaling/create";
 	}
 	
@@ -109,7 +110,7 @@ public class TotAccController {
 		List<LedgerType> ledger_types = this.ledgerTypesImpl.fetchAll();
 		
 		
-		model.addAttribute("ledger_types", ledger_types);
+		model.addAttribute("ledgerTypes", ledger_types);
 		model.addAttribute("account", totalingForm);
 		
 		this.auditor.before(request, "TotalingForm", totalingForm);

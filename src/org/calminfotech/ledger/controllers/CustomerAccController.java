@@ -5,13 +5,13 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.calminfotech.ledger.boInterface.BalSheetCatBo;
+import org.calminfotech.ledger.boInterface.LedgerCatBo;
 import org.calminfotech.ledger.boInterface.CustomerAccBo;
 import org.calminfotech.ledger.boInterface.GenLedgerBo;
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
 import org.calminfotech.ledger.boInterface.TotAccBo;
 import org.calminfotech.ledger.forms.LedgerAccForm;
-import org.calminfotech.ledger.models.BalSheetCat;
+import org.calminfotech.ledger.models.LedgerCategory;
 import org.calminfotech.ledger.models.CustomerAccount;
 import org.calminfotech.ledger.models.CustomerEntry;
 import org.calminfotech.ledger.models.LedgerAccount;
@@ -40,7 +40,7 @@ public class CustomerAccController {
 	private LedgerAccBo ledgerAccBo;
 	
 	@Autowired
-	private BalSheetCatBo balSheetCatBo;
+	private LedgerCatBo balSheetCatBo;
 
 	@Autowired
 	private TotAccBo totAccBo;
@@ -139,7 +139,7 @@ public class CustomerAccController {
 	public String create(Model model) {		
 		
 		List<TotalingAccount> totalingAccounts = this.totAccBo.fetchAll();
-		List<BalSheetCat> balSheetCats = this.balSheetCatBo.fetchAll();
+		List<LedgerCategory> balSheetCats = this.balSheetCatBo.fetchAll();
 		
 		model.addAttribute("account", new LedgerAccForm());
 		model.addAttribute("balSheetCats", balSheetCats);
