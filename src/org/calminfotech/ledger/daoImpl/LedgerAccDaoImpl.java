@@ -1,14 +1,18 @@
 package org.calminfotech.ledger.daoImpl;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.calminfotech.ledger.daoInterface.LedgerAccDao;
 import org.calminfotech.ledger.models.LedgerAccount;
 import org.calminfotech.system.boInterface.SettingBo;
+import org.calminfotech.system.models.GetsettingsAssignmentProc;
+import org.calminfotech.system.models.SettingsAssignment;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
 
 @Repository
 @Transactional
@@ -23,13 +27,14 @@ public class LedgerAccDaoImpl implements LedgerAccDao {
 	@SuppressWarnings("unchecked")
 	public List<LedgerAccount> fetchAll(int branch_id, int company_id){
 		
+		
+		System.out.println("this one " + branch_id + " : " + company_id);
 		List<LedgerAccount> ledgerAccounts = sessionFactory.getCurrentSession()
-				.createQuery(" from LedgerAccount WHERE organisation_id = ? AND company_id = ? AND account_no != ?")
+				.createQuery(" from LedgerAccount WHERE organisation_id = ? AND company_id = ? AND account_no NOT IN ( :interfaces )")
 				.setParameter(0, branch_id)
 				.setParameter(1, company_id)
-				.setParameter(2, this.settingBo.fetchsettings("interbank-GLP", 2).getSettings_value())
+				.setParameterList("interfaces", Arrays.asList("1-0000-000", "2-0000-000"))
 				.list();
-		
 		
 		if (ledgerAccounts.size() > 0)
 			return ledgerAccounts;

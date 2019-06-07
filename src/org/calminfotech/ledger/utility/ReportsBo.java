@@ -9,7 +9,9 @@ import org.calminfotech.ledger.reports.models.BranchTB;
 import org.calminfotech.ledger.reports.models.TrialBalEntry;
 import org.calminfotech.system.boInterface.OrganisationBo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ReportsBo {
 	
 

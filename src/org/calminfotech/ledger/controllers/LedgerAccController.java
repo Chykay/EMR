@@ -52,11 +52,14 @@ public class LedgerAccController {
 	@RequestMapping(value = {"/index"}, method=RequestMethod.GET)
 	public String indexGenLedgert(Model model) {
 		Organisation org = userIdentity.getOrganisation();
+		System.out.println(org.getId() + " : " + org.getOrgCoy().getId());
 		
 		if (this.ledgerAccBo.fetchAll(org.getId(), org.getOrgCoy().getId()) != null) {
 			List<LedgerAccount> ledgerAccounts = this.ledgerAccBo.fetchAll(org.getId(), org.getOrgCoy().getId());
 			model.addAttribute("accounts", ledgerAccounts);
 		} 
+		
+		System.out.println(this.ledgerAccBo.fetchAll(org.getId(), org.getOrgCoy().getId()));
 		// model.addAttribute("id", id);
 		return "/ledger/ledger_acc/index";
 	}
