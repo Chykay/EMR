@@ -5,9 +5,9 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
-
+/*
 import org.calminfotech.hmo.boInterface.HmoBo;
-import org.calminfotech.hmo.boInterface.HmoPackageBo;
+import org.calminfotech.hmo.boInterface.HmoPackageBo;*/
 import org.calminfotech.patient.boInterface.PatientBo;
 import org.calminfotech.patient.boInterface.PatientDocumentBo;
 import org.calminfotech.patient.boInterface.PatientFamilyHistoryBo;
@@ -99,9 +99,9 @@ public class PatientsReportController {
 
 	@Autowired
 	private StatesList stateList;
-
+/*
 	@Autowired
-	private HmoBo hmoBo;
+	private HmoBo hmoBo;*/
 
 	/*
 	 * @Autowired private EhmoBo ehmoBo;
@@ -133,9 +133,9 @@ public class PatientsReportController {
 
 	@Autowired
 	private PatientDocumentBo patientDocumentBo;
-
+/*
 	@Autowired
-	private HmoPackageBo hmoPackageBo;
+	private HmoPackageBo hmoPackageBo;*/
 
 	@Autowired
 	private PatientHistoryBo patientMedicalHistoryBo;

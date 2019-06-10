@@ -15,7 +15,9 @@ public class GLPostingForm {
 
 	private String amount;
 
-	private String posting_date;
+	private String postingDate;
+	
+	private String pDate;
 	
 	private float rAmount;
 	
@@ -191,11 +193,11 @@ public class GLPostingForm {
 	}
 
 	public String getPostingDate() {
-		return posting_date;
+		return postingDate;
 	}
 
-	public void setPosting_date(String posting_date) {
-		this.posting_date = posting_date;
+	public void setPostingDate(String postingDate) {
+		this.postingDate = postingDate;
 	}
 
 	public String getPAccountType() {

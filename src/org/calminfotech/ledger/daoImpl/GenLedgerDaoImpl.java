@@ -181,7 +181,7 @@ public class GenLedgerDaoImpl implements GenLedgerDao {
 	@Override
 	public List<GLEntry> getGLEntriesListing(String account_no, String start_date, String end_date) {
 		List<GLEntry> entries = sessionFactory.getCurrentSession()
-				.createQuery("FROM GLEntry WHERE company_id = ? AND organisation_id = ? AND account_no = ?  AND posting_date >= '" + start_date + "'  AND posting_date < '" + end_date + "'")
+				.createQuery("FROM GLEntry WHERE company_id = ? AND organisation_id = ? AND account_no like '%' + ? + '%'   AND posting_date >= '" + start_date + "'  AND posting_date < '" + end_date + "'")
 				.setParameter(0, userIdentity.getOrganisation().getOrgCoy().getId())
 				.setParameter(1, userIdentity.getOrganisation().getId())
 				.setParameter(2, account_no)
@@ -197,7 +197,7 @@ public class GenLedgerDaoImpl implements GenLedgerDao {
 	public List<CustomerEntry> getCustEntriesListing(String account_no, String start_date, String end_date) {
 		System.out.println(account_no + " : " + start_date + " : " + end_date);
 		List<CustomerEntry> entries = sessionFactory.getCurrentSession()
-				.createQuery("FROM CustomerEntry WHERE company_id = ? AND organisation_id = ? AND account_no = ? AND posting_date >= '" + start_date + "'  AND posting_date < '" + end_date + "'")
+				.createQuery("FROM CustomerEntry WHERE company_id = ? AND organisation_id = ? AND account_no like '%' + ? + '%'  AND posting_date >= '" + start_date + "'  AND posting_date < '" + end_date + "'")
 				.setParameter(0, userIdentity.getOrganisation().getOrgCoy().getId())
 				.setParameter(1, userIdentity.getOrganisation().getId())
 				.setParameter(2, account_no)

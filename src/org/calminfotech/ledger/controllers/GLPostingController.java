@@ -134,7 +134,7 @@ public class GLPostingController {
 
 	
 	@RequestMapping(value = {"/direct/post"}, method=RequestMethod.POST)
-	public String postGl(@Valid @ModelAttribute("account") GLPostingForm glPostingForm, BindingResult result, Model model,
+	public String postGl(@Valid @ModelAttribute("posting") GLPostingForm glPostingForm, BindingResult result, Model model,
 			RedirectAttributes redirectAttributes) {
 				
 		/* begin Transaction 

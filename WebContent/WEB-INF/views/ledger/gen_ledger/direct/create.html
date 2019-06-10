@@ -41,21 +41,22 @@
 				</div>
 						
 							
-				 <div class="form-group">
-							<label class="control-label col-xs-12 col-sm-3 no-padding-right"
-								for="date-picker">Date to:</label>
+				
+				<div class="form-group">
+							<label class="control-label col-sm-3 no-padding-right"
+								for="date-picker">Date from:</label>
 
 							<div class="col-xs-12 col-sm-9">
 								<div class="clearfix">
 
-									<input type="text" class="col-xs-12 col-sm-3 date-picker" required="required"
-										id="date-picker-2" th:field="*{postingDate}"
+									<input type="text" class="col-xs-10 col-sm-7 date-picker" 
+										id="date-picker-1" th:field="*{postingDate}"
 										data-date-format="yyyy-mm-dd" /> <span class="text-danger"
 										th:if="${#fields.hasErrors('postingDate')}" th:errors="postingDate"></span>
 
 								</div>
 							</div>
-				</div> 
+				</div>
 				
 				<div class="form-group">
 					<label for="pAccountNo" class="col-sm-3 control-label no-padding-right">Posting Account:</label>
@@ -119,7 +120,7 @@
 	    			<div class="form-group">
 						<label for="pPostCode" class="col-sm-5 control-label no-padding-right">Post Code:</label>
 						<div class="col-sm-7">
-							<select th:field="*{pPostCode}" class="col-xs-12 col-sm-12"  required="required" id="pPostCode">
+							<select th:field="*{pPostCode}" class="col-xs-12 col-sm-12"  required="required" >
 								<option value="">Select..</option>
 									<option th:each="postCode: ${postCodes}" 
 								th:value = "${postCode.code}" 
@@ -138,7 +139,7 @@
 							<input type="text" class="col-xs-12 col-sm-12" 
 								th:field="*{amount}"
 								oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"
-							/> <span
+							disabled="disabled"/> <span
 								class="text-danger" th:if="${#fields.hasErrors('amount')}"
 								th:errors="*{amount}"></span>
 						</div>
@@ -189,11 +190,11 @@
 				<div class="form-group">
 					<label for="rAccountNo" class="col-sm-3 control-label no-padding-right">Account:</label>
 					<div class="col-sm-9">
-					<input id="rAccountNoSearch"  name="rAccountNoSearch" class="col-xs-10 col-sm-7" style="margin-bottom:0px;" onkeyup="filterR()" onblur="selectAccountR()" /> 
+					<input id="rAccountNoSearch"  name="rAccountNoSearch" class="col-xs-10 col-sm-7" style="margin-bottom:0px;" onkeyup="filterR()" onblur="selectAccountR()" disabled="disabled"/> 
 					<button class="rCustSearch" hidden="hidden">searcn</button> 
 						<br />
 						
-						<select th:field="*{rAccountNo}" size="" style="margin-top:0px;" class="col-xs-10 col-sm-7"  required="required">
+						<select th:field="*{rAccountNo}" size="" style="margin-top:0px;" class="col-xs-10 col-sm-7"  required="required" >
 							
 								<!-- <option th:each="generalLedger: ${generalLedgers}" 
 							th:value = "${generalLedger.accountNo}" 
@@ -245,7 +246,7 @@
 					<div class="form-group">
 						<label for="rPostCode" class="col-sm-5 control-label no-padding-right">Post Code:</label>
 						<div class="col-sm-7">
-							<select th:field="*{rPostCode}" class="col-xs-12 col-sm-12"  required="required" id="rPostCode">
+							<select th:field="*{rPostCode}" class="col-xs-12 col-sm-12"  required="required">
 								<option value="">Select..</option>
 									<option th:each="postCode: ${postCodes}" 
 								th:value = "${postCode.code}" 

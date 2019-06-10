@@ -116,7 +116,7 @@ public class APIUtilityController {
 	
 	@ResponseBody
 	@RequestMapping(value = {"/gen_ledger/listings/{account_no}/{start_date}/{end_date}"}, method=RequestMethod.GET, produces = "text/html")
-	public String getGLListings(@PathVariable("account_no") String account_no, @PathVariable("start_date") String start_date, @PathVariable("end_date") String end_date){
+	public String getGLListings(@PathVariable("accountNo") String account_no, @PathVariable("startDate") String start_date, @PathVariable("endDate") String end_date){
 		List<GLEntry>  glEntries = null;
 		try {
 			 glEntries = this.genLedgerBo.getGLEntriesListing(account_no, start_date, end_date);

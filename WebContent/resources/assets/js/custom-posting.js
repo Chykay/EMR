@@ -5,63 +5,75 @@ $(document).ready(function() {
     $('#rAccountNo').select2();
 });
            
+
+$('.date-picker').datepicker({
+	autoclose : true,
+	format: 'yyyy-mm-dd',
+	todayHighlight : true
+})//show datepicker when clicking on the icon
+.next().on(ace.click_event, function() {
+	$(this).prev().focus();
+});
+
+
+
 $('#pAccountType').change(function() {
 	// document.getElementById("pAccountNoSearch").value = "";
-	var sel_acc_type = $('#pAccountType option:selected');
-	var acc_type = sel_acc_type[0].value;
+	var selAccType = $('#pAccountType option:selected');
+	var accType = selAccType[0].value;
 
 	$("#rBranchID").prop("disabled", false);
 	
 
-	if(acc_type != ""){
-		getLedgers($("#pAccountNo"), acc_type);
+	if(accType != ""){
+		getLedgers($("#pAccountNo"), accType);
 	} else {
 		$("#pAccountNo").html("");
 	}
 	
-	if (acc_type == "CL") {
+	if (accType == "CL") {
 		$(".pCustSearch").addClass("btn btn-primary btn-xs");
 		$(".pCustSearch").removeAttr("hidden");
 		$("#rBranchID").prop("disabled", "disabled");
 		//remove hidden attr on pCustSearch OR add class="btn btn-primary btn-xs pCustSearch"
 	}
-	/* if(acc_type == "GL"){
+	/* if(accType == "GL"){
 		//enable bracnh selection
 		
-		getLedgers($("#pAccountNo"), acc_type);
-	} else if (acc_type == "CL") {
+		getLedgers($("#pAccountNo"), accType);
+	} else if (accType == "CL") {
 		//remove hidden attr on pCustSearch OR add class="btn btn-primary btn-xs pCustSearch"
 	} */
 });
 
 $('#rAccountType').change(function() {
 	document.getElementById("rAccountNoSearch").value = "";
-	var sel_acc_type = $('#rAccountType option:selected');
-	var acc_type = sel_acc_type[0].value;
+	var selAccType = $('#rAccountType option:selected');
+	var accType = selAccType[0].value;
 
 	$("#rBranchID").prop("disabled", false);
 
-	if(acc_type != ""){
-		getLedgers($("#rAccountNo"), acc_type);
+	if(accType != ""){
+		getLedgers($("#rAccountNo"), accType);
 	} else {
 		$("#rAccountNo").html("");
 	}
 	
-	if (acc_type == "CL") {
+	if (accType == "CL") {
 		$(".rCustSearch").addClass("btn btn-primary btn-xs");
 		$(".rCustSearch").removeAttr("hidden");
 		$("#rBranchID").prop("disabled", "disabled");
 	}
-	/* if(acc_type == "GL"){
-		getLedgers($("#rAccountNo"), acc_type);
-	} else if (acc_type == "CL") {
+	/* if(accType == "GL"){
+		getLedgers($("#rAccountNo"), accType);
+	} else if (accType == "CL") {
 		//remove hidden attr on rCustSearch OR add class="btn btn-primary btn-xs rCustSearch"
 	} */
 });
 
 $('#amount').focus(function(){
-	var selected_option = $('#p_post_code option:selected');
-	if(selected_option[0].value == ""){
+	var selectedOption = $('#pPostCode option:selected');
+	if(selectedOption[0].value == ""){
 		$.gritter.add({
 			title : "Invalid Action!",
 			text : "You must select the post code first",
@@ -81,36 +93,41 @@ $('#amount').blur(function(){
 	
 	this.value = valuee;
 	
-	$('#r_amount').attr('value', valuee);
+	$('#rAmount').attr('value', valuee);
 	
-	/* $('#r_amount').attr('value', this.value); */
+	/* $('#rAmount').attr('value', this.value); */
 	
 	
 });
 
-$('#p_post_code').change(function() {
+$('#pPostCode').change(function() {
 	
-	var selected_option = $('#p_post_code option:selected');
+	var selectedOption = $('#pPostCode option:selected');
 	
-	$('#r_post_code option').each(function() {
-	    if($(this)[0].value != selected_option[0].value ) {
+	$('#rPostCode option').each(function() {
+	    if($(this)[0].value != selectedOption[0].value ) {
 	    	$(this)[0].selected = true;
 	    } 
 	});
+	
+	let amount = document.getElementById("amount");
+	console.log(amount);
+	amount.removeAttribute("disabled");
+	console.log("removed");
 });
 
-$('#r_post_code').change(function() {
-	var selected_option = $('#r_post_code option:selected');
+$('#rPostCode').change(function() {
+	var selectedOption = $('#rPostCode option:selected');
 	
-	$('#p_post_code option').each(function() {
-	    if($(this)[0].value != selected_option[0].value ) {
+	$('#pPostCode option').each(function() {
+	    if($(this)[0].value != selectedOption[0].value ) {
 	    	$(this)[0].selected = true;
 	    } 
 	});
 });
 
 function setDesc() {
-	$("#r_description")[0].value = $("#p_description")[0].value;
+	$("#rDescription")[0].value = $("#pDescription")[0].value;
 }
 
 
@@ -146,15 +163,15 @@ function selectAccount(){
         	document.getElementById("pAccountNoSearch").value = txt;
         	fleet.size = 0;
         	
-        	var selected_branch = $('#rBranchID option:selected');
-        	var sel_acc_type = $('#pAccountType option:selected');
-        	var acc_type = sel_acc_type[0].value;
+        	var selectedBranch = $('#pBranchID option:selected');
+        	var selAccType = $('#pAccountType option:selected');
+        	var accType = selAccType[0].value;
         	
-        	if(acc_type == 'CL'){
-        		getBalance($("#p_branch_bal"), fleet.options[i].value, "0", "CL");
+        	if(accType == 'CL'){
+        		getBalance($("#pBranchBal"), fleet.options[i].value, "0", "CL");
             }
-    		else if(selected_branch[0].value != ""){
-        		getBalance($("#p_branch_bal"), fleet.options[i].value, selected_branch[0].value, "GL");
+    		else if(selectedBranch[0].value != ""){
+        		getBalance($("#pBranchBal"), fleet.options[i].value, selectedBranch[0].value, "GL");
         	}
             break;
         }
@@ -193,15 +210,15 @@ function selectAccountR(){
         	document.getElementById("rAccountNoSearch").value = txt;
         	fleet.size = 0;
         	
-			var selected_branch = $('#rBranchID option:selected');
-			var sel_acc_type = $('#rAccountType option:selected');
-        	var acc_type = sel_acc_type[0].value;
+			var selectedBranch = $('#rBranchID option:selected');
+			var selAccType = $('#rAccountType option:selected');
+        	var accType = selAccType[0].value;
         	
-        	if(acc_type == 'CL'){
+        	if(accType == 'CL'){
         		getBalance($("#rBranchBal"), fleet.options[i].value, "0", "CL");
         	}
-    		else if(selected_branch[0].value != ""){
-        		getBalance($("#rBranchBal"), fleet.options[i].value, selected_branch[0].value, "GL");
+    		else if(selectedBranch[0].value != ""){
+        		getBalance($("#rBranchBal"), fleet.options[i].value, selectedBranch[0].value, "GL");
         	}
             break;
         }
@@ -217,83 +234,83 @@ function selectAccountR(){
 }
 
 $("#pAccountNo").change(function(){
-	var selected_option = $('#pAccountNo option:selected');
-	//document.getElementById("pAccountNoSearch").value = selected_option.val(); 
+	var selectedOption = $('#pAccountNo option:selected');
+	//document.getElementById("pAccountNoSearch").value = selectedOption.val(); 
 	
-	var selected_branch = $('#rBranchID option:selected');
+	var selectedBranch = $('#rBranchID option:selected');
 	
-	var sel_acc_type = $('#pAccountType option:selected');
-	var acc_type = sel_acc_type[0].value;
+	var selAccType = $('#pAccountType option:selected');
+	var accType = selAccType[0].value;
 	
-	if(acc_type == 'CL'){
-		getBalance($("#p_branch_bal"), selected_option[0].value, "0", "CL");
+	if(accType == 'CL'){
+		getBalance($("#pBranchBal"), selectedOption[0].value, "0", "CL");
 		}
-	else if(selected_branch[0].value != ""){
-		getBalance($("#p_branch_bal"), selected_option[0].value, selected_branch[0].value, "GL");
+	else if(selectedBranch[0].value != ""){
+		getBalance($("#pBranchBal"), selectedOption[0].value, selectedBranch[0].value, "GL");
 	}
 	// call ajax function
 });
 
-$('#rBranchID').change(function() {
+$('#pBranchID').change(function() {
 	
 	// var search_field = document.getElementById("pAccountNoSearch").value;
 	
-	var selected_option = $('#pAccountNo option:selected');
+	var selectedOption = $('#pAccountNo option:selected');
 
-	var selected_branch = $('#rBranchID option:selected');
+	var selectedBranch = $('#pBranchID option:selected');
 	
-	var sel_acc_type = $('#pAccountType option:selected');
-	var acc_type = sel_acc_type[0].value;
+	var selAccType = $('#pAccountType option:selected');
+	var accType = selAccType[0].value;
 	
-	if(acc_type == 'CL'){
-		getBalance($("#p_branch_bal"), selected_option[0].value, "0", "CL");
+	if(accType == 'CL'){
+		getBalance($("#pBranchBal"), selectedOption[0].value, "0", "CL");
 		}
 	else/* if(search_field != "")*/{
-		getBalance($("#p_branch_bal"), selected_option[0].value, selected_branch[0].value, "GL");
+		getBalance($("#pBranchBal"), selectedOption[0].value, selectedBranch[0].value, "GL");
 	}
 });
 
 $("#rAccountNo").change(function(){
-	var selected_option = $('#rAccountNo option:selected');
-	document.getElementById("rAccountNoSearch").value = selected_option.val();
+	var selectedOption = $('#rAccountNo option:selected');
+	document.getElementById("rAccountNoSearch").value = selectedOption.val();
 
 
-	var selected_branch = $('#rBranchID option:selected');
+	var selectedBranch = $('#rBranchID option:selected');
 	
-	var sel_acc_type = $('#rAccountType option:selected');
-	var acc_type = sel_acc_type[0].value;
+	var selAccType = $('#rAccountType option:selected');
+	var accType = selAccType[0].value;
 	
-	if(acc_type == 'CL'){
-		getBalance($("#rBranchBal"), selected_option[0].value, "0", "CL");
+	if(accType == 'CL'){
+		getBalance($("#rBranchBal"), selectedOption[0].value, "0", "CL");
 	}
-	else if(selected_branch[0].value != ""){
-		getBalance($("#rBranchBal"), selected_option[0].value, selected_branch[0].value, "GL");
+	else if(selectedBranch[0].value != ""){
+		getBalance($("#rBranchBal"), selectedOption[0].value, selectedBranch[0].value, "GL");
 	}
 });
 
 
 $('#rBranchID').change(function() {
 	
-	var selected_option = $('#rAccountNo option:selected');
+	var selectedOption = $('#rAccountNo option:selected');
 
-	var selected_branch = $('#rBranchID option:selected');
+	var selectedBranch = $('#rBranchID option:selected');
 	
-	var sel_acc_type = $('#rAccountType option:selected');
-	var acc_type = sel_acc_type[0].value;
+	var selAccType = $('#rAccountType option:selected');
+	var accType = selAccType[0].value;
 	
-	if(acc_type == 'CL'){
-		getBalance($("#rBranchBal"), selected_option[0].value, "0", "CL");
+	if(accType == 'CL'){
+		getBalance($("#rBranchBal"), selectedOption[0].value, "0", "CL");
 	}
-	else if(selected_option[0].value != ""){
-		getBalance($("#rBranchBal"), selected_option[0].value, selected_branch[0].value, "GL");
+	else if(selectedOption[0].value != ""){
+		getBalance($("#rBranchBal"), selectedOption[0].value, selectedBranch[0].value, "GL");
 	}
 });
 
 	
-function getBalance(elem, account_no, branch_id, account_type) {
+function getBalance(elem, accountNo, branchID, accountType) {
 	$.ajax({
 		type : "GET",
-		url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/balance/' + account_no + '/' + branch_id + '/' + account_type,
+		url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/balance/' + accountNo + '/' + branchID + '/' + accountType,
 		beforeSend : function() {
 			 $.gritter.add({
 				title : "Progress...",
@@ -323,10 +340,10 @@ function getBalance(elem, account_no, branch_id, account_type) {
 });
 }
 
-function getLedgers(elem, account_type) {
+function getLedgers(elem, accountType) {
 	$.ajax({
 		type : "GET",
-		url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/fetch/' + account_type,
+		url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/fetch/' + accountType,
 		beforeSend : function() {
 			 $.gritter.add({
 				title : "Progress...",
