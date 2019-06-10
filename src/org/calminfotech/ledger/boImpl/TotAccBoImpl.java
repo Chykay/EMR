@@ -48,6 +48,8 @@ public class TotAccBoImpl implements  TotAccBo{
 		
 		
 		totalingAccount.setOrganisation(userIdentity.getOrganisation());
+		System.out.print(userIdentity.getOrganisation().getName());
+		System.out.println(": " + userIdentity.getOrganisation().getOrgCoy().getName());
 		totalingAccount.setOrgCoy(userIdentity.getOrganisation().getOrgCoy());
 		totalingAccount.setCreated_by(userIdentity.getUser());
 		totalingAccount.setCreate_date(new Date(System.currentTimeMillis()));

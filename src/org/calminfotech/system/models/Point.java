@@ -10,8 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.calminfotech.hrunit.models.HrunitCategory;
+/*
+import org.calminfotech.hrunit.models.HrunitCategory;*/
 
 import org.calminfotech.user.models.User;
 
@@ -27,10 +27,10 @@ public class Point {
 	@Column(name = "id", unique = true, nullable = false)
 	private int id;
 	
-	@ManyToOne
+/*	@ManyToOne
 	@JoinColumn(name = "unit_id")
 	private HrunitCategory unit;
-	
+	*/
 	@Column(name = "organisation_id")
 	private int organisation_id;
 	
@@ -64,7 +64,7 @@ public class Point {
 	}
 
 	
-
+/*
 	public HrunitCategory getUnit() {
 		return unit;
 	}
@@ -72,7 +72,7 @@ public class Point {
 	public void setUnit(HrunitCategory unit) {
 		this.unit = unit;
 	}
-
+*/
 	public int getOrganisation_id() {
 		return organisation_id;
 	}

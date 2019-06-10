@@ -1,0 +1,98 @@
+
+<div class="container">
+
+
+ <button style="float: right;" onclick="printDiv()">Print</button>
+
+<!--   <a href="#" onclick="printDiv();">Print</a>
+
+   <a download="report.csv" href="#" onclick="return ExcellentExport.csv(this, 'printableArea');">Export to CSV</a> -->
+    <br/>
+</div>
+
+
+
+<div class="container" id="printableArea">
+
+  <span style="float: left;"> 
+								<img th:if="${@userIdentity.getOrganisation().getOrgCoy().getLogo() == null}" id="avatar2"
+									th:src="@{/resources/img/nhis.png}" alt=""
+									class="img-responsive" style="width:100px; height:100px"/> 
+									
+									<img th:if="${@userIdentity.getOrganisation().getOrgCoy().getLogo() != null}" id="avatar2"
+									th:src="@{/system/organisationscompany/image/{id}(id=${@userIdentity.getOrganisation().getOrgCoy().getId()})}"
+									alt="" class="img-responsive" style="width:100px; height:100px"/>
+								</span>
+
+<div style="padding-top: 25px">  <span style="float: left;"> <h2><span th:text="${@userIdentity.getOrganisation().getOrgCoy().getName()}"></span></h2> </span></div>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+
+<span style="float: left;font-size:11px;  font-weight: bold"> Bill Due by Unit from:  
+<span
+		th:text="${datefrom}"></span> and 	<span
+		th:text="${dateto}"></span>
+		
+		<span th:text="${'UNIT : ' + unithold}"></span>
+			<span th:text="${'Total Invoice : ' + totals.sumvalue}"></span>
+			<span th:text="${'Total Payment : ' + totals.sumpay}"></span>
+			
+		</span>
+
+
+
+
+	
+
+  <table class="table table-condensed" id="printtable" style="font-size:11px">
+    <thead>
+      <tr><th>Due Date</th>
+     
+					<th>File No</th>
+					<th>Visit Code</th>
+
+					<th>Patient Name</th>
+					
+	<th>Item</th>
+					
+						<th>Invoice Amount</th>
+						<th>Raised to Cash</th>
+					<th>Raised to HMO</th>
+					<th>Amount Paid</th>
+					<th>Raised By</th>
+					<th>Unit</th>
+     <th>Patient's HMO</th>
+					<th>HMO package</th>
+	
+      </tr>
+    </thead>
+    <tbody>
+     	<tr th:each="billreport : ${billreport}">
+     	<td th:text="${billreport.duedate != null} ? ${billreport.duedate}">Email</td>
+     	<td th:text="${billreport.patient_fileno != null} ? ${billreport.patient_fileno}">Email</td>
+     	<td th:text="${billreport.code != null} ? ${billreport.code}">Email</td>
+     	
+     	<td	th:text="${billreport.surname} + ' ' + ${billreport.firstName} + ' ' + ${billreport.othernames}">Lastname</td>
+	
+
+	<td th:text="${billreport.billedfor != null} ? ${billreport.billedfor}">Email</td>
+	
+     	
+	<td th:text="${billreport.invamt != null} ? ${billreport.invamt}">Email</td>
+	<td th:text="${billreport.cashamt != null} ? ${billreport.cashamt}">Email</td>
+	<td th:text="${billreport.hmoamt != null} ? ${billreport.hmoamt}">Email</td>
+	<td th:text="${billreport.amtpaid != null} ? ${billreport.amtpaid}">Email</td>
+
+	
+	<td th:text="${billreport.billedby != null} ? ${billreport.usernames}">Email</td>
+	<td th:text="${billreport.category_name != null} ? ${billreport.category_name}">Email</td>
+	<td th:text="${billreport.hmoname != null} ? ${billreport.hmoname}">Email</td>
+	<td th:text="${billreport.hmopkgname != null} ? ${billreport.hmopkgname}">Email</td>
+  	
+     		      </tr>
+    </tbody>
+  </table>
+  </div>
+  	

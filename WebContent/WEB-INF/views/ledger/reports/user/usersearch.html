@@ -1,0 +1,72 @@
+<div class="page-header">
+	<h1>
+		Generate User List by Status<small> <i
+			class="ace-icon fa fa-angle-double-right"></i>
+		</small>
+	</h1>
+</div>
+
+
+
+<div class="row">
+	
+		
+	
+		
+		
+		<form role="form" class="form-horizontal" method="POST"    th:object="${userreportForm}"   >
+
+
+					<div class="form-group">
+				<label for="appType" class="col-sm-3 control-label no-padding-right">Choose Status</label>
+				<div class="col-sm-9">
+					<select th:field="*{status}"
+										 class="col-xs-10 col-sm-5">
+										<option value="All">All</option>
+										<option value="True">Active</option>
+										<option value="False">Inactive</option>
+					</select>  
+				</div>
+	
+</div>
+			
+
+			<div class="clearfix form-actions">
+				<div class="col-md-12 col-md-offset-5">
+				
+		
+					<button onclick="alluserlist()" class="btn btn-primary" id="submit" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i> Search
+										</button>	
+				<button class="btn btn-primary" id="button" type="reset" >
+											<i class="ace-icon fa fa-check bigger-110"></i> Reset
+										</button>
+
+											
+										
+			</div>
+			
+			</div>
+	</form>
+	
+	</div>
+
+
+<script>
+
+
+function alluserlist() {
+
+	var status = $('#status').val()
+
+alert("statusis " +status );
+	   var myWindow = window.open("/../EMR/userreport/alluserbystatus/" + status , "MsgWindow", "width=1000, height=700");
+		
+	  myWindow.focus();
+	   
+    return false
+}
+
+
+
+</script>

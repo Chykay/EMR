@@ -1,0 +1,112 @@
+
+<div class="container">
+
+
+
+ <button style="float: right;" onclick="printDiv()">Print</button>
+    <br/>
+</div>
+
+
+
+<div class="container" id="printableArea">
+
+
+  <span style="float: left;"> 
+								<img th:if="${@userIdentity.getOrganisation().getOrgCoy().getLogo() == null}" id="avatar2"
+									th:src="@{/resources/img/nhis.png}" alt=""
+									class="img-responsive" style="width:100px; height:100px"/> 
+									
+									<img th:if="${@userIdentity.getOrganisation().getOrgCoy().getLogo() != null}" id="avatar2"
+									th:src="@{/system/organisationscompany/image/{id}(id=${@userIdentity.getOrganisation().getOrgCoy().getId()})}"
+									alt="" class="img-responsive" style="width:100px; height:100px"/>
+								</span>
+
+<div style="padding-top: 25px">  <span style="float: left;"> <h2><span th:text="${@userIdentity.getOrganisation().getOrgCoy().getName()}"></span></h2> </span></div>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<span style="float: left;"> <h4>Laboratory Diagnosis Report </h4></span>
+		<br></br>
+<br></br>
+		<span style="float: left;"> <h4>Patient File No: <span
+		th:text="${prescribedtest?.visitConsultation?.visit?.patient?.patientFileno}"></span> </h4></span>
+		<br></br>
+<br></br>		
+		<span style="float: left;"> <h4>Patient Name: <span
+		th:text="${prescribedtest?.visitConsultation?.visit?.patient?.surname + ' ' + prescribedtest?.visitConsultation?.visit?.patient?.firstName + ' ' + prescribedtest?.visitConsultation?.visit?.patient?.othernames }"></span> </h4></span>
+		<br></br>
+<br></br>		
+				 
+	<span style="float: left;"> <h4>Patient Email: <span
+		th:text="${prescribedtest?.visitConsultation?.visit?.patient?.email}"></span> </h4></span>
+				<br></br>
+<br></br>	
+
+
+	
+
+  <table class="table table-condensed" id="printtable">
+ 		<thead>
+								<tr>
+									<th>Result Name</th>
+									<th hidden="hidden">Result Setup Id</th>
+									<th>Minimum Value</th>
+									<th>Maximum Value</th>
+									
+									<th>Main / Sub </th>
+									
+									
+									<th>Value</th>
+									<th>Measure</th>
+								</tr>
+							</thead>
+ 		<tbody>
+								<tr th:each="procedure : ${testresult}">
+									<td th:text="${procedure.result_name}"></td>
+				<td hidden="hidden">
+									<div class="form-group">
+				<label for="name" class="col-sm-3 control-label no-padding-right"></label>
+				<div class="col-sm-9">
+					<input type="text" class="col-xs-10 col-sm-5" placeholder=""
+						 name = "setupId" readonly = "readonly" th:value = "${procedure.setupId}"/> 
+				</div>
+				</div>
+				</td>
+				<td th:text="${procedure.minimum_value}"></td>
+				<td th:text="${procedure.maximum_value}"></td>
+				
+									 <td th:text="${procedure.type}"></td> 
+									<!-- <td
+												th:text="${ #dates.format(doc.createdDate, 'MMM dd, yyyy HH:mm')}"></td> -->
+									<!-- <td><a class="btn btn-xs btn-primary tooltips"
+												title="view/download document"
+												th:href="@{/customers/patients/documents/view/{id}/{docName} (id=${doc.id}, docName = ${doc.name}) }">
+													<i class="fa fa-eye"></i>
+											</a> <a class="btn btn-xs btn-danger tooltips"
+												title="delete document"
+												th:href="@{/customers/patients/documents/delete/{id} (id=${doc.id}) }">
+													<i class="fa fa-trash-o"></i>
+											</a></td> -->
+	
+				<td th:text="${procedure.maximum_value}"></td>
+		
+			<!-- 
+					<input type="text"  style="width:180px" placeholder=""
+						 name = "actual_value"  th:value = "${procedure.actual_value}"/> 
+				-->
+						
+		
+	
+	
+			<td th:text="${procedure.measure}"></td>
+		
+	
+		
+											
+								</tr>
+							</tbody>
+  </table>
+  </div>
+  	

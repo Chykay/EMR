@@ -5,18 +5,18 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.calminfotech.ledger.boInterface.BalSheetCatBo;
+import org.calminfotech.ledger.boInterface.LedgerCatBo;
 import org.calminfotech.ledger.boInterface.CustomerAccBo;
 import org.calminfotech.ledger.boInterface.GenLedgerBo;
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
 import org.calminfotech.ledger.boInterface.TotAccBo;
 import org.calminfotech.ledger.forms.LedgerAccForm;
-import org.calminfotech.ledger.models.BalSheetCat;
+import org.calminfotech.ledger.models.LedgerCategory;
 import org.calminfotech.ledger.models.CustomerAccount;
 import org.calminfotech.ledger.models.CustomerEntry;
 import org.calminfotech.ledger.models.LedgerAccount;
 import org.calminfotech.ledger.models.TotalingAccount;
-import org.calminfotech.ledger.utiility.LedgerException;
+import org.calminfotech.ledger.utility.LedgerException;
 import org.calminfotech.system.models.Organisation;
 import org.calminfotech.user.utils.UserIdentity;
 import org.calminfotech.utils.Alert;
@@ -40,7 +40,7 @@ public class CustomerAccController {
 	private LedgerAccBo ledgerAccBo;
 	
 	@Autowired
-	private BalSheetCatBo balSheetCatBo;
+	private LedgerCatBo balSheetCatBo;
 
 	@Autowired
 	private TotAccBo totAccBo;
@@ -82,16 +82,16 @@ public class CustomerAccController {
 	
 	
 	@RequestMapping(value = {"/listings"}, method=RequestMethod.POST)
-	public String postListings(Model model, @Valid @ModelAttribute("product_type") String product_type,
-			@Valid @ModelAttribute("account_no") String account_no,  @Valid @ModelAttribute("start_date") String start_date,
-			@Valid @ModelAttribute("end_date") String end_date) {
+	public String postListings(Model model, @Valid @ModelAttribute("productType") String productType,
+			@Valid @ModelAttribute("accountNo") String accountNo,  @Valid @ModelAttribute("startDate") String startDate,
+			@Valid @ModelAttribute("endDate") String endDate) {
 		
-		System.out.println(product_type + "got here : " + start_date );
-		if (product_type.contains("CA")) {
-			System.out.println(product_type + "got here  2 : " );
+		System.out.println(productType + "got here : " + startDate );
+		if (productType.contains("CA")) {
+			System.out.println(productType + "got here  2 : " );
 			List<CustomerEntry>  customerEntries = null;
 			try {
-				customerEntries = this.genLedgerBo.getCustEntriesListing(account_no, start_date, end_date);
+				customerEntries = this.genLedgerBo.getCustEntriesListing(accountNo, startDate, endDate);
 			} catch (Exception e) {
 				// TODO: handle exception
 				System.err.println("error oo");
@@ -101,7 +101,7 @@ public class CustomerAccController {
 		
 		List<CustomerEntry>  customerEntries = null;
 		try {
-			customerEntries = this.genLedgerBo.getCustEntriesListing(account_no, start_date, end_date);
+			customerEntries = this.genLedgerBo.getCustEntriesListing(accountNo, startDate, endDate);
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.err.println("error oo");
@@ -112,11 +112,11 @@ public class CustomerAccController {
 	}
 	
 	/* REVERSE ENTRY */
-	@RequestMapping(value = {"/reversal/{batch_no}"}, method=RequestMethod.GET)
-	public String GLReversal(@PathVariable("batch_no") String batch_no, Model model) {
+	@RequestMapping(value = {"/reversal/{batchNo}"}, method=RequestMethod.GET)
+	public String GLReversal(@PathVariable("batchNo") String batchNo, Model model) {
 		
 		try {
-			this.genLedgerBo.CustReversal(batch_no);
+			this.genLedgerBo.CustReversal(batchNo);
 		} catch (LedgerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -139,7 +139,7 @@ public class CustomerAccController {
 	public String create(Model model) {		
 		
 		List<TotalingAccount> totalingAccounts = this.totAccBo.fetchAll();
-		List<BalSheetCat> balSheetCats = this.balSheetCatBo.fetchAll();
+		List<LedgerCategory> balSheetCats = this.balSheetCatBo.fetchAll();
 		
 		model.addAttribute("account", new LedgerAccForm());
 		model.addAttribute("balSheetCats", balSheetCats);

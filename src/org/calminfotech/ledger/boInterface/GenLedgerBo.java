@@ -8,7 +8,7 @@ import org.calminfotech.ledger.models.GLEntry;
 import org.calminfotech.ledger.models.GenLedgBalance;
 import org.calminfotech.ledger.models.JournalEntry;
 import org.calminfotech.ledger.models.LedgerAccount;
-import org.calminfotech.ledger.utiility.LedgerException;
+import org.calminfotech.ledger.utility.LedgerException;
 
 public interface GenLedgerBo {
 	
@@ -22,7 +22,7 @@ public interface GenLedgerBo {
 	
 	public boolean getLedgerStat(String account_no, int branch_id, int company_id) throws LedgerException;
 
-	public List<GLEntry> getGLEntries() throws LedgerException;
+	public List<GLEntry> getGLEntries(int org_id) throws LedgerException;
 
 	public List<GLEntry> getGLEntriesByBatch_no(String batch_no) throws LedgerException;
 	

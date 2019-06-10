@@ -31,8 +31,8 @@ public class LedgerAccount extends CommonLedger{
 	private String totalingCode;
 	
 
-	@Column(name = "bal_sheet_cat_id")
-	private Integer balSheetCatID;
+	@Column(name = "ledger_cat_id")
+	private Integer ledgerCatID;
 	 
 	
 	@Column(name = "code")
@@ -79,12 +79,12 @@ public class LedgerAccount extends CommonLedger{
 		this.totalingCode = totalingCode;
 	}
 
-	public Integer getBalSheetCatID() {
-		return balSheetCatID;
+	public Integer getLedgerCatID() {
+		return ledgerCatID;
 	}
 
-	public void setBalSheetCatID(Integer balSheetCatID) {
-		this.balSheetCatID = balSheetCatID;
+	public void setLedgerCatID(Integer balSheetCatID) {
+		this.ledgerCatID = balSheetCatID;
 	}
 
 	public String getCode() {

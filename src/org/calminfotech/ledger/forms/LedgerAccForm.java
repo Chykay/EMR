@@ -12,7 +12,7 @@ public class LedgerAccForm {
 	
 	private String totalingCode;
 	
-	private Integer balSheetCatID;
+	private Integer ledgerCatID;
 	
 	private Integer isActive;
 	
@@ -41,12 +41,12 @@ public class LedgerAccForm {
 		this.totalingCode = totalingCode;
 	}
 
-	public Integer getBalSheetCatID() {
-		return balSheetCatID;
+	public Integer getLedgerCatID() {
+		return ledgerCatID;
 	}
 
-	public void setBalSheetCatID(Integer balSheetCatID) {
-		this.balSheetCatID = balSheetCatID;
+	public void setLedgerCatID(Integer ledgerCatID) {
+		this.ledgerCatID = ledgerCatID;
 	}
 	
 	public Integer getIsActive() {

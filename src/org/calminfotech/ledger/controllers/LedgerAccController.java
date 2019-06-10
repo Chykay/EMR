@@ -5,11 +5,11 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.calminfotech.ledger.boInterface.BalSheetCatBo;
+import org.calminfotech.ledger.boInterface.LedgerCatBo;
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
 import org.calminfotech.ledger.boInterface.TotAccBo;
 import org.calminfotech.ledger.forms.LedgerAccForm;
-import org.calminfotech.ledger.models.BalSheetCat;
+import org.calminfotech.ledger.models.LedgerCategory;
 import org.calminfotech.ledger.models.LedgerAccount;
 import org.calminfotech.ledger.models.TotalingAccount;
 import org.calminfotech.system.models.Organisation;
@@ -35,7 +35,7 @@ public class LedgerAccController {
 	private LedgerAccBo ledgerAccBo;
 	
 	@Autowired
-	private BalSheetCatBo balSheetCatBo;
+	private LedgerCatBo ledgerCatBo;
 
 	@Autowired
 	private TotAccBo totAccBo;
@@ -52,8 +52,14 @@ public class LedgerAccController {
 	@RequestMapping(value = {"/index"}, method=RequestMethod.GET)
 	public String indexGenLedgert(Model model) {
 		Organisation org = userIdentity.getOrganisation();
-		List<LedgerAccount> ledgerAccounts = this.ledgerAccBo.fetchAll(org.getId(), org.getOrgCoy().getId());
-		model.addAttribute("accounts", ledgerAccounts);
+		System.out.println(org.getId() + " : " + org.getOrgCoy().getId());
+		
+		if (this.ledgerAccBo.fetchAll(org.getId(), org.getOrgCoy().getId()) != null) {
+			List<LedgerAccount> ledgerAccounts = this.ledgerAccBo.fetchAll(org.getId(), org.getOrgCoy().getId());
+			model.addAttribute("accounts", ledgerAccounts);
+		} 
+		
+		System.out.println(this.ledgerAccBo.fetchAll(org.getId(), org.getOrgCoy().getId()));
 		// model.addAttribute("id", id);
 		return "/ledger/ledger_acc/index";
 	}
@@ -72,10 +78,10 @@ public class LedgerAccController {
 	public String create(Model model) {		
 		
 		List<TotalingAccount> totalingAccounts = this.totAccBo.fetchAll();
-		List<BalSheetCat> balSheetCats = this.balSheetCatBo.fetchAll();
+		List<LedgerCategory> ledgerCats = this.ledgerCatBo.fetchAll();
 		
 		model.addAttribute("account", new LedgerAccForm());
-		model.addAttribute("balSheetCats", balSheetCats);
+		model.addAttribute("ledgerCats", ledgerCats);
 		model.addAttribute("totalingAccounts", totalingAccounts);
 		return "/ledger/ledger_acc/create";
 	}

@@ -14,8 +14,8 @@ import org.calminfotech.ledger.models.GLEntry;
 import org.calminfotech.ledger.models.GenLedgBalance;
 import org.calminfotech.ledger.models.JournalEntry;
 import org.calminfotech.ledger.models.LedgerAccount;
-import org.calminfotech.ledger.utiility.LedgerException;
-import org.calminfotech.ledger.utiility.LedgerUtility;
+import org.calminfotech.ledger.utility.LedgerException;
+import org.calminfotech.ledger.utility.LedgerUtility;
 import org.calminfotech.system.boInterface.OrganisationBo;
 import org.calminfotech.system.boInterface.SettingBo;
 import org.calminfotech.system.models.SettingsAssignment;
@@ -57,6 +57,115 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 	public GenLedgBalance getBalance(String account_no, int branch_id, int company_id)  throws LedgerException{
 		return this.genLedgerDao.getBalance(account_no, branch_id, company_id);
 	}
+	
+	@Override
+	public void GLPosting(GLPostingForm glPostingForm) throws LedgerException {
+		GLEntry gLEntry1 = new GLEntry();
+		GLEntry gLEntry2 = new GLEntry();
+		
+		String batch_no = LedgerUtility.getBatchNo();
+		String account1 = glPostingForm.getPAccountType();
+		String account2 = glPostingForm.getRAccountType();
+		System.out.println("account1: " + account1 + " : account2: " + account2);
+		
+		
+		gLEntry1.setCreate_date(new Date(System.currentTimeMillis()));
+		gLEntry1.setAccountNo(glPostingForm.getPAccountNo());
+		gLEntry1.setOrganisation(this.userIdentity.getOrganisation());
+		gLEntry1.setOrgCoy(this.userIdentity.getOrganisation().getOrgCoy());
+		gLEntry1.setRefNo1(glPostingForm.getRefNo1());
+		gLEntry1.setPostCode(glPostingForm.getPPostCode());
+		gLEntry1.setAmount(Float.parseFloat(glPostingForm.getAmount().replace(",", "")));
+		gLEntry1.setDescription(glPostingForm.getPDescription());
+		gLEntry1.setCreated_by(userIdentity.getUser());
+		gLEntry1.setBatchNo(batch_no);
+		System.out.println(glPostingForm.getPostingDate());
+		gLEntry1.setPostingDate(DateUtils.formatStringToDate(glPostingForm.getPostingDate()));
+		
+		
+		
+		gLEntry2.setCreate_date(new Date(System.currentTimeMillis()));
+		gLEntry2.setAccountNo(glPostingForm.getRAccountNo());
+		gLEntry2.setOrganisation(this.userIdentity.getOrganisation());
+		gLEntry2.setOrgCoy(this.userIdentity.getOrganisation().getOrgCoy());
+		gLEntry2.setRefNo1(glPostingForm.getRefNo1());
+		gLEntry2.setPostCode(glPostingForm.getRPostCode());
+		gLEntry2.setAmount(Float.parseFloat(glPostingForm.getAmount().replace(",", "")));
+		gLEntry2.setDescription(glPostingForm.getRDescription());
+		gLEntry2.setCreated_by(userIdentity.getUser());
+		gLEntry2.setBatchNo(batch_no);
+		gLEntry2.setPostingDate(DateUtils.formatStringToDate(glPostingForm.getPostingDate()));
+		
+		
+		if (account1.equals("CA")) {
+			CustomerEntry customerEntry= new CustomerEntry();
+			customerEntry.setAccountNo(glPostingForm.getPAccountNo());
+			customerEntry.setAmount(Float.parseFloat(glPostingForm.getAmount().replace(",", "")));
+			customerEntry.setBatchNo(batch_no);
+			customerEntry.setCreate_date(new Date(System.currentTimeMillis()));
+			customerEntry.setOrganisation(this.userIdentity.getOrganisation());
+			customerEntry.setOrgCoy(this.userIdentity.getOrganisation().getOrgCoy());
+			customerEntry.setPostCode(glPostingForm.getPPostCode());
+			customerEntry.setDescription(glPostingForm.getPDescription());
+			customerEntry.setCreated_by(userIdentity.getUser());
+			customerEntry.setPostingDate(DateUtils.formatStringToDate(glPostingForm.getPostingDate()));
+			
+			this.cAccBo.CustEntry(customerEntry);
+
+			String customerGl = this.settingBo.fetchsettings("customer-GLP", 2).getSettings_value();
+			float amount;
+			if (glPostingForm.getPPostCode().equals("DR")) {
+				amount = Float.parseFloat(glPostingForm.getAmount().replace(",", "")) * -1;
+			} else {
+				amount = Float.parseFloat(glPostingForm.getAmount().replace(",", ""));
+			}
+			CustomerAccount customerAccount = this.cAccBo.getCustomerByAccount_no(glPostingForm.getPAccountNo());
+			customerAccount.setCurrBalance(customerAccount.getCurr_balance() + amount);
+			
+			this.cAccBo.update(customerAccount);
+			
+			gLEntry1.setBranch(customerAccount.getOrganisation().getId());
+			gLEntry1.setProductID(glPostingForm.getPAccountNo());
+			gLEntry1.setAccountNo(customerGl);
+		} else {
+			gLEntry1.setBranch(this.organisationBo.getOrganisationById(glPostingForm.getPBranchID()).getId());
+		}
+		
+		if (account2.equals("CA")) {
+			System.out.println("customer account 2 ");
+			CustomerEntry customerEntry= new CustomerEntry();
+			customerEntry.setAmount(Float.parseFloat(glPostingForm.getAmount().replace(",", "")));
+			customerEntry.setBatchNo(batch_no);
+			customerEntry.setCreate_date(new Date(System.currentTimeMillis()));
+			customerEntry.setAccountNo(glPostingForm.getRAccountNo());
+			customerEntry.setOrganisation(this.userIdentity.getOrganisation());
+			customerEntry.setOrgCoy(this.userIdentity.getOrganisation().getOrgCoy());
+			customerEntry.setPostCode(glPostingForm.getRPostCode());
+			customerEntry.setDescription(glPostingForm.getRDescription());
+			customerEntry.setCreated_by(userIdentity.getUser());
+			customerEntry.setPostingDate(DateUtils.formatStringToDate(glPostingForm.getPostingDate()));
+			
+			this.cAccBo.CustEntry(customerEntry);
+			
+			String customerGl = this.settingBo.fetchsettings("customer-GLP", 2).getSettings_value();
+			CustomerAccount customerAccount = this.cAccBo.getCustomerByAccount_no(glPostingForm.getRAccountNo());
+			customerAccount.setCurrBalance(customerAccount.getCurr_balance() + Float.parseFloat(glPostingForm.getAmount().replace(",", "")));
+			
+			this.cAccBo.update(customerAccount);
+			
+			gLEntry2.setBranch(customerAccount.getOrganisation().getId());
+			gLEntry2.setProductID(glPostingForm.getPAccountNo());
+			gLEntry2.setAccountNo(customerGl);
+		} else {
+			
+			gLEntry2.setBranch(this.organisationBo.getOrganisationById(glPostingForm.getRBranchID()).getId());
+		}
+
+
+		this.GLEntry(gLEntry1);
+		this.GLEntry(gLEntry2);
+	}
+	
 
 	@Override
 	public void GLEntry(GLEntry glEntry) throws LedgerException 
@@ -103,117 +212,13 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		
 	}
 
-	@Override
-	public void GLPosting(GLPostingForm glPostingForm) throws LedgerException {
-		GLEntry gLEntry1 = new GLEntry();
-		GLEntry gLEntry2 = new GLEntry();
-		
-		String batch_no = LedgerUtility.getBatchNo();
-		String account1 = glPostingForm.getPAccountType();
-		String account2 = glPostingForm.getRAccountType();
-		
-		
-		gLEntry1.setCreate_date(new Date(System.currentTimeMillis()));
-		gLEntry1.setAccountNo(glPostingForm.getPAccountNo());
-		gLEntry1.setOrganisation(this.userIdentity.getOrganisation());
-		gLEntry1.setOrgCoy(this.userIdentity.getOrganisation().getOrgCoy());
-		gLEntry1.setRefNo1(glPostingForm.getRefNo1());
-		gLEntry1.setPostCode(glPostingForm.getPPostCode());
-		gLEntry1.setAmount(Float.parseFloat(glPostingForm.getAmount().replace(",", "")));
-		gLEntry1.setDescription(glPostingForm.getPDescription());
-		gLEntry1.setCreated_by(userIdentity.getUser());
-		gLEntry1.setBatchNo(batch_no);
-		gLEntry1.setPostingDate(DateUtils.formatStringToDate(glPostingForm.getPostingDate()));
-		
-		
-		
-		gLEntry2.setCreate_date(new Date(System.currentTimeMillis()));
-		gLEntry2.setAccountNo(glPostingForm.getRAccountNo());
-		gLEntry2.setOrganisation(this.userIdentity.getOrganisation());
-		gLEntry2.setOrgCoy(this.userIdentity.getOrganisation().getOrgCoy());
-		gLEntry2.setRefNo1(glPostingForm.getRefNo1());
-		gLEntry2.setPostCode(glPostingForm.getRPostCode());
-		gLEntry2.setAmount(Float.parseFloat(glPostingForm.getAmount().replace(",", "")));
-		gLEntry2.setDescription(glPostingForm.getRDescription());
-		gLEntry2.setCreated_by(userIdentity.getUser());
-		gLEntry2.setBatchNo(batch_no);
-		gLEntry2.setPostingDate(DateUtils.formatStringToDate(glPostingForm.getPostingDate()));
-		
-		
-		if (account1.contains("CA")) {
-			CustomerEntry customerEntry= new CustomerEntry();
-			customerEntry.setAccountNo(glPostingForm.getPAccountNo());
-			customerEntry.setAmount(Float.parseFloat(glPostingForm.getAmount().replace(",", "")));
-			customerEntry.setBatchNo(batch_no);
-			customerEntry.setCreate_date(new Date(System.currentTimeMillis()));
-			customerEntry.setOrganisation(this.userIdentity.getOrganisation());
-			customerEntry.setOrgCoy(this.userIdentity.getOrganisation().getOrgCoy());
-			customerEntry.setPostCode(glPostingForm.getPPostCode());
-			customerEntry.setDescription(glPostingForm.getPDescription());
-			customerEntry.setCreated_by(userIdentity.getUser());
-			customerEntry.setPostingDate(DateUtils.formatStringToDate(glPostingForm.getPostingDate()));
-			
-			this.cAccBo.CustEntry(customerEntry);
-
-			String customerGl = this.settingBo.fetchsettings("customer-GLP", 2).getSettings_value();
-			float amount;
-			if (glPostingForm.getPPostCode().contains("DR")) {
-				amount = Float.parseFloat(glPostingForm.getAmount().replace(",", "")) * -1;
-			} else {
-				amount = Float.parseFloat(glPostingForm.getAmount().replace(",", ""));
-			}
-			CustomerAccount customerAccount = this.cAccBo.getCustomerByAccount_no(glPostingForm.getPAccountNo());
-			customerAccount.setCurrBalance(customerAccount.getCurr_balance() + amount);
-			
-			this.cAccBo.update(customerAccount);
-			
-			gLEntry1.setBranch(customerAccount.getOrganisation().getId());
-			gLEntry1.setProductID(glPostingForm.getPAccountNo());
-			gLEntry1.setAccountNo(customerGl);
-		} else {
-			gLEntry1.setBranch(this.organisationBo.getOrganisationById(glPostingForm.getPBranchID()).getId());
-		}
-		
-		if (account2.contains("CA")) {
-			CustomerEntry customerEntry= new CustomerEntry();
-			customerEntry.setAmount(Float.parseFloat(glPostingForm.getAmount().replace(",", "")));
-			customerEntry.setBatchNo(batch_no);
-			customerEntry.setCreate_date(new Date(System.currentTimeMillis()));
-			customerEntry.setAccountNo(glPostingForm.getRAccountNo());
-			customerEntry.setOrganisation(this.userIdentity.getOrganisation());
-			customerEntry.setOrgCoy(this.userIdentity.getOrganisation().getOrgCoy());
-			customerEntry.setPostCode(glPostingForm.getRPostCode());
-			customerEntry.setDescription(glPostingForm.getRDescription());
-			customerEntry.setCreated_by(userIdentity.getUser());
-			customerEntry.setPostingDate(DateUtils.formatStringToDate(glPostingForm.getPostingDate()));
-			
-			this.cAccBo.CustEntry(customerEntry);
-			
-			String customerGl = this.settingBo.fetchsettings("customer-GLP", 2).getSettings_value();
-			CustomerAccount customerAccount = this.cAccBo.getCustomerByAccount_no(glPostingForm.getRAccountNo());
-			customerAccount.setCurrBalance(customerAccount.getCurr_balance() + Float.parseFloat(glPostingForm.getAmount().replace(",", "")));
-			
-			this.cAccBo.update(customerAccount);
-			
-			gLEntry2.setBranch(customerAccount.getOrganisation().getId());
-			gLEntry2.setProductID(glPostingForm.getPAccountNo());
-			gLEntry2.setAccountNo(customerGl);
-		} else {
-
-			gLEntry2.setBranch(this.organisationBo.getOrganisationById(glPostingForm.getRBranchID()).getId());
-		}
-
-
-		this.GLEntry(gLEntry1);
-		this.GLEntry(gLEntry2);
-	}
 	
 	
 	@SuppressWarnings("null")
 	public float getAmount(float amount, Character ledgerType, String postCode) throws LedgerException {
 
 		/* debit */
-		if (postCode.contains("DR")) {
+		if (postCode.equals("DR")) {
 			System.out.println("debit");
 			if (ledgerType == '1' || ledgerType == '5') {
 				System.out.println("debit of debit");
@@ -228,7 +233,7 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		
 		
 		/* credit */
-		if (postCode.contains("CR")) {
+		if (postCode.equals("CR")) {
 			if (ledgerType == '1' || ledgerType == '5') {
 				// credit of debit
 				return amount *= -1;
@@ -274,7 +279,7 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 
 		System.out.println(sysAccountNo);
 		gLEntry1.setAccountNo(sysAccountNo);
-		if (glEntry.getPostCode().contains("DR")) {
+		if (glEntry.getPostCode().equals("DR")) {
 			gLEntry1.setPostCode("CR");
 			gLEntry1.setAmount(amount);
 			/*System.out.println("amount two: " + this.getAmount(amount, sysAccountNo.charAt(0), "CR"));
@@ -306,7 +311,7 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		
 		gLEntry2.setAccountNo(sysAccountNo);
 		gLEntry2.setPostCode(glEntry.getPostCode());
-		if (glEntry.getPostCode().contains("DR")) {
+		if (glEntry.getPostCode().equals("DR")) {
 			gLEntry2.setPostCode("DR");
 			gLEntry2.setAmount(amount);
 			/*System.out.println("amount four: " + this.getAmount(amount, sysAccountNo.charAt(0), "DR"));
@@ -334,8 +339,8 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		return this.genLedgerDao.getLedgerStat(account_no, branch_id, company_id);
 	}
 	
-	public List<GLEntry> getGLEntries() {
-		return this.genLedgerDao.getGLEntries();
+	public List<GLEntry> getGLEntries(int org_id) {
+		return this.genLedgerDao.getGLEntries(org_id);
 	}
 
 	public List<GLEntry> getGLEntriesByBatch_no(String batch_no) {
@@ -371,11 +376,11 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 			glEntry1.setDescription("REVERSAL-".concat(desc));
 			glEntry1.setPostingDate(new Date(System.currentTimeMillis()));
 			
-			if (glEntry.getPostCode().contains("DR")) {
-				System.out.println("contains DR");
+			if (glEntry.getPostCode().equals("DR")) {
+				System.out.println("equals DR");
 				glEntry1.setPostCode("CR");
 			} else {
-				System.out.println("contains CR");
+				System.out.println("equals CR");
 				glEntry1.setPostCode("DR");
 			}
 
@@ -417,11 +422,11 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 			customerEntry1.setDescription("REVERSAL-".concat(desc));
 			customerEntry1.setPostingDate(new Date(System.currentTimeMillis()));
 			
-			if (customerEntry.getPostCode().contains("DR")) {
-				System.out.println("contains DR");
+			if (customerEntry.getPostCode().equals("DR")) {
+				System.out.println("equals DR");
 				customerEntry1.setPostCode("CR");
 			} else {
-				System.out.println("contains CR");
+				System.out.println("equals CR");
 				customerEntry1.setPostCode("DR");
 			}
 
@@ -450,11 +455,11 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 			glEntry1.setDescription("REVERSAL-".concat(desc));
 			glEntry1.setPostingDate(new Date(System.currentTimeMillis()));
 			
-			if (glEntry.getPostCode().contains("DR")) {
-				System.out.println("contains DR");
+			if (glEntry.getPostCode().equals("DR")) {
+				System.out.println("equals DR");
 				glEntry1.setPostCode("CR");
 			} else {
-				System.out.println("contains CR");
+				System.out.println("equals CR");
 				glEntry1.setPostCode("DR");
 			}
 

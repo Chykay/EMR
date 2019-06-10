@@ -27,16 +27,16 @@
 		<form role="form" class="form-horizontal" method="post" style="margin-top:20px;">
 			<div class="form-group">
 				
-				<label for="product_type" class="col-sm-1 control-label no-padding">Product Type:</label>
+				<label for="productType" class="col-sm-1 control-label no-padding">Product Type:</label>
 				<div class="col-sm-2">
-					<select id="product_type" name="product_type" size="" class="col-xs-12 col-sm-12" style="margin-top:0px;"  required="required">
+					<select id="productType" name="productType" size="" class="col-xs-12 col-sm-12" style="margin-top:0px;"  required="required">
 							<option value="">Select account type</option>
 							<option value="CA">Customer</option>
 					</select>
 				</div>
 				<div class="col-sm-3">
-					<label for="account_no" style="padding-right:10px;">Account No:</label>
-					<input id="account_no"  name="account_no"  style="margin-bottom:0px;"   />
+					<label for="accountNo" style="padding-right:10px;">Account No:</label>
+					<input id="accountNo"  name="accountNo"  style="margin-bottom:0px;"   />
 				</div>
 				<div class="col-sm-5">
 					<label for="startDate" style="padding-right: 10px;">From:</label>
@@ -69,10 +69,10 @@
 			<!-- Table body -->
 			<tbody>
 				<tr th:each="custEntry : ${custEntries}">
-					<td th:text="${custEntry.account_no}">Account Number</td>
+					<td th:text="${custEntry.accountNo}">Account Number</td>
 					<td th:text="${custEntry.amount}">Amount</td>
-					<td th:text="${custEntry.post_code}">Post Code</td><!-- 
-					<td th:text="${custEntry.organisation_id}">Branch ID</td> -->
+					<td th:text="${custEntry.postCode}">Post Code</td><!-- 
+					<td th:text="${custEntry.organisation}">Branch ID</td> -->
 					<td th:text="${custEntry.batchNo}">Batch No</td>
 					<td th:text="${custEntry.refNo2}">Ref No</td>
 					<td th:text="${custEntry.description}">Description</td>
@@ -101,18 +101,18 @@
 
 	/* $(".search").click(function(){
 		alert('now now');
-		var account_no = $('#account_no').val();
+		var accountNo = $('#accountNo').val();
 		var startDate = $('#startDate').val();
 		var endDate = $('#endDate').val();
-		var sel_product_type = $('#product_type option:selected');
-		var prod_type = sel_product_type[0].value;
+		var sel_productType = $('#productType option:selected');
+		var prod_type = sel_productType[0].value;
 
-		if(account_no == "" || startDate == "" || endDate == ""){
+		if(accountNo == "" || startDate == "" || endDate == ""){
 			alert('you must select');
 		} else {
 			$.ajax({
 				type : "GET",
-				url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/customer_acc/listings/' + prod_type + '/'+ account_no + '/' + startDate + '/'	+ endDate,
+				url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/customer_acc/listings/' + prod_type + '/'+ accountNo + '/' + startDate + '/'	+ endDate,
 				success : function(value) {
 					$('#tbody').html(value);
 				}

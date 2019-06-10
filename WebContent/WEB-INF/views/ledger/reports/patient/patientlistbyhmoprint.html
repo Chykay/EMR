@@ -1,0 +1,50 @@
+
+<div class="container">
+
+ <button style="float: right;" onclick="printDiv()">Print</button>
+    <br/>
+</div>
+
+<div class="container" id="printableArea">
+  <span style="float: left;"> 
+								<img th:if="${@userIdentity.getOrganisation().getOrgCoy().getLogo() == null}" id="avatar2"
+									th:src="@{/resources/img/nhis.png}" alt=""
+									class="img-responsive" style="width:100px; height:100px"/> 
+									
+									<img th:if="${@userIdentity.getOrganisation().getOrgCoy().getLogo() != null}" id="avatar2"
+									th:src="@{/system/organisationscompany/image/{id}(id=${@userIdentity.getOrganisation().getOrgCoy().getId()})}"
+									alt="" class="img-responsive" style="width:100px; height:100px"/>
+								</span>
+
+<div style="padding-top: 25px">  <span style="float: left;"> <h2><span th:text="${@userIdentity.getOrganisation().getOrgCoy().getName()}"></span></h2> </span></div>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<span style="float: left;font-size:11px; font-weight: bold"> Patient List by HMO :  <span
+		th:text="${hmoname}"></span>  </span>
+
+
+  <table class="table table-condensed" id="printtable" style="font-size:11px">
+    <thead>
+      <tr>
+     				<th>Patient Code</th>
+					<th>File No</th>
+					<th>Full Name</th>
+					<th>Email</th>
+					
+      </tr>
+    </thead>
+    <tbody>
+     	<tr th:each="patientreport : ${patientListbyHmoresult}">
+     	<td th:text="${patientreport.patientCode != null} ? ${patientreport.patientCode}">patientCode</td>
+					<td th:text="${patientreport.patientFileno != null} ? ${patientreport.patientFileno}">fileno</td>
+					<td	th:text="${patientreport.surname} + ' ' + ${patientreport.firstName} + ' ' + ${patientreport.othernames}">Lastname</td>
+					
+   	<td th:text="${patientreport.email != null} ? ${patientreport.email}">Email</td>
+				
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  	

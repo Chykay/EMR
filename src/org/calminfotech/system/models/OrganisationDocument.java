@@ -12,8 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.calminfotech.patient.models.Patient;
+/*
+import org.calminfotech.patient.models.Patient;*/
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -51,11 +51,11 @@ public class OrganisationDocument {
 	private Boolean isDeleted;
 
 	@Column(name = "modified_by")
-	private String modifiedBy;
+	private String modifiedBy;/*
 
 	@ManyToOne
 	@JoinColumn(name = "director_id")
-	private Patient director;
+	private Patient director;*/
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "organisation_id")
@@ -128,13 +128,13 @@ public class OrganisationDocument {
 		this.modifiedBy = modifiedBy;
 	}
 
-	public Patient getDirector() {
+	/*public Patient getDirector() {
 		return director;
 	}
 
 	public void setDirector(Patient director) {
 		this.director = director;
-	}
+	}*/
 
 	public OrganisationCompany getOrganisation() {
 		return organisation;
