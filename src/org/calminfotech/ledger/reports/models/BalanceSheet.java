@@ -8,4 +8,6 @@ import javax.persistence.Id;
 public class BalanceSheet {
 	@Id
 	private Integer id;
+	
+	
 }

@@ -3,7 +3,6 @@ package org.calminfotech.ledger.utility;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.calminfotech.ledger.boInterface.GenLedgerBo;
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
 import org.calminfotech.ledger.models.GenLedgBalance;
 import org.calminfotech.ledger.reports.models.BranchTB;
@@ -11,6 +10,7 @@ import org.calminfotech.ledger.reports.models.CompanyTB;
 import org.calminfotech.ledger.reports.models.TrialBalEntry;
 import org.calminfotech.system.boInterface.OrganisationBo;
 import org.calminfotech.system.models.Organisation;
+import org.calminfotech.user.utils.UserIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +18,6 @@ import org.springframework.stereotype.Service;
 public class ReportsBo {
 	
 
-	@Autowired
-	private GenLedgerBo genLedgerBo;
 	
 	@Autowired
 	private LedgerAccBo ledgerAccBo;
@@ -29,6 +27,9 @@ public class ReportsBo {
 	
 	@Autowired
 	private ReportsDao reportsDao;
+	
+	@Autowired
+	private UserIdentity userIdentity;
 
 	public BranchTB getBranchTB(int org_id) {
 		List<TrialBalEntry> trialBalEntries = new ArrayList<TrialBalEntry>();
@@ -58,7 +59,7 @@ public class ReportsBo {
 		
 		
 		branchTB.setName(this.organisationBo.getOrganisationById(org_id).getName());
-		branchTB.setTBalEntries(trialBalEntries);
+		branchTB.settBalEntries(trialBalEntries);
 		branchTB.setTotBalance(balance);
 		branchTB.setTotCredit(tot_credit);
 		branchTB.setTotDebit(tot_debit);
@@ -66,51 +67,29 @@ public class ReportsBo {
 	}
 	
 
-	@SuppressWarnings("null")
 	public CompanyTB getCompanyTB(int comp_id) {
 		
 		List<Organisation> organisations = this.organisationBo.fetchAll(comp_id);
+		CompanyTB companyTB = new CompanyTB();
+		float tot_debit = 0, tot_credit = 0, balance = 0;
+		List<BranchTB> branchTBs = new ArrayList<BranchTB>();
 		
 		for (Organisation organisation : organisations) {
-			this.getBranchTB(organisation.getId());
+			BranchTB branchTB = this.getBranchTB(organisation.getId());
+			tot_credit += branchTB.getTotCredit();
+			tot_debit += branchTB.getTotDebit();
+			balance += branchTB.getTotBalance();
+			branchTBs.add(branchTB);
 		}
 		
+		companyTB.setBranchTBs(branchTBs);
+		companyTB.setTotBalance(balance);
+		companyTB.setTotCredit(tot_credit);
+		companyTB.setTotDebit(tot_debit);
+		companyTB.setName(this.userIdentity.getOrganisation().getOrgCoy().getName());
 		
-		/*List<TrialBalEntry> trialBalEntries = null;
-		float tot_debit = 0, tot_credit = 0, balance = 0;
-		BranchTB branchTB = new BranchTB();
-		
-		try {
-			List<GLEntry> glEntries = this.genLedgerBo.getGLEntries(org_id);
-			for (GLEntry glEntry : glEntries) {
-				String postCode = glEntry.getPostCode(), accountNo = glEntry.getAccountNo();
-				float amount = glEntry.getAmount();
-				TrialBalEntry trialBalEntry = new TrialBalEntry();
-				
-				trialBalEntry.setName(this.ledgerAccBo.getLedgerByAccount_no(accountNo).getName());
-				trialBalEntry.setAccountNo(accountNo);
-				
-				if (postCode.equals("DR")) {
-					trialBalEntry.setDebit(amount);
-					tot_debit += amount;
-				} else {
-					trialBalEntry.setCredit(amount);
-					tot_credit += amount;
-				}
-				
-				trialBalEntries.add(trialBalEntry);
-			}
-		} catch (LedgerException e) {
-			e.printStackTrace();
-		}
-		
-		branchTB.setName(this.organisationBo.getOrganisationById(org_id).getName());
-		branchTB.setTBalEntries(trialBalEntries);
-		branchTB.setTotBalance(balance);
-		branchTB.setTotCredit(tot_credit);
-		branchTB.setTotDebit(tot_debit);
-		return branchTB;
-	*/
+	
+		return companyTB;
 	}
 	
 }

@@ -32,11 +32,11 @@ public class BranchTB {
 		this.name = name;
 	}
 
-	public List<TrialBalEntry> getTBalEntries() {
+	public List<TrialBalEntry> gettBalEntries() {
 		return tBalEntries;
 	}
 
-	public void setTBalEntries(List<TrialBalEntry> tBalEntries) {
+	public void settBalEntries(List<TrialBalEntry> tBalEntries) {
 		this.tBalEntries = tBalEntries;
 	}
 

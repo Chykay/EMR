@@ -1,28 +1,14 @@
 package org.calminfotech.ledger.reports;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
-
-import javax.servlet.http.HttpSession;
 
 import org.calminfotech.ledger.boInterface.TotAccBo;
 import org.calminfotech.ledger.models.TotalingAccount;
 import org.calminfotech.ledger.reports.models.BranchTB;
 import org.calminfotech.ledger.utility.ReportsBo;
-/*
-import org.calminfotech.patient.forms.PatientreportsearchForm;*/
-import org.calminfotech.report.models.ConsultationCount;
-import org.calminfotech.report.models.PrescribedDrugReport;
-import org.calminfotech.report.utils.ConsultationCountDao;
-import org.calminfotech.report.utils.TopPrescribedDrug;
 import org.calminfotech.system.boInterface.OrganisationBo;
 import org.calminfotech.system.models.Organisation;
-import org.calminfotech.user.utils.Authorize;
 import org.calminfotech.user.utils.UserIdentity;
-import org.calminfotech.utils.Alert;
-import org.calminfotech.utils.Auditor;
-import org.calminfotech.utils.DateUtils;
 import org.calminfotech.utils.annotations.Layout;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,25 +16,23 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping(value = "/ledger/reports")
 public class ReportsController {
-
+/*
 	@Autowired
 	private Authorize authorize;
 
 	@Autowired
 	private Alert alert;
-
+*/
 	@Autowired
 	private UserIdentity userIdentity;
 
-	@Autowired
+	/*@Autowired
 	private Auditor auditor;
-	
+	*/
 	@Autowired
 	private TotAccBo totAccBo;
 
@@ -89,12 +73,12 @@ public class ReportsController {
 	public String branchTB(Model model, @PathVariable int branchID) {
 		BranchTB branchTB = this.reportsBo.getBranchTB(branchID);
 		model.addAttribute("branchTB", branchTB);
-		model.addAttribute("entries", branchTB.getTBalEntries());
+		model.addAttribute("entries", branchTB.gettBalEntries());
 		return "ledger/reports/tb/branch";
 	}
 	
 	@Layout("layouts/reportblank")
-	@RequestMapping(value = "/TB/{company}", method = RequestMethod.GET)
+	@RequestMapping(value = "/TB/{companyID}", method = RequestMethod.GET)
 	public String companyTB(Model model, @PathVariable int companyID) {
 
 		model.addAttribute("companyTB", this.reportsBo.getCompanyTB(companyID));
