@@ -1,16 +1,17 @@
 package org.calminfotech.ledger.reports.models;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Entity
+@org.hibernate.annotations.Entity(dynamicInsert = true)
 public class TrialBalEntry {
+	@Id
 	private Integer id;
 	
 	private String accountNo;
 	
 	private String name;
-	
-	private String postCode;
 	
 	private float credit;
 	
@@ -40,14 +41,6 @@ public class TrialBalEntry {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getPostCode() {
-		return postCode;
-	}
-
-	public void setPostCode(String postCode) {
-		this.postCode = postCode;
 	}
 
 	public float getCredit() {

@@ -8,7 +8,7 @@ import javax.persistence.OneToMany;
 
 @Entity
 @org.hibernate.annotations.Entity(dynamicInsert = true)
-public class BranchTB {
+public class CompanyTB {
 	
 	@Id
 	private Integer id;
@@ -16,7 +16,7 @@ public class BranchTB {
 	private String name;
 
 	@OneToMany
-	private List<TrialBalEntry> tBalEntries;
+	private List<BranchTB> branchTBs;
 	
 	private float totCredit;
 	
@@ -32,12 +32,12 @@ public class BranchTB {
 		this.name = name;
 	}
 
-	public List<TrialBalEntry> getTBalEntries() {
-		return tBalEntries;
+	public List<BranchTB> getBranchTBs() {
+		return branchTBs;
 	}
 
-	public void setTBalEntries(List<TrialBalEntry> tBalEntries) {
-		this.tBalEntries = tBalEntries;
+	public void setBranchTBs(List<BranchTB> branchTBs) {
+		this.branchTBs = branchTBs;
 	}
 
 	public float getTotCredit() {

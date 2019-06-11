@@ -1,13 +1,16 @@
 package org.calminfotech.ledger.utility;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.calminfotech.ledger.boInterface.GenLedgerBo;
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
-import org.calminfotech.ledger.models.GLEntry;
+import org.calminfotech.ledger.models.GenLedgBalance;
 import org.calminfotech.ledger.reports.models.BranchTB;
+import org.calminfotech.ledger.reports.models.CompanyTB;
 import org.calminfotech.ledger.reports.models.TrialBalEntry;
 import org.calminfotech.system.boInterface.OrganisationBo;
+import org.calminfotech.system.models.Organisation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,37 +26,36 @@ public class ReportsBo {
 	
 	@Autowired
 	private OrganisationBo organisationBo;
+	
+	@Autowired
+	private ReportsDao reportsDao;
 
-	@SuppressWarnings("null")
 	public BranchTB getBranchTB(int org_id) {
-		List<TrialBalEntry> trialBalEntries = null;
+		List<TrialBalEntry> trialBalEntries = new ArrayList<TrialBalEntry>();
 		float tot_debit = 0, tot_credit = 0, balance = 0;
 		BranchTB branchTB = new BranchTB();
 		
-		try {
-			List<GLEntry> glEntries = this.genLedgerBo.getGLEntries(org_id);
-			for (GLEntry glEntry : glEntries) {
-				String postCode = glEntry.getPostCode(), accountNo = glEntry.getAccountNo();
-				float amount = glEntry.getAmount();
-				TrialBalEntry trialBalEntry = new TrialBalEntry();
-				
-				trialBalEntry.setName(this.ledgerAccBo.getLedgerByAccount_no(accountNo).getName());
-				trialBalEntry.setAccountNo(accountNo);
-				trialBalEntry.setPostCode(postCode);
-				
-				if (postCode.equals("DR")) {
-					trialBalEntry.setDebit(amount);
-					tot_debit += amount;
-				} else {
-					trialBalEntry.setCredit(amount);
-					tot_credit += amount;
-				}
-				
-				trialBalEntries.add(trialBalEntry);
+		List<GenLedgBalance> genLedgBalances = this.reportsDao.getGLBalances(org_id);
+		
+		for (GenLedgBalance genLedgBalance : genLedgBalances) {
+			String accountNo = genLedgBalance.getGLAccountNo();
+			TrialBalEntry trialBalEntry = new TrialBalEntry();
+			System.out.println(accountNo);
+			trialBalEntry.setName(this.ledgerAccBo.getLedgerByAccount_no(accountNo).getName());
+			trialBalEntry.setAccountNo(accountNo);
+			
+			balance = genLedgBalance.getCurrBalance();
+			
+			if (accountNo.charAt(0) == '1' || accountNo.charAt(0) ==  '5') {
+				trialBalEntry.setDebit(balance);
+				tot_debit += balance;
+			} else {
+				trialBalEntry.setCredit(balance);
+				tot_credit += balance;
 			}
-		} catch (LedgerException e) {
-			e.printStackTrace();
+			trialBalEntries.add(trialBalEntry);
 		}
+		
 		
 		branchTB.setName(this.organisationBo.getOrganisationById(org_id).getName());
 		branchTB.setTBalEntries(trialBalEntries);
@@ -65,14 +67,16 @@ public class ReportsBo {
 	
 
 	@SuppressWarnings("null")
-	public BranchTB getCompanyTB(int comp_id) {
-		int org_id = 0;
+	public CompanyTB getCompanyTB(int comp_id) {
+		
+		List<Organisation> organisations = this.organisationBo.fetchAll(comp_id);
+		
+		for (Organisation organisation : organisations) {
+			this.getBranchTB(organisation.getId());
+		}
 		
 		
-		
-		
-		
-		List<TrialBalEntry> trialBalEntries = null;
+		/*List<TrialBalEntry> trialBalEntries = null;
 		float tot_debit = 0, tot_credit = 0, balance = 0;
 		BranchTB branchTB = new BranchTB();
 		
@@ -85,7 +89,6 @@ public class ReportsBo {
 				
 				trialBalEntry.setName(this.ledgerAccBo.getLedgerByAccount_no(accountNo).getName());
 				trialBalEntry.setAccountNo(accountNo);
-				trialBalEntry.setPostCode(postCode);
 				
 				if (postCode.equals("DR")) {
 					trialBalEntry.setDebit(amount);
@@ -107,7 +110,7 @@ public class ReportsBo {
 		branchTB.setTotCredit(tot_credit);
 		branchTB.setTotDebit(tot_debit);
 		return branchTB;
+	*/
 	}
-	
 	
 }

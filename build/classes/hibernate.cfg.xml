@@ -406,5 +406,10 @@
 		 <mapping class="org.calminfotech.ledger.models.LedgerType" />
 		 <mapping class="org.calminfotech.ledger.models.PostCode" />
 		 <mapping class="org.calminfotech.ledger.models.TotalingAccount" />
+		 
+		 <mapping class="org.calminfotech.ledger.reports.models.BranchTB" />
+		 <mapping class="org.calminfotech.ledger.reports.models.TrialBalEntry" />
+		 
+		 
 	</session-factory>
 </hibernate-configuration>

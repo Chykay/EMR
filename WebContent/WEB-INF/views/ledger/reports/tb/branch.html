@@ -46,15 +46,23 @@
       </tr>
     </thead>
     <tbody>
-     	<tr th:each="tBalEntry : ${branchTB.tBalEntries}">
+     	<tr th:each="tBalEntry : ${entries}">
  	
 					
-					<td th:text="${tBalEntries.accountNo}"></td> 
-					<td th:text="${tBalEntries.name}"></td> 
-					<td th:text="${tBalEntries.debit}" ></td>
-					<td th:text="${tBalEntries.credit}" ></td>
+					<td th:text="${tBalEntry.accountNo}"></td> 
+					<td th:text="${tBalEntry.name}"></td> 
+					<td th:text="${tBalEntry.debit}" ></td>
+					<td th:text="${tBalEntry.credit}" ></td>
 			
 					 
+      </tr>
+      <tr>
+      	<td></td>
+      	<td>TOTAL</td>
+      	<td th:text="${branchTB.totDebit}"></td> 
+      	<td th:text="${branchTB.totCredit}"></td> 
+      	<td th:text="${branchTB.totBalance}"></td> 
+      	
       </tr>
     </tbody>
   </table>

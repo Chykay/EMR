@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import org.calminfotech.ledger.boInterface.TotAccBo;
 import org.calminfotech.ledger.models.TotalingAccount;
+import org.calminfotech.ledger.reports.models.BranchTB;
 import org.calminfotech.ledger.utility.ReportsBo;
 /*
 import org.calminfotech.patient.forms.PatientreportsearchForm;*/
@@ -15,6 +16,8 @@ import org.calminfotech.report.models.ConsultationCount;
 import org.calminfotech.report.models.PrescribedDrugReport;
 import org.calminfotech.report.utils.ConsultationCountDao;
 import org.calminfotech.report.utils.TopPrescribedDrug;
+import org.calminfotech.system.boInterface.OrganisationBo;
+import org.calminfotech.system.models.Organisation;
 import org.calminfotech.user.utils.Authorize;
 import org.calminfotech.user.utils.UserIdentity;
 import org.calminfotech.utils.Alert;
@@ -52,6 +55,9 @@ public class ReportsController {
 	@Autowired
 	private ReportsBo reportsBo;
 	
+	@Autowired
+	private OrganisationBo organisationBo;
+	
 
 
 	@Layout("layouts/reportblank")
@@ -67,12 +73,23 @@ public class ReportsController {
 		}
 		return "ledger/reports/sample";
 	}
-	
-	@Layout("layouts/reportblank")
-	@RequestMapping(value = "/TB/{branch}", method = RequestMethod.GET)
-	public String branchTB(Model model, @PathVariable int branchID) {
 
-		model.addAttribute("branchTB", this.reportsBo.getBranchTB(branchID));
+	@Layout("layouts/datatable")
+	@RequestMapping(value = "/TB", method = RequestMethod.GET)
+	public String trialBalance(Model model) {
+		List<Organisation> branches = this.organisationBo.fetchAll(this.userIdentity.getOrganisation().getId());
+		model.addAttribute("company", this.userIdentity.getOrganisation().getOrgCoy());
+		model.addAttribute("branches", branches);
+		return "ledger/reports/tb/index";
+	}
+	
+
+	@Layout("layouts/reportblank")
+	@RequestMapping(value = "/TB/branch/{branchID}", method = RequestMethod.GET)
+	public String branchTB(Model model, @PathVariable int branchID) {
+		BranchTB branchTB = this.reportsBo.getBranchTB(branchID);
+		model.addAttribute("branchTB", branchTB);
+		model.addAttribute("entries", branchTB.getTBalEntries());
 		return "ledger/reports/tb/branch";
 	}
 	

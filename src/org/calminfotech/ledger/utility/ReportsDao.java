@@ -3,6 +3,7 @@ package org.calminfotech.ledger.utility;
 import java.util.Date;
 import java.util.List;
 
+import org.calminfotech.ledger.models.GenLedgBalance;
 import org.calminfotech.report.models.PatientListing;
 import org.calminfotech.user.utils.UserIdentity;
 import org.hibernate.SessionFactory;
@@ -18,20 +19,14 @@ public class ReportsDao {
 	@Autowired
 	private UserIdentity userIdentity;
 
-	public List<PatientListing> fetchAllPatient(Date datefrom, Date dateto) {
-		System.out.println("myorg" + userIdentity.getOrganisation().getId());
-		List<PatientListing> list = sessionFactory
-				.getCurrentSession()
-				.createQuery(
-						"from PatientListing  where company_id=?  and startdate >=? and startdate <= ? ORDER BY startdate DESC")
-				.setParameter(0,
-						userIdentity.getOrganisation().getOrgCoy().getId())
-				.setParameter(1, datefrom).setParameter(2, dateto).list();
+	@SuppressWarnings("unchecked")
+	public List<GenLedgBalance> getGLBalances(int branchID) {
+		List<GenLedgBalance> list = sessionFactory.getCurrentSession()
+				.createQuery("from GenLedgBalance  where company_id = ?  AND organisation_id = ?")
+				.setParameter(0, this.userIdentity.getOrganisation().getOrgCoy().getId())
+				.setParameter(1, branchID)
+				.list();
 		return list;
 	}
 
-	// List<PatientListing> list =
-	// getHibernateTemplate().find("from PatientListing where startdate BETWEEN ? and isDeleted =0",
-	// id);
-	// return list;
 }

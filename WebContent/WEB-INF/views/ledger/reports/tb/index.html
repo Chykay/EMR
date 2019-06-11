@@ -1,0 +1,91 @@
+<div class="page-header">
+	<h1>
+		All Account
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/ledger/gen_ledger/index}">
+			<i class="fa fa-home"></i> System Dashboard
+		</a> 
+		<a class="btn btn-xs btn-primary" >
+			<i class="fa fa-plus-circle"></i> Add Account 
+		</a>
+	
+ 		<span   id="imgId" hidden="hidden" > 
+ 			<img th:src="@{/resources/assets/images/ajax-loader.gif}" id="loading_img" />  
+ 		</span>      
+	</div>
+</div>
+
+<div class="hr hr-18 dotted hr-double"></div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<div class="table-header">List of Branches</div>
+		<table id="dTable"
+			class="table table-striped table-bordered table-hover">
+			<!-- Table heading -->
+			 <thead>
+				<tr>
+					<th>Branch Name</th>
+					<th>Branch Address</th>
+					
+					<th><i class="glyphicon glyphicon-asterisk"></i></th>
+				</tr>
+			</thead>
+
+			<!-- Table body -->
+			<tbody>
+				<tr th:each="branch : ${branches}">
+					<td th:text="${branch.name}">Branch Name</td>
+					<td th:text="${branch.address}">Address</td>
+					
+						
+					<td>
+						
+							<a class="btn btn-xs btn-success tooltips " 
+								title="View TB"  
+								th:href="@{/ledger/reports/TB/branch/{id}(id=${branch.id}) }"
+								> <i
+									class="fa fa-reply"></i>
+							</a>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">Company Trial Balance</td>
+					<td>
+						<a class="btn btn-xs btn-success tooltips " 
+								title="View TB"   
+								th:href="@{/ledger/reports/TB/{id}(id=${company.id}) }"> <i
+									class="fa fa-reply"></i>
+							</a>
+					</td>
+				</tr>
+			</tbody>
+			<!--  Table body END -->
+		</table>
+		<!-- End view content here -->
+	</div>
+</div>
+
+<script type="text/javascript">
+/*<![CDATA[*/
+
+	$(".reverse").click(function(){
+		var batchNo = this.id;
+		
+		$.ajax({
+			type : "GET",
+			url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/gen_ledger/reversal/'	+ batchNo,
+			success : function(value) {
+				//if value is true, then you can't delete 
+			}
+		});
+	});
+
+
+/*]]>*/
+</script>
