@@ -3,9 +3,11 @@ package org.calminfotech.ledger.utility;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.calminfotech.ledger.boInterface.GenLedgerBo;
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
 import org.calminfotech.ledger.boInterface.LedgerCatBo;
 import org.calminfotech.ledger.models.GenLedgBalance;
+import org.calminfotech.ledger.models.LedgerAccount;
 import org.calminfotech.ledger.models.LedgerCategory;
 import org.calminfotech.ledger.reports.models.BalanceSheet;
 import org.calminfotech.ledger.reports.models.BranchBalSheet;
@@ -37,6 +39,9 @@ public class ReportsBo {
 	
 	@Autowired
 	private LedgerCatBo ledgerCatBo;
+	
+	@Autowired
+	private GenLedgerBo genLedgerBo;
 
 	public BranchTB getBranchTB(int org_id) {
 		List<TrialBalEntry> trialBalEntries = new ArrayList<TrialBalEntry>();
@@ -120,19 +125,28 @@ public class ReportsBo {
 		}
 		
 		for (BalanceSheet balanceSheet : rootBalSheets) {
-			balanceSheet.setBalanceSheets(this.getBalSheets(descBalSheets, balanceSheet.getId()));;
+			BalanceSheet self = this.getBalSheets(descBalSheets, balanceSheet.getId());
+			balanceSheet.setBalanceSheets(self.getBalanceSheets());
+			balanceSheet.setTotBalance(self.getTotBalance());
 		}
 		
 		
 		for (BalanceSheet balanceSheet : rootBalSheets) {
-			System.out.println(balanceSheet.getName() + ":");
+			System.out.println(balanceSheet.getName() + ":" + balanceSheet.getTotBalance());
 			if (balanceSheet.getBalanceSheets().size() > 0) {
 				for (BalanceSheet balanceSheet2 : balanceSheet.getBalanceSheets()) {
-					System.out.println("  " + balanceSheet2.getName() + ":");
+					System.out.println("  " + balanceSheet2.getName() + ":" + balanceSheet2.getTotBalance());
 					if (balanceSheet2.getBalanceSheets().size() > 0) {
 						for (BalanceSheet balanceSheet3 : balanceSheet2.getBalanceSheets()) {
-							System.out.println("    " + balanceSheet3.getName() + ":");
-							
+							System.out.println("    " + balanceSheet3.getName() + ":" + balanceSheet3.getTotBalance());
+							if (balanceSheet3.getBalanceSheets().size() > 0) {
+								for (BalanceSheet balanceSheet4 : balanceSheet3.getBalanceSheets()) {
+									System.out.println("    " + balanceSheet4.getName() + ": " + balanceSheet4.getTotBalance());
+									
+								}
+							} else {
+								System.out.println("  no children" );
+							}
 						}
 					} else {
 						System.out.println("  no children" );
@@ -147,19 +161,59 @@ public class ReportsBo {
 	}
 
 
-	private List<BalanceSheet> getBalSheets(List<BalanceSheet> descBalSheets, int parentID) {
+	private BalanceSheet getBalSheets(List<BalanceSheet> descBalSheets, int parentID) {
 		List<BalanceSheet> children = new ArrayList<BalanceSheet>();
+		BalanceSheet parent = new BalanceSheet();
+		float totBalance = 0;
 		
 		for (BalanceSheet balanceSheet : descBalSheets) {
 			if(balanceSheet.getParentID() == parentID){
-				//if thislgetbalshets > 0, it has child nodes, call set ball sheets else, call genledbalancing...
-				balanceSheet.setBalanceSheets(this.getBalSheets(descBalSheets, balanceSheet.getId()));
-				System.out.println(balanceSheet.getName());
+				BalanceSheet returnedSelf = this.getBalSheets(descBalSheets, balanceSheet.getId());
+				
+				if (returnedSelf.getBalanceSheets().size() > 0) {
+					balanceSheet.setBalanceSheets(returnedSelf.getBalanceSheets());
+				} else {
+					returnedSelf = this.getLedgers(balanceSheet.getId());
+					balanceSheet.setBalanceSheets(returnedSelf.getBalanceSheets());
+				}
+				
+				balanceSheet.setTotBalance(returnedSelf.getTotBalance());
+				totBalance += returnedSelf.getTotBalance();
 				children.add(balanceSheet);
 			} 
 		}
 		
-		return children;
+		parent.setTotBalance(totBalance);
+		parent.setBalanceSheets(children);
+		return parent;
+	}
+
+
+	private BalanceSheet getLedgers(Integer parentID) {
+		BalanceSheet parent = new BalanceSheet();
+		List<BalanceSheet> balanceSheets = new ArrayList<BalanceSheet>();
+		List<LedgerAccount> childLedgers = this.reportsDao.getGLBalancesByParent(parentID);
+		float totBalance = 0, balance;
+		
+		for (LedgerAccount ledgerAccount : childLedgers) {
+			BalanceSheet balSheet = new BalanceSheet();
+			balSheet.setName(ledgerAccount.getName());
+			balSheet.setAccountNo(ledgerAccount.getAccountNo());
+			balSheet.setBalanceSheets(new ArrayList<BalanceSheet>());
+			try {
+				balance = this.genLedgerBo.getBalance(ledgerAccount.getAccountNo(), ledgerAccount.getOrganisation().getId(), ledgerAccount.getOrgCoy().getId()).getCurrBalance();
+				balSheet.setTotBalance(balance);
+				totBalance += balance;
+			} catch (LedgerException e) {
+				e.printStackTrace();
+			}
+			
+			balanceSheets.add(balSheet);
+		}
+		
+		parent.setBalanceSheets(balanceSheets);
+		parent.setTotBalance(totBalance);
+		return parent;
 	}
 
 
