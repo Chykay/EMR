@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.calminfotech.ledger.boInterface.TotAccBo;
 import org.calminfotech.ledger.models.TotalingAccount;
-import org.calminfotech.ledger.reports.models.BranchTB;
 import org.calminfotech.ledger.utility.ReportsBo;
 import org.calminfotech.system.boInterface.OrganisationBo;
 import org.calminfotech.system.models.Organisation;
@@ -71,9 +70,8 @@ public class ReportsController {
 	@Layout("layouts/reportblank")
 	@RequestMapping(value = "/TB/branch/{branchID}", method = RequestMethod.GET)
 	public String branchTB(Model model, @PathVariable int branchID) {
-		BranchTB branchTB = this.reportsBo.getBranchTB(branchID);
-		model.addAttribute("branchTB", branchTB);
-		model.addAttribute("entries", branchTB.gettBalEntries());
+		
+		model.addAttribute("branchTB", this.reportsBo.getBranchTB(branchID));
 		return "ledger/reports/tb/branch";
 	}
 	
@@ -84,53 +82,32 @@ public class ReportsController {
 		model.addAttribute("companyTB", this.reportsBo.getCompanyTB(companyID));
 		return "ledger/reports/tb/company";
 	}
-
-	/*// this is to show invoice / bill list by due date form
-	@SuppressWarnings({ "unused", "null" })
-	@Layout(value = "layouts/form_wizard_layout")
-	@RequestMapping(value = "/searchcount")
-	public String searchcountteform(Model model,
-			RedirectAttributes redirectAttributes) {
-
-		PatientreportsearchForm ctform = new PatientreportsearchForm();
-
-		Calendar cal = GregorianCalendar.getInstance();
-		cal.add(Calendar.DAY_OF_YEAR, -30);
-
-		cal.add(Calendar.DAY_OF_YEAR, +30);
-
-		model.addAttribute("ctform", ctform);
-
-		return "report/general/consultioncount";
+	
+	@Layout("layouts/datatable")
+	@RequestMapping(value = "/bal_sheet", method = RequestMethod.GET)
+	public String balanceSheet(Model model) {
+		List<Organisation> branches = this.organisationBo.fetchAll(this.userIdentity.getOrganisation().getId());
+		model.addAttribute("company", this.userIdentity.getOrganisation().getOrgCoy());
+		model.addAttribute("branches", branches);
+		return "ledger/reports/tb/index";
 	}
-
-	// this is to show patient list by registration date result in table form
-	@Layout(value = "layouts/reportblank")
-	@RequestMapping(value = "/allcountprint/{datefrom}/{dateto}", method = RequestMethod.GET)
-	public String printcount(@PathVariable("datefrom") String datefrom,
-			@PathVariable("dateto") String dateto, Model model,
-			HttpSession session, RedirectAttributes redirectAttributes) {
-
+	
+	
+	@Layout("layouts/reportblank")
+	@RequestMapping(value = "/bal_sheet/branch/{branchID}", method = RequestMethod.GET)
+	public String branchBalSheet(Model model, @PathVariable int branchID) {
 		
-		 * System.out.println("My first date " +datefrom);
-		 * System.out.println("My second  date " +dateto);
-		 
-		List<ConsultationCount> cnsultationCount = this.consultationCountDao
-				.fetchAllconsultationcount(DateUtils.formatStringToDate(
-						datefrom, "yyyy-MM-dd hh:mm"), DateUtils
-						.formatStringToDate(dateto, "yyyy-MM-dd hh:mm"));
-
-		model.addAttribute("counttable", cnsultationCount);
-
-		// for the header sake
-
-		model.addAttribute("datefrom", datefrom);
-		model.addAttribute("dateto", dateto);
-		
-		 * int r; if (r == 0) { }
-		 
-		return "report/general/consultioncounprint";
-
+		model.addAttribute("branchTB", this.reportsBo.getBranchBalSheet(branchID));
+		return "ledger/reports/bal_sheet/branch";
 	}
-*/
+	
+	@Layout("layouts/reportblank")
+	@RequestMapping(value = "/bal_sheet/{companyID}", method = RequestMethod.GET)
+	public String companyBalSheet(Model model, @PathVariable int companyID) {
+
+		model.addAttribute("companyTB", this.reportsBo.getCompanyTB(companyID));
+		return "ledger/reports/tb/company";
+	}
+	
+
 }

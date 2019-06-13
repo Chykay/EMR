@@ -8,44 +8,17 @@ import javax.persistence.OneToMany;
 
 @Entity
 @org.hibernate.annotations.Entity(dynamicInsert = true)
-public class BalanceSheet {
+public class BranchBalSheet {
+	
 	@Id
 	private Integer id;
-	
+
 	private String name;
-	
-	private String accountNo;
-	
-	private float totBalance;
-	
-	private Integer parentID;
-	
+
 	@OneToMany
 	private List<BalanceSheet> balanceSheets;
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getAccountNo() {
-		return accountNo;
-	}
-
-	public void setAccountNo(String accountNo) {
-		this.accountNo = accountNo;
-	}
-
-	public float getTotBalance() {
-		return totBalance;
-	}
-
-	public void setTotBalance(float totBalance) {
-		this.totBalance = totBalance;
-	}
+	
+	
 
 	public String getName() {
 		return name;
@@ -53,6 +26,15 @@ public class BalanceSheet {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public List<BalanceSheet> getBalanceSheets() {
@@ -63,15 +45,7 @@ public class BalanceSheet {
 		this.balanceSheets = balanceSheets;
 	}
 
-	public Integer getParentID() {
-		return parentID;
-	}
 
-	public void setParentID(Integer parentID) {
-		this.parentID = parentID;
-	}
-	
-	
-	
-	
+
+
 }
