@@ -105,7 +105,7 @@ public class ReportsBo {
 	}
 
 
-	public BranchBalSheet getBranchBalSheet(int branchID) {
+	public BranchBalSheet getBranchBalSheet(int branchID, String type) {
 		List<LedgerCategory> ledgerCategories = this.ledgerCatBo.fetchAllByOrg(branchID);
 		List<BalanceSheet> rootBalSheets = new ArrayList<BalanceSheet>();
 		List<BalanceSheet> descBalSheets = new ArrayList<BalanceSheet>();
@@ -127,7 +127,7 @@ public class ReportsBo {
 		}
 		
 		for (BalanceSheet balanceSheet : rootBalSheets) {
-			BalanceSheet self = this.getBalSheets(descBalSheets, balanceSheet.getId());
+			BalanceSheet self = this.getBalSheets(descBalSheets, balanceSheet.getId(), type);
 			if (self.getBalanceSheets().size() > 0) {
 				balanceSheet.setBalanceSheets(self.getBalanceSheets());
 				balanceSheet.setTotBalance(self.getTotBalance());
@@ -172,23 +172,27 @@ public class ReportsBo {
 	}
 
 
-	private BalanceSheet getBalSheets(List<BalanceSheet> descBalSheets, int parentID) {
+	private BalanceSheet getBalSheets(List<BalanceSheet> descBalSheets, int parentID, String type) {
 		List<BalanceSheet> children = new ArrayList<BalanceSheet>();
 		BalanceSheet parent = new BalanceSheet();
 		float totBalance = 0;
 		
 		for (BalanceSheet balanceSheet : descBalSheets) {
 			if(balanceSheet.getParentID() == parentID){
-				BalanceSheet returnedSelf = this.getBalSheets(descBalSheets, balanceSheet.getId());
+				BalanceSheet returnedSelf = this.getBalSheets(descBalSheets, balanceSheet.getId(), type);
 				
 				if (returnedSelf.getBalanceSheets().size() > 0) {
 					balanceSheet.setBalanceSheets(returnedSelf.getBalanceSheets());
 					balanceSheet.setHasChildren(1);
 				} else {
-					returnedSelf = this.getLedgers(balanceSheet.getId());
+					returnedSelf = this.getLedgers(balanceSheet.getId(), type);
 					
 					if (returnedSelf.getBalanceSheets().size() > 0) {
-						balanceSheet.setBalanceSheets(returnedSelf.getBalanceSheets());
+						if (type.equals("full")) {
+							balanceSheet.setBalanceSheets(returnedSelf.getBalanceSheets());
+						} else {
+							balanceSheet.setBalanceSheets(new ArrayList<BalanceSheet>());
+						}
 						balanceSheet.setHasChildren(1);
 					} else {
 						balanceSheet.setBalanceSheets(new ArrayList<BalanceSheet>());
@@ -208,7 +212,7 @@ public class ReportsBo {
 	}
 
 
-	private BalanceSheet getLedgers(Integer parentID) {
+	private BalanceSheet getLedgers(Integer parentID, String type) {
 		BalanceSheet parent = new BalanceSheet();
 		List<BalanceSheet> balanceSheets = new ArrayList<BalanceSheet>();
 		List<LedgerAccount> childLedgers = this.reportsDao.getGLBalancesByParent(parentID);
@@ -236,14 +240,14 @@ public class ReportsBo {
 	}
 
 	
-	public CompanyBalSheet getCompanyBalSheet(int comp_id) {
+	public CompanyBalSheet getCompanyBalSheet(int comp_id, String type) {
 		
 		List<Organisation> organisations = this.organisationBo.fetchAll(comp_id);
 		CompanyBalSheet companyBalSheet = new CompanyBalSheet();
 		List<BranchBalSheet> branchBalSheets = new ArrayList<BranchBalSheet>();
 		
 		for (Organisation organisation : organisations) {
-			BranchBalSheet branchBalSheet = this.getBranchBalSheet(organisation.getId());
+			BranchBalSheet branchBalSheet = this.getBranchBalSheet(organisation.getId(), type);
 			branchBalSheets.add(branchBalSheet);
 		}
 		

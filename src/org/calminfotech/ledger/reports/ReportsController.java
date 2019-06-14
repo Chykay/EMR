@@ -76,7 +76,7 @@ public class ReportsController {
 	}
 	
 	@Layout("layouts/reportblank")
-	@RequestMapping(value = "/TB/{companyID}", method = RequestMethod.GET)
+	@RequestMapping(value = "/TB/{companyID}/{type}", method = RequestMethod.GET)
 	public String companyTB(Model model, @PathVariable int companyID) {
 
 		model.addAttribute("companyTB", this.reportsBo.getCompanyTB(companyID));
@@ -94,18 +94,18 @@ public class ReportsController {
 	
 	
 	@Layout("layouts/reportblank")
-	@RequestMapping(value = "/bal_sheet/branch/{branchID}", method = RequestMethod.GET)
-	public String branchBalSheet(Model model, @PathVariable int branchID) {
+	@RequestMapping(value = "/bal_sheet/branch/{branchID}/{type}", method = RequestMethod.GET)
+	public String branchBalSheet(Model model, @PathVariable int branchID, @PathVariable String type) {
 		
-		model.addAttribute("branchBS", this.reportsBo.getBranchBalSheet(branchID));
+		model.addAttribute("branchBS", this.reportsBo.getBranchBalSheet(branchID, type));
 		return "ledger/reports/bal_sheet/branch";
 	}
 	
 	@Layout("layouts/reportblank")
-	@RequestMapping(value = "/bal_sheet/{companyID}", method = RequestMethod.GET)
-	public String companyBalSheet(Model model, @PathVariable int companyID) {
+	@RequestMapping(value = "/bal_sheet/{companyID}/{type}", method = RequestMethod.GET)
+	public String companyBalSheet(Model model, @PathVariable int companyID, @PathVariable String type) {
 
-		model.addAttribute("companyBS", this.reportsBo.getCompanyBalSheet(companyID));
+		model.addAttribute("companyBS", this.reportsBo.getCompanyBalSheet(companyID, type));
 		return "ledger/reports/bal_sheet/company";
 	}
 }
