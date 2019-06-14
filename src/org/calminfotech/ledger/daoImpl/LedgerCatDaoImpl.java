@@ -62,4 +62,15 @@ public class LedgerCatDaoImpl implements LedgerCatDao {
 		System.out.println("Updating");
 		this.sessionFactory.getCurrentSession().update(balSheetCat);
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<LedgerCategory> fetchAllByOrg(int orgID) {
+		List<LedgerCategory> balSheetCats = sessionFactory.getCurrentSession()
+				.createQuery(" from LedgerCategory WHERE organisation_id = ?")
+				.setParameter(0, orgID)
+				.list();
+		
+		return balSheetCats;
+	}
 }

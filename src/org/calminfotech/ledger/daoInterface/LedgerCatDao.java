@@ -6,6 +6,8 @@ import org.calminfotech.ledger.models.LedgerCategory;
 
 public interface LedgerCatDao {
 	public List<LedgerCategory> fetchAll();
+	
+	public List<LedgerCategory> fetchAllByOrg(int orgID);
 
 	public List<LedgerCategory> fetchParents(int id);
 

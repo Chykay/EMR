@@ -79,4 +79,11 @@ public class LedgerCatBoImpl implements LedgerCatBo {
 		this.ledgerCatDao.update(ledgerCategory);
 		return ledgerCategory;
 	}
+
+	@Override
+	public List<LedgerCategory> fetchAllByOrg(int orgID) {
+		
+		return this.ledgerCatDao.fetchAllByOrg(orgID);
+		
+	}
 }

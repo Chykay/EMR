@@ -4,7 +4,7 @@
 	</h1>
 </div>
 
-<div class="row">
+<div class="row"   xmlns:th="http://www.thymeleaf.org">
 	<div class="col-xs-12">
 		<!-- Button for view -->
 		<a class="btn btn-xs btn-info" th:href="@{/ledger/gen_ledger/index}">
@@ -73,19 +73,5 @@
 
 <script type="text/javascript">
 /*<![CDATA[*/
-
-	$(".reverse").click(function(){
-		var batchNo = this.id;
-		
-		$.ajax({
-			type : "GET",
-			url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/gen_ledger/reversal/'	+ batchNo,
-			success : function(value) {
-				//if value is true, then you can't delete 
-			}
-		});
-	});
-
-
 /*]]>*/
 </script>

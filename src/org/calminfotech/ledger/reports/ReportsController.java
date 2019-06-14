@@ -106,8 +106,6 @@ public class ReportsController {
 	public String companyBalSheet(Model model, @PathVariable int companyID) {
 
 		model.addAttribute("companyBS", this.reportsBo.getCompanyBalSheet(companyID));
-		return "ledger/reports/tb/company";
+		return "ledger/reports/bal_sheet/company";
 	}
-	
-
 }

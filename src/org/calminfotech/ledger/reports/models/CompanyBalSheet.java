@@ -33,6 +33,4 @@ public class CompanyBalSheet {
 	public void setBranchBalSheets(List<BranchBalSheet> branchBalSheets) {
 		this.branchBalSheets = branchBalSheets;
 	}
-
-
 }

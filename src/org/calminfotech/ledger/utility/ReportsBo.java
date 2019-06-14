@@ -106,7 +106,7 @@ public class ReportsBo {
 
 
 	public BranchBalSheet getBranchBalSheet(int branchID) {
-		List<LedgerCategory> ledgerCategories = this.ledgerCatBo.fetchAll();
+		List<LedgerCategory> ledgerCategories = this.ledgerCatBo.fetchAllByOrg(branchID);
 		List<BalanceSheet> rootBalSheets = new ArrayList<BalanceSheet>();
 		List<BalanceSheet> descBalSheets = new ArrayList<BalanceSheet>();
 		BranchBalSheet branchBalSheet = new BranchBalSheet();
@@ -251,7 +251,5 @@ public class ReportsBo {
 		companyBalSheet.setName(this.userIdentity.getOrganisation().getOrgCoy().getName());
 		
 		return companyBalSheet;
-	}
-	
-	
+	}	
 }
