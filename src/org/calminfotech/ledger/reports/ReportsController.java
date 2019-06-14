@@ -97,7 +97,7 @@ public class ReportsController {
 	@RequestMapping(value = "/bal_sheet/branch/{branchID}/{type}", method = RequestMethod.GET)
 	public String branchBalSheet(Model model, @PathVariable int branchID, @PathVariable String type) {
 		
-		model.addAttribute("branchBS", this.reportsBo.getBranchBalSheet(branchID, type));
+		model.addAttribute("branchBS", this.reportsBo.getBranchBalSheet(branchID, type, "balSheet"));
 		return "ledger/reports/bal_sheet/branch";
 	}
 	
@@ -105,7 +105,33 @@ public class ReportsController {
 	@RequestMapping(value = "/bal_sheet/{companyID}/{type}", method = RequestMethod.GET)
 	public String companyBalSheet(Model model, @PathVariable int companyID, @PathVariable String type) {
 
-		model.addAttribute("companyBS", this.reportsBo.getCompanyBalSheet(companyID, type));
+		model.addAttribute("companyBS", this.reportsBo.getCompanyBalSheet(companyID, type, "balSheet"));
 		return "ledger/reports/bal_sheet/company";
+	}
+	
+	@Layout("layouts/datatable")
+	@RequestMapping(value = "/P_L", method = RequestMethod.GET)
+	public String PandL(Model model) {
+		List<Organisation> branches = this.organisationBo.fetchAll(this.userIdentity.getOrganisation().getId());
+		model.addAttribute("company", this.userIdentity.getOrganisation().getOrgCoy());
+		model.addAttribute("branches", branches);
+		return "ledger/P_L/index";
+	}
+	
+	
+	@Layout("layouts/reportblank")
+	@RequestMapping(value = "/P_L/branch/{branchID}/{type}", method = RequestMethod.GET)
+	public String branchPandL(Model model, @PathVariable int branchID, @PathVariable String type) {
+		
+		model.addAttribute("branchPL", this.reportsBo.getBranchBalSheet(branchID, type, "PandL"));
+		return "ledger/reports/P_L/branch";
+	}
+	
+	@Layout("layouts/reportblank")
+	@RequestMapping(value = "/P_L/{companyID}/{type}", method = RequestMethod.GET)
+	public String companyPandL(Model model, @PathVariable int companyID, @PathVariable String type) {
+
+		model.addAttribute("companyPL", this.reportsBo.getCompanyBalSheet(companyID, type, "PandL"));
+		return "ledger/reports/P_L/company";
 	}
 }

@@ -14,7 +14,7 @@
 				</tr>
 				<tr>
 					
-			    	<td  th:case="1" th:replace="ledger/reports/bal_sheet/branchFragment :: branch(balSheetList=${balSheetItem.balanceSheets})">Balance Sheets</td>
+			    	<td  th:case="1" th:replace="ledger/reports/bal_sheet/branchFragment :: branch(balSheetList=${balSheetItem.accChartEntries})">Balance Sheets</td>
 			    	
 				</tr>
 				
@@ -48,7 +48,7 @@
 				
 				<td th:case="-1"></td>
 				<td></td>
-		    	<td  th:case="1" th:replace="ledger/reports/bal_sheet/branchFragment :: branch(balSheetList=${balSheetItem.balanceSheets})">Balance Sheets</td>
+		    	<td  th:case="1" th:replace="ledger/reports/bal_sheet/branchFragment :: branch(balSheetList=${balSheetItem.accChartEntries})">Balance Sheets</td>
 		    	
 			</tr>
 			
@@ -65,7 +65,7 @@
             <span  th:text="${balSheetItem.name}"></span>
             <span th:text="${balSheetItem.totBalance}"></span>
             it works
-               <div th:replace="ledger/reports/bal_sheet/branchFragment :: branch(balSheetList=${balSheetItem.balanceSheets})">Sidebar</div>
+               <div th:replace="ledger/reports/bal_sheet/branchFragment :: branch(balSheetList=${balSheetItem.accChartEntries})">Sidebar</div>
  </li>
         </ul> 
     </div>

@@ -32,7 +32,7 @@
 
 	
 	
-<th:block th:each=" branchBS : ${companyBS.branchBalSheets}">
+<th:block th:each=" branchBS : ${companyBS.branchAccCharts}">
 
   <p style="float: center;"><h4>Balance Sheet For <span th:text="${branchBS.name}"></span></h4></p>
 
@@ -49,7 +49,7 @@
       </tr>
     </thead>
     <tbody>
-     <th:block th:replace="ledger/reports/bal_sheet/branchFragment :: branch(balSheetList=${branchBS.balanceSheets})">Balance Sheet</th:block>
+     <th:block th:replace="ledger/reports/bal_sheet/branchFragment :: branch(balSheetList=${branchBS.accChartEntries})">Balance Sheet</th:block>
 
     </tbody>
   </table>

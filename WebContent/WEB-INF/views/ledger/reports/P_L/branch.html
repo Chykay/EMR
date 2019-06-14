@@ -28,7 +28,7 @@
 <br></br>
 <br></br>
 <br></br>
-<p style="float: center;"><h4>Balance Sheet For <span th:text="${branchBS.name}"></span></h4></p>
+<p style="float: center;"><h4>Profit and Loss For <span th:text="${branchPL.name}"></span></h4></p>
 
 
 <table class="table table-condensed" id="printtable">
@@ -43,15 +43,20 @@
       </tr>
     </thead>
     <tbody>
-     <th:block th:replace="ledger/reports/bal_sheet/branchFragment :: branch(balSheetList=${branchBS.accChartEntries})">Balance Sheet</th:block>
+     <th:block th:replace="ledger/reports/P_L/branchFragment :: branch(PandLList=${branchPL.accChartEntries})">Balance Sheet</th:block>
 
     </tbody>
   </table>
 <!-- 
+<div th:switch="${branchPL.name}">
+    <span th:case="'Calm 1'"> User is a manager</span>
+    <span th:case="*"> Not a man</span>
+    
+</div>
 
 
 
-<div th:replace="ledger/reports/bal_sheet/branchFragment :: branch(balSheetList=${branchBS.accChartEntries})">Sidebar</div>
+<div th:replace="ledger/reports/P_L/branchFragment :: branch(PandLList=${branchPL.accChartEntries})">Sidebar</div>
 
  -->
 </div>

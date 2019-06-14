@@ -407,7 +407,11 @@
 		 <mapping class="org.calminfotech.ledger.models.PostCode" />
 		 <mapping class="org.calminfotech.ledger.models.TotalingAccount" />
 		 
+		 <mapping class="org.calminfotech.ledger.reports.models.AccChartEntry" />
+		 <mapping class="org.calminfotech.ledger.reports.models.BranchAccChart" />
 		 <mapping class="org.calminfotech.ledger.reports.models.BranchTB" />
+		 <mapping class="org.calminfotech.ledger.reports.models.CompanyAccChart" />
+		 <mapping class="org.calminfotech.ledger.reports.models.CompanyTB" />
 		 <mapping class="org.calminfotech.ledger.reports.models.TrialBalEntry" />
 		 
 		 

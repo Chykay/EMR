@@ -22,7 +22,7 @@
 
 <div class="hr hr-18 dotted hr-double"></div>
 
-<div class="row" xmlns:th="http://www.thymeleaf.org">
+<div class="row">
 	<div class="col-xs-12">
 		<div class="table-header">List of Branches</div>
 		<table id="dTable"
@@ -48,29 +48,29 @@
 						
 							<a class="btn btn-xs btn-primary tooltips " 
 								title="View Bal Sheet"  
-								th:href="@{/ledger/reports/bal_sheet/branch/{id}/{type}(id=${branch.id}, type='min') }"
+								th:href="@{/ledger/reports/P_L/branch/{id}/{type}(id=${branch.id}, type='min') }"
 								> <i
 									class="fa fa-reply"></i>
 							</a>
 							<a class="btn btn-xs btn-success tooltips " 
 								title="View Bal Sheet"  
-								th:href="@{/ledger/reports/bal_sheet/branch/{type}(id=${branch.id}, type='full') }"
+								th:href="@{/ledger/reports/P_L/branch/{type}(id=${branch.id}, type='full') }"
 								> <i
 									class="fa fa-reply"></i>
 							</a>
 					</td>
 				</tr>
 				<tr>
-					<td colspan="2">Company Balance Sheet</td>
+					<td colspan="2">Company Profit and Loss</td>
 					<td>
 						<a class="btn btn-xs btn-primary tooltips " 
-								title="View Bal Sheet"   
-								th:href="@{/ledger/reports/bal_sheet/{id}/{type}(id=${company.id}, type='min') }"> <i
+								title="View P and L"   
+								th:href="@{/ledger/reports/P_L/{id}/{type}(id=${company.id}, type='min') }"> <i
 									class="fa fa-reply"></i>
 							</a>
 						<a class="btn btn-xs btn-success tooltips " 
-								title="View Bal Sheet"   
-								th:href="@{/ledger/reports/bal_sheet/{id}/{type}(id=${company.id}, type='full') }"> <i
+								title="View P and L"   
+								th:href="@{/ledger/reports/P_L/{id}/{type}(id=${company.id}, type='full') }"> <i
 									class="fa fa-reply"></i>
 							</a>
 					</td>

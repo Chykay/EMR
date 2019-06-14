@@ -8,7 +8,7 @@ import javax.persistence.OneToMany;
 
 @Entity
 @org.hibernate.annotations.Entity(dynamicInsert = true)
-public class BalanceSheet {
+public class AccChartEntry {
 	@Id
 	private Integer id;
 	
@@ -23,7 +23,7 @@ public class BalanceSheet {
 	private Integer hasChildren;
 	
 	@OneToMany
-	private List<BalanceSheet> balanceSheets;
+	private List<AccChartEntry> accChartEntries;
 
 	public Integer getId() {
 		return id;
@@ -57,12 +57,13 @@ public class BalanceSheet {
 		this.name = name;
 	}
 
-	public List<BalanceSheet> getBalanceSheets() {
-		return balanceSheets;
+	
+	public List<AccChartEntry> getAccChartEntries() {
+		return accChartEntries;
 	}
 
-	public void setBalanceSheets(List<BalanceSheet> balanceSheets) {
-		this.balanceSheets = balanceSheets;
+	public void setAccChartEntries(List<AccChartEntry> accChartEntries) {
+		this.accChartEntries = accChartEntries;
 	}
 
 	public Integer getParentID() {
