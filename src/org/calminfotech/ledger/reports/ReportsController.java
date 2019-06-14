@@ -89,7 +89,7 @@ public class ReportsController {
 		List<Organisation> branches = this.organisationBo.fetchAll(this.userIdentity.getOrganisation().getId());
 		model.addAttribute("company", this.userIdentity.getOrganisation().getOrgCoy());
 		model.addAttribute("branches", branches);
-		return "ledger/reports/tb/index";
+		return "ledger/reports/bal_sheet/index";
 	}
 	
 	
@@ -97,7 +97,7 @@ public class ReportsController {
 	@RequestMapping(value = "/bal_sheet/branch/{branchID}", method = RequestMethod.GET)
 	public String branchBalSheet(Model model, @PathVariable int branchID) {
 		
-		model.addAttribute("branchTB", this.reportsBo.getBranchBalSheet(branchID));
+		model.addAttribute("branchBS", this.reportsBo.getBranchBalSheet(branchID));
 		return "ledger/reports/bal_sheet/branch";
 	}
 	
@@ -105,7 +105,7 @@ public class ReportsController {
 	@RequestMapping(value = "/bal_sheet/{companyID}", method = RequestMethod.GET)
 	public String companyBalSheet(Model model, @PathVariable int companyID) {
 
-		model.addAttribute("companyTB", this.reportsBo.getCompanyTB(companyID));
+		model.addAttribute("companyBS", this.reportsBo.getCompanyBalSheet(companyID));
 		return "ledger/reports/tb/company";
 	}
 	

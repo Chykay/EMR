@@ -11,7 +11,7 @@
 
 
 
-<div class="container" id="printableArea">
+<div class="container" id="printableArea"  xmlns:th="http://www.thymeleaf.org">
 
   <span style="float: left;"> 
 								<img th:if="${@userIdentity.getOrganisation().getOrgCoy().getLogo() == null}" id="avatar2"
@@ -28,43 +28,36 @@
 <br></br>
 <br></br>
 <br></br>
-<p style="float: center;"><h4>Trial Balance For <!-- <span th:text="${branchTB.name}"></span> --></h4></p>
+<p style="float: center;"><h4>Balance Sheet For <span th:text="${branchBS.name}"></span></h4></p>
 
-	
-	
 
-  <table class="table table-condensed" id="printtable">
+<table class="table table-condensed" id="printtable">
     <thead>
       <tr>
     				
-		<th>Account No</th>
-		<th>Name</th>
-		<th>DR</th>
-		<th>CR</th>
+		<th></th>
+		<th></th>
+		<th></th>
 				
 					 
       </tr>
     </thead>
     <tbody>
-     	<!-- <tr th:each="tBalEntry : *{branchTB.tBalEntries}">
- 	
-					
-					<td th:text="${tBalEntry.accountNo}"></td> 
-					<td th:text="${tBalEntry.name}"></td> 
-					<td th:text="${tBalEntry.debit}" ></td>
-					<td th:text="${tBalEntry.credit}" ></td>
-			
-					 
-      </tr>
-      <tr>
-      	<td></td>
-      	<td>TOTAL</td>
-      	<td th:text="${branchTB.totDebit}"></td> 
-      	<td th:text="${branchTB.totCredit}"></td> 
-      	<td th:text="${branchTB.totBalance}"></td> 
-      	
-      </tr> -->
+     <th:block th:replace="ledger/reports/bal_sheet/branchFragment :: branch(balSheetList=${branchBS.balanceSheets})">Balance Sheet</th:block>
+
     </tbody>
   </table>
-  </div>
+<!-- 
+<div th:switch="${branchBS.name}">
+    <span th:case="'Calm 1'"> User is a manager</span>
+    <span th:case="*"> Not a man</span>
+    
+</div>
+
+
+
+<div th:replace="ledger/reports/bal_sheet/branchFragment :: branch(balSheetList=${branchBS.balanceSheets})">Sidebar</div>
+
+ -->
+</div>
   	

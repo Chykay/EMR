@@ -1,0 +1,73 @@
+<th:block xmlns:th="http://www.thymeleaf.org" th:fragment="branch(balSheetList)">
+	<th:block th:each="balSheetItem : ${balSheetList}">
+		<th:block th:switch="${balSheetItem.hasChildren}">
+			<th:block  th:case="0">
+				<tr>
+					<td th:text="${balSheetItem.name}"></td>
+					<td th:text="${balSheetItem.accountNo}"></td>
+					<td th:text="${balSheetItem.totBalance}"></td>
+				</tr>
+			</th:block>
+			<th:block  th:case="1">
+				<tr  >
+					<td th:text="${balSheetItem.name}"></td>
+				</tr>
+				<tr>
+					
+			    	<td  th:case="1" th:replace="ledger/reports/bal_sheet/branchFragment :: branch(balSheetList=${balSheetItem.balanceSheets})">Balance Sheets</td>
+			    	
+				</tr>
+				
+			    <tr>
+			    	<td th:text="|Total ${balSheetItem.name}:|"></td>
+			    	<td></td>
+			    	<td th:text="${balSheetItem.totBalance}"></td>
+			    </tr>
+			</th:block>
+			<th:block  th:case="-1">
+				<tr >
+					<td th:text="${balSheetItem.name}"></td>
+				</tr>
+				
+			    <tr>
+			    	<td>No Ledgers Added to this category</td>
+			    </tr>
+			</th:block>
+			
+	    </th:block>
+	</th:block>
+    
+</th:block>
+
+
+
+<!-- <tr  >
+			<td th:text="${balSheetItem.name}"></td>
+		</tr>
+			<tr>
+				
+				<td th:case="-1"></td>
+				<td></td>
+		    	<td  th:case="1" th:replace="ledger/reports/bal_sheet/branchFragment :: branch(balSheetList=${balSheetItem.balanceSheets})">Balance Sheets</td>
+		    	
+			</tr>
+			
+		    <tr>
+		    	<td th:text="|Total ${balSheetItem.name}:|"></td>
+		    	<td></td>
+		    	<td th:text="${balSheetItem.totBalance}"></td>
+		    </tr>  -->
+
+<!-- 
+    <div xmlns:th="http://www.thymeleaf.org" th:fragment="branch(balSheetList)">
+        <ul>
+            <li th:each="balSheetItem : ${balSheetList}">
+            <span  th:text="${balSheetItem.name}"></span>
+            <span th:text="${balSheetItem.totBalance}"></span>
+            it works
+               <div th:replace="ledger/reports/bal_sheet/branchFragment :: branch(balSheetList=${balSheetItem.balanceSheets})">Sidebar</div>
+ </li>
+        </ul> 
+    </div>
+    
+     -->

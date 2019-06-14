@@ -12,6 +12,7 @@ import org.calminfotech.ledger.models.LedgerCategory;
 import org.calminfotech.ledger.reports.models.BalanceSheet;
 import org.calminfotech.ledger.reports.models.BranchBalSheet;
 import org.calminfotech.ledger.reports.models.BranchTB;
+import org.calminfotech.ledger.reports.models.CompanyBalSheet;
 import org.calminfotech.ledger.reports.models.CompanyTB;
 import org.calminfotech.ledger.reports.models.TrialBalEntry;
 import org.calminfotech.system.boInterface.OrganisationBo;
@@ -108,6 +109,7 @@ public class ReportsBo {
 		List<LedgerCategory> ledgerCategories = this.ledgerCatBo.fetchAll();
 		List<BalanceSheet> rootBalSheets = new ArrayList<BalanceSheet>();
 		List<BalanceSheet> descBalSheets = new ArrayList<BalanceSheet>();
+		BranchBalSheet branchBalSheet = new BranchBalSheet();
 		
 		for (LedgerCategory ledgerCategory : ledgerCategories) {
 
@@ -126,22 +128,31 @@ public class ReportsBo {
 		
 		for (BalanceSheet balanceSheet : rootBalSheets) {
 			BalanceSheet self = this.getBalSheets(descBalSheets, balanceSheet.getId());
-			balanceSheet.setBalanceSheets(self.getBalanceSheets());
-			balanceSheet.setTotBalance(self.getTotBalance());
+			if (self.getBalanceSheets().size() > 0) {
+				balanceSheet.setBalanceSheets(self.getBalanceSheets());
+				balanceSheet.setTotBalance(self.getTotBalance());
+				balanceSheet.setHasChildren(1);
+			} else {
+				balanceSheet.setBalanceSheets(new ArrayList<BalanceSheet>());
+				balanceSheet.setHasChildren(-1);
+			}
 		}
 		
+		branchBalSheet.setBalanceSheets(rootBalSheets);
+		branchBalSheet.setName(this.organisationBo.getOrganisationById(branchID).getName());
 		
-		for (BalanceSheet balanceSheet : rootBalSheets) {
-			System.out.println(balanceSheet.getName() + ":" + balanceSheet.getTotBalance());
+		
+		/*for (BalanceSheet balanceSheet : rootBalSheets) {
+			System.out.println(balanceSheet.getName() + ":" + balanceSheet.getHasChildren());
 			if (balanceSheet.getBalanceSheets().size() > 0) {
 				for (BalanceSheet balanceSheet2 : balanceSheet.getBalanceSheets()) {
-					System.out.println("  " + balanceSheet2.getName() + ":" + balanceSheet2.getTotBalance());
+					System.out.println("  " + balanceSheet2.getName() + ":" + balanceSheet2.getHasChildren());
 					if (balanceSheet2.getBalanceSheets().size() > 0) {
 						for (BalanceSheet balanceSheet3 : balanceSheet2.getBalanceSheets()) {
-							System.out.println("    " + balanceSheet3.getName() + ":" + balanceSheet3.getTotBalance());
+							System.out.println("    " + balanceSheet3.getName() + ":" + balanceSheet3.getHasChildren());
 							if (balanceSheet3.getBalanceSheets().size() > 0) {
 								for (BalanceSheet balanceSheet4 : balanceSheet3.getBalanceSheets()) {
-									System.out.println("    " + balanceSheet4.getName() + ": " + balanceSheet4.getTotBalance());
+									System.out.println("    " + balanceSheet4.getName() + ": " + balanceSheet4.getHasChildren());
 									
 								}
 							} else {
@@ -156,8 +167,8 @@ public class ReportsBo {
 				System.out.println("no children" );
 
 			}
-		}
-		return null;	
+		}*/
+		return branchBalSheet;	
 	}
 
 
@@ -172,9 +183,17 @@ public class ReportsBo {
 				
 				if (returnedSelf.getBalanceSheets().size() > 0) {
 					balanceSheet.setBalanceSheets(returnedSelf.getBalanceSheets());
+					balanceSheet.setHasChildren(1);
 				} else {
 					returnedSelf = this.getLedgers(balanceSheet.getId());
-					balanceSheet.setBalanceSheets(returnedSelf.getBalanceSheets());
+					
+					if (returnedSelf.getBalanceSheets().size() > 0) {
+						balanceSheet.setBalanceSheets(returnedSelf.getBalanceSheets());
+						balanceSheet.setHasChildren(1);
+					} else {
+						balanceSheet.setBalanceSheets(new ArrayList<BalanceSheet>());
+						balanceSheet.setHasChildren(-1);
+					}
 				}
 				
 				balanceSheet.setTotBalance(returnedSelf.getTotBalance());
@@ -207,7 +226,7 @@ public class ReportsBo {
 			} catch (LedgerException e) {
 				e.printStackTrace();
 			}
-			
+			balSheet.setHasChildren(0);
 			balanceSheets.add(balSheet);
 		}
 		
@@ -216,7 +235,23 @@ public class ReportsBo {
 		return parent;
 	}
 
-
+	
+	public CompanyBalSheet getCompanyBalSheet(int comp_id) {
+		
+		List<Organisation> organisations = this.organisationBo.fetchAll(comp_id);
+		CompanyBalSheet companyBalSheet = new CompanyBalSheet();
+		List<BranchBalSheet> branchBalSheets = new ArrayList<BranchBalSheet>();
+		
+		for (Organisation organisation : organisations) {
+			BranchBalSheet branchBalSheet = this.getBranchBalSheet(organisation.getId());
+			branchBalSheets.add(branchBalSheet);
+		}
+		
+		companyBalSheet.setBranchBalSheets(branchBalSheets);
+		companyBalSheet.setName(this.userIdentity.getOrganisation().getOrgCoy().getName());
+		
+		return companyBalSheet;
+	}
 	
 	
 }

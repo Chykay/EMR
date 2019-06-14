@@ -20,6 +20,8 @@ public class BalanceSheet {
 	
 	private Integer parentID;
 	
+	private Integer hasChildren;
+	
 	@OneToMany
 	private List<BalanceSheet> balanceSheets;
 
@@ -69,6 +71,14 @@ public class BalanceSheet {
 
 	public void setParentID(Integer parentID) {
 		this.parentID = parentID;
+	}
+
+	public Integer getHasChildren() {
+		return hasChildren;
+	}
+
+	public void setHasChildren(Integer hasChildren) {
+		this.hasChildren = hasChildren;
 	}
 	
 	
