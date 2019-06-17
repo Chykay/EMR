@@ -127,4 +127,21 @@ public class SettingDaoImpl implements SettingDao {
 
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<String> fetchAllGLSettings(int company_id) {
+		
+		List<String> list = this.sessionFactory
+				.getCurrentSession()
+				.createQuery(
+						"select settings_value from SettingsAssignment where settings_code LIKE '%' + 'GLP' + '%' and company_id=?")
+				.setParameter(0, company_id)
+				.list();
+
+		if (list.size() > 0)
+			return list;
+		
+		return null;
+
+	}
+
 }

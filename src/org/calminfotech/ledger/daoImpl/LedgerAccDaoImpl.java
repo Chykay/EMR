@@ -1,10 +1,10 @@
 package org.calminfotech.ledger.daoImpl;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.calminfotech.ledger.daoInterface.LedgerAccDao;
 import org.calminfotech.ledger.models.LedgerAccount;
+import org.calminfotech.system.boInterface.SettingBo;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -18,19 +18,18 @@ public class LedgerAccDaoImpl implements LedgerAccDao {
 	@Autowired
 	private SessionFactory sessionFactory;
 	
-	/*@Autowired
-	private SettingBo settingBo;*/
+	@Autowired
+	private SettingBo settingBo;
 
 	@SuppressWarnings("unchecked")
 	public List<LedgerAccount> fetchAll(int branch_id, int company_id){
+		List<String> interfaces = this.settingBo.fetchAllGLSettings(company_id);
 		
-		
-		System.out.println("this one " + branch_id + " : " + company_id);
 		List<LedgerAccount> ledgerAccounts = sessionFactory.getCurrentSession()
 				.createQuery(" from LedgerAccount WHERE organisation_id = ? AND company_id = ? AND account_no NOT IN ( :interfaces )")
 				.setParameter(0, branch_id)
 				.setParameter(1, company_id)
-				.setParameterList("interfaces", Arrays.asList("1-0000-000", "2-0000-000"))
+				.setParameterList("interfaces", interfaces)
 				.list();
 		
 		if (ledgerAccounts.size() > 0)
