@@ -104,9 +104,24 @@ public class ReportsBo {
 		return companyTB;
 	}
 
-
+	
 	public BranchAccChart getBranchCoA(int branchID, String type, String chartType) {
-		List<LedgerCategory> ledgerCategories = this.ledgerCatBo.fetchAllByOrg(branchID);
+		// fetch ledger Category by type, depending on chartType
+		List<LedgerCategory> ledgerCategories = new ArrayList<LedgerCategory>();
+		
+		ArrayList<Integer> ledgerTypes = new ArrayList<Integer>();
+		
+		if (chartType.equals("balSheet")) {
+			ledgerTypes.add(1);
+			ledgerTypes.add(2);
+			ledgerCategories = this.ledgerCatBo.fetchByLedgType(ledgerTypes);
+			
+		} else {
+			ledgerTypes.add(4);
+			ledgerTypes.add(5);
+			ledgerCategories = this.ledgerCatBo.fetchByLedgType(ledgerTypes);
+		}
+		
 		List<AccChartEntry> rootBalSheets = new ArrayList<AccChartEntry>();
 		List<AccChartEntry> descBalSheets = new ArrayList<AccChartEntry>();
 		BranchAccChart branchAccChart = new BranchAccChart();

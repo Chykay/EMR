@@ -1,6 +1,6 @@
 <div class="page-header">
 	<h1>
-		Balance Sheets
+		Profit and Loss
 	</h1>
 </div>
 
@@ -47,13 +47,13 @@
 					<td>
 						
 							<a class="btn btn-xs btn-primary tooltips " 
-								title="View Bal Sheet"  
+								title="View P and L"  
 								th:href="@{/ledger/reports/P_L/branch/{id}/{type}(id=${branch.id}, type='min') }"
 								> <i
 									class="fa fa-reply"></i>
 							</a>
 							<a class="btn btn-xs btn-success tooltips " 
-								title="View Bal Sheet"  
+								title="View P and L FULL"  
 								th:href="@{/ledger/reports/P_L/branch/{id}/{type}(id=${company.id}, type='full') }"
 								> <i
 									class="fa fa-reply"></i>

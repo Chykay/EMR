@@ -1,5 +1,6 @@
 package org.calminfotech.ledger.boInterface;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.calminfotech.ledger.forms.LedgerCatForm;
@@ -20,4 +21,6 @@ public interface LedgerCatBo {
 	public void delete(LedgerCategory totalingAccount);
 	
 	public LedgerCategory update(LedgerCatForm balSheetForm, int id);
+
+	List<LedgerCategory> fetchByLedgType(ArrayList<Integer> ledgerTypes);
 }

@@ -5,9 +5,6 @@ import java.util.List;
 
 import org.calminfotech.ledger.daoInterface.LedgerAccDao;
 import org.calminfotech.ledger.models.LedgerAccount;
-import org.calminfotech.system.boInterface.SettingBo;
-import org.calminfotech.system.models.GetsettingsAssignmentProc;
-import org.calminfotech.system.models.SettingsAssignment;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -21,8 +18,8 @@ public class LedgerAccDaoImpl implements LedgerAccDao {
 	@Autowired
 	private SessionFactory sessionFactory;
 	
-	@Autowired
-	private SettingBo settingBo;
+	/*@Autowired
+	private SettingBo settingBo;*/
 
 	@SuppressWarnings("unchecked")
 	public List<LedgerAccount> fetchAll(int branch_id, int company_id){

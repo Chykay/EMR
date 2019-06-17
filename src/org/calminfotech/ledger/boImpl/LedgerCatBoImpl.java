@@ -1,5 +1,6 @@
 package org.calminfotech.ledger.boImpl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -84,6 +85,12 @@ public class LedgerCatBoImpl implements LedgerCatBo {
 	public List<LedgerCategory> fetchAllByOrg(int orgID) {
 		
 		return this.ledgerCatDao.fetchAllByOrg(orgID);
+		
+	}
+	
+	@Override
+	public List<LedgerCategory> fetchByLedgType(ArrayList<Integer> ledgerTypes) {
+		return this.ledgerCatDao.fetchByLedgType(ledgerTypes);
 		
 	}
 }

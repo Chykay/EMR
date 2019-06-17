@@ -1,5 +1,6 @@
 package org.calminfotech.ledger.daoInterface;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.calminfotech.ledger.models.LedgerCategory;
@@ -18,4 +19,6 @@ public interface LedgerCatDao {
 	public void delete(LedgerCategory balSheetCat);
 	
 	public void update(LedgerCategory balSheetCat);
+
+	public List<LedgerCategory> fetchByLedgType(ArrayList<Integer> ledgerTypes);
 }

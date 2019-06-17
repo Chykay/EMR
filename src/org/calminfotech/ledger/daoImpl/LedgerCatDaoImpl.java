@@ -1,9 +1,11 @@
 package org.calminfotech.ledger.daoImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.calminfotech.ledger.daoInterface.LedgerCatDao;
 import org.calminfotech.ledger.models.LedgerCategory;
+import org.calminfotech.user.utils.UserIdentity;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -13,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class LedgerCatDaoImpl implements LedgerCatDao {
 	
+	@Autowired
+	private UserIdentity userIdentity;
 	
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -20,20 +24,20 @@ public class LedgerCatDaoImpl implements LedgerCatDao {
 	@SuppressWarnings("unchecked")
 	public List<LedgerCategory> fetchAll(){
 		
-		List<LedgerCategory> balSheetCats = sessionFactory.getCurrentSession()
+		List<LedgerCategory> ledgerCats = sessionFactory.getCurrentSession()
 				.createQuery(" from LedgerCategory")
 				.list();
-		return balSheetCats;
+		return ledgerCats;
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<LedgerCategory> fetchParents(int id){
 		
-		List<LedgerCategory> balSheetCats = sessionFactory.getCurrentSession()
+		List<LedgerCategory> ledgerCats = sessionFactory.getCurrentSession()
 				.createQuery(" from LedgerCategory WHERE id != ?")
 				.setParameter(0, id)
 				.list();
-		return balSheetCats;
+		return ledgerCats;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -66,11 +70,27 @@ public class LedgerCatDaoImpl implements LedgerCatDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<LedgerCategory> fetchAllByOrg(int orgID) {
-		List<LedgerCategory> balSheetCats = sessionFactory.getCurrentSession()
+		List<LedgerCategory> ledgerCats = sessionFactory.getCurrentSession()
 				.createQuery(" from LedgerCategory WHERE organisation_id = ?")
 				.setParameter(0, orgID)
 				.list();
 		
-		return balSheetCats;
+		return ledgerCats;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<LedgerCategory> fetchByLedgType(ArrayList<Integer> ledgerTypes) {
+		
+		for (int i : ledgerTypes) {
+			System.out.println(i);
+		}
+		List<LedgerCategory> ledgerCats = sessionFactory.getCurrentSession()
+				.createQuery(" from LedgerCategory WHERE organisation_id = ? AND ledger_type IN ( :types )")
+				.setParameter(0, this.userIdentity.getOrganisation().getId())
+				.setParameterList("types", ledgerTypes)
+				.list();
+		
+		return ledgerCats;
 	}
 }

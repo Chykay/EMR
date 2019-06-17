@@ -17,7 +17,7 @@ public class GLPostingForm {
 
 	private String postingDate;
 	
-	private String pDate;
+
 	
 	private float rAmount;
 	
