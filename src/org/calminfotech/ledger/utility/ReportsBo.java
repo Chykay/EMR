@@ -113,14 +113,12 @@ public class ReportsBo {
 		
 		if (chartType.equals("balSheet")) {
 			ledgerTypes.add(1);
-			ledgerTypes.add(2);
-			ledgerCategories = this.ledgerCatBo.fetchByLedgType(ledgerTypes);
-			
+			ledgerTypes.add(2);			
 		} else {
 			ledgerTypes.add(4);
 			ledgerTypes.add(5);
-			ledgerCategories = this.ledgerCatBo.fetchByLedgType(ledgerTypes);
 		}
+		ledgerCategories = this.ledgerCatBo.fetchByLedgType(ledgerTypes);
 		
 		List<AccChartEntry> rootBalSheets = new ArrayList<AccChartEntry>();
 		List<AccChartEntry> descBalSheets = new ArrayList<AccChartEntry>();
@@ -194,6 +192,7 @@ public class ReportsBo {
 		
 		for (AccChartEntry accChartEntry : descBalSheets) {
 			if(accChartEntry.getParentID() == parentID){
+				accChartEntry.setAccChartEntries(new ArrayList<AccChartEntry>());
 				AccChartEntry returnedSelf = this.getChildCoA(descBalSheets, accChartEntry.getId(), type, chartType);
 				
 				if (returnedSelf.getAccChartEntries().size() > 0) {
@@ -205,12 +204,9 @@ public class ReportsBo {
 					if (returnedSelf.getAccChartEntries().size() > 0) {
 						if (type.equals("full")) {
 							accChartEntry.setAccChartEntries(returnedSelf.getAccChartEntries());
-						} else {
-							accChartEntry.setAccChartEntries(new ArrayList<AccChartEntry>());
-						}
+						} 
 						accChartEntry.setHasChildren(1);
 					} else {
-						accChartEntry.setAccChartEntries(new ArrayList<AccChartEntry>());
 						accChartEntry.setHasChildren(-1);
 					}
 				}
