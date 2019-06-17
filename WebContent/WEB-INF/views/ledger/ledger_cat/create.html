@@ -56,10 +56,26 @@
 					<option value="0">NONE</option>
 						<option th:each="ledgerCat: ${ledgerCats}" 
 					th:value = "${ledgerCat.id}" 
-					th:text="${ledgerCat.name}">Parent Name</option>
+					th:text="${ledgerCat.name}"
+					th:id="${ledgerCat.ledgerType}">Parent Name</option>
 				</select>
 				<span class="text-danger" th:if="${#fields.hasErrors('parentID')}"
 					th:errors="*{parentID}">
+				</span>
+			</div>
+		</div>
+		
+		
+		<div class="form-group">
+			<label for="gender" class="col-sm-3 control-label no-padding-right">Ledger Type:</label>
+			<div class="col-sm-9">
+				<select th:field="*{ledgerType}" class="col-xs-10 col-sm-5"  required="required">
+						<option th:each="ledgerType: ${ledgerTypes}" 
+					th:value = "${ledgerType.id}" 
+					th:text="${ledgerType.name}">Ledger Type</option>
+				</select>
+				<span class="text-danger" th:if="${#fields.hasErrors('ledgerType')}"
+					th:errors="*{ledgerType}">
 				</span>
 			</div>
 		</div>
@@ -77,3 +93,12 @@
 		</div>
 	</form>
 </div>
+
+
+<script>
+/*
+ * 
+ use the th:id to get the parent_ledgerType and set ledger type where id = parent_ledgerType
+ add the CDATA nonsense oo
+ */
+</script>

@@ -105,7 +105,7 @@ public class ReportsBo {
 	}
 
 
-	public BranchAccChart getBranchBalSheet(int branchID, String type, String chartType) {
+	public BranchAccChart getBranchCoA(int branchID, String type, String chartType) {
 		List<LedgerCategory> ledgerCategories = this.ledgerCatBo.fetchAllByOrg(branchID);
 		List<AccChartEntry> rootBalSheets = new ArrayList<AccChartEntry>();
 		List<AccChartEntry> descBalSheets = new ArrayList<AccChartEntry>();
@@ -127,7 +127,7 @@ public class ReportsBo {
 		}
 		
 		for (AccChartEntry accChartEntry : rootBalSheets) {
-			AccChartEntry self = this.getBalSheets(descBalSheets, accChartEntry.getId(), type, chartType);
+			AccChartEntry self = this.getChildCoA(descBalSheets, accChartEntry.getId(), type, chartType);
 			if (self.getAccChartEntries().size() > 0) {
 				accChartEntry.setAccChartEntries(self.getAccChartEntries());
 				accChartEntry.setTotBalance(self.getTotBalance());
@@ -172,20 +172,20 @@ public class ReportsBo {
 	}
 
 
-	private AccChartEntry getBalSheets(List<AccChartEntry> descBalSheets, int parentID, String type, String chartType) {
+	private AccChartEntry getChildCoA(List<AccChartEntry> descBalSheets, int parentID, String type, String chartType) {
 		List<AccChartEntry> children = new ArrayList<AccChartEntry>();
 		AccChartEntry parent = new AccChartEntry();
 		float totBalance = 0;
 		
 		for (AccChartEntry accChartEntry : descBalSheets) {
 			if(accChartEntry.getParentID() == parentID){
-				AccChartEntry returnedSelf = this.getBalSheets(descBalSheets, accChartEntry.getId(), type, chartType);
+				AccChartEntry returnedSelf = this.getChildCoA(descBalSheets, accChartEntry.getId(), type, chartType);
 				
 				if (returnedSelf.getAccChartEntries().size() > 0) {
 					accChartEntry.setAccChartEntries(returnedSelf.getAccChartEntries());
 					accChartEntry.setHasChildren(1);
 				} else {
-					returnedSelf = this.getLedgers(accChartEntry.getId(), type, chartType);
+					returnedSelf = this.getChildLedgers(accChartEntry.getId(), type, chartType);
 					
 					if (returnedSelf.getAccChartEntries().size() > 0) {
 						if (type.equals("full")) {
@@ -212,7 +212,7 @@ public class ReportsBo {
 	}
 
 
-	private AccChartEntry getLedgers(Integer parentID, String type, String chartType) {
+	private AccChartEntry getChildLedgers(Integer parentID, String type, String chartType) {
 		AccChartEntry parent = new AccChartEntry();
 		List<AccChartEntry> accChartEntries = new ArrayList<AccChartEntry>();
 		List<LedgerAccount> childLedgers = new ArrayList<LedgerAccount>();
@@ -246,14 +246,14 @@ public class ReportsBo {
 	}
 
 	
-	public CompanyAccChart getCompanyBalSheet(int comp_id, String type, String chartType) {
+	public CompanyAccChart getCompanyCoA(int comp_id, String type, String chartType) {
 		
 		List<Organisation> organisations = this.organisationBo.fetchAll(comp_id);
 		CompanyAccChart companyAccChart = new CompanyAccChart();
 		List<BranchAccChart> branchAccCharts = new ArrayList<BranchAccChart>();
 		
 		for (Organisation organisation : organisations) {
-			BranchAccChart branchAccChart = this.getBranchBalSheet(organisation.getId(), type, chartType);
+			BranchAccChart branchAccChart = this.getBranchCoA(organisation.getId(), type, chartType);
 			branchAccCharts.add(branchAccChart);
 		}
 		

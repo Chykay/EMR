@@ -9,6 +9,8 @@ public class LedgerCatForm {
 	private Integer parentID;
 	
 	private Integer isActive;
+	
+	private Integer ledgerType;
 
 	public Integer getIsActive() {
 		return isActive;
@@ -42,5 +44,15 @@ public class LedgerCatForm {
 	public void setId(Integer id) {
 		this.id = id;
 	}
+
+	public Integer getLedgerType() {
+		return ledgerType;
+	}
+
+	public void setLedgerType(Integer ledgerType) {
+		this.ledgerType = ledgerType;
+	}
+	
+	
 
 }
