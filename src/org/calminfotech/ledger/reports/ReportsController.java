@@ -96,10 +96,12 @@ public class ReportsController {
 	@Layout("layouts/reportblank")
 	@RequestMapping(value = "/bal_sheet/branch/{branchID}/{type}", method = RequestMethod.GET)
 	public String branchBalSheet(Model model, @PathVariable int branchID, @PathVariable String type) {
-		
+
 		model.addAttribute("branchBS", this.reportsBo.getBranchBalSheet(branchID, type, "balSheet"));
+		//model.addAttribute("branchBS", this.reportsBo.getBranchBalSheet2());
 		return "ledger/reports/bal_sheet/branch";
 	}
+	
 	
 	@Layout("layouts/reportblank")
 	@RequestMapping(value = "/bal_sheet/{companyID}/{type}", method = RequestMethod.GET)

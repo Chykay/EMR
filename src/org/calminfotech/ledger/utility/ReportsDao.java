@@ -44,7 +44,6 @@ public class ReportsDao {
 			
        List<LedgerAccount> list = (List<LedgerAccount>) query.list();  
        
-       System.out.println("category: " + categoryID + " :Size: " + list.size());
        
        return list;
 

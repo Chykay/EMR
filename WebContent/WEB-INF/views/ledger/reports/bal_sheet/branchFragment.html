@@ -10,7 +10,7 @@
 			</th:block>
 			<th:block  th:case="1">
 				<tr  >
-					<td th:text="${balSheetItem.name}"></td>
+					<td colspan="3" th:text="${balSheetItem.name}"></td>
 				</tr>
 				<tr>
 					
@@ -25,13 +25,13 @@
 			    </tr>
 			</th:block>
 			<th:block  th:case="-1">
-				<tr >
+				<!-- <tr >
 					<td th:text="${balSheetItem.name}"></td>
 				</tr>
 				
 			    <tr>
 			    	<td>No Ledgers Added to this category</td>
-			    </tr>
+			    </tr> -->
 			</th:block>
 			
 	    </th:block>

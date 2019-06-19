@@ -141,33 +141,6 @@ public class ReportsBo {
 		branchAccChart.setAccChartEntries(rootBalSheets);
 		branchAccChart.setName(this.organisationBo.getOrganisationById(branchID).getName());
 		
-		
-		/*for (BalanceSheet balanceSheet : rootBalSheets) {
-			System.out.println(balanceSheet.getName() + ":" + balanceSheet.getHasChildren());
-			if (balanceSheet.getAccChartEntries().size() > 0) {
-				for (BalanceSheet balanceSheet2 : balanceSheet.getAccChartEntries()) {
-					System.out.println("  " + balanceSheet2.getName() + ":" + balanceSheet2.getHasChildren());
-					if (balanceSheet2.getAccChartEntries().size() > 0) {
-						for (BalanceSheet balanceSheet3 : balanceSheet2.getAccChartEntries()) {
-							System.out.println("    " + balanceSheet3.getName() + ":" + balanceSheet3.getHasChildren());
-							if (balanceSheet3.getAccChartEntries().size() > 0) {
-								for (BalanceSheet balanceSheet4 : balanceSheet3.getAccChartEntries()) {
-									System.out.println("    " + balanceSheet4.getName() + ": " + balanceSheet4.getHasChildren());
-									
-								}
-							} else {
-								System.out.println("  no children" );
-							}
-						}
-					} else {
-						System.out.println("  no children" );
-					}
-				}
-			} else {
-				System.out.println("no children" );
-
-			}
-		}*/
 		return branchAccChart;	
 	}
 
@@ -261,5 +234,5 @@ public class ReportsBo {
 		companyAccChart.setName(this.userIdentity.getOrganisation().getOrgCoy().getName());
 		
 		return companyAccChart;
-	}	
+	}
 }

@@ -412,7 +412,9 @@
 		 <mapping class="org.calminfotech.ledger.reports.models.BranchTB" />
 		 <mapping class="org.calminfotech.ledger.reports.models.CompanyAccChart" />
 		 <mapping class="org.calminfotech.ledger.reports.models.CompanyTB" />
+		 <mapping class="org.calminfotech.ledger.reports.models.LedgerReport" />
 		 <mapping class="org.calminfotech.ledger.reports.models.TrialBalEntry" />
+		 
 		 
 		 
 	</session-factory>
