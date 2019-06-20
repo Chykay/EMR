@@ -28,7 +28,6 @@ public class LedgerAccBoImpl implements LedgerAccBo {
 		try {
 			
 			list = this.ledgerAccDao.fetchAll(branch_id, company_id);	
-			System.out.println(branch_id + " : " + company_id + " : " + list.get(0).getAccountNo());
 		} catch (Exception e) {
 			System.out.println("null");
 		}

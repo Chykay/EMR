@@ -22,4 +22,6 @@ public interface SettingDao {
 
 	public SettingsAssignment fetchsettings(String code, Integer orgId);
 
+	public List<String> fetchAllGLSettings(int company_id);
+
 }

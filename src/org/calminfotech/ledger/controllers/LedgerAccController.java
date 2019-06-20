@@ -5,12 +5,12 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.calminfotech.ledger.boInterface.LedgerCatBo;
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
+import org.calminfotech.ledger.boInterface.LedgerCatBo;
 import org.calminfotech.ledger.boInterface.TotAccBo;
 import org.calminfotech.ledger.forms.LedgerAccForm;
-import org.calminfotech.ledger.models.LedgerCategory;
 import org.calminfotech.ledger.models.LedgerAccount;
+import org.calminfotech.ledger.models.LedgerCategory;
 import org.calminfotech.ledger.models.TotalingAccount;
 import org.calminfotech.system.models.Organisation;
 import org.calminfotech.user.utils.UserIdentity;
@@ -59,8 +59,6 @@ public class LedgerAccController {
 			model.addAttribute("accounts", ledgerAccounts);
 		} 
 		
-		System.out.println(this.ledgerAccBo.fetchAll(org.getId(), org.getOrgCoy().getId()));
-		// model.addAttribute("id", id);
 		return "/ledger/ledger_acc/index";
 	}
 	
