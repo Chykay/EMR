@@ -22,6 +22,8 @@ public class AccChartEntry {
 	
 	private Integer hasChildren;
 	
+	private Integer show;
+	
 	@OneToMany
 	private List<AccChartEntry> accChartEntries;
 
@@ -80,6 +82,14 @@ public class AccChartEntry {
 
 	public void setHasChildren(Integer hasChildren) {
 		this.hasChildren = hasChildren;
+	}
+
+	public Integer getShow() {
+		return show;
+	}
+
+	public void setShow(Integer show) {
+		this.show = show;
 	}
 	
 	
