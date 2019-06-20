@@ -49,7 +49,7 @@
       </tr>
     </thead>
     <tbody>
-     <th:block th:replace="ledger/reports/bal_sheet/branchFragment :: branch(balSheetList=${branchBS.accChartEntries})">Balance Sheet</th:block>
+     <th:block th:replace="ledger/reports/bal_sheet/branchFragment :: branch(balSheetList=${branchBS.accChartEntries}, margin=0)">Balance Sheet</th:block>
 
     </tbody>
   </table>

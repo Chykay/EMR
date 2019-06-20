@@ -43,7 +43,7 @@
       </tr>
     </thead>
     <tbody>
-     <th:block th:replace="ledger/reports/P_L/branchFragment :: branch(PandLList=${branchPL.accChartEntries})">Balance Sheet</th:block>
+     <th:block th:replace="ledger/reports/P_L/branchFragment :: branch(PandLList=${branchPL.accChartEntries}, margin=0)">P and L</th:block>
 
     </tbody>
   </table>

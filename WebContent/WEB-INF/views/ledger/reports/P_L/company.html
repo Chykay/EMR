@@ -28,13 +28,13 @@
 <br></br>
 <br></br>
 <br></br>
-<p style="float: center;"><h4>Balance Sheet For <span th:text="${companyPL.name}"></span></h4></p>
+<p style="float: center;"><h4>P and L For <span th:text="${companyPL.name}"></span></h4></p>
 
 	
 	
 <th:block th:each=" branchPL : ${companyPL.branchAccCharts}">
 
-  <p style="float: center;"><h4>Balance Sheet For <span th:text="${branchPL.name}"></span></h4></p>
+  <p style="float: center;"><h4>P and L For <span th:text="${branchPL.name}"></span></h4></p>
 
 
 <table class="table table-condensed" id="printtable">
@@ -49,7 +49,7 @@
       </tr>
     </thead>
     <tbody>
-     <th:block th:replace="ledger/reports/P_L/branchFragment :: branch(balSheetList=${branchPL.accChartEntries})">Balance Sheet</th:block>
+     <th:block th:replace="ledger/reports/P_L/branchFragment :: branch(PandLList=${branchPL.accChartEntries}, margin=0)">P and L</th:block>
 
     </tbody>
   </table>
