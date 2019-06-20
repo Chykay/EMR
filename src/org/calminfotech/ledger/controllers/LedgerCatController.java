@@ -73,10 +73,10 @@ public class LedgerCatController {
 	public String create(Model model) {		
 		
 		List<LedgerCategory> ledgerCats = this.ledgerCatBo.fetchAll();
-		List<LedgerType> ledgerTypes = this.ledgerTypesImpl.fetchAll();
+		//List<LedgerType> ledgerTypes = this.ledgerTypesImpl.fetchAll();
 		
 		model.addAttribute("ledgerCats", ledgerCats);
-		model.addAttribute("ledgerTypes", ledgerTypes);
+		//model.addAttribute("ledgerTypes", ledgerTypes);
 		model.addAttribute("account", new LedgerCatForm());
 		return "/ledger/ledger_cat/create";
 	}

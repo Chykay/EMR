@@ -1,11 +1,9 @@
 package org.calminfotech.ledger.daoImpl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.calminfotech.ledger.daoInterface.LedgerCatDao;
 import org.calminfotech.ledger.models.LedgerCategory;
-import org.calminfotech.user.utils.UserIdentity;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -14,9 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class LedgerCatDaoImpl implements LedgerCatDao {
-	
+/*	
 	@Autowired
-	private UserIdentity userIdentity;
+	private UserIdentity userIdentity;*/
 	
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -78,7 +76,7 @@ public class LedgerCatDaoImpl implements LedgerCatDao {
 		return ledgerCats;
 	}
 	
-	@SuppressWarnings("unchecked")
+/*	@SuppressWarnings("unchecked")
 	@Override
 	public List<LedgerCategory> fetchByLedgType(ArrayList<Integer> ledgerTypes) {
 		
@@ -92,5 +90,5 @@ public class LedgerCatDaoImpl implements LedgerCatDao {
 				.list();
 		
 		return ledgerCats;
-	}
+	}*/
 }

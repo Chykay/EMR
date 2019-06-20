@@ -5,9 +5,11 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.calminfotech.ledger.boInterface.JournalBo;
+import org.calminfotech.ledger.boInterface.LedgerAccBo;
 import org.calminfotech.ledger.forms.JournalForm;
 import org.calminfotech.ledger.models.JournalEntry;
 import org.calminfotech.ledger.models.JournalHeader;
+import org.calminfotech.ledger.models.LedgerAccount;
 import org.calminfotech.ledger.utility.LedgerException;
 import org.calminfotech.system.boInterface.OrganisationBo;
 import org.calminfotech.system.models.Organisation;
@@ -51,6 +53,9 @@ public class JournalController {
 
 	@Autowired
 	private UserIdentity userIdentity;
+
+	@Autowired
+	private LedgerAccBo ledgerAccBo;
 
 	
 	/* GET ALL JOURNAL ENTRIES*/
@@ -110,23 +115,27 @@ public class JournalController {
 		JournalForm journalForm = new JournalForm();
 		JournalHeader journalHeader = null;
 		List<JournalEntry> journalEntries = null;
+		
 		try {
 			journalHeader = this.journalBo.getJournalHeader(journalID);
 			journalEntries = this.journalBo.getJournalEntriesByJournalID(journalID);
 		} catch (LedgerException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		
-		
 		journalForm.setJournalHeader(journalHeader);
 		if (journalEntries == null) {
+			System.out.println("null");
 			model.addAttribute("journalEntries", new JournalEntry());
 		} else {
+			System.out.println("not null" + journalEntries.get(0).getAccountNo());
+			
 			model.addAttribute("journalEntries", journalEntries);
 		}
-		
+
+		Organisation org = userIdentity.getOrganisation();
+		List<LedgerAccount> ledgerAccounts = this.ledgerAccBo.fetchAll(org.getId(), org.getOrgCoy().getId());
+		model.addAttribute("generalLedgers", ledgerAccounts);
 		model.addAttribute("journalHeader", journalHeader);
 		return "/ledger/gen_ledger/journal/edit";
 	}

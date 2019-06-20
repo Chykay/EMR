@@ -8,7 +8,6 @@ import java.util.List;
 import org.calminfotech.ledger.boInterface.CustomerAccBo;
 import org.calminfotech.ledger.boInterface.GenLedgerBo;
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
-import org.calminfotech.ledger.models.CustomerAccount;
 import org.calminfotech.ledger.models.CustomerEntry;
 import org.calminfotech.ledger.models.GLEntry;
 import org.calminfotech.ledger.models.LedgerAccount;
@@ -96,7 +95,6 @@ public class APIUtilityController {
 		Organisation org = this.userIdentity.getOrganisation();
 		
 		String accounts = "";
-		if (account_type.contains("GA")) {
 			List<LedgerAccount> ledgerAccounts = this.ledgerAccBo.fetchAll(org.getId(), org.getOrgCoy().getId());
 			
 			for (LedgerAccount ledgerAccount : ledgerAccounts) {
@@ -104,13 +102,7 @@ public class APIUtilityController {
 						+ ledgerAccount.getAccountNo().concat("-") + ledgerAccount.getName() + "</option>";
 			}
 			
-		} else {
-			List<CustomerAccount> customerAccounts = this.customerAccBo.fetchAll(org.getId(), org.getOrgCoy().getId());
-			for (CustomerAccount customerAccount : customerAccounts) {
-				accounts += "<option value='" + customerAccount.getAccountNo() + "'>"
-						+ customerAccount.getAccountNo() + "</option>";
-			}
-		}
+			
 		return accounts;
 	}
 	

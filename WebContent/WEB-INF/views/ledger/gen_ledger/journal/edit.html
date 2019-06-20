@@ -39,20 +39,25 @@
 		<button type="submit" class="btn btn-success" id="save">Save Entries</button>
 	 	<button type="submit" class="btn btn-default" id="post">Post Entries</button>
 	
-		 <div th:each="journalEntry : ${journalEntries}" class=" journal">
-		    <select class="accountType" required="required">
+		 <div th:each="journalEntry : ${journalEntries}" class=" journal nothing">
+		    <!-- <select class="accountType" required="required">
 		        <option th:value="${journalEntry.accountType}">Select..</option>
 		        <option value="CA">Customer</option>
 		        <option value="GA">GL</option>
-		    </select>
-		    <div style="display:inline-table;"> 
+		    </select> -->
+		    <select class="accountNo" id="accountNo"  style="margin-top:0px; width: 120px;"  required="required"  th:value="${journalEntry.accountNo}" >
+		    		<option th:each="generalLedger: ${generalLedgers}" 
+							th:value="${generalLedger.id}"
+							th:text="${generalLedger.name}"></option>
+			</select>
+		   <!--  <div style="display:inline-table;"> 
 		    	 <input type="text" class="accountNoSearch" id="accountNoSearch" placeholder="account no" th:value="${journalEntry.accountNo}" required="required" disabled="disabled"/>
-		    	 <select class="accountNo" id="accountNo"  style="margin-top:0px; display:none; width: 120px;"  required="required"  th:value="${journalEntry.accountNo}" >
+		    	 <select class="accountNo" id="accountNo"  style="margin-top:0px; width: 120px;"  required="required"  th:value="${journalEntry.accountNo}" >
 		    		<option th:value="${journalEntry.accountNo}" selected="selected">Select..</option>
 				</select>
 				
 				<button type="button" class="custSearch btn btn-xs btn-primary" hidden="hidden">searcn</button> 
-		   	</div>
+		   	</div> -->
 		    <select id="postCode" required="required">
 		        <option th:value="${journalEntry.postCode}">Select..</option>
 		        <option value="DR">GL Debit</option>

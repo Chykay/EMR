@@ -14,8 +14,8 @@ public class JournalEntry extends CommonLedger {
 	@Column(name="id")
 	private Integer id;
 
-	@Column(name="account_type")
-	private String accountType;
+	/*@Column(name="account_type")
+	private String accountType;*/
 
 	@Column(name="account_no")
 	private String accountNo;
@@ -46,14 +46,14 @@ public class JournalEntry extends CommonLedger {
 		this.id = id;
 	}
 
-	public String getAccountType() {
+/*	public String getAccountType() {
 		return accountType;
 	}
 
 	public void setAccountType(String accountType) {
 		this.accountType = accountType;
 	}
-
+*/
 	public String getAccountNo() {
 		return accountNo;
 	}

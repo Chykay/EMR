@@ -8,7 +8,6 @@ import org.calminfotech.ledger.boInterface.GenLedgerBo;
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
 import org.calminfotech.ledger.daoInterface.GenLedgerDao;
 import org.calminfotech.ledger.forms.GLPostingForm;
-import org.calminfotech.ledger.models.CustomerAccount;
 import org.calminfotech.ledger.models.CustomerEntry;
 import org.calminfotech.ledger.models.GLEntry;
 import org.calminfotech.ledger.models.GenLedgBalance;
@@ -64,9 +63,8 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		GLEntry gLEntry2 = new GLEntry();
 		
 		String batch_no = LedgerUtility.getBatchNo();
-		String account1 = glPostingForm.getPAccountType();
-		String account2 = glPostingForm.getRAccountType();
-		System.out.println("account1: " + account1 + " : account2: " + account2);
+		/*String account1 = glPostingForm.getPAccountType();
+		String account2 = glPostingForm.getRAccountType();*/
 		
 		
 		gLEntry1.setCreate_date(new Date(System.currentTimeMillis()));
@@ -97,7 +95,7 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		gLEntry2.setPostingDate(DateUtils.formatStringToDate(glPostingForm.getPostingDate()));
 		
 		
-		if (account1.equals("CA")) {
+		/*if (account1.equals("CA")) {
 			CustomerEntry customerEntry= new CustomerEntry();
 			customerEntry.setAccountNo(glPostingForm.getPAccountNo());
 			customerEntry.setAmount(Float.parseFloat(glPostingForm.getAmount().replace(",", "")));
@@ -127,11 +125,11 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 			gLEntry1.setBranch(customerAccount.getOrganisation().getId());
 			gLEntry1.setProductID(glPostingForm.getPAccountNo());
 			gLEntry1.setAccountNo(customerGl);
-		} else {
-			gLEntry1.setBranch(this.organisationBo.getOrganisationById(glPostingForm.getPBranchID()).getId());
-		}
+		} else {*/
+		gLEntry1.setBranch(this.organisationBo.getOrganisationById(glPostingForm.getPBranchID()).getId());
+		//}
 		
-		if (account2.equals("CA")) {
+		/*if (account2.equals("CA")) {
 			System.out.println("customer account 2 ");
 			CustomerEntry customerEntry= new CustomerEntry();
 			customerEntry.setAmount(Float.parseFloat(glPostingForm.getAmount().replace(",", "")));
@@ -156,10 +154,10 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 			gLEntry2.setBranch(customerAccount.getOrganisation().getId());
 			gLEntry2.setProductID(glPostingForm.getPAccountNo());
 			gLEntry2.setAccountNo(customerGl);
-		} else {
+		} else {*/
 			
 			gLEntry2.setBranch(this.organisationBo.getOrganisationById(glPostingForm.getRBranchID()).getId());
-		}
+		//}
 
 
 		this.GLEntry(gLEntry1);

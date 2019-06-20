@@ -50,12 +50,6 @@ public class GLEntry extends CommonLedger {
 	@Column(name="posting_date")
 	@Temporal(TemporalType.DATE)
 	private Date postingDate;
-	
-	@Column(name="product_id")
-	private String productID;
-	
-	@Column(name="product_type")
-	private String productType;
 
 	public int getId() {
 		return id;
@@ -145,21 +139,5 @@ public class GLEntry extends CommonLedger {
 
 	public void setPostingDate(Date postingDate) {
 		this.postingDate = postingDate;
-	}
-
-	public String getProductID() {
-		return productID;
-	}
-
-	public void setProductID(String productID) {
-		this.productID = productID;
-	}
-
-	public String getProduct_type() {
-		return productType;
-	}
-
-	public void setProduct_type(String productType) {
-		this.productType = productType;
 	}
 }

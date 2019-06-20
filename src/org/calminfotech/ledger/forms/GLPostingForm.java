@@ -39,9 +39,9 @@ public class GLPostingForm {
 	
 	private String refNo3;
 
-	private String pAccountType;
+	/*private String pAccountType;
 
-	private String rAccountType;
+	private String rAccountType;*/
 	
 	private String currency = "NGN";
 
@@ -200,7 +200,7 @@ public class GLPostingForm {
 		this.postingDate = postingDate;
 	}
 
-	public String getPAccountType() {
+/*	public String getPAccountType() {
 		return pAccountType;
 	}
 	
@@ -214,7 +214,7 @@ public class GLPostingForm {
 
 	public void setRAccountType(String rAccountType) {
 		this.rAccountType = rAccountType;
-	}
+	}*/
 
 	
 	

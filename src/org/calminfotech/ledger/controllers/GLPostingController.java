@@ -5,9 +5,11 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.calminfotech.ledger.boInterface.GenLedgerBo;
+import org.calminfotech.ledger.boInterface.LedgerAccBo;
 import org.calminfotech.ledger.daoImpl.PostCodeDaoImpl;
 import org.calminfotech.ledger.forms.GLPostingForm;
 import org.calminfotech.ledger.models.GLEntry;
+import org.calminfotech.ledger.models.LedgerAccount;
 import org.calminfotech.ledger.models.PostCode;
 import org.calminfotech.ledger.utility.LedgerException;
 import org.calminfotech.system.boInterface.OrganisationBo;
@@ -46,6 +48,9 @@ public class GLPostingController {
 
 	@Autowired
 	private Alert alert;
+	
+	@Autowired
+	private LedgerAccBo ledgerAccBo;
 
 	/*	
 	@Autowired
@@ -83,8 +88,8 @@ public class GLPostingController {
 	}
 	
 	@RequestMapping(value = {"/listings/"}, method=RequestMethod.POST)
-	public String postListings(Model model, @Valid @ModelAttribute("account_no") String account_no,  
-			@Valid @ModelAttribute("start_date") String start_date, @Valid @ModelAttribute("end_date") String end_date) {
+	public String postListings(Model model, @Valid @ModelAttribute("accountNo") String account_no,  
+			@Valid @ModelAttribute("startDate") String start_date, @Valid @ModelAttribute("endDate") String end_date) {
 		
 		
 		List<GLEntry>  glEntries = null;
@@ -119,14 +124,14 @@ public class GLPostingController {
 	@RequestMapping(value = {"/direct/post"}, method=RequestMethod.GET)
 	public String postGl(Model model) {		
 		Organisation org = userIdentity.getOrganisation();
-	/*
-		List<LedgerAccount> ledgerAccounts = this.ledgerAccBo.fetchAll(org.getId(), org.getOrgCoy().getId());*/
+	
+		List<LedgerAccount> ledgerAccounts = this.ledgerAccBo.fetchAll(org.getId(), org.getOrgCoy().getId());
 		List<Organisation> branches = this.organisationBo.fetchAll(org.getOrgCoy().getId());
 		List<PostCode> postCodes = this.postCodeDaoImpl.fetchAll();
 
 		
 		model.addAttribute("posting", new GLPostingForm());
-		/*model.addAttribute("generalLedgers", ledgerAccounts);*/
+		model.addAttribute("generalLedgers", ledgerAccounts);
 		model.addAttribute("postCodes", postCodes);
 		model.addAttribute("branches", branches);
 		return "/ledger/gen_ledger/direct/create";

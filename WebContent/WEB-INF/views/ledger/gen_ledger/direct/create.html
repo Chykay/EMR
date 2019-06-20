@@ -26,7 +26,7 @@
 			th:object="${posting}">
 		<div class="col-md-5 col-md-offset-1">
 			
-				<div class="form-group">
+				<!-- <div class="form-group">
 					<label for="pAccountType" class="col-sm-3 control-label no-padding-right">Account Type:</label>
 					<div class="col-sm-9">
 						<select th:field="*{pAccountType}" size="" class="col-xs-10 col-sm-7" style="margin-top:0px;"  required="required">
@@ -38,7 +38,7 @@
 							th:errors="*{pAccountType}">
 						</span>
 					</div>
-				</div>
+				</div> -->
 						
 							
 				
@@ -61,11 +61,13 @@
 				<div class="form-group">
 					<label for="pAccountNo" class="col-sm-3 control-label no-padding-right">Posting Account:</label>
 					<div class="col-sm-9">
-						<input id="pAccountNoSearch"  name="pAccountNoSearch" class="col-xs-10 col-sm-7" style="margin-bottom:0px;" disabled="disabled"/>
+						<!-- <input id="pAccountNoSearch"  name="pAccountNoSearch" class="col-xs-10 col-sm-7" style="margin-bottom:0px;" disabled="disabled"/>
 						<button class="pCustSearch" hidden="hidden">searcn</button> 
-						<br />
+						<br /> -->
 						<select th:field="*{pAccountNo}" id="pAccountNo" size="" class="col-xs-10 col-sm-7" style="margin-top:0px;"  required="required">
-							
+							<option th:each="generalLedger: ${generalLedgers}" 
+							th:value="${generalLedger.id}"
+							th:text="${generalLedger.name}"></option>
 						</select>
 						<span class="text-danger" th:if="${#fields.hasErrors('pAccountNo')}"
 							th:errors="*{pAccountNo}">
@@ -173,7 +175,7 @@
 		
 		<!-- RECEIVING BRANCH -->
 			<div class="col-md-5 col-md-offset-1">
-				<div class="form-group">
+				<!-- <div class="form-group">
 					<label for="rAccountType" class="col-sm-3 control-label no-padding-right">Account Type:</label>
 					<div class="col-sm-9">
 						<select th:field="*{rAccountType}" size="" class="col-xs-10 col-sm-7" style="margin-top:0px;"  required="required">
@@ -185,14 +187,14 @@
 							th:errors="*{rAccountType}">
 						</span>
 					</div>
-				</div>
+				</div> -->
 				 
 				<div class="form-group">
 					<label for="rAccountNo" class="col-sm-3 control-label no-padding-right">Account:</label>
 					<div class="col-sm-9">
-					<input id="rAccountNoSearch"  name="rAccountNoSearch" class="col-xs-10 col-sm-7" style="margin-bottom:0px;" onkeyup="filterR()" onblur="selectAccountR()" disabled="disabled"/> 
+					<!-- <input id="rAccountNoSearch"  name="rAccountNoSearch" class="col-xs-10 col-sm-7" style="margin-bottom:0px;" onkeyup="filterR()" onblur="selectAccountR()" disabled="disabled"/> 
 					<button class="rCustSearch" hidden="hidden">searcn</button> 
-						<br />
+						<br /> -->
 						
 						<select th:field="*{rAccountNo}" size="" style="margin-top:0px;" class="col-xs-10 col-sm-7"  required="required" >
 							

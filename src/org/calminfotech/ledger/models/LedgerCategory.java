@@ -28,8 +28,8 @@ public class LedgerCategory extends CommonLedger{
 	@Column(name = "is_active")
 	private boolean isActive;
 	
-	@Column(name = "ledger_type")
-	private Integer ledgerType;
+	/*@Column(name = "ledger_type")
+	private Integer ledgerType;*/
 	
 	// column is_parent that gets updated to 1 when it is selected as a parent
 	
@@ -76,13 +76,13 @@ public class LedgerCategory extends CommonLedger{
 		this.isActive = isActive;
 	}
 
-	public Integer getLedgerType() {
+	/*public Integer getLedgerType() {
 		return ledgerType;
 	}
 
 	public void setLedgerType(Integer ledgerType) {
 		this.ledgerType = ledgerType;
-	}
+	}*/
 
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;

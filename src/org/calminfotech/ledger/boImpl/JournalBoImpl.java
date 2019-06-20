@@ -4,18 +4,14 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.calminfotech.ledger.boInterface.CustomerAccBo;
 import org.calminfotech.ledger.boInterface.GenLedgerBo;
 import org.calminfotech.ledger.boInterface.JournalBo;
 import org.calminfotech.ledger.daoInterface.JournalDao;
-import org.calminfotech.ledger.models.CustomerAccount;
-import org.calminfotech.ledger.models.CustomerEntry;
 import org.calminfotech.ledger.models.GLEntry;
 import org.calminfotech.ledger.models.JournalEntry;
 import org.calminfotech.ledger.models.JournalHeader;
 import org.calminfotech.ledger.utility.LedgerException;
 import org.calminfotech.ledger.utility.LedgerUtility;
-import org.calminfotech.system.boInterface.SettingBo;
 import org.calminfotech.user.utils.UserIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,12 +34,13 @@ public class JournalBoImpl implements JournalBo{
 	@Autowired
 	private GenLedgerBo genLedgerBo;
 	
-	@Autowired
+	/*@Autowired
 	private CustomerAccBo cAccBo;
 
 	@Autowired
 	private SettingBo settingBo;
-	/*@Autowired
+
+	@Autowired
 	private OrganisationBo organisationBo;
 
 	@Autowired
@@ -149,8 +146,8 @@ public class JournalBoImpl implements JournalBo{
 		this.removeEntries(journalID);
 		for (JsonElement jsonElement : entries) {
 			JournalEntry journalEntry = new JournalEntry();
-			JsonObject jEntryObj = jsonElement.getAsJsonObject();
-			journalEntry.setAccountType(jEntryObj.get("account_type").getAsString());
+			JsonObject jEntryObj = jsonElement.getAsJsonObject();/*
+			journalEntry.setAccountType(jEntryObj.get("account_type").getAsString());*/
 			journalEntry.setAccountNo(jEntryObj.get("account_no").getAsString());
 			journalEntry.setAmount(Float.parseFloat(jEntryObj.get("amount").getAsString().replace(",", "")));
 			journalEntry.setPostCode(jEntryObj.get("post_code").getAsString());
@@ -209,7 +206,7 @@ public class JournalBoImpl implements JournalBo{
 			gLEntry.setRef_no3(journalID);
 			gLEntry.setBranch(journalEntry.getBranchID());
 			
-			if (journalEntry.getAccountType().contains("CA")) {
+			/*if (journalEntry.getAccountType().contains("CA")) {
 				CustomerEntry customerEntry= new CustomerEntry();
 				customerEntry.setAccountNo(journalEntry.getAccountNo());
 				customerEntry.setAmount(journalEntry.getAmount());
@@ -238,9 +235,8 @@ public class JournalBoImpl implements JournalBo{
 				this.cAccBo.update(customerAccount);
 				
 				gLEntry.setBranch(customerAccount.getOrganisation().getId());
-				gLEntry.setProductID(journalEntry.getAccountNo());
 				gLEntry.setAccountNo(customerGl);
-			} 
+			} */
 			this.genLedgerBo.GLEntry(gLEntry);
 		}
 	}
