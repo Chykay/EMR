@@ -1,40 +1,39 @@
-<th:block xmlns:th="http://www.thymeleaf.org" th:fragment="branch(PandLList)">
+<th:block xmlns:th="http://www.thymeleaf.org" th:fragment="branch(PandLList, margin)">
 	<th:block th:each="PandLItem : ${PandLList}">
-		<th:block th:switch="${PandLItem.hasChildren}">
-			<th:block  th:case="0">
-				<tr>
-					<td th:text="${PandLItem.name}"></td>
-					<td th:text="${PandLItem.accountNo}"></td>
-					<td th:text="${PandLItem.totBalance}"></td>
-				</tr>
-			</th:block>
-			<th:block  th:case="1">
-				<tr  >
-					<td th:text="${PandLItem.name}"></td>
-				</tr>
-				<tr>
+		<th:block th:if="${PandLItem.show} == 1">
+			<th:block th:switch="${PandLItem.hasChildren}">
+				<th:block  th:case="1">
+					<tr >
+						<td colspan="3"><b  th:style="'margin-left:'+@{${margin}}+'px;'" th:text="${PandLItem.name}"></b></td>
+					</tr>
+					<tr>						
+				    	<td  th:case="1" th:replace="ledger/reports/P_L/branchFragment :: branch(PandLList=${PandLItem.accChartEntries}, margin=${margin + 20})">P and L</td>				    	
+					</tr>
 					
-			    	<td  th:case="1" th:replace="ledger/reports/P_L/branchFragment :: branch(PandLList=${PandLItem.accChartEntries})">Balance Sheets</td>
-			    	
-				</tr>
+				    <tr>
+				    	<td colspan="2"><i><span  th:style="'margin-left:'+@{${margin}}+'px;'"  th:text="|Total ${PandLItem.name}:|"></span></i></td>
+				    	<td th:text="${PandLItem.totBalance}"></td>
+				    </tr>
+				</th:block>
+				<th:block  th:case="0">
+					<tr>
+						<td><span  th:style="'margin-left:'+@{${margin}}+'px;'"  th:text="${PandLItem.name}"></span></td>
+						<td th:text="${PandLItem.accountNo}"></td>
+						<td th:text="${PandLItem.totBalance}"></td>
+					</tr>
+				</th:block>
+				<th:block  th:case="-1">
+					<!-- <tr >
+						<td th:text="${PandLItem.name}"></td>
+					</tr>
+					
+				    <tr>
+				    	<td>No Ledgers Added to this category</td>
+				    </tr> -->
+				</th:block>
 				
-			    <tr>
-			    	<td th:text="|Total ${PandLItem.name}:|"></td>
-			    	<td></td>
-			    	<td th:text="${PandLItem.totBalance}"></td>
-			    </tr>
-			</th:block>
-			<th:block  th:case="-1">
-				<tr >
-					<td th:text="${PandLItem.name}"></td>
-				</tr>
-				
-			    <tr>
-			    	<td>No Ledgers Added to this category</td>
-			    </tr>
-			</th:block>
-			
-	    </th:block>
+		    </th:block>
+		</th:block>
 	</th:block>
     
 </th:block>

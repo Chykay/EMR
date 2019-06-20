@@ -96,16 +96,20 @@ public class ReportsController {
 	@Layout("layouts/reportblank")
 	@RequestMapping(value = "/bal_sheet/branch/{branchID}/{type}", method = RequestMethod.GET)
 	public String branchBalSheet(Model model, @PathVariable int branchID, @PathVariable String type) {
+
 		
 		model.addAttribute("branchBS", this.reportsBo.getBranchCoA(branchID, type, "balSheet"));
+
 		return "ledger/reports/bal_sheet/branch";
 	}
+	
 	
 	@Layout("layouts/reportblank")
 	@RequestMapping(value = "/bal_sheet/{companyID}/{type}", method = RequestMethod.GET)
 	public String companyBalSheet(Model model, @PathVariable int companyID, @PathVariable String type) {
 
 		model.addAttribute("companyBS", this.reportsBo.getCompanyCoA(companyID, type, "balSheet"));
+
 		return "ledger/reports/bal_sheet/company";
 	}
 	
@@ -124,6 +128,7 @@ public class ReportsController {
 	public String branchPandL(Model model, @PathVariable int branchID, @PathVariable String type) {
 		
 		model.addAttribute("branchPL", this.reportsBo.getBranchCoA(branchID, type, "PandL"));
+
 		return "ledger/reports/P_L/branch";
 	}
 	
@@ -132,6 +137,7 @@ public class ReportsController {
 	public String companyPandL(Model model, @PathVariable int companyID, @PathVariable String type) {
 
 		model.addAttribute("companyPL", this.reportsBo.getCompanyCoA(companyID, type, "PandL"));
+
 		return "ledger/reports/P_L/company";
 	}
 }

@@ -1,40 +1,39 @@
-<th:block xmlns:th="http://www.thymeleaf.org" th:fragment="branch(balSheetList)">
+<th:block xmlns:th="http://www.thymeleaf.org" th:fragment="branch(balSheetList, margin)">
 	<th:block th:each="balSheetItem : ${balSheetList}">
-		<th:block th:switch="${balSheetItem.hasChildren}">
-			<th:block  th:case="0">
-				<tr>
-					<td th:text="${balSheetItem.name}"></td>
-					<td th:text="${balSheetItem.accountNo}"></td>
-					<td th:text="${balSheetItem.totBalance}"></td>
-				</tr>
-			</th:block>
-			<th:block  th:case="1">
-				<tr  >
-					<td th:text="${balSheetItem.name}"></td>
-				</tr>
-				<tr>
+		<th:block th:if="${balSheetItem.show} == 1">
+			<th:block th:switch="${balSheetItem.hasChildren}">
+				<th:block  th:case="1">
+					<tr >
+						<td colspan="3"><b th:style="'margin-left:'+@{${margin}}+'px;'" th:text="${balSheetItem.name}"></b></td>
+					</tr>
+					<tr>
+				    	<td  th:case="1" th:replace="ledger/reports/bal_sheet/branchFragment :: branch(balSheetList=${balSheetItem.accChartEntries}, margin=${margin + 20})">Balance Sheets</td>
+					</tr>
 					
-			    	<td  th:case="1" th:replace="ledger/reports/bal_sheet/branchFragment :: branch(balSheetList=${balSheetItem.accChartEntries})">Balance Sheets</td>
-			    	
-				</tr>
+				    <tr>
+				    	<td  colspan="2"><i><span  th:style="'margin-left:'+@{${margin}}+'px;'"  th:text="|Total ${balSheetItem.name}:|"></span></i></td>
+				    	<td th:text="${balSheetItem.totBalance}"></td>
+				    </tr>
+				</th:block>
+				<th:block  th:case="0">
+					<tr>
+						<td><span  th:style="'margin-left:'+@{${margin}}+'px;'"  th:text="${balSheetItem.name}"></span></td>
+						<td th:text="${balSheetItem.accountNo}"></td>
+						<td th:text="${balSheetItem.totBalance}"></td>
+					</tr>
+				</th:block>
+				<th:block  th:case="-1">
+					<!-- <tr >
+						<td th:text="${balSheetItem.name}"></td>
+					</tr>
+					
+				    <tr>
+				    	<td>No Ledgers Added to this category</td>
+				    </tr> -->
+				</th:block>
 				
-			    <tr>
-			    	<td th:text="|Total ${balSheetItem.name}:|"></td>
-			    	<td></td>
-			    	<td th:text="${balSheetItem.totBalance}"></td>
-			    </tr>
-			</th:block>
-			<th:block  th:case="-1">
-				<tr >
-					<td th:text="${balSheetItem.name}"></td>
-				</tr>
-				
-			    <tr>
-			    	<td>No Ledgers Added to this category</td>
-			    </tr>
-			</th:block>
-			
-	    </th:block>
+		    </th:block>
+		</th:block>
 	</th:block>
     
 </th:block>

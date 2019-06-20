@@ -415,5 +415,6 @@
 		 <mapping class="org.calminfotech.ledger.reports.models.TrialBalEntry" />
 		 
 		 
+		 
 	</session-factory>
 </hibernate-configuration>
