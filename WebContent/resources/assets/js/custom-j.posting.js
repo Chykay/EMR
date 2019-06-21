@@ -4,7 +4,6 @@ window.branches = "";
 window.random = 1;
 const saveBtn = document.getElementById('save');
 const postBtn = document.getElementById('post');
-//const searchButtons = document.querySelectorAll('.custSearch');
 
 saveBtn.addEventListener('click', (e) => {
 	e.preventDefault();
@@ -17,25 +16,19 @@ postBtn.addEventListener('click', (e) => {
 	onSubmit('post')
 });
  
-/*  for (const searchButton of searchButtons) {
-searchButton.addEventListener('click', function(event) {
-custSearch(searchButton);
-});
-} */
  
 $(document).ready(function(){
 	getBranches();
-	$(".accountNo").select2();
+	$(".accountNo").select2().trigger("change");
+	$(".accountNo").each(function() {
+		$(this).trigger("change.select2");
+	});
 });
    
 
 $('.add').click(function(){
 	div = document.createElement('div');
-
-	//var $src = document.querySelectorAll('.accountNo')[0];
-	var $src = $("#accountNo");
-	//console.log($src, $src2);
-
+	var $src = $("#accountNo0");
 
 	$src.select2("destroy");
 
@@ -66,12 +59,7 @@ $('.add').click(function(){
 	$src.trigger("change.select2");
 	$dup.select2({width: "120px"});
 
-	/*$(".accountNo").each(function() {
-		$(this).select2({width: "120px"});
-		$(this).trigger("change.select2");
-	});*/
 	window.random++;
-	//$src.val("b").trigger("change.select2");
 });
 
 
@@ -91,23 +79,7 @@ function onSubmit(action){
 	$("#form input, textarea, select").each(function(){
 		if ($.trim($(this).val()).length == 0){
 			$(this).addClass("highlight");
-
 			isFormValid = false;
-			/*
-			if($(this)[0].id == "accountNo"){
-				if($(this).parent().parent().find('.accountType option:selected')[0].value != 'CA') {
-					isFormValid = false;
-				}
-				
-				
-			} else if($(this)[0].id == "accountNoSearch") {
-				if($(this).parent().parent().find('.accountType option:selected')[0].value != 'GA') {
-					isFormValid = false;
-					 console.log("no value: IT IS account no IT IS NOT CUSTOMERSELECTED"); 
-				}
-			} else {
-				isFormValid = false;
-			}*/
 				
 		} else {
 			$(this).removeClass("highlight");
@@ -128,19 +100,13 @@ function onSubmit(action){
 			/*let account_type = $(this).find('.accountType option:selected')[0].value;*/
 			  	 	
 			var entry = {
-				"account_no": $(this).find('#accountNo option:selected')[0].value,
+				"account_no": $(this).find('.accountNo option:selected')[0].value,
 				"post_code": $(this).find('#postCode option:selected')[0].value,
 				"branch_id": $(this).find('#branchID option:selected')[0].value,
 				"amount": $(this).find('#amount')[0].value,
 				"ref_no": $(this).find('#refNo')[0].value,
 				"desc": $(this).find('#desc')[0].value
 			};
-			
-			/*if (account_type == "GA"){
-				entry.account_no = $(this).find('#accountNo option:selected')[0].value;
-			} else {
-				entry.account_no = $(this).find('#accountNoSearch')[0].value;
-			}*/
 			 		 
 			journalEntries.push(entry);
 		});
@@ -202,28 +168,31 @@ function getBranches() {
 }
  
 function selectOptions() {
+	
+	
 	$("select").each(function(){
-		var selValue = $(this)[0].value;
-		//var selClass = $(this)[0].className;
+		
+		var selClass = $(this)[0].id;
+			
+		if(selClass == "postCode")
+			var selValue = $(this)[0].value;
+		else
+			var selValue = $(this)[0]["attributes"]["value"]["value"];
+		
+		
+		console.log(selValue);
 		var options = $(this)[0]["options"];
 		
-		/*if(selClass == "accountType") {
-			//console.log("setting up account no");
-			accountSetup($(this).parent(), $(this)[0].value);
-		} else if(selClass == "accountNo") {
-			//console.log
-			//var options = $(this)[0]["options"];
-			console.log(options, $(this));
-		}*/
-
 		
 
-		//console.log("now setting up selected account no");
 		$.each(options, function( index ) {
 			if(this.value == selValue) {
+				console.log(this.value, selValue);
 				this.selected = true;
 			} 
 		});
+		
+		$(this).trigger("change");
 	});
 }
    
@@ -253,8 +222,6 @@ function accountSetup(journalElem, acc_type) {
 		accNoSearchElem.style.display="inline-block";
 		searchBtn.style.display="inline-block";
 
-		/*if(accNoSearchElem.value.length < 1)
-			accNoSearchElem.value = "";*/
 	}
 }
    
@@ -265,11 +232,8 @@ function getAccounts(elem, account_type) {
 			url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/fetch/' + account_type,
 			
 			success : function(value) {
-				/* elem.html(value); */
 				window.generalLedgers = value;
-				
-				
-				
+		
 				getBranches();
 			},
 			error : function() {
@@ -287,57 +251,7 @@ function custSearch(searchBtn) {
 	return false
 }
 
-function updateAccNo(customerAccNo){/*
-	const accNoSearch = window.searchBtn.parent().find('#accountNoSearch')[0];*/
-	accNoSearch.value = customerAccNo;
-}
-
-/*function filter(elem, keyword) {
-	var fleet = elem.next().next()[0];
-	console.log(element, text);
-    var keyword = document.getElementById("pAccountNoSearch").value;
-    var fleet = document.getElementById("pAccountNo");
-    var selSize = 0;
-    for (var i = 0; i < fleet.length; i++) {
-        var txt = fleet.options[i].text.toLowerCase();
-        if (!txt.includes(keyword.toLowerCase())) {
-            fleet.options[i].style.display = 'none';
-        } else {
-            fleet.options[i].style.display = 'list-item';
-            selSize++;
-            fleet.style.width="200px";
-			fleet.size = selSize;
-        }
-    }
-}
-
-function selectAccount(elem, keyword){
-	var fleet = elem.next().next()[0];
-    for (var i = 0; i < fleet.length; i++) {
-        var txt = fleet.options[i].text.toLowerCase();
-        if (!txt.includes(keyword.toLowerCase())) {
-            fleet.options[i].style.display = 'none';
-        } else {
-        	fleet.options[i].selected = true;
-        	elem[0].value = txt;
-        	fleet.size = 0;
-        	
-            break;
-        }
-    }
-}*/
 
 
-
-
-
-/*function insertAccNo(elem, accNo){
-	var selected_option = $('#pAccountNo option:selected');
-	elem.prev().prev()[0].value = selected_option.val(); 
 	
-	var selected_branch = $('#rBranchID option:selected');
-	
-	
-}
-	*/	
 		/*]]>*/
