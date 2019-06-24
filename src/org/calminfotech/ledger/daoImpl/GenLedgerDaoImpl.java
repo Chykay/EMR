@@ -180,6 +180,8 @@ public class GenLedgerDaoImpl implements GenLedgerDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<GLEntry> getGLEntriesListing(String account_no, String start_date, String end_date) {
+
+		System.out.println("dao " + account_no + " : " + start_date + " : " + end_date);
 		List<GLEntry> entries = sessionFactory.getCurrentSession()
 				.createQuery("FROM GLEntry WHERE company_id = ? AND organisation_id = ? AND account_no like '%' + ? + '%'   AND posting_date >= '" + start_date + "'  AND posting_date < '" + end_date + "'")
 				.setParameter(0, userIdentity.getOrganisation().getOrgCoy().getId())

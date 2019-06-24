@@ -24,21 +24,31 @@
 
 <div class="row">
 	<div class="col-xs-12">
-		<form role="form" class="form-horizontal" method="get" style="margin-top:20px;">
+		<form role="form" class="form-horizontal" method="post" style="margin-top:20px;" th:object="${criteria}">
 			<div class="form-group">
 				<label for="accountNo" class="col-sm-2 control-label no-padding-right">GL Account No:</label>
 				<div class="col-sm-3">
-					<input id="accountNo"  name="accountNo"  style="margin-bottom:0px;"   />
+					<input id="accountNo"  th:field="*{accountNo}"  style="margin-bottom:0px;"   />
 				</div>
 				<label for="startDate" class="col-sm-1 control-label no-padding-right">From:</label>
 				<div class="col-sm-2">
-					<input id="startDate"  name="startDate"  style="margin-bottom:0px;" />
+					<div class="clearfix">
+						<input type="text" class="col-xs-12 col-sm-12 date-picker startDate" 
+						th:field="*{startDate}" 
+						id="date-picker-1"
+						data-date-format="yyyy-mm-dd" />
+					</div>
 				</div>
 				<label for="endDate" class="col-sm-1 control-label no-padding-right">To:</label>
 				<div class="col-sm-2">
-					<input id="endDate"  name="endDate_search" style="margin-bottom:0px;" />
+					<div class="clearfix">
+						<input type="text" class="col-xs-12 col-sm-12 date-picker endDate" 
+						th:field="*{endDate}" 
+						id="date-picker-2"
+						data-date-format="yyyy-mm-dd" />
+					</div>
 				</div>
-				<button type="submit" class="btn btn-xs btn-primary">Searcn</button>
+				<button type="submit" class="btn btn-xs btn-primary search">Searcn</button>
 			</div>
 		</form>
 		<div class="table-header">List of Entries </div>
@@ -61,7 +71,7 @@
 
 			<!-- Table body -->
 			<tbody id="tbody">
-				<!-- <tr th:each="glEntry : ${glEntries}">
+				<tr th:each="glEntry : ${glEntries}">
 					<td th:text="${glEntry.accountNo}">Account Number</td>
 					<td th:text="${glEntry.amount}">Amount</td>
 					<td th:text="${glEntry.postCode}">Post Code</td>
@@ -73,15 +83,15 @@
 						
 					<td>
 						
-						<span th:if="${glEntry.ref_no2 != 'REVERSED' and glEntry.ref_no2  != 'REVERSAL' and glEntry.product_id == null}">
+						<span th:if="${glEntry.refNo2 != 'REVERSED' and glEntry.refNo2  != 'REVERSAL'}">
 							<a class="btn btn-xs btn-danger tooltips reverse" 
-								title="Reverse Entry"   th:id="${glEntry.batch_no}" 
+								title="Reverse Entry"   th:id="${glEntry.batchNo}" 
 								href="#"> <i
 									class="fa fa-reply"></i>
 							</a>
 						</span>
 					</td>
-				</tr> -->
+				</tr>
 			</tbody>
 			<!--  Table body END -->
 		</table>
@@ -91,11 +101,33 @@
 
 <script type="text/javascript">
 /*<![CDATA[*/
+$('.date-picker').datepicker({
+	autoclose : true,
+	format: 'yyyy-mm-dd',
+	todayHighlight : true
+})//show datepicker when clicking on the icon
+.next().on(ace.click_event, function() {
+	$(this).prev().focus();
+});
 
-	$(".search").click(function(){
+$(".reverse").click(function(){
+	var batchNo = this.id;
+	
+	$.ajax({
+		type : "GET",
+		url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/gen_ledger/reversal/'	+ batchNo,
+		success : function(value) {
+			//if value is true, then you can't delete 
+		}
+	});
+});
+
+
+
+	/* $(".search").click(function(){
 		var accountNo = $("#accountNo").val();
-		var startDate = $("#startDate").val();
-		var endDate = $("#endDate").val();
+		var startDate = $(".startDate").val();
+		var endDate = $(".endDate").val();
 
 		if(accountNo || startDate || endDate){
 			alert("you must select");
@@ -103,13 +135,14 @@
 			alert("selected all ");
 			$.ajax({
 				type : "GET",
-				url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/gen_ledger/listings/' + accountNo + "/" + startDate + "/"	+ endDate,
+				url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/gen_ledger/listingss/' + accountNo + "/" + startDate + "/"	+ endDate,
 				success : function(value) {
+					console.log(value);
 					$("#tbody").html(value);
 				}
 			});
 		}
-	});
+	}); */
 
 
 /*]]>*/

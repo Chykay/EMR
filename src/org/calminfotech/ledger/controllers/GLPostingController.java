@@ -8,6 +8,7 @@ import org.calminfotech.ledger.boInterface.GenLedgerBo;
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
 import org.calminfotech.ledger.daoImpl.PostCodeDaoImpl;
 import org.calminfotech.ledger.forms.GLPostingForm;
+import org.calminfotech.ledger.forms.LedgerListingForm;
 import org.calminfotech.ledger.models.GLEntry;
 import org.calminfotech.ledger.models.LedgerAccount;
 import org.calminfotech.ledger.models.PostCode;
@@ -83,22 +84,30 @@ public class GLPostingController {
 	
 	@RequestMapping(value = {"/listings"}, method=RequestMethod.GET)
 	public String listings(Model model) {
+		model.addAttribute("criteria", new LedgerListingForm());
 		model.addAttribute("glEntries");
 		return "/ledger/gen_ledger/list";
 	}
 	
-	@RequestMapping(value = {"/listings/"}, method=RequestMethod.POST)
-	public String postListings(Model model, @Valid @ModelAttribute("accountNo") String account_no,  
-			@Valid @ModelAttribute("startDate") String start_date, @Valid @ModelAttribute("endDate") String end_date) {
-		
+	@RequestMapping(value = {"/listings"}, method=RequestMethod.POST)
+	public String postListings(Model model, @Valid @ModelAttribute("criteria") LedgerListingForm criteria) {
+		String start_date = criteria.getStartDate();
+		String end_date = criteria.getEndDate();
+		String account_no = criteria.getAccountNo();
 		
 		List<GLEntry>  glEntries = null;
+
+		System.out.println(account_no + " : " + start_date + " : " + end_date);
+		if (end_date.equals("")) end_date = "2999-01-01";
+		System.out.println(account_no + " : " + start_date + " : " + end_date);
 		try {
 			glEntries = this.genLedgerBo.getGLEntriesListing(account_no, start_date, end_date);
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.err.println("error oo");
 		}
+
+		model.addAttribute("criteria", criteria);
 		model.addAttribute("glEntries", glEntries);
 		
 		

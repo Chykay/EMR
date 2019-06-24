@@ -107,14 +107,15 @@ public class APIUtilityController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = {"/gen_ledger/listings/{account_no}/{start_date}/{end_date}"}, method=RequestMethod.GET, produces = "text/html")
+	@RequestMapping(value = {"/gen_ledger/listingss/{account_no}/{start_date}/{end_date}"}, method=RequestMethod.GET, produces = "text/html")
 	public String getGLListings(@PathVariable("accountNo") String account_no, @PathVariable("startDate") String start_date, @PathVariable("endDate") String end_date){
 		List<GLEntry>  glEntries = null;
+			System.err.println("error oo");
+		if (end_date.equals("")) start_date = "2999-01-01";
 		try {
 			 glEntries = this.genLedgerBo.getGLEntriesListing(account_no, start_date, end_date);
 		} catch (Exception e) {
 			// TODO: handle exception
-			System.err.println("error oo");
 		}
 		
 		String accounts = "<tr>";
