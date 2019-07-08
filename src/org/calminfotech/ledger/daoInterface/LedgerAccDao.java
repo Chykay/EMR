@@ -19,4 +19,6 @@ public interface LedgerAccDao {
 	public void delete(LedgerAccount ledgerAccount);
 	
 	public void update(LedgerAccount ledgerAccount);
+
+	public List<LedgerAccount> getAssetLedgers();
 }

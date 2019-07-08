@@ -393,6 +393,7 @@
 		-->
 		
 		<!-- LEDGER--> 
+		 <mapping class="org.calminfotech.ledger.models.BankAccount" />
 		 <mapping class="org.calminfotech.ledger.models.CommonLedger" />
 		 <mapping class="org.calminfotech.ledger.models.CustomerAccount" />
 		 <mapping class="org.calminfotech.ledger.models.CustomerEntry" />

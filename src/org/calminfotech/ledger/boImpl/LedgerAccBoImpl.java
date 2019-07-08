@@ -113,4 +113,10 @@ public class LedgerAccBoImpl implements LedgerAccBo {
 		this.ledgerAccDao.update(ledgerAccount);
 		return ledgerAccount;
 	}
+
+	@Override
+	public List<LedgerAccount> getAssetLedgers() {
+	
+		return this.ledgerAccDao.getAssetLedgers();
+	}
 }
