@@ -3,9 +3,13 @@ package org.calminfotech.ledger.utility;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.calminfotech.ledger.boInterface.GLSetupBo;
 import org.calminfotech.ledger.boInterface.GenLedgerBo;
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
 import org.calminfotech.ledger.boInterface.LedgerCatBo;
+import org.calminfotech.ledger.forms.LedgerAccForm;
+import org.calminfotech.ledger.forms.LedgerCatForm;
+import org.calminfotech.ledger.models.GLEntry;
 import org.calminfotech.ledger.models.GenLedgBalance;
 import org.calminfotech.ledger.models.LedgerAccount;
 import org.calminfotech.ledger.models.LedgerCategory;
@@ -14,6 +18,7 @@ import org.calminfotech.ledger.reports.models.BranchAccChart;
 import org.calminfotech.ledger.reports.models.BranchTB;
 import org.calminfotech.ledger.reports.models.CompanyAccChart;
 import org.calminfotech.ledger.reports.models.CompanyTB;
+import org.calminfotech.ledger.reports.models.TBReport;
 import org.calminfotech.ledger.reports.models.TrialBalEntry;
 import org.calminfotech.system.boInterface.OrganisationBo;
 import org.calminfotech.system.models.Organisation;
@@ -43,6 +48,9 @@ public class ReportsBo {
 	
 	@Autowired
 	private GenLedgerBo genLedgerBo;
+	
+	@Autowired
+	private GLSetupBo glSetupBo;
 
 	public BranchTB getBranchTB(int org_id) {
 		List<TrialBalEntry> trialBalEntries = new ArrayList<TrialBalEntry>();
@@ -84,7 +92,8 @@ public class ReportsBo {
 		
 		
 		branchTB.setName(this.organisationBo.getOrganisationById(org_id).getName());
-		branchTB.settBalEntries(trialBalEntries);
+		branchTB.setCompanyName(this.organisationBo.getOrganisationById(org_id).getOrgCoy().getName());
+		branchTB.setEntries(trialBalEntries);
 		branchTB.setTotBalance(tot_credit - tot_debit);
 		branchTB.setTotCredit(tot_credit);
 		branchTB.setTotDebit(tot_debit);
@@ -123,6 +132,7 @@ public class ReportsBo {
 		List<AccChartEntry> rootBalSheets = new ArrayList<AccChartEntry>();
 		List<AccChartEntry> descBalSheets = new ArrayList<AccChartEntry>();
 		BranchAccChart branchAccChart = new BranchAccChart();
+		float totbalance = 0;
 		
 		for (LedgerCategory ledgerCategory : ledgerCategories) {
 
@@ -149,9 +159,26 @@ public class ReportsBo {
 				accChartEntry.setTotBalance(self.getTotBalance());
 				accChartEntry.setHasChildren(1);
 			} else {
-				accChartEntry.setAccChartEntries(new ArrayList<AccChartEntry>());
-				accChartEntry.setHasChildren(-1);
+
+				AccChartEntry returnedSelf = this.getChildLedgers(accChartEntry.getId(), type, chartType);
+				
+				if (returnedSelf.getAccChartEntries().size() > 0) {
+					if (type.equals("full")) {
+						accChartEntry.setAccChartEntries(returnedSelf.getAccChartEntries());
+					} else {
+						accChartEntry.setAccChartEntries(new ArrayList<AccChartEntry>());
+					}
+					accChartEntry.setTotBalance(returnedSelf.getTotBalance());
+					accChartEntry.setShow(1);
+					accChartEntry.setHasChildren(1);
+				} else {
+					accChartEntry.setAccChartEntries(new ArrayList<AccChartEntry>());
+					accChartEntry.setHasChildren(-1);
+				}
+				
 			}
+			
+			totbalance += accChartEntry.getTotBalance();
 		}
 		
 		/*for (AccChartEntry accChartEntry : rootBalSheets) {
@@ -182,8 +209,11 @@ public class ReportsBo {
 
 			}
 		}*/
+		
 		branchAccChart.setAccChartEntries(rootBalSheets);
+		branchAccChart.setBalance(totbalance);
 		branchAccChart.setName(this.organisationBo.getOrganisationById(branchID).getName());
+		branchAccChart.setCompanyName(this.userIdentity.getOrganisation().getOrgCoy().getName());
 		
 		return branchAccChart;	
 	}
@@ -240,7 +270,7 @@ public class ReportsBo {
 		float totBalance = 0, balance;
 		
 		if (chartType.equals("balSheet")) {
-			childLedgers = this.reportsDao.getGLBalancesByParent(parentID, "1", "2");
+			childLedgers = this.reportsDao.getGLBalancesByParentR(parentID, "1", "2");
 		} else {
 			childLedgers = this.reportsDao.getGLBalancesByParent(parentID, "4", "5");
 		}
@@ -286,5 +316,95 @@ public class ReportsBo {
 		companyAccChart.setName(this.userIdentity.getOrganisation().getOrgCoy().getName());
 		
 		return companyAccChart;
+	}
+
+
+	public TBReport GLReport(String accountNo) {
+		TBReport tbReport = new TBReport();
+		List<TrialBalEntry> trialBalEntries = new ArrayList<TrialBalEntry>();
+		float totDebit = 0, totCredit = 0;
+		List<GLEntry> glEntries = new ArrayList<GLEntry>();
+		try {
+			glEntries = this.genLedgerBo.getGLEntriesListing(accountNo, "", "2222-09-09");
+		} catch (LedgerException e) {
+			e.printStackTrace();
+		}
+		
+		for (GLEntry glEntry : glEntries) {
+			String postCode = glEntry.getPostCode();
+			float amount = Math.abs(glEntry.getAmount());
+			
+			TrialBalEntry trialBalEntry = new TrialBalEntry();
+			trialBalEntry.setAccountNo(accountNo);
+			trialBalEntry.setName(glEntry.getName());
+			
+			
+			if (postCode.equals("DR")) {
+				trialBalEntry.setDebit(amount);
+				totDebit += amount;
+			} else {
+				trialBalEntry.setCredit(amount);
+				totCredit += amount;
+			}
+				
+			
+			trialBalEntries.add(trialBalEntry);
+		}
+		
+		tbReport.setName(accountNo);
+		tbReport.setEntries(trialBalEntries);
+		tbReport.setTotCredit(totCredit);
+		tbReport.setTotDebit(totDebit);
+		tbReport.setTotBalance(totCredit - totDebit);
+		return tbReport;
+	}
+	
+	public BranchAccChart addReserve(int branchID, String type) {
+		Organisation org = this.userIdentity.getOrganisation();
+		BranchAccChart branchAccChart = new BranchAccChart();
+		float reserve = this.getBranchCoA(branchID, type, "PandL").getBalance();
+		float balance = 0;
+		Boolean removeTemp = null;
+		int catID = 0, ledgerID = 0;
+		
+		LedgerAccount reserveGL = this.glSetupBo.getReserveGL();
+		
+		if (reserveGL == null) {
+			removeTemp = true;
+			// TODO NOt yet complete, try create a new category, get the id, set a field, if field is set, remove the category at the last line, just before the return
+			LedgerCatForm ledgerCatForm = new LedgerCatForm();
+			ledgerCatForm.setName("RESERVE");
+			ledgerCatForm.setParentID(0);
+			catID = this.ledgerCatBo.save(ledgerCatForm).getId();
+			
+			LedgerAccForm ledgerAccForm = new LedgerAccForm();
+			
+			ledgerAccForm.setCode("000");
+			ledgerAccForm.setTotalingCode("0000");
+			ledgerAccForm.setAccountNo("6-0000-000");
+			ledgerAccForm.setLedgerCatID(catID);
+			ledgerAccForm.setName("Reserve");
+			ledgerAccForm.setIsActive(1);
+			
+			ledgerID = this.ledgerAccBo.save(ledgerAccForm).getId();
+		}
+		try {
+			balance = this.genLedgerBo.getBalance(reserveGL.getAccountNo(), org.getId(), org.getOrgCoy().getId()).getCurrBalance();
+			reserveGL.setAmount(reserve - balance);
+			this.genLedgerBo.updateGLBalance(reserveGL, org.getId());
+		} catch (LedgerException e) {
+			e.printStackTrace();
+		}
+		
+		
+		branchAccChart = this.getBranchCoA(branchID, type, "balSheet");
+		
+		
+		if (removeTemp) {
+			this.ledgerCatBo.delete(this.ledgerCatBo.getLedgerById(catID));
+			
+			this.ledgerAccBo.delete(this.ledgerAccBo.getLedgerById(ledgerID));
+		}
+		return branchAccChart;
 	}
 }

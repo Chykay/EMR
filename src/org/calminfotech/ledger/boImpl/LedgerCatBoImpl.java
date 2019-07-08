@@ -47,7 +47,6 @@ public class LedgerCatBoImpl implements LedgerCatBo {
 		
 		
 		ledgerCategory.setOrganisation(userIdentity.getOrganisation());
-		System.out.println(userIdentity.getOrganisation().getId() + " and " + userIdentity.getOrganisation().getOrgCoy().getId());
 		ledgerCategory.setOrgCoy(userIdentity.getOrganisation().getOrgCoy());
 		ledgerCategory.setCreated_by(userIdentity.getUser());
 		ledgerCategory.setCreate_date(new Date(System.currentTimeMillis()));

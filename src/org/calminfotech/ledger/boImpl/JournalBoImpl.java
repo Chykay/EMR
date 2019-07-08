@@ -124,10 +124,11 @@ public class JournalBoImpl implements JournalBo{
 	}
 
 	@Override
-	public void manageJournal(Object journal) throws LedgerException {
+	public boolean manageJournal(Object journal) throws LedgerException {
 		Gson gson = new Gson();
 		JsonParser parser = new JsonParser();
 		String journalID, description, action;
+		float totDebit = 0, totCredit = 0;
 		
         String json = gson.toJson(journal, LinkedHashMap.class);
 		JsonElement jsonTree = parser.parse(json);
@@ -160,6 +161,11 @@ public class JournalBoImpl implements JournalBo{
 			journalEntry.setOrganisation(this.userIdentity.getUser().getOrganisation());
 			journalEntry.setOrgCoy(this.userIdentity.getUser().getOrganisation().getOrgCoy());
 			
+			if (journalEntry.getPostCode().equals("DR")) {
+				totDebit += journalEntry.getAmount();
+			} else {
+				totCredit += journalEntry.getAmount();
+			}
 			try {
 				this.saveJournalEntry(journalEntry);
 			} catch (LedgerException e) {
@@ -168,8 +174,16 @@ public class JournalBoImpl implements JournalBo{
 		}
 		
 		if (action.contains("post")) {
-			this.postJournal(journalID);
+			if (Math.abs(totCredit) - Math.abs(totDebit) == 0) {
+				this.postJournal(journalID);
+				return true;
+			} else {
+				System.out.print("no dice");
+				return false;
+			}
 		}
+		
+		return true;
 		
 	}
 

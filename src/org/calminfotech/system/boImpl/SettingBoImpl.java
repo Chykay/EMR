@@ -75,5 +75,9 @@ public class SettingBoImpl implements SettingBo {
 	public List<String> fetchAllGLSettings(int company_id) {
 		return this.settingDao.fetchAllGLSettings(company_id);
 	}
+	
+	public void update(SettingsAssignment settingsAssignment) {
+		this.settingDao.update(settingsAssignment);
+	}
 
 }

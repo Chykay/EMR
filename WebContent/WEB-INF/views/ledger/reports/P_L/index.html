@@ -48,7 +48,7 @@
 						
 							<a class="btn btn-xs btn-primary tooltips " 
 								title="View P and L"  
-								th:href="@{/ledger/reports/P_L/branch/{id}/{type}(id=${branch.id}, type='min') }"
+								th:href="@{/ledger/reports/P_L/branch/{id}/{type}(id=${branch.id}, type='summary') }"
 								> <i
 									class="fa fa-reply"></i>
 							</a>
@@ -67,7 +67,7 @@
 					<td>
 						<a class="btn btn-xs btn-primary tooltips " 
 								title="View P and L"   
-								th:href="@{/ledger/reports/P_L/{id}/{type}(id=${company.id}, type='min') }"> <i
+								th:href="@{/ledger/reports/P_L/{id}/{type}(id=${company.id}, type='summary') }"> <i
 									class="fa fa-reply"></i>
 							</a>
 						<a class="btn btn-xs btn-success tooltips " 

@@ -144,4 +144,9 @@ public class SettingDaoImpl implements SettingDao {
 
 	}
 
+	@Override
+	public void update(SettingsAssignment settingsAssignment) {
+		 this.sessionFactory.getCurrentSession().saveOrUpdate(settingsAssignment);
+	}
+
 }

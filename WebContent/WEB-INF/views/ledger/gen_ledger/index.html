@@ -31,6 +31,7 @@
 			 <thead>
 				<tr>
 					<th>Account Number</th>
+					<th>Account Name</th>
 					<th>Amount</th>
 					<th>Post Code</th>
 					<th>Branch ID</th>
@@ -46,6 +47,7 @@
 			<tbody>
 				<tr th:each="glEntry : ${glEntries}">
 					<td th:text="${glEntry.accountNo}">Account Number</td>
+					<td th:text="${glEntry.name}">Account Name</td>
 					<td th:text="${glEntry.amount}">Amount</td>
 					<td th:text="${glEntry.postCode}">Post Code</td>
 					<td th:text="${glEntry.branch}">Branch ID</td>
@@ -86,6 +88,35 @@
 			}
 		});
 	});
+	
+
+	jQuery(function($) {
+		var oTable1 = $('#dTable').dataTable({
+			bAutoWidth : false,
+			"aoColumns" : [ {
+				"bSortable" : true
+			},null,	null,
+			 {
+				"bSortable" : true
+			},	null,null,null,null
+		,null	
+			]
+
+		,
+		//"sScrollY": "200px",
+		"bPaginate": true,
+
+		//"sScrollX": "100%",
+		//"sScrollXInner": "120%",
+		//"bScrollCollapse": true,
+		//Note: if you are applying horizontal scrolling (sScrollX) on a ".table-bordered"
+		//you may want to wrap the table inside a "div.dataTables_borderWrap" element
+
+		//"iDisplayLength": 50
+		});
+
+	});
+
 
 
 /*]]>*/

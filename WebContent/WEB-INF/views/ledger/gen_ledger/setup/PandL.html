@@ -1,0 +1,165 @@
+<div class="page-header">
+	<h1>
+		Add New Account
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/ledger/ledger_acc/index}">
+			<i class="fa fa-home"></i> System Dashboard
+		</a> 
+		<a class="btn btn-xs btn-primary" th:href="@{/ledger/ledger_acc/create}">
+			<i class="fa fa-plus-circle"></i> Add Account 
+		</a>
+	
+ 		<span   id="imgId" hidden="hidden" > 
+ 			<img th:src="@{/resources/assets/images/ajax-loader.gif}" id="loading_img" />  
+ 		</span>      
+	</div>
+</div>
+
+
+<div>
+	<form role="form" class="form-horizontal" method="POST"
+			th:object="${account}">
+			
+		<div class="form-group">
+			<label for="gender" class="col-sm-3 control-label no-padding-right">Totaling Account:</label>
+			<div class="col-sm-9">
+				<select th:field="*{totalingCode}" class="col-xs-10 col-sm-5"  required="required">
+					<option value="">Select..</option>
+						<option th:each="totalingAccount: ${totalingAccounts}" 
+					th:value = "${totalingAccount.code}" 
+					th:text="${totalingAccount.code} + '-' + ${totalingAccount.name}">Totaling Code</option>
+				</select>
+				<span class="text-danger" th:if="${#fields.hasErrors('totalingCode')}"
+					th:errors="*{totalingCode}">
+				</span>
+			</div>
+		</div>
+			<input type="hidden" class="col-xs-10 col-sm-5" value="000"
+					th:field="*{code}" required="required" />
+		<!-- <div class="form-group">
+			<label for="code" class="col-sm-3 control-label no-padding-right">Code:</label>
+			<div class="col-sm-9">
+				<input type="text" class="col-xs-10 col-sm-5" placeholder="code"
+					th:field="*{code}" required="required" /> <span
+					class="text-danger" th:if="${#fields.hasErrors('code')}"
+					th:errors="*{code}"></span>
+			</div>
+		</div> -->
+		<div class="form-group">
+			<label for="name" class="col-sm-3 control-label no-padding-right">Name:</label>
+			<div class="col-sm-9">
+				<input type="text" class="col-xs-10 col-sm-5" placeholder="Name"
+					th:field="*{name}" value="Reserve" readonly="readonly" /> <span
+					class="text-danger" th:if="${#fields.hasErrors('name')}"
+					th:errors="*{name}" ></span>
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="gender" class="col-sm-3 control-label no-padding-right">Ledger Category:</label>
+			<div class="col-sm-9">
+				<select th:field="*{ledgerCatID}" class="col-xs-10 col-sm-5"  required="required" id="ledgerCatID">
+					<option value="">Select..</option>
+						<option th:each="ledgerCat: ${ledgerCats}" 
+					th:value = "${ledgerCat.id}" 
+					th:text="${ledgerCat.name}">Balance Sheet Category</option>
+				</select>
+				<span class="text-danger" th:if="${#fields.hasErrors('ledgerCatID')}"
+					th:errors="*{ledgerCatID}">
+				</span>
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="accountNo" class="col-sm-3 control-label no-padding-right">Account Number:</label>
+			<div class="col-sm-9">
+				<input type="text" class="col-xs-10 col-sm-5" placeholder="Account Number"
+					th:field="*{accountNo}" readonly="readonly" /> <span
+					class="text-danger" th:if="${#fields.hasErrors('accountNo')}"
+					th:errors="*{accountNo}"></span>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="gender" class="col-sm-3 control-label no-padding-right">Active Status:</label>
+			<div class="col-sm-9">
+				<select th:field="*{isActive}" class="col-xs-10 col-sm-5"  required="required" id="isActive">
+					<option value="">Select..</option>
+					<option value="0">Inactive</option>
+					<option value="1">Active</option>
+				</select>
+				<span class="text-danger" th:if="${#fields.hasErrors('isActive')}"
+					th:errors="*{isActive}">
+				</span>
+			</div>
+		</div>
+		
+		<div class="clearfix form-actions">
+			<div class="col-md-offset-3 col-md-9">
+				<button class="btn btn-primary" type="submit">
+					<i class="ace-icon fa fa-check bigger-110"></i> Add
+				</button>
+
+				<button class="btn btn-danger" type="reset">
+					<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+				</button>
+			</div>
+		</div>
+	</form>
+</div>
+
+<script type="text/javascript">
+/*<![CDATA[*/
+	/* Form Account Number*/
+		$('#totalingCode').change(function(){
+			/* var selAccType = $('#pAccountType option:selected');
+			var accType = selAccType[0].value; */
+			var optValue = this.value;
+			//var optValue = selElement[0].selectedOptions[0].innerText;
+		
+			//var code = $('#code')[0].value;
+			/* var splitOption = optValue.split("-");
+			var accountNo = "6" + "-" + splitOption[1] + "-" + "000"; */
+			var accountNo = "6" + "-" + optValue + "-" + "000";
+			$('#accountNo')[0].value = accountNo;
+			});
+		
+
+	/* $('#code').blur(function(){
+
+		var code = this.value;
+
+		if(code.length > 3) {
+			$.gritter.add({
+				title : "Invalid Action!",
+				text : "code cannot be MORE than 3 values",
+				time : 4000
+			}); 
+			code = "";
+			$('#code')[0].value = "";
+		} else if (code.length < 3){
+
+			var x = 3 - code.length;
+			for(i=0; i<x; i++){
+				code = "0" + code;
+			}
+
+			$('#code')[0].value = code;
+			
+		}
+		
+		var optValue = $('#totalingCode')[0].selectedOptions[0].innerText;
+		
+		var splitOption = optValue.split("-");	
+		var accountNo = "6" + "-" + splitOption[1] + "-" + code;
+		 
+		$('#accountNo')[0].value = accountNo;
+	}); */
+
+/*]]>*/
+</script>

@@ -17,6 +17,7 @@ import org.calminfotech.ledger.utility.LedgerException;
 import org.calminfotech.ledger.utility.LedgerUtility;
 import org.calminfotech.system.boInterface.OrganisationBo;
 import org.calminfotech.system.boInterface.SettingBo;
+import org.calminfotech.system.models.Organisation;
 import org.calminfotech.system.models.SettingsAssignment;
 import org.calminfotech.user.models.User;
 import org.calminfotech.user.utils.UserIdentity;
@@ -84,6 +85,7 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		
 		gLEntry2.setCreate_date(new Date(System.currentTimeMillis()));
 		gLEntry2.setAccountNo(glPostingForm.getRAccountNo());
+		System.out.println(gLEntry2.getAccountNo());
 		gLEntry2.setOrganisation(this.userIdentity.getOrganisation());
 		gLEntry2.setOrgCoy(this.userIdentity.getOrganisation().getOrgCoy());
 		gLEntry2.setRefNo1(glPostingForm.getRefNo1());
@@ -254,10 +256,12 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		/*SettingsAssignment settingsAssignment = new SettingsAssignment();
 		settingsAssignment.setSettings_code("interbank-GLP");
 		*/
+		
+		Organisation org = this.userIdentity.getOrganisation();
 		float amount = glEntry.getAmount();
-		SettingsAssignment settingsAssignment = this.settingBo.fetchsettings("interbank-GLP", 2);
+		SettingsAssignment settingsAssignment = this.settingBo.fetchsettings("interbank-GLP", org.getOrgCoy().getId());
 		String sysAccountNo = settingsAssignment.getSettings_value();
-		this.getBalance(sysAccountNo, this.userIdentity.getOrganisation().getId(), this.userIdentity.getOrganisation().getOrgCoy().getId());
+		this.getBalance(sysAccountNo, org.getId(), org.getOrgCoy().getId());
 		User user = new User();
 		user.setUserId(1);
 		
@@ -338,7 +342,7 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 	}
 	
 	public List<GLEntry> getGLEntries(int org_id) {
-		return this.genLedgerDao.getGLEntries(org_id);
+		return this.addNameToGLEntries(this.genLedgerDao.getGLEntries(org_id));
 	}
 
 	public List<GLEntry> getGLEntriesByBatch_no(String batch_no) {
@@ -486,5 +490,15 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 	@Override
 	public List<CustomerEntry> getCustEntriesListing(String account_no, String start_date, String end_date) throws LedgerException {
 		return this.genLedgerDao.getCustEntriesListing(account_no, start_date, end_date);
+	}
+	
+	public List<GLEntry> addNameToGLEntries(List<GLEntry> glEntries) {
+		
+		for (GLEntry glEntry : glEntries) {
+			glEntry.setName(this.ledgerAccBo.getLedgerByAccount_no(glEntry.getAccountNo()).getName());
+			
+		}
+		
+		return glEntries;
 	}
 }

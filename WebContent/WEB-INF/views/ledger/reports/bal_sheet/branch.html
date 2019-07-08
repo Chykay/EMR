@@ -28,7 +28,7 @@
 <br></br>
 <br></br>
 <br></br>
-<p style="float: center;"><h4>Balance Sheet For <span th:text="${branchBS.name}"></span></h4></p>
+<p style="float: center;"><h4>Balance Sheet as at <span th:text="${#dates.format(#dates.createNow(), 'dd MMM yyyy')}"></span> For Branch: <span th:text="${branchBS.name}"></span> of <span th:text="${branchBS.companyName}"></span></h4></p>
 
 
 <table class="table table-condensed" id="printtable">
@@ -45,6 +45,7 @@
     <tbody>
      <th:block th:replace="ledger/reports/bal_sheet/branchFragment :: branch(balSheetList=${branchBS.accChartEntries}, margin=0)">Balance Sheet</th:block>
 
+	<!-- <tr> <td  th:text="${#numbers.formatDecimal(T(java.lang.Math).abs(branchBS.), 0, 'COMMA', 2, 'POINT')}"></td></tr> -->
     </tbody>
   </table>
 <!-- 

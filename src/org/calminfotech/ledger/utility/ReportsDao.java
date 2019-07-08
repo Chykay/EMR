@@ -31,9 +31,38 @@ public class ReportsDao {
 
 	@SuppressWarnings("unchecked")
 	public List<LedgerAccount> getGLBalancesByParent(Integer categoryID, String ledgerType1, String ledgerType2) {
-		String hsql="SELECT A FROM LedgerAccount A, GenLedgBalance B "
-		+ "WHERE A.accountNo = B.gLAccountNo AND A.ledgerCatID = ? AND B.organisation.Id = ? AND B.orgCoy.Id = ?  AND (A.accountNo LIKE ''+ ? + '%' OR A.accountNo LIKE ''+ ? + '%')";
+		String hsql="SELECT A FROM LedgerAccount A "
+		+ "WHERE  ledgerCatID = ? AND organisation_id = ? AND company_id = ?  AND (account_no LIKE ''+ ? + '%' OR account_no LIKE ''+ ? + '%')";
 		
+		
+		/*String hsql="SELECT A FROM LedgerAccount A, GenLedgBalance B "
+		+ "WHERE A.accountNo = B.gLAccountNo AND A.ledgerCatID = ? AND B.organisation.Id = ? AND B.orgCoy.Id = ?  AND (A.accountNo LIKE ''+ ? + '%' OR A.accountNo LIKE ''+ ? + '%')";
+		*/
+		Query query = sessionFactory.getCurrentSession()
+			.createQuery(hsql)
+			.setParameter(0, categoryID)
+			.setParameter(1, userIdentity.getOrganisation().getId())
+			.setParameter(2, this.userIdentity.getOrganisation().getOrgCoy().getId())
+			.setParameter(3, ledgerType1)
+			.setParameter(4, ledgerType2);
+			
+       List<LedgerAccount> list = (List<LedgerAccount>) query.list();  
+       
+       
+       return list;
+
+		
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<LedgerAccount> getGLBalancesByParentR(Integer categoryID, String ledgerType1, String ledgerType2) {
+		String hsql="SELECT A FROM LedgerAccount A "
+		+ "WHERE  ledgerCatID = ? AND organisation_id = ? AND company_id = ?  AND (account_no LIKE ''+ ? + '%' OR account_no LIKE ''+ ? + '%' OR account_no LIKE '6%')";
+		
+		
+		/*String hsql="SELECT A FROM LedgerAccount A, GenLedgBalance B "
+		+ "WHERE A.accountNo = B.gLAccountNo AND A.ledgerCatID = ? AND B.organisation.Id = ? AND B.orgCoy.Id = ?  AND (A.accountNo LIKE ''+ ? + '%' OR A.accountNo LIKE ''+ ? + '%')";
+		*/
 		Query query = sessionFactory.getCurrentSession()
 			.createQuery(hsql)
 			.setParameter(0, categoryID)

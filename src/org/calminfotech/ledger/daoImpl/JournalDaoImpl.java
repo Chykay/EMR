@@ -64,10 +64,10 @@ public class JournalDaoImpl implements JournalDao {
 
 		System.out.println(this.userIdentity.getUser().getUserId() + " get journal headers");
 		List<JournalHeader> entries = sessionFactory.getCurrentSession()
-				.createQuery("FROM JournalHeader WHERE company_id = 2 AND organisation_id = 2 ")
-				/*.setParameter(0, userIdentity.getOrganisation().getOrgCoy().getId())
+				.createQuery("FROM JournalHeader WHERE company_id = ? AND organisation_id = ? ")
+				.setParameter(0, userIdentity.getOrganisation().getOrgCoy().getId())
 				.setParameter(1, userIdentity.getOrganisation().getId())
-				.setParameter(2, this.settingBo.fetchsettings("interbank-GLP", 2).getSettings_value())*/
+				/*.setParameter(2, this.settingBo.fetchsettings("interbank-GLP", 2).getSettings_value())*/
 				.list();
 
 		return entries;

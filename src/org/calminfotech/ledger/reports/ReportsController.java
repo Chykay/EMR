@@ -76,7 +76,7 @@ public class ReportsController {
 	}
 	
 	@Layout("layouts/reportblank")
-	@RequestMapping(value = "/TB/{companyID}/{type}", method = RequestMethod.GET)
+	@RequestMapping(value = "/TB/{companyID}", method = RequestMethod.GET)
 	public String companyTB(Model model, @PathVariable int companyID) {
 
 		model.addAttribute("companyTB", this.reportsBo.getCompanyTB(companyID));
@@ -98,7 +98,7 @@ public class ReportsController {
 	public String branchBalSheet(Model model, @PathVariable int branchID, @PathVariable String type) {
 
 		
-		model.addAttribute("branchBS", this.reportsBo.getBranchCoA(branchID, type, "balSheet"));
+		model.addAttribute("branchBS", this.reportsBo.addReserve(branchID, type));
 
 		return "ledger/reports/bal_sheet/branch";
 	}
@@ -139,5 +139,15 @@ public class ReportsController {
 		model.addAttribute("companyPL", this.reportsBo.getCompanyCoA(companyID, type, "PandL"));
 
 		return "ledger/reports/P_L/company";
+	}
+	
+	
+	@Layout("layouts/reportblank")
+	@RequestMapping(value = "/GL/{accountNo}", method = RequestMethod.GET)
+	public String generalLedger(Model model, @PathVariable String accountNo) {
+		
+		model.addAttribute("gLReport", this.reportsBo.GLReport(accountNo));
+
+		return "ledger/reports/GL/report";
 	}
 }

@@ -142,9 +142,11 @@ public class JournalController {
 	
 	
 	@RequestMapping(value = {"/edit"}, method=RequestMethod.POST, consumes = "application/json")
-	public void edit(@RequestBody Object journal) {
+	public String edit(@RequestBody Object journal) {
 		try {
-			this.journalBo.manageJournal(journal);
+			Boolean value = this.journalBo.manageJournal(journal);
+			
+			
 		} catch (LedgerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -152,7 +154,10 @@ public class JournalController {
 		
 		System.out.println("oya redirect oo");
 		
-		/*return "redirect:/ledger/journal/index";*/
+		if(true)
+			return "redirect:/ledger/journal/index";
+		else
+			return "redirect:/ledger/journal/index";
 	}
 	
 }

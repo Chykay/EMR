@@ -14,6 +14,10 @@ public class BranchAccChart {
 	private Integer id;
 
 	private String name;
+	
+	private String companyName;
+	
+	private float balance;
 
 	@OneToMany
 	private List<AccChartEntry> accChartEntries;
@@ -42,4 +46,23 @@ public class BranchAccChart {
 	public void setAccChartEntries(List<AccChartEntry> accChartEntries) {
 		this.accChartEntries = accChartEntries;
 	}
+
+	public String getCompanyName() {
+		return companyName;
+	}
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
+
+	public float getBalance() {
+		return balance;
+	}
+
+	public void setBalance(float balance) {
+		this.balance = balance;
+	}
+	
+	
+	
 }

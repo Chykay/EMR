@@ -1,5 +1,6 @@
 package org.calminfotech.ledger.daoImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.calminfotech.ledger.daoInterface.LedgerAccDao;
@@ -25,6 +26,11 @@ public class LedgerAccDaoImpl implements LedgerAccDao {
 	public List<LedgerAccount> fetchAll(int branch_id, int company_id){
 		List<String> interfaces = this.settingBo.fetchAllGLSettings(company_id);
 		
+		if (interfaces == null) {
+			interfaces = new ArrayList<String>();
+			interfaces.add("0-0000-000");
+		}
+		
 		List<LedgerAccount> ledgerAccounts = sessionFactory.getCurrentSession()
 				.createQuery(" from LedgerAccount WHERE organisation_id = ? AND company_id = ? AND account_no NOT IN ( :interfaces )")
 				.setParameter(0, branch_id)
@@ -37,13 +43,36 @@ public class LedgerAccDaoImpl implements LedgerAccDao {
 		
 		return null;
 	}
+	
+	@SuppressWarnings({ "unchecked" })
+	public List<LedgerAccount> fetchTop100(int branch_id, int company_id){
+		List<String> interfaces = this.settingBo.fetchAllGLSettings(company_id);
+		
+		if (interfaces == null) {
+			interfaces = new ArrayList<String>();
+			interfaces.add("0-0000-000");
+		}
+		
+		List<LedgerAccount> ledgerAccounts = sessionFactory.getCurrentSession()
+				.createQuery(" from LedgerAccount WHERE organisation_id = ? AND company_id = ? AND account_no NOT IN ( :interfaces ) ORDER BY create_date DESC")
+				.setParameter(0, branch_id)
+				.setParameter(1, company_id)
+				.setParameterList("interfaces", interfaces)
+				.setMaxResults(100)
+				.list();
+		
+		if (ledgerAccounts.size() > 0)
+			return ledgerAccounts;
+		
+		return null;
+	}
 
 	@SuppressWarnings("unchecked")
 	public LedgerAccount getLedgerById(int id){
 		List<LedgerAccount> list = this.sessionFactory.getCurrentSession()
-		.createQuery("FROM LedgerAccount WHERE id = ?")
-		.setParameter(0, id).list();
-		
+				.createQuery("FROM LedgerAccount WHERE id = ?")
+				.setParameter(0, id).list();
+				
 		if (list.size() > 0)
 			return (LedgerAccount) list.get(0);
 		

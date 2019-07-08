@@ -5,16 +5,20 @@ window.random = 1;
 const saveBtn = document.getElementById('save');
 const postBtn = document.getElementById('post');
 
-saveBtn.addEventListener('click', (e) => {
-	e.preventDefault();
-	onSubmit('save')
-});
+if(saveBtn != null){
+	saveBtn.addEventListener('click', (e) => {
+		e.preventDefault();
+		onSubmit('save')
+	});
+}
    
 //if the post button is clicked, call the onSubmit method with the post para
-postBtn.addEventListener('click', (e) => {
-	e.preventDefault();
-	onSubmit('post')
-});
+if(postBtn != null) {
+	postBtn.addEventListener('click', (e) => {
+		e.preventDefault();
+		onSubmit('post')
+	});
+}
  
  
 $(document).ready(function(){
@@ -48,7 +52,7 @@ $('.add').click(function(){
 	};
 	
 
-	markup = '<select id="postCode"  required="required"><option value="">Select..</option><option value="DR">GL Debit</option><option value="CR">GL Credit</option></select><select id="branchID"  required="required">' + window.branches + '</select><input type="text" id="amount"  placeholder="amount"  required="required" /><input type="text" id="refNo"  placeholder="ref no"  required="required" /><input type="text" id="desc"  placeholder="description"  required="required" /><button type="button" class="btn btn-xs btn-default delete"><i class="fa fa-trash-o"></i></button>';
+	markup = '<select id="postCode"  required="required"><option value="">Select..</option><option value="DR">GL Debit</option><option value="CR">GL Credit</option></select><select id="branchID"  required="required">' + window.branches + '</select><input type="text" class="amount" id="amount" oninput="this.value = this.value.replace(/[^0-9.]/g, ""); this.value = this.value.replace(/(\..*)\./g, "$1");" placeholder="amount"  required="required" /><input type="text" id="refNo"  placeholder="ref no"  required="required" /><input type="text" id="desc"  placeholder="description"  required="required" /><button type="button" class="btn btn-xs btn-default delete"><i class="fa fa-trash-o"></i></button>';
 	
 	$(div).addClass("journal").html(markup);
 	$(div).prepend($dup);
@@ -72,6 +76,15 @@ $(document.body).on("click", ".custSearch", function(){
 });
 
 
+$(document.body).on("blur", ".amount", function(){
+	 var valuee = parseFloat(this.value.replace(/,/g, ""))
+	   .toFixed(2)
+	   .toString()
+	   .replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
+		
+		this.value = valuee;
+		
+});
 
 
 function onSubmit(action){
@@ -132,11 +145,9 @@ function onSubmit(action){
 			dataType: "json",
 			
 			success: function(response, data){
-				alert("yuppie");
-				window.location = '/../'+ window.location.pathname.split('/')[1] + '/ledger/journal/index';
+				//window.location = '/../'+ window.location.pathname.split('/')[1] + '/ledger/journal/index';
 			},
-			error: function(response){
-				// alert("nopppiee");
+			error: function(response, data){
 				window.location = '/../'+ window.location.pathname.split('/')[1] + '/ledger/journal/index';
 			}
 		});
@@ -180,14 +191,12 @@ function selectOptions() {
 			var selValue = $(this)[0]["attributes"]["value"]["value"];
 		
 		
-		console.log(selValue);
 		var options = $(this)[0]["options"];
 		
 		
 
 		$.each(options, function( index ) {
 			if(this.value == selValue) {
-				console.log(this.value, selValue);
 				this.selected = true;
 			} 
 		});
@@ -199,10 +208,8 @@ function selectOptions() {
 function accountSetup(journalElem, acc_type) {
 
 	accNoElem = journalElem.find('.select2-container');
-	console.log(accNoElem);
 	
 	accNoElem2 = journalElem.querySelector('.select2');
-	console.log("acc No 2", accNoElem2);
 	
 	searchBtn = journalElem.find('.custSearch')[0];
 	accNoSearchElem = journalElem.find('#accountNoSearch')[0];

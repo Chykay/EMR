@@ -15,10 +15,10 @@ public interface LedgerCatBo {
 	
 	public LedgerCategory getLedgerById(int id);
 	
-	public LedgerCategory save(LedgerCatForm balSheetForm);
+	public LedgerCategory save(LedgerCatForm ledgerCatForm);
 	
-	public void delete(LedgerCategory totalingAccount);
+	public void delete(LedgerCategory ledgerCategory);
 	
-	public LedgerCategory update(LedgerCatForm balSheetForm, int id);
+	public LedgerCategory update(LedgerCatForm ledgerCatForm, int id);
 
 }

@@ -6,13 +6,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.SQLDelete;
 
 @Entity
 @org.hibernate.annotations.Entity(dynamicInsert = true)
 @SQLDelete(sql = "UPDATE GL_setup_table SET is_active = 0 WHERE id = ?")
-@Table(name = "GL_setup_table")
+@Table(name = "GL_setup_table", uniqueConstraints = @UniqueConstraint(columnNames={"name", "organisation_id"}))
 public class LedgerAccount extends CommonLedger{
 	
 	@Id
@@ -20,10 +21,10 @@ public class LedgerAccount extends CommonLedger{
 	@Column(name ="id")
 	private int id;
 	
-	@Column(name = "name", unique=true, nullable=false)
+	@Column(name = "name", nullable=false)
 	private String name;
 	
-	@Column(name = "account_no", unique=true, nullable=false)
+	@Column(name = "account_no", nullable=false)
 	private String accountNo;
 	
 

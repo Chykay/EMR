@@ -55,14 +55,15 @@
 							title="view category details" 		th:href="@{/ledger/ledger_acc/view/{id} (id=${account.id}) }"> <i
 								class="fa fa-eye"></i>
 						</a> 
-						 <!-- <a class="btn btn-xs btn-warning tooltips"
-							title="Edit Item details"
-							th:href="@{/ledger/ledger_acc/edit/{id}(id=${account.id}) }"> <i
-								class="fa fa-edit"></i>
-						</a> --> <a class="btn btn-xs btn-danger tooltips deleteBtn" 
+						  <a class="btn btn-xs btn-danger tooltips deleteBtn" 
 							title="Delete Item details"   th:id="${account.id}" 
 							href="#"> <i
 								class="fa fa-trash-o"></i>
+						</a>
+						<a class="btn btn-xs btn-warning tooltips"
+							title="Print GL report"
+							th:href="@{/ledger/reports/GL/{id}(id=${account.accountNo}) }"> <i
+								class="fa fa-edit"></i>
 						</a>
 					</td>
 				</tr>

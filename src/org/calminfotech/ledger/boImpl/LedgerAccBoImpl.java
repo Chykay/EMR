@@ -35,6 +35,17 @@ public class LedgerAccBoImpl implements LedgerAccBo {
 		return list;
 	}
 	
+	public List<LedgerAccount> fetchTop100(int branch_id, int company_id){
+		List<LedgerAccount> list = null;
+		try {
+			list = this.ledgerAccDao.fetchTop100(branch_id, company_id);	
+		} catch (Exception e) {
+			System.out.println("null");
+		}
+		
+		return list;
+	}
+	
 	public LedgerAccount getLedgerById(int id){
 		return this.ledgerAccDao.getLedgerById(id);
 	}

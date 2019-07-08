@@ -21,5 +21,7 @@ public interface SettingBo {
 	public SettingsAssignment fetchsettings(String code, Integer orgId);
 
 	public List<String> fetchAllGLSettings(int company_id);
+	
+	public void update(SettingsAssignment settingsAssignment);
 
 }

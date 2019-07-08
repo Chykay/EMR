@@ -21,6 +21,8 @@ public interface SettingDao {
 	public void deleteassingment(Integer orgid);
 
 	public SettingsAssignment fetchsettings(String code, Integer orgId);
+	
+	public void update(SettingsAssignment settingsAssignment);
 
 	public List<String> fetchAllGLSettings(int company_id);
 

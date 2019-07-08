@@ -8,6 +8,8 @@ public interface LedgerAccDao {
 
 	public List<LedgerAccount> fetchAll(int branch_id, int company_id);
 
+	public List<LedgerAccount> fetchTop100(int branch_id, int company_id);
+
 	public LedgerAccount getLedgerById(int id);
 	
 	public LedgerAccount getLedgerByAccount_no(String account_no);

@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 
 @Entity
@@ -50,6 +51,10 @@ public class GLEntry extends CommonLedger {
 	@Column(name="posting_date")
 	@Temporal(TemporalType.DATE)
 	private Date postingDate;
+	
+	@Transient
+	private String name;
+	
 
 	public int getId() {
 		return id;
@@ -140,4 +145,14 @@ public class GLEntry extends CommonLedger {
 	public void setPostingDate(Date postingDate) {
 		this.postingDate = postingDate;
 	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	
 }

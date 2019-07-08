@@ -18,5 +18,7 @@ public interface LedgerAccBo {
 	public void delete(LedgerAccount genLedgerAccount);
 	
 	public LedgerAccount update(LedgerAccForm ledgerAccForm, int id);
+
+	public List<LedgerAccount> fetchTop100(int branch_id, int company_id);
 	
 }

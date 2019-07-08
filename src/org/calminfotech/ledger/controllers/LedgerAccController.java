@@ -54,8 +54,8 @@ public class LedgerAccController {
 		Organisation org = userIdentity.getOrganisation();
 		System.out.println(org.getId() + " : " + org.getOrgCoy().getId());
 		
-		if (this.ledgerAccBo.fetchAll(org.getId(), org.getOrgCoy().getId()) != null) {
-			List<LedgerAccount> ledgerAccounts = this.ledgerAccBo.fetchAll(org.getId(), org.getOrgCoy().getId());
+		if (this.ledgerAccBo.fetchTop100(org.getId(), org.getOrgCoy().getId()) != null) {
+			List<LedgerAccount> ledgerAccounts = this.ledgerAccBo.fetchTop100(org.getId(), org.getOrgCoy().getId());
 			model.addAttribute("accounts", ledgerAccounts);
 		} 
 		
@@ -88,8 +88,16 @@ public class LedgerAccController {
 	@RequestMapping(value = {"/create"}, method=RequestMethod.POST)
 	public String create(@Valid @ModelAttribute("account") LedgerAccForm ledgerAccForm, BindingResult result, Model model,
 			RedirectAttributes redirectAttributes) {
-				
-		LedgerAccount account = this.ledgerAccBo.save(ledgerAccForm);
+		LedgerAccount account = new LedgerAccount();
+		try {
+			account = this.ledgerAccBo.save(ledgerAccForm);
+		} catch (Exception e) {
+			
+			alert.setAlert(redirectAttributes, Alert.DANGER,
+					"Failure! Account Number Already Exists for this branch  "
+							+ account.getId());
+			return "redirect:/ledger/ledger_acc/index";
+		}
 		
 		alert.setAlert(redirectAttributes, Alert.SUCCESS,
 				"Success! New GeneralLedger Succesfully Added! GeneralLedger id:  "

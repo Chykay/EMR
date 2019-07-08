@@ -28,7 +28,7 @@
 <br></br>
 <br></br>
 <br></br>
-<p style="float: center;"><h4>Trial Balance For <span th:text="${branchTB.name}"></span></h4></p>
+<p style="float: center;"><h4>Trial Balance For Branch: <span th:text="${branchTB.name}"></span> of  <span th:text="${branchTB.companyName}"></span> </h4></p>
 
 	
 	
@@ -46,23 +46,23 @@
       </tr>
     </thead>
     <tbody>
-     	<tr th:each="tBalEntry : *{branchTB.tBalEntries}">
+     	<tr th:each="tBalEntry : *{branchTB.entries}">
  	
 					
 					<td th:text="${tBalEntry.accountNo}"></td> 
 					<td th:text="${tBalEntry.name}"></td> 
-					<td th:text="${tBalEntry.debit}" ></td>
-					<td th:text="${tBalEntry.credit}" ></td>
+					<td th:text="${#numbers.formatDecimal(tBalEntry.debit, 0, 'COMMA', 2, 'POINT')}" ></td>
+					<td th:text="${#numbers.formatDecimal(tBalEntry.credit, 0, 'COMMA', 2, 'POINT')}" ></td>
+					<!-- <td th:text="${tBalEntry.credit}" ></td> -->
 			
 					 
       </tr>
       <tr>
       	<td></td>
       	<td>TOTAL</td>
-      	<td th:text="${branchTB.totDebit}"></td> 
-      	<td th:text="${branchTB.totCredit}"></td> 
-      	<td th:text="${branchTB.totBalance}"></td> 
-      	
+      	<td th:text="${#numbers.formatDecimal(branchTB.totDebit, 0, 'COMMA', 2, 'POINT')}"></td>
+      	<td th:text="${#numbers.formatDecimal(branchTB.totCredit, 0, 'COMMA', 2, 'POINT')}"></td>
+      	<td th:text="${#numbers.formatDecimal(branchTB.totBalance, 0, 'COMMA', 2, 'POINT')}"></td>      	
       </tr>
     </tbody>
   </table>
