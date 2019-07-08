@@ -1,15 +1,22 @@
 package org.calminfotech.ledger.boImpl;
 
 import java.util.Date;
+import java.util.List;
 
 import org.calminfotech.ledger.boInterface.GLSetupBo;
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
 import org.calminfotech.ledger.daoInterface.GLSetupDao;
+import org.calminfotech.ledger.forms.BankAccForm;
 import org.calminfotech.ledger.forms.LedgerAccForm;
+import org.calminfotech.ledger.models.BankAccount;
 import org.calminfotech.ledger.models.LedgerAccount;
 import org.calminfotech.system.boInterface.SettingBo;
+import org.calminfotech.system.models.Organisation;
 import org.calminfotech.system.models.SettingsAssignment;
 import org.calminfotech.system.models.SettingsAssignment_log;
+import org.calminfotech.user.models.User;
+import org.calminfotech.user.utils.UserIdentity;
+import org.calminfotech.utils.models.Bank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +30,9 @@ public class GLSetupBoImpl implements GLSetupBo{
 	
 	@Autowired
 	private SettingBo settingBo;
+	
+	@Autowired
+	private UserIdentity userIdentity;
 	
 	
 	public LedgerAccount getReserveGL() {
@@ -65,5 +75,32 @@ public class GLSetupBoImpl implements GLSetupBo{
 		}
 		
 		return account;
+	}
+
+	@Override
+	public List<BankAccount> getAllBankAccs(Organisation branch) {
+		return this.glSetupDao.getAllBankAccs(branch);
+	}
+	
+	@Override
+	public List<Bank> getAllBanks() {
+		return this.glSetupDao.getAllBanks();
+	}
+
+	@Override
+	public BankAccount addBankAcc(BankAccForm bankAccForm) {
+		User user = this.userIdentity.getUser();
+		BankAccount bankAccount = new BankAccount();
+		
+		bankAccount.setAccountNo(bankAccForm.getAccountNo());
+		bankAccount.setBank(bankAccForm.getBank());
+		bankAccount.setLedgerAccount(this.ledgerAccBo.getLedgerById(bankAccForm.getLedgerAccID()));
+		
+		bankAccount.setCreate_date(new Date(System.currentTimeMillis()));
+		bankAccount.setCreated_by(user);
+		bankAccount.setOrganisation(user.getOrganisation());
+		bankAccount.setOrgCoy(user.getOrganisation().getOrgCoy());
+		
+		return this.glSetupDao.addBankAcc(bankAccount);
 	}
 }
