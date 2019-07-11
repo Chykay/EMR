@@ -606,4 +606,9 @@ public class Patient {
 		this.isDeleted = isDeleted;
 	}
 
+	public Integer getCreditlimit() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

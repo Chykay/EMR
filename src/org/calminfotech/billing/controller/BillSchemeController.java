@@ -1,0 +1,949 @@
+package org.calminfotech.billing.controller;
+
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
+import org.calminfotech.billing.boInterface.BillSchemeBo;
+import org.calminfotech.billing.boInterface.BillSchemeItemBo;
+import org.calminfotech.billing.boInterface.BillSchemeItemPriceBo;
+import org.calminfotech.billing.boInterface.BillSchemeMeasurePriceBo;
+import org.calminfotech.billing.forms.BillSchemeForm;
+import org.calminfotech.billing.forms.BillSchemeItemForm;
+import org.calminfotech.billing.forms.BillSchemeItemPriceForm;
+import org.calminfotech.billing.forms.BillSchemeMeasurePriceForm;
+import org.calminfotech.billing.forms.BillSchemeRankingPriceForm;
+import org.calminfotech.billing.models.BillScheme;
+import org.calminfotech.billing.models.BillSchemeItem;
+import org.calminfotech.billing.models.BillSchemeItemPrice;
+import org.calminfotech.system.boInterface.GlobalItemBo;
+import org.calminfotech.system.boInterface.GlobalItemUnitofMeasureBo;
+import org.calminfotech.system.forms.GlobalItemForm;
+import org.calminfotech.system.models.GlobalItem;
+import org.calminfotech.system.models.GlobalItemRanking;
+import org.calminfotech.system.models.GlobalItemUnitofMeasure;
+import org.calminfotech.system.models.GlobalItemUnitofMeasureVw;
+import org.calminfotech.user.utils.Authorize;
+import org.calminfotech.user.utils.UserIdentity;
+import org.calminfotech.utils.Alert;
+import org.calminfotech.utils.Auditor;
+import org.calminfotech.utils.BillschemestatusList;
+import org.calminfotech.utils.annotations.Layout;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+@Controller
+@RequestMapping(value = "/billscheme")
+public class BillSchemeController {
+
+	@Autowired
+	private BillSchemeBo billschemeBo;
+	@Autowired
+	private BillSchemeItemBo billschemeItemBo;
+	@Autowired
+	private BillSchemeItemPriceBo billschemeItemPriceBo;
+
+	@Autowired
+	private BillSchemeMeasurePriceBo billSchemeMeasurePriceBo;
+
+	@Autowired
+	private GlobalItemUnitofMeasureBo billUnitOfMeasureBo;
+
+	@Autowired
+	private GlobalItemBo globalItemBo;
+
+	@Autowired
+	private Alert alert;
+
+	@Autowired
+	private BillschemestatusList billschemestatusList;
+
+	@Autowired
+	private UserIdentity userIdentity;
+	@Autowired
+	private Auditor auditor;
+
+	@Autowired
+	private Authorize authorize;
+
+	@RequestMapping(value = { "", "/" })
+	@Layout(value = "layouts/datatable")
+	public String indexAction(RedirectAttributes redirectAttributes, Model model) {
+		if (authorize.isAllowed("BILLING000")) {
+
+			// model.addAttribute("scheme", billschemeBo.fetchAll());
+			List<BillScheme> list = billschemeBo
+					.fetchAllByOrganisation(userIdentity.getOrganisation());
+			model.addAttribute("scheme", list);
+
+			// List<BillSchemeItem> listItem = billschemeItemBo.fetchAll();
+			// model.addAttribute("item", listItem);
+
+			// List<BillSchemeItemPrice> listPrice =
+			// billschemeItemPriceBo.fetchAll();
+			// model.addAttribute("pric", listPrice);
+
+			// List<GlobalItemUnitofMeasure> listUnit =
+			// this.billUnitOfMeasureBo(userIdentity.getOrganisation().getId());
+			// model.addAttribute("uni", listUnit);
+
+			return "billscheme/index";
+
+		} else {
+			alert.setAlert(redirectAttributes, Alert.WARNING,
+					"You have no permission to List Billing Scheme");
+
+			return "redirect:/";
+		}
+
+	}
+
+	@RequestMapping(value = "/add")
+	@Layout(value = "layouts/datatable")
+	public String addAction(RedirectAttributes redirectAttributes, Model model) {
+
+		if (authorize.isAllowed("BILLING001")) {
+
+			model.addAttribute("aForm", new BillSchemeForm());
+			model.addAttribute("scheme", this.billschemeBo
+					.fetchAllByOrganisation(userIdentity.getOrganisation()));
+			return "billscheme/add";
+		} else {
+			alert.setAlert(redirectAttributes, Alert.WARNING,
+					"You have no permission to Add Billing Scheme");
+
+			return "redirect:/";
+
+		}
+
+	}
+
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	@Layout(value = "layouts/datatable")
+	public String saveAction(
+			@Valid @ModelAttribute("aForm") BillSchemeForm billschemeForm,
+			BindingResult result, RedirectAttributes redirectAttributes,
+			Model model) {
+		if (authorize.isAllowed("BILLING001")) {
+			if (result.hasErrors()) {
+				model.addAttribute("scheme", this.billschemeBo
+						.fetchAllByOrganisation(userIdentity.getOrganisation()));
+				return "billscheme/add";
+			}
+			BillScheme billscheme = new BillScheme();
+			billscheme.setId(billschemeForm.getBillId());
+			billscheme.setName(billschemeForm.getName());
+			billscheme.setDescription(billschemeForm.getDescription());
+			// billscheme.setBillingType(billschemeForm.getBillingType());
+			billscheme.setCreatedBy(userIdentity.getUsername());
+			billscheme.setOrganisation(userIdentity.getOrganisation());
+			billscheme.setCreatedDate(new GregorianCalendar().getTime());
+			billscheme.setBillschemestatus(this.billschemestatusList
+					.getBillschemestatusById(1));
+			this.billschemeBo.save(billscheme);
+			alert.setAlert(redirectAttributes, Alert.SUCCESS,
+					"Success! Service Billing Scheme added!");
+			return "redirect:/billscheme";
+
+		} else {
+			alert.setAlert(redirectAttributes, Alert.WARNING,
+					"You have no permission to Add Billing Scheme");
+
+			return "redirect:/";
+
+		}
+
+	}
+
+	@RequestMapping(value = "/billprice/{id}")
+	@Layout(value = "layouts/datatable")
+	/*
+	 * public String viewAction(@PathVariable("id") Integer id,
+	 * RedirectAttributes redirectAttributes, Model model) {
+	 */
+	public String viewActionp(@PathVariable("id") Integer id, Model model,
+			RedirectAttributes redirectAttributes, HttpServletRequest request) {
+		if (authorize.isAllowed("BILLPRICE002")) {
+
+			List<BillScheme> billschemelist = billschemeBo
+					.fetchAllByOrganisation(userIdentity.getOrganisation());
+			GlobalItemUnitofMeasureVw globalitemunitofmeasurevw = this.billUnitOfMeasureBo
+					.getGlobalItemUnitofMeasureByIdvw(id);
+
+			// model.addAttribute("globalitemunit",
+			// this.billUnitOfMeasureBo.fetchAllByOrganisation(userIdentity.getOrganisation().getId()));
+			// List<BillSchemeMeasurePrice> mypricelist =
+			// this.billSchemeMeasurePriceBo
+			// .fetchAllByMeasure(id);
+			model.addAttribute("pricelist",
+					this.billSchemeMeasurePriceBo.fetchAllByMeasure(id));
+			// this.billSchemeMeasurePriceBo.fetchAllByMeasure(id));
+
+			model.addAttribute("globalitemunitofmeasurevw",
+					globalitemunitofmeasurevw);
+			model.addAttribute("billschemelist", billschemelist);
+			BillSchemeMeasurePriceForm billschememeasurepriceForm = new BillSchemeMeasurePriceForm();
+			billschememeasurepriceForm.setGlobalitemunitofmeasure_id(id);
+			model.addAttribute("mpForm", billschememeasurepriceForm);
+
+			// model.addAttribute("item", this.billschemeItemBo.fetchAll());
+			// model.addAttribute("global",this.globalItemBo.fetchAllByOrganisation(userIdentity.getOrganisation().getId()));
+
+			/*
+			 * BillItemPriceForm billItemPriceForm = new BillItemPriceForm();
+			 * model.addAttribute("pForm", billItemPriceForm);
+			 * model.addAttribute("pric", billItemPriceBo.fetchAll());
+			 */
+			return "billscheme/billprice";
+
+		} else {
+			alert.setAlert(redirectAttributes, Alert.WARNING,
+					"You have no permission to View Billing Price");
+
+			return "redirect:/";
+		}
+
+	}
+
+	@RequestMapping(value = "/billrankingprice/{id}")
+	@Layout(value = "layouts/datatable")
+	/*
+	 * public String viewAction(@PathVariable("id") Integer id,
+	 * RedirectAttributes redirectAttributes, Model model) {
+	 */
+	public String viewActionpr(@PathVariable("id") Integer id, Model model,
+			RedirectAttributes redirectAttributes, HttpServletRequest request) {
+		if (authorize.isAllowed("RNKPR002")) {
+
+			List<BillScheme> billschemelist = billschemeBo
+					.fetchAllByOrganisation(userIdentity.getOrganisation());
+
+			GlobalItemRanking globalitemranking = this.billUnitOfMeasureBo
+					.getGlobalItemRankingById(id);
+
+			// model.addAttribute("globalitemunit",
+			// this.billUnitOfMeasureBo.fetchAllByOrganisation(userIdentity.getOrganisation().getId()));
+			model.addAttribute("globalitemranking", globalitemranking);
+			model.addAttribute("billschemelist", billschemelist);
+
+			BillSchemeRankingPriceForm billschemerankingpriceForm = new BillSchemeRankingPriceForm();
+
+			billschemerankingpriceForm.setGlobalitemranking_id(id);
+
+			model.addAttribute("mpForm", billschemerankingpriceForm);
+
+			// model.addAttribute("item", this.billschemeItemBo.fetchAll());
+			// model.addAttribute("global",this.globalItemBo.fetchAllByOrganisation(userIdentity.getOrganisation().getId()));
+
+			/*
+			 * BillItemPriceForm billItemPriceForm = new BillItemPriceForm();
+			 * model.addAttribute("pForm", billItemPriceForm);
+			 * model.addAttribute("pric", billItemPriceBo.fetchAll());
+			 */
+			return "billscheme/billrankingprice";
+
+		} else {
+			alert.setAlert(redirectAttributes, Alert.WARNING,
+					"You have no permission to View Billing Ranking Price");
+
+			return "redirect:/";
+		}
+
+	}
+
+	@RequestMapping(value = "/view/{id}")
+	@Layout(value = "layouts/datatable")
+	/*
+	 * public String viewAction(@PathVariable("id") Integer id,
+	 * RedirectAttributes redirectAttributes, Model model) {
+	 */
+	public String viewAction(@PathVariable("id") Integer id, Model model,
+			RedirectAttributes redirectAttributes, HttpServletRequest request) {
+		if (authorize.isAllowed("BILLING002")) {
+
+			BillScheme billscheme = billschemeBo.getBillSchemeById(id);
+
+			/*
+			 * if (null == billscheme) { alert.setAlert(redirectAttributes,
+			 * Alert.DANGER, "Invalid resource!"); return "billscheme/index"; }
+			 */
+
+			// List l= (List) billscheme.getBillschememeasure();
+			// BillSchemeMeasurePrice bsmp =l.get(0);
+			// bsmp.getGlobalitemunit().
+
+			// GlobalItemUnitofMeasure=
+
+			BillSchemeMeasurePriceForm billschememeasureForm = new BillSchemeMeasurePriceForm();
+
+			// BillSchemeMeaureForm billschemeForm = new BillSchemeForm();
+
+			model.addAttribute("bForm", billschememeasureForm);
+
+			// model.addAttribute("globalitemunit",
+			// this.billUnitOfMeasureBo.fetchAllByOrganisation(userIdentity.getOrganisation().getId()));
+			model.addAttribute("scheme", billscheme);
+
+			// BillSchemeItemForm billschemeItemForm = new BillSchemeItemForm();
+			// billschemeItemForm.setBillId(billscheme.getId());
+			// model.addAttribute("iForm", billschemeItemForm);
+			// model.addAttribute("item", this.billschemeItemBo.fetchAll());
+			// model.addAttribute("global",this.globalItemBo.fetchAllByOrganisation(userIdentity.getOrganisation().getId()));
+
+			/*
+			 * BillItemPriceForm billItemPriceForm = new BillItemPriceForm();
+			 * model.addAttribute("pForm", billItemPriceForm);
+			 * model.addAttribute("pric", billItemPriceBo.fetchAll());
+			 */
+			return "billscheme/view";
+
+		} else {
+			alert.setAlert(redirectAttributes, Alert.WARNING,
+					"You have no permission to View Billing Scheme");
+
+			return "redirect:/";
+
+		}
+
+	}
+
+	@RequestMapping(value = "/edit/{id}")
+	public String editAction(@PathVariable("id") Integer id, Model model,
+			RedirectAttributes redirectAttributes, HttpServletRequest request) {
+
+		if (authorize.isAllowed("BILLING003")) {
+			BillScheme billscheme = billschemeBo.getBillSchemeById(id);
+			// System.out.println( "Before1");
+			if (null == billscheme) {
+				alert.setAlert(redirectAttributes, Alert.DANGER,
+						"Invalid resource");
+				return "redirect:/billscheme/edit/" + id;
+			}
+			BillSchemeForm billschemeForm = new BillSchemeForm();
+
+			billschemeForm.setBillId(billscheme.getId());
+			billschemeForm.setName(billscheme.getName());
+			billschemeForm.setDescription(billscheme.getDescription());
+			// billschemeForm.setBillingType(billscheme.getBillingType());
+			billschemeForm.setStatus_id(billscheme.getBillschemestatus()
+					.getBillschemestatus_id());
+			model.addAttribute("billschemestatus",
+					this.billschemestatusList.fetchAll());
+
+			model.addAttribute("eForm", billschemeForm);
+			// model.addAttribute("scheme",
+			// this.billschemeBo.fetchAllByOrganisation(userIdentity.getOrganisation().getId()));
+			// System.out.println( "Before2");
+			this.auditor.before(request, "billing Scheme Form", billschemeForm);
+
+			return "billscheme/edit";
+
+		} else {
+			alert.setAlert(redirectAttributes, Alert.WARNING,
+					"You have no permission to Edit Billing Scheme");
+
+			return "redirect:/";
+
+		}
+	}
+
+	@RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
+	public String updateAction(
+			@Valid @ModelAttribute("eForm") BillSchemeForm billschemeForm,
+			BindingResult result, RedirectAttributes redirectAttributes,
+			Model model, HttpServletRequest request) {
+
+		if (authorize.isAllowed("BILLING003")) {
+			if (result.hasErrors()) {
+				model.addAttribute("scheme", this.billschemeBo
+						.fetchAllByOrganisation(userIdentity.getOrganisation()));
+				return "redirect:/billscheme/edit"
+						+ billschemeForm.getStatus_id();
+			}
+
+			BillScheme billscheme = billschemeBo
+					.getBillSchemeById(billschemeForm.getBillId());
+			billscheme.setName(billschemeForm.getName());
+			billscheme.setDescription(billschemeForm.getDescription());
+			billscheme.setBillschemestatus(this.billschemestatusList
+					.getBillschemestatusById(billschemeForm.getStatus_id()));
+
+			billschemeBo.update(billscheme);
+
+			auditor.after(request, "Billing Form", billschemeForm,
+					userIdentity.getUsername(), billschemeForm.getBillId());
+
+			alert.setAlert(redirectAttributes, Alert.SUCCESS,
+					"Success! Billing Scheme updated");
+
+			return "redirect:/billscheme";
+
+		} else {
+			alert.setAlert(redirectAttributes, Alert.WARNING,
+					"You have no permission to Edit Billing Scheme");
+
+			return "redirect:/";
+
+		}
+
+	}
+
+	@RequestMapping(value = "/delete/{id}")
+	public String deleteAction(@PathVariable("id") Integer id, Model model,
+			RedirectAttributes redirectAttributes, HttpServletRequest request) {
+
+		if (authorize.isAllowed("BILLING004")) {
+			BillScheme billscheme = billschemeBo.getBillSchemeById(id);
+			if (null == billscheme) {
+				alert.setAlert(redirectAttributes, Alert.DANGER,
+						"Error! Invalid resource");
+				return "billscheme/index";
+			}
+
+			BillSchemeForm billschemeForm = new BillSchemeForm();
+			billschemeForm.setBillId(billscheme.getId());
+			billschemeForm.setDescription(billscheme.getDescription());
+			billschemeForm.setName(billscheme.getName());
+			// billschemeForm.setBillingType(billscheme.getBillingType());
+			model.addAttribute("dForm", billschemeForm);
+			model.addAttribute("scheme", billscheme);
+			return "billscheme/delete";
+
+		} else {
+			alert.setAlert(redirectAttributes, Alert.WARNING,
+					"You have no permission to Delete Billing Scheme");
+
+			return "redirect:/";
+
+		}
+
+	}
+
+	@RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
+	public String confirmDeleteAction(
+			@ModelAttribute("dForm") BillSchemeForm billschemeForm,
+			BindingResult result, RedirectAttributes redirectAttributes,
+			Model model) {
+
+		if (authorize.isAllowed("BILLING004")) {
+
+			BillScheme billscheme = billschemeBo
+					.getBillSchemeById(billschemeForm.getBillId());
+			System.out.println("name");
+			if (null == billscheme) {
+				alert.setAlert(redirectAttributes, Alert.DANGER,
+						"Error! Invalid resource");
+				return "billscheme";
+			}
+			this.billschemeBo.delete(billscheme);
+			alert.setAlert(redirectAttributes, Alert.DANGER,
+					"Success! Bill Scheme Deleted");
+			return "redirect:/billscheme";
+
+		} else {
+			alert.setAlert(redirectAttributes, Alert.WARNING,
+					"You have no permission to Delete Billing Scheme");
+
+			return "redirect:/";
+
+		}
+
+	}
+
+	// global item
+	@RequestMapping(value = "/globalIndex")
+	@Layout(value = "layouts/datatable")
+	public String indexGlobal(RedirectAttributes redirectAttributes, Model model) {
+		if (authorize.isAllowed("ITEMBILL000")) {
+
+			// List<BillGlobalItem> globalItem =
+			// globalItemBo.fetchAllByOrganisation(userIdentity.getOrganisation().getId());
+			// model.addAttribute("global", globalItem);
+			// List<BillGlobalItem> list2 = globalItemBo.fetchAll();
+			// model.addAttribute("pric", list2);
+			return "billscheme/globalIndex";
+		} else {
+			alert.setAlert(redirectAttributes, Alert.WARNING,
+					"You have no permission to List Global Item Billing Scheme");
+
+			return "redirect:/";
+
+		}
+
+	}
+
+	@RequestMapping(value = "/addGlobal")
+	@Layout(value = "layouts/datatable")
+	public String addGlobal(RedirectAttributes redirectAttributes, Model model) {
+		if (authorize.isAllowed("ITEMBILL001")) {
+			model.addAttribute("gForm", new GlobalItemForm());
+			model.addAttribute("global", this.globalItemBo.fetchAll());
+			return "billscheme/addGlobal";
+		} else {
+			alert.setAlert(redirectAttributes, Alert.WARNING,
+					"You have no permission to Add Global Item Billing Scheme");
+
+			return "redirect:/";
+
+		}
+
+	}
+
+	@RequestMapping(value = "/addGlobal", method = RequestMethod.POST)
+	@Layout(value = "layouts/datatable")
+	public String saveGlobal(
+			@Valid @ModelAttribute("gForm") GlobalItemForm globalItemForm,
+			BindingResult result, RedirectAttributes redirectAttributes,
+			Model model) {
+
+		if (authorize.isAllowed("ITEMBILL001")) {
+			if (result.hasErrors()) {
+				model.addAttribute("global", this.globalItemBo.fetchAll());
+				return "billscheme/addGlobal";
+			}
+			GlobalItem globalItemItem = new GlobalItem();
+			// globalItemItem.setGlobalItemId(globalItemForm.getGobalitemId());
+			// globalItemItem.setGlobalName(globalItemForm.getGlobalitemName());
+			// globalItemItem.setGlobalDescription(globalItemForm.getGlobalitemDescription());
+			globalItemItem.setCreatedBy(userIdentity.getUsername());
+			globalItemItem.setOrganisation(userIdentity.getOrganisation());
+			globalItemItem.setCreatedDate(new GregorianCalendar().getTime());
+			// globalItemItem.setStatus("Active");
+			this.globalItemBo.save(globalItemItem);
+			alert.setAlert(redirectAttributes, Alert.SUCCESS,
+					"Success! Global Item added successfully!");
+			return "redirect:/billscheme/globalIndex";
+		} else {
+			alert.setAlert(redirectAttributes, Alert.WARNING,
+					"You have no permission to Add Global Item Billing Scheme");
+
+			return "redirect:/";
+
+		}
+	}
+
+	@RequestMapping(value = "/editGlobal/{id}")
+	public String editGlobal(@PathVariable("id") Integer id, Model model,
+			RedirectAttributes redirectAttributes, HttpServletRequest request) {
+		if (authorize.isAllowed("ITEMBILL003")) {
+
+			// BillGlobalItem globalItem =
+			// this.globalItemBo.getGlobalItemById(id);
+			// if (null == globalItem) {
+			// alert.setAlert(redirectAttributes, Alert.DANGER,
+			// "Invalid resource");
+			return "redirect:/billscheme/globalIndex";
+		} else {
+			alert.setAlert(redirectAttributes, Alert.WARNING,
+					"You have no permission to Edit Global Item Billing Scheme");
+
+			return "redirect:/";
+
+		}
+	}
+
+	@RequestMapping(value = "/editGlobal/{id}", method = RequestMethod.POST)
+	public String updateGlobal(
+			@Valid @ModelAttribute("gForm") GlobalItemForm globalItemForm,
+			BindingResult result, RedirectAttributes redirectAttributes,
+			Model model, HttpServletRequest request) {
+
+		if (authorize.isAllowed("ITEMBILL003")) {
+			if (result.hasErrors()) {
+				model.addAttribute("global", this.globalItemBo.fetchAll());
+				return "billscheme/editGlobal";
+			}
+			// BillGlobalItem globalItem =
+			// globalItemBo.getGlobalItemById(globalItemForm.getGobalitemId());
+			// ''globalItem.setGlobalName(globalItemForm.getGlobalitemName());
+			// globalItem.setGlobalDescription(globalItemForm.getGlobalitemDescription());
+
+			// globalItemBo.update(globalItem);
+
+			auditor.after(request, "global Form", globalItemForm,
+					userIdentity.getUsername(), 0);
+
+			alert.setAlert(redirectAttributes, Alert.SUCCESS,
+					"Success! global Item updated");
+
+			return "redirect:/billscheme/globalIndex";
+		} else {
+			alert.setAlert(redirectAttributes, Alert.WARNING,
+					"You have no permission to Edit Global Item Billing Scheme");
+
+			return "redirect:/";
+
+		}
+
+	}
+
+	// Scheme item
+	@RequestMapping(value = "/saveBillItem", method = RequestMethod.POST)
+	public String saveItem(
+			@Valid @ModelAttribute("iForm") BillSchemeItemForm billschemeItemForm,
+			BindingResult result, Model model,
+			RedirectAttributes redirectAttributes) {
+		if (authorize.isAllowed("ITEMBILL001")) {
+			BillScheme billscheme = this.billschemeBo
+					.getBillSchemeById(billschemeItemForm.getBillId());
+
+			/*
+			 * if (result.hasErrors()) { model.addAttribute("scheme", bill);
+			 * return "redirect:/billscheme"; }
+			 */
+
+			/*
+			 * if (null == bill) { alert.setAlert(redirectAttributes,
+			 * Alert.DANGER,
+			 * "Error! Could not save billing scheme. Invalid resource"); return
+			 * "redirect:/billscheme"; }
+			 */
+			BillSchemeItem billschemeItem = new BillSchemeItem();
+
+			billschemeItem.setBillScheme(billscheme);
+			billschemeItem.setId(billschemeItemForm.getBillSchemeItemId());
+			billschemeItem.setBillName(billschemeItemForm.getBillName());
+			billschemeItem
+					.setGlobalItemId(billschemeItemForm.getGlobalItemId());
+			billschemeItem.setOrganisation(userIdentity.getOrganisation());
+			billschemeItem.setCreatedDate(new GregorianCalendar().getTime());
+			billschemeItem.setCreatedBy(userIdentity.getUsername());
+
+			this.billschemeItemBo.save(billschemeItem);
+			alert.setAlert(redirectAttributes, Alert.SUCCESS,
+					"Success! Billing Item saved successfully");
+			return "redirect:/billscheme/view/" + billscheme.getId();
+		} else {
+			alert.setAlert(redirectAttributes, Alert.WARNING,
+					"You have no permission to Add Bill Item");
+
+			return "redirect:/";
+
+		}
+
+	}
+
+	@RequestMapping(value = "/editItem/{id}")
+	public String editItem(@PathVariable("id") Integer id, Model model,
+			RedirectAttributes redirectAttributes, HttpServletRequest request) {
+		if (authorize.isAllowed("ITEMBILL003")) {
+
+			BillSchemeItem billschemeItem = billschemeItemBo
+					.getBillSchemeItemById(id);
+			if (null == billschemeItem) {
+				alert.setAlert(redirectAttributes, Alert.DANGER,
+						"Invalid resource");
+				return "redirect:/billscheme";
+			}
+			BillSchemeItemForm billschemeItemForm = new BillSchemeItemForm();
+
+			billschemeItemForm.setBillSchemeItemId(billschemeItem.getId());
+			billschemeItemForm
+					.setGlobalItemId(billschemeItem.getGlobalItemId());
+			billschemeItemForm.setBillName(billschemeItem.getBillName());
+
+			model.addAttribute("iForm", billschemeItemForm);
+			model.addAttribute("item", this.billschemeItemBo.fetchAll());
+			// model.addAttribute("global",
+			// this.globalItemBo.fetchAllByOrganisation(userIdentity.getOrganisation().getId()));
+			this.auditor.before(request, "Billing Item Form",
+					billschemeItemForm);
+
+			return "billscheme/editItem";
+
+		} else {
+			alert.setAlert(redirectAttributes, Alert.WARNING,
+					"You have no permission to Edit Bill Item");
+
+			return "redirect:/";
+
+		}
+	}
+
+	@RequestMapping(value = "/editItem/{id}", method = RequestMethod.POST)
+	public String updateItem(
+			@Valid @ModelAttribute("iForm") BillSchemeItemForm billschemeItemForm,
+			BindingResult result, RedirectAttributes redirectAttributes,
+			Model model, HttpServletRequest request) {
+
+		if (authorize.isAllowed("ITEMBILL003")) {
+			if (result.hasErrors()) {
+				model.addAttribute("item", this.billschemeItemBo.fetchAll());
+				return "billscheme/edit";
+			}
+			BillSchemeItem billschemeItem = billschemeItemBo
+					.getBillSchemeItemById(billschemeItemForm
+							.getBillSchemeItemId());
+			billschemeItem.setBillName(billschemeItemForm.getBillName());
+			billschemeItem
+					.setGlobalItemId(billschemeItemForm.getGlobalItemId());
+			billschemeItem.setModifiedDate(new GregorianCalendar().getTime());
+			billschemeItem.setModifiedBy(userIdentity.getUsername());
+
+			billschemeItemBo.update(billschemeItem);
+			auditor.after(request, "Billing Item Form", billschemeItemForm,
+					userIdentity.getUsername(), billschemeItem.getId());
+			alert.setAlert(redirectAttributes, Alert.SUCCESS,
+					"Success! Billing Scheme Item updated");
+			return "redirect:/billscheme/view/"
+					+ billschemeItem.getBillScheme().getId();
+		} else {
+			alert.setAlert(redirectAttributes, Alert.WARNING,
+					"You have no permission to Edit Bill Item");
+
+			return "redirect:/";
+
+		}
+
+	}
+
+	// bill item price
+	@RequestMapping(value = "/viewBillPrice/{id}")
+	@Layout(value = "layouts/datatable")
+	/*
+	 * public String viewPrice(@PathVariable("id") Integer id,
+	 * RedirectAttributes redirectAttributes, Model model) {
+	 */
+	public String viewPrice(@PathVariable("id") Integer id, Model model,
+			RedirectAttributes redirectAttributes, HttpServletRequest request) {
+		if (authorize.isAllowed("BILLPRICE002")) {
+			BillSchemeItem billschemeItem = billschemeItemBo
+					.getBillSchemeItemById(id);
+			/*
+			 * if (null == billscheme) { alert.setAlert(redirectAttributes,
+			 * Alert.DANGER, "Invalid resource!"); return "billscheme/index"; }
+			 */
+			BillSchemeItemForm billschemeItemForm = new BillSchemeItemForm();
+			model.addAttribute("iForm", billschemeItemForm);
+			model.addAttribute("item", this.billschemeItemBo.fetchAll());
+			model.addAttribute("item", billschemeItem);
+
+			BillSchemeItemPriceForm billschemeItemPriceForm = new BillSchemeItemPriceForm();
+			billschemeItemPriceForm.setBillSchemeItemId(billschemeItem.getId());
+			model.addAttribute("pForm", billschemeItemPriceForm);
+			model.addAttribute("pric", billschemeItemPriceBo.fetchAll());
+			// model.addAttribute("global",
+			// globalItemBo.fetchAllByOrganisation(userIdentity.getOrganisation().getId()));
+			// List<BillSchemeUnitOfMeasure> listUnit =
+			// this.billUnitOfMeasureBo.fetchAllByOrganisation(userIdentity.getOrganisation().getId());
+			// model.addAttribute("uni", listUnit);
+			return "billscheme/viewPrice";
+
+		} else {
+			alert.setAlert(redirectAttributes, Alert.WARNING,
+					"You have no permission to View Bill Item Price");
+
+			return "redirect:/";
+
+		}
+	}
+
+	@RequestMapping(value = "/saveBillPrice", method = RequestMethod.POST)
+	public String savePrice(
+			@Valid @ModelAttribute("pForm") BillSchemeItemPriceForm billschemeItemPriceForm,
+			BindingResult result, Model model,
+			RedirectAttributes redirectAttributes) {
+		if (authorize.isAllowed("BILLPRICE001")) {
+			BillSchemeItem billschemeItem = this.billschemeItemBo
+					.getBillSchemeItemById(billschemeItemPriceForm
+							.getBillSchemeItemId());
+
+			/*
+			 * if (result.hasErrors()) { model.addAttribute("scheme", bill);
+			 * return "redirect:/billscheme"; }
+			 */
+
+			if (null == billschemeItem) {
+				alert.setAlert(redirectAttributes, Alert.DANGER,
+						"Error! Could not save billing item price. Invalid resource");
+				return "redirect:/billscheme";
+			}
+			BillSchemeItemPrice billschemeItemPrice = new BillSchemeItemPrice();
+
+			billschemeItemPrice.setBillSchemeItem(billschemeItem);
+			billschemeItemPrice.setId(billschemeItemPriceForm
+					.getBillItemPriceId());
+			billschemeItemPrice.setGlobalItemId(billschemeItemPriceForm
+					.getGlobalItemId());
+			billschemeItemPrice.setUnitOfMeasure(billschemeItemPriceForm
+					.getUnitOfMeasure());
+			billschemeItemPrice.setBillItemPrice(billschemeItemPriceForm
+					.getBillItemPrice());
+			billschemeItemPrice.setCreatedDate(new GregorianCalendar()
+					.getTime());
+			billschemeItemPrice.setCreatedBy(userIdentity.getUsername());
+			billschemeItemPrice.setOrganisation(userIdentity.getOrganisation());
+			this.billschemeItemPriceBo.save(billschemeItemPrice);
+			alert.setAlert(redirectAttributes, Alert.SUCCESS,
+					"Success! Billing Scheme Item Price saved successfully");
+			return "redirect:/billscheme/viewBillPrice/"
+					+ billschemeItem.getId();
+
+		} else {
+			alert.setAlert(redirectAttributes, Alert.WARNING,
+					"You have no permission to Save Bill Item Price");
+
+			return "redirect:/";
+
+		}
+	}
+
+	@RequestMapping(value = "/editPrice/{id}")
+	public String editPrice(@PathVariable("id") Integer id, Model model,
+			RedirectAttributes redirectAttributes, HttpServletRequest request) {
+
+		if (authorize.isAllowed("BILLPRICE003")) {
+			BillSchemeItemPrice billschemeItemPrice = billschemeItemPriceBo
+					.getBillItemPriceById(id);
+			if (null == billschemeItemPrice) {
+				alert.setAlert(redirectAttributes, Alert.DANGER,
+						"Invalid resource");
+				return "redirect:/billscheme";
+			}
+			BillSchemeItemPriceForm billschemeItemPriceForm = new BillSchemeItemPriceForm();
+
+			billschemeItemPriceForm.setBillItemPriceId(billschemeItemPrice
+					.getId());
+			billschemeItemPriceForm.setBillItemPrice(billschemeItemPrice
+					.getBillItemPrice());
+			billschemeItemPriceForm.setUnitOfMeasure(billschemeItemPrice
+					.getUnitOfMeasure());
+
+			model.addAttribute("pForm", billschemeItemPriceForm);
+			model.addAttribute("pric", this.billschemeItemPriceBo.fetchAll());
+			model.addAttribute("item", this.billschemeItemBo.fetchAll());
+			// model.addAttribute("uni",
+			// this.billUnitOfMeasureBo.fetchAllByOrganisation(userIdentity.getOrganisation().getId()));
+			this.auditor.before(request, "Item Price Form",
+					billschemeItemPriceForm);
+
+			return "billscheme/editPrice";
+		} else {
+			alert.setAlert(redirectAttributes, Alert.WARNING,
+					"You have no permission to Edit Bill Item Price");
+
+			return "redirect:/";
+
+		}
+	}
+
+	@RequestMapping(value = "/editPrice/{id}", method = RequestMethod.POST)
+	public String updatePrice(
+			@Valid @ModelAttribute("pForm") BillSchemeItemPriceForm billschemeItemPriceForm,
+			BindingResult result, RedirectAttributes redirectAttributes,
+			Model model, HttpServletRequest request) {
+
+		if (authorize.isAllowed("BILLPRICE003")) {
+			if (result.hasErrors()) {
+				model.addAttribute("pric",
+						this.billschemeItemPriceBo.fetchAll());
+				return "billscheme/editPrice";
+			}
+			BillSchemeItemPrice billschemeItemPrice = billschemeItemPriceBo
+					.getBillItemPriceById(billschemeItemPriceForm
+							.getBillItemPriceId());
+			billschemeItemPrice.setUnitOfMeasure(billschemeItemPriceForm
+					.getUnitOfMeasure());
+			billschemeItemPrice.setBillItemPrice(billschemeItemPriceForm
+					.getBillItemPrice());
+			billschemeItemPrice.setModifiedDate(new GregorianCalendar()
+					.getTime());
+			billschemeItemPrice.setModifiedBy(userIdentity.getUsername());
+
+			billschemeItemPriceBo.update(billschemeItemPrice);
+			auditor.after(request, "Billing Item Price Form",
+					billschemeItemPriceForm, userIdentity.getUsername(),
+					billschemeItemPrice.getId());
+
+			alert.setAlert(redirectAttributes, Alert.SUCCESS,
+					"Success! Billing Item Price updated");
+			return "redirect:/billscheme/viewBillPrice/"
+					+ billschemeItemPrice.getBillSchemeItem().getId();
+		} else {
+			alert.setAlert(redirectAttributes, Alert.WARNING,
+					"You have no permission to Edit Bill Item Price");
+
+			return "redirect:/";
+
+		}
+	}
+
+	// unit of measure here
+	@RequestMapping(value = "/unitIndex")
+	@Layout(value = "layouts/datatable")
+	public String indexUnit(RedirectAttributes redirectAttributes, Model model) {
+
+		if (authorize.isAllowed("BILLPRICE000")) {
+			// List<BillSchemeUnitOfMeasure> billschemeUnitOfMeasure =
+			// billUnitOfMeasureBo.fetchAllByOrganisation(userIdentity.getOrganisation().getId());
+			// model.addAttribute("uni", billschemeUnitOfMeasure);
+			return "billscheme/unitIndex";
+		} else {
+			alert.setAlert(redirectAttributes, Alert.WARNING,
+					"You have no permission to List Item  Measure Price");
+
+			return "redirect:/";
+
+		}
+	}
+
+	@RequestMapping(value = "/addUnit")
+	@Layout(value = "layouts/datatable")
+	public String addUnit(RedirectAttributes redirectAttributes, Model model) {
+		if (authorize.isAllowed("BILLPRICE001")) {
+			// model.addAttribute("uForm", new BillUnitOfMeasureForm());
+			// model.addAttribute("uni",
+			// this.globalItemUnitofMeasure.fetchAllByOrganisation(userIdentity.getOrganisation().getId()));
+			return "billscheme/addUnit";
+		} else {
+			alert.setAlert(redirectAttributes, Alert.WARNING,
+					"You have no permission to Add Item  Measure Price");
+
+			return "redirect:/";
+
+		}
+	}
+
+	@RequestMapping(value = "/addUnit", method = RequestMethod.POST)
+	@Layout(value = "layouts/datatable")
+	public String saveUnit(
+			@Valid @ModelAttribute("uForm") BindingResult result,
+			RedirectAttributes redirectAttributes, Model model) {
+		if (authorize.isAllowed("BILLPRICE001")) {
+
+			if (result.hasErrors()) {
+				model.addAttribute("uni", this.billUnitOfMeasureBo.fetchAll());
+				return "billscheme/addUnit";
+			}
+			GlobalItemUnitofMeasure billschemeUnitOfMeasure = new GlobalItemUnitofMeasure();
+			// billschemeUnitOfMeasure.setUnitOfMeasureId(billUnitOfMeasureForm.getUnitOfMeasureId());
+			// billschemeUnitOfMeasure.setUnitOfMeasure(billUnitOfMeasureForm.getUnitOfMeasure());
+			// billschemeUnitOfMeasure.setUnit(billUnitOfMeasureForm.getUnit());
+			// billschemeUnitOfMeasure.setCreatedBy(userIdentity.getUsername());
+			// bi/llSchemeUnitOfMeasure.setOrganisation(userIdentity.getOrganisation());
+			// billschemeUnitOfMeasure.setCreatedDate(new
+			// GregorianCalendar().getTime());
+			// billschemeUnitOfMeasure.setStatus("Active");
+			// this.billUnitOfMeasureBo.save(billschemeUnitOfMeasure);
+			alert.setAlert(redirectAttributes, Alert.SUCCESS,
+					"Success! Unit Of Measure added!");
+			return "redirect:/billscheme/unitIndex";
+		} else {
+			alert.setAlert(redirectAttributes, Alert.WARNING,
+					"You have no permission to Add Item  Measure Price");
+
+			return "redirect:/";
+
+		}
+
+	}
+}
