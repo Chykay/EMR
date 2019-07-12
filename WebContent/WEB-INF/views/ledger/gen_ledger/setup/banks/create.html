@@ -1,0 +1,131 @@
+<div class="page-header">
+	<h1>
+		Add New Account
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/ledger/setup/banks/index}">
+			<i class="fa fa-home"></i> System Dashboard
+		</a> 
+		<a class="btn btn-xs btn-primary" th:href="@{/ledger/setup/banks/add}">
+			<i class="fa fa-plus-circle"></i> Add Bank Account 
+		</a>
+	
+ 		<span   id="imgId" hidden="hidden" > 
+ 			<img th:src="@{/resources/assets/images/ajax-loader.gif}" id="loading_img" />  
+ 		</span>      
+	</div>
+</div>
+
+
+<div>
+	<form role="form" class="form-horizontal" method="POST"
+			th:object="${bankAccount}">
+			
+		<div class="form-group">
+			<label for="gender" class="col-sm-3 control-label no-padding-right">Select Bank:</label>
+			<div class="col-sm-9">
+				<select th:field="*{bank}" class="col-xs-10 col-sm-5"  required="required">
+					<option value="">Select..</option>
+						<option th:each="bank: ${banks}" 
+					th:value = "${bank.bankCode}" 
+					th:text="${bank.name}">Bank Name</option>
+				</select>
+				<span class="text-danger" th:if="${#fields.hasErrors('bank')}"
+					th:errors="*{bank}">
+				</span>
+			</div>
+		</div>
+			
+		<div class="form-group">
+			<label for="accountNo" class="col-sm-3 control-label no-padding-right">Account No:</label>
+			<div class="col-sm-9">
+				<input type="text" class="col-xs-10 col-sm-5" placeholder="accountNo"
+					th:field="*{accountNo}" required="required" /> <span
+					class="text-danger" th:if="${#fields.hasErrors('accountNo')}"
+					th:errors="*{accountNo}"></span>
+			</div>
+		</div>
+		
+		
+		<div class="form-group">
+			<label for="ledgerAccID" class="col-sm-3 control-label no-padding-right">Select GL for Bank:</label>
+			<div class="col-sm-9">
+				<select th:field="*{ledgerAccID}" class="col-xs-10 col-sm-5"  required="required" id="bank">
+					<option value="">Select..</option>
+						<option th:each="ledgerAccount: ${ledgerAccounts}" 
+					th:value = "${ledgerAccount.id}" 
+					th:text="|${ledgerAccount.accountNo}-${ledgerAccount.name}|">Select GL for Bank</option>
+				</select>
+				<span class="text-danger" th:if="${#fields.hasErrors('ledgerAccID')}"
+					th:errors="*{ledgerAccID}">
+				</span>
+			</div>
+		</div>
+		
+		
+		
+		<div class="clearfix form-actions">
+			<div class="col-md-offset-3 col-md-9">
+				<button class="btn btn-primary" type="submit">
+					<i class="ace-icon fa fa-check bigger-110"></i> Add
+				</button>
+
+				<button class="btn btn-danger" type="reset">
+					<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+				</button>
+			</div>
+		</div>
+	</form>
+</div>
+
+<script type="text/javascript">
+/*<![CDATA[*/
+	/* Form Account Number*/
+	/* 	$('#totalingCode').change(function(){
+			var selElement = $(this);
+			var optValue = selElement[0].selectedOptions[0].innerText;
+		
+			var code = $('#code')[0].value;
+			var splitOption = optValue.split("-");
+			var accountNo = splitOption[0] + "-" + splitOption[1] + "-" + code;
+			$('#accountNo')[0].value = accountNo;
+			});
+		
+
+	$('#code').blur(function(){
+
+		var code = this.value;
+
+		if(code.length > 3) {
+			$.gritter.add({
+				title : "Invalid Action!",
+				text : "code cannot be MORE than 3 values",
+				time : 4000
+			}); 
+			code = "";
+			$('#code')[0].value = "";
+		} else if (code.length < 3){
+
+			var x = 3 - code.length;
+			for(i=0; i<x; i++){
+				code = "0" + code;
+			}
+
+			$('#code')[0].value = code;
+			
+		}
+		
+		var optValue = $('#totalingCode')[0].selectedOptions[0].innerText;
+		
+		var splitOption = optValue.split("-");	
+		var accountNo = splitOption[0] + "-" + splitOption[1] + "-" + code;
+		 
+		$('#accountNo')[0].value = accountNo;
+	}); */
+
+/*]]>*/
+</script>

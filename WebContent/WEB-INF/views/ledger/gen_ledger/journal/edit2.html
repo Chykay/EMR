@@ -1,0 +1,78 @@
+<div class="page-header">
+	<h1>
+		Posting
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- Button for view -->
+		<a class="btn btn-xs btn-info" th:href="@{/ledger/gen_ledger/index}">
+			<i class="fa fa-home"></i> System Dashboard
+		</a> 
+		<a class="btn btn-xs btn-primary" th:href="@{/ledger/gen_ledger/create}">
+			<i class="fa fa-plus-circle"></i> Add Account 
+		</a>
+	
+ 		<span   id="imgId" hidden="hidden" > 
+ 			<img th:src="@{/resources/assets/images/ajax-loader.gif}" id="loading_img" />  
+ 		</span>      
+	</div>
+</div>
+
+
+<div>
+	<form role="form" class="form-horizontal" id="form" style="margin-top:20px;">
+		<div class="form-group container">
+		     <label for="description" class="col-sm-3 control-label no-padding-right">Journal Description: </label>
+		    <div class="col-sm-9">
+				<input type="text" class="col-xs-10 col-sm-5" placeholder="description"
+					th:value="${journalHeader.description}"
+					th:id="${journalHeader.journalID}"
+					th:name="description"
+					 required="required" /> <span
+					class="text-danger" th:if="${#fields.hasErrors('journalHeader.description')}"
+					th:errors="${journalHeader.description}"></span>
+			</div>  
+		</div>
+	 	<th:bloock th:if="${journalHeader.status  != 'POSTED' }">
+			<button type="button" class="btn btn-primary add">New Entry</button> 
+			<button type="submit" class="btn btn-success" id="save">Save Entries</button>
+	 		<button type="submit" class="btn btn-default" id="post">Post Entries</button>
+	 	</th:bloock>
+	
+		 <div th:each="journalEntry, counter : ${journalEntries}" class=" journal nothing">
+
+		    <select class="accountNo" th:id="'accountNo' + ${counter.index}"  style="margin-top:0px; width: 120px;"  required="required"  th:value="${journalEntry.accountNo}" >
+		    		<option th:each="generalLedger: ${generalLedgers}" 
+							th:value="${generalLedger.accountNo}"
+							th:text="|${generalLedger.accountNo}-${generalLedger.name}|"></option>
+			</select>
+		    <select id="postCode" required="required">
+		        <option th:value="${journalEntry.postCode}">Select..</option>
+		        <option value="DR">GL Debit</option>
+		        <option value="CR">GL Credit</option>
+		    </select>
+		    <select id="branchID" th:value="${journalEntry.branchID}" required="required">
+		    </select>
+								
+						
+		    <input type="text" id="amount" class="amount"  placeholder="amount" th:value="${journalEntry.amount}" 
+		    oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"
+		    required="required"/>
+		    <input type="text" id="refNo"  placeholder="ref no" th:value="${journalEntry.refNo}" required="required"/>
+		    <input type="text" id="desc"  placeholder="description" th:value="${journalEntry.description}" required="required"/>
+		    <button type="button" class="btn btn-xs btn-default delete"><i class="fa fa-trash-o"></i></button>		    	
+		</div>
+	
+	</form>
+	
+</div>
+
+
+<script th:src="@{/resources/assets/js/custom-j.posting.js}"></script>
+<!-- <script type="text/javascript">
+/*<![CDATA[*/
+
+/*]]>*/
+</script> -->

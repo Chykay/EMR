@@ -124,7 +124,7 @@ public class JournalBoImpl implements JournalBo{
 	}
 
 	@Override
-	public boolean manageJournal(Object journal) throws LedgerException {
+	public void manageJournal(Object journal) throws LedgerException {
 		Gson gson = new Gson();
 		JsonParser parser = new JsonParser();
 		String journalID, description, action;
@@ -176,14 +176,13 @@ public class JournalBoImpl implements JournalBo{
 		if (action.contains("post")) {
 			if (Math.abs(totCredit) - Math.abs(totDebit) == 0) {
 				this.postJournal(journalID);
-				return true;
+				/*return true;
 			} else {
-				System.out.print("no dice");
-				return false;
+				return false;*/
 			}
 		}
 		
-		return true;
+		//return true;
 		
 	}
 

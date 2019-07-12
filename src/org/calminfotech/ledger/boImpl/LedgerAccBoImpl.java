@@ -23,11 +23,11 @@ public class LedgerAccBoImpl implements LedgerAccBo {
 	private UserIdentity userIdentity;
 	
 	
-	public List<LedgerAccount> fetchAll(int branch_id, int company_id){
+	public List<LedgerAccount> fetchAll(int company_id){
 		List<LedgerAccount> list = null;
 		try {
 			
-			list = this.ledgerAccDao.fetchAll(branch_id, company_id);	
+			list = this.ledgerAccDao.fetchAll(company_id);	
 		} catch (Exception e) {
 			System.out.println("null");
 		}
@@ -35,10 +35,10 @@ public class LedgerAccBoImpl implements LedgerAccBo {
 		return list;
 	}
 	
-	public List<LedgerAccount> fetchTop100(int branch_id, int company_id){
+	public List<LedgerAccount> fetchTop100(int company_id){
 		List<LedgerAccount> list = null;
 		try {
-			list = this.ledgerAccDao.fetchTop100(branch_id, company_id);	
+			list = this.ledgerAccDao.fetchTop100(company_id);	
 		} catch (Exception e) {
 			System.out.println("null");
 		}
@@ -112,5 +112,11 @@ public class LedgerAccBoImpl implements LedgerAccBo {
 		
 		this.ledgerAccDao.update(ledgerAccount);
 		return ledgerAccount;
+	}
+
+	@Override
+	public List<LedgerAccount> getAssetLedgers() {
+	
+		return this.ledgerAccDao.getAssetLedgers();
 	}
 }

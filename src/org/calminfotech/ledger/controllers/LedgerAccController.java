@@ -54,8 +54,8 @@ public class LedgerAccController {
 		Organisation org = userIdentity.getOrganisation();
 		System.out.println(org.getId() + " : " + org.getOrgCoy().getId());
 		
-		if (this.ledgerAccBo.fetchTop100(org.getId(), org.getOrgCoy().getId()) != null) {
-			List<LedgerAccount> ledgerAccounts = this.ledgerAccBo.fetchTop100(org.getId(), org.getOrgCoy().getId());
+		if (this.ledgerAccBo.fetchTop100(org.getOrgCoy().getId()) != null) {
+			List<LedgerAccount> ledgerAccounts = this.ledgerAccBo.fetchTop100(org.getOrgCoy().getId());
 			model.addAttribute("accounts", ledgerAccounts);
 		} 
 		

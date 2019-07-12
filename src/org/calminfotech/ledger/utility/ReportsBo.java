@@ -61,6 +61,10 @@ public class ReportsBo {
 		
 		for (GenLedgBalance genLedgBalance : genLedgBalances) {
 			String accountNo = genLedgBalance.getGLAccountNo();
+			if (accountNo.charAt(0) == '6') {
+				continue;
+			}
+			
 			balance = genLedgBalance.getCurrBalance();
 			TrialBalEntry trialBalEntry = new TrialBalEntry();
 			trialBalEntry.setName(this.ledgerAccBo.getLedgerByAccount_no(accountNo).getName());
@@ -127,12 +131,13 @@ public class ReportsBo {
 
 
 	public BranchAccChart getBranchCoA(int branchID, String type, String chartType) {
-		List<LedgerCategory> ledgerCategories = this.ledgerCatBo.fetchAllByOrg(branchID);
+		List<LedgerCategory> ledgerCategories = this.ledgerCatBo.fetchAll();
 
-		List<AccChartEntry> rootBalSheets = new ArrayList<AccChartEntry>();
-		List<AccChartEntry> descBalSheets = new ArrayList<AccChartEntry>();
+		List<AccChartEntry> rootAccCharts = new ArrayList<AccChartEntry>();
+		List<AccChartEntry> emptyRootAccCharts = new ArrayList<AccChartEntry>();
+		List<AccChartEntry> descAccCharts = new ArrayList<AccChartEntry>();
 		BranchAccChart branchAccChart = new BranchAccChart();
-		float totbalance = 0;
+		//float totbalance = 0;
 		
 		for (LedgerCategory ledgerCategory : ledgerCategories) {
 
@@ -142,16 +147,16 @@ public class ReportsBo {
 			accChartEntry.setId(ledgerCategory.getId());
 			
 			if (ledgerCategory.getParentID() == 0) {
-				rootBalSheets.add(accChartEntry);
+				rootAccCharts.add(accChartEntry);
 			} else {
 				accChartEntry.setParentID(ledgerCategory.getParentID());
-				descBalSheets.add(accChartEntry);
+				descAccCharts.add(accChartEntry);
 			}
 		}
 		
-		for (AccChartEntry accChartEntry : rootBalSheets) {
+		for (AccChartEntry accChartEntry : rootAccCharts) {
 
-			AccChartEntry self = this.getChartOfAccs(descBalSheets, accChartEntry.getId(), type, chartType);
+			AccChartEntry self = this.getChartOfAccs(descAccCharts, accChartEntry.getId(), type, chartType);
 			accChartEntry.setShow(self.getShow());
 		
 			if (self.getAccChartEntries().size() > 0) {
@@ -178,10 +183,13 @@ public class ReportsBo {
 				
 			}
 			
-			totbalance += accChartEntry.getTotBalance();
+			if (accChartEntry.getShow() == null) 
+				emptyRootAccCharts.add(accChartEntry);
+			//totbalance += accChartEntry.getTotBalance();
 		}
 		
-		/*for (AccChartEntry accChartEntry : rootBalSheets) {
+
+		for (AccChartEntry accChartEntry : rootAccCharts) {
 			System.out.println("here");
 			System.out.println(accChartEntry.getName() + ":" + accChartEntry.getShow() + ":" + accChartEntry.getHasChildren());
 			if (accChartEntry.getAccChartEntries() != null && accChartEntry.getAccChartEntries().size() > 0) {
@@ -208,10 +216,43 @@ public class ReportsBo {
 				System.out.println("no children" );
 
 			}
-		}*/
+		}
 		
-		branchAccChart.setAccChartEntries(rootBalSheets);
-		branchAccChart.setBalance(totbalance);
+		System.out.println("AND NOW");
+		rootAccCharts.removeAll(emptyRootAccCharts);
+		
+		for (AccChartEntry accChartEntry : rootAccCharts) {
+			System.out.println("here");
+			System.out.println(accChartEntry.getName() + ":" + accChartEntry.getShow() + ":" + accChartEntry.getHasChildren());
+			if (accChartEntry.getAccChartEntries() != null && accChartEntry.getAccChartEntries().size() > 0) {
+				for (AccChartEntry accChartEntry2 : accChartEntry.getAccChartEntries()) {
+					System.out.println("  " + accChartEntry2.getName() + ":" + accChartEntry2.getShow() + ":" + accChartEntry2.getHasChildren());
+					
+					if (accChartEntry2.getAccChartEntries() != null && accChartEntry2.getAccChartEntries().size() > 0) {
+						for (AccChartEntry accChartEntry3 : accChartEntry2.getAccChartEntries()) {
+							System.out.println("    " + accChartEntry3.getName() + ":" + accChartEntry3.getShow() + ":" + accChartEntry3.getHasChildren());
+							if (accChartEntry3.getAccChartEntries() != null && accChartEntry3.getAccChartEntries().size() > 0) {
+								for (AccChartEntry accChartEntry4 : accChartEntry3.getAccChartEntries()) {
+									System.out.println("    " + accChartEntry4.getName() + ": " + accChartEntry4.getShow() + ": " + accChartEntry4.getHasChildren());
+									
+								}
+							} else {
+								System.out.println("  no children" );
+							}
+						}
+					} else {
+						System.out.println("  no children" );
+					}
+				}
+			} else {
+				System.out.println("no children" );
+
+			}
+		}
+		
+		branchAccChart.setAccChartEntries(rootAccCharts);
+		branchAccChart.setBalance(rootAccCharts.get(0).getTotBalance() - rootAccCharts.get(1).getTotBalance());
+		System.out.println(branchAccChart.getBalance() + " OVER HERE");
 		branchAccChart.setName(this.organisationBo.getOrganisationById(branchID).getName());
 		branchAccChart.setCompanyName(this.userIdentity.getOrganisation().getOrgCoy().getName());
 		
@@ -220,15 +261,15 @@ public class ReportsBo {
 
 
 
-	private AccChartEntry getChartOfAccs(List<AccChartEntry> descBalSheets, int parentID, String type, String chartType) {
+	private AccChartEntry getChartOfAccs(List<AccChartEntry> descAccCharts, int parentID, String type, String chartType) {
 
 		List<AccChartEntry> children = new ArrayList<AccChartEntry>();
 		AccChartEntry parent = new AccChartEntry();
 		float totBalance = 0;
 		
-		for (AccChartEntry accChartEntry : descBalSheets) {
+		for (AccChartEntry accChartEntry : descAccCharts) {
 			if(accChartEntry.getParentID() == parentID){
-				AccChartEntry returnedSelf = this.getChartOfAccs(descBalSheets, accChartEntry.getId(), type, chartType);
+				AccChartEntry returnedSelf = this.getChartOfAccs(descAccCharts, accChartEntry.getId(), type, chartType);
 				accChartEntry.setShow(returnedSelf.getShow());
 				
 				if (returnedSelf.getAccChartEntries().size() > 0) {
@@ -283,7 +324,9 @@ public class ReportsBo {
 			try {
 				balance = this.genLedgerBo.getBalance(ledgerAccount.getAccountNo(), ledgerAccount.getOrganisation().getId(), ledgerAccount.getOrgCoy().getId()).getCurrBalance();
 				accChartEntry.setTotBalance(balance);
+				
 				totBalance += balance;
+				
 			} catch (LedgerException e) {
 				e.printStackTrace();
 			}

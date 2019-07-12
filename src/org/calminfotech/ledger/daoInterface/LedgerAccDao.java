@@ -6,9 +6,9 @@ import org.calminfotech.ledger.models.LedgerAccount;
 
 public interface LedgerAccDao {
 
-	public List<LedgerAccount> fetchAll(int branch_id, int company_id);
+	public List<LedgerAccount> fetchAll(int company_id);
 
-	public List<LedgerAccount> fetchTop100(int branch_id, int company_id);
+	public List<LedgerAccount> fetchTop100(int company_id);
 
 	public LedgerAccount getLedgerById(int id);
 	
@@ -19,4 +19,6 @@ public interface LedgerAccDao {
 	public void delete(LedgerAccount ledgerAccount);
 	
 	public void update(LedgerAccount ledgerAccount);
+
+	public List<LedgerAccount> getAssetLedgers();
 }

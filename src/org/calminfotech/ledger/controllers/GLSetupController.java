@@ -5,13 +5,18 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.calminfotech.ledger.boInterface.GLSetupBo;
+import org.calminfotech.ledger.boInterface.LedgerAccBo;
 import org.calminfotech.ledger.boInterface.LedgerCatBo;
 import org.calminfotech.ledger.boInterface.TotAccBo;
+import org.calminfotech.ledger.forms.BankAccForm;
 import org.calminfotech.ledger.forms.LedgerAccForm;
+import org.calminfotech.ledger.models.BankAccount;
 import org.calminfotech.ledger.models.LedgerAccount;
 import org.calminfotech.ledger.models.LedgerCategory;
 import org.calminfotech.ledger.models.TotalingAccount;
+import org.calminfotech.user.utils.UserIdentity;
 import org.calminfotech.utils.Alert;
+import org.calminfotech.utils.models.Bank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,15 +32,18 @@ public class GLSetupController {
 
 	@Autowired
 	private TotAccBo totAccBo;
-	
+
 	@Autowired
 	private LedgerCatBo ledgerCatBo;
 	
 	@Autowired
-	private Alert alert;
-/*
+	private LedgerAccBo ledgerAccBo;
+	
 	@Autowired
-	private LedgerAccBo ledgerAccBo;*/
+	private Alert alert;
+
+	@Autowired
+	private UserIdentity userIdentity;
 
 	@Autowired
 	private GLSetupBo glSetupBo;
@@ -75,6 +83,36 @@ public class GLSetupController {
 
 		model.addAttribute("account", account);
 		return "redirect:/ledger/setup/P_L";
+	}
+	
+	@RequestMapping(value = {"/banks/index"}, method=RequestMethod.GET)
+	public String indexB(Model model){
+		
+
+		List<BankAccount> bankAccounts = this.glSetupBo.getAllBankAccs(this.userIdentity.getOrganisation());
+		
+		model.addAttribute("bankAccounts", bankAccounts);
+		return "ledger/gen_ledger/setup/banks/index";
+	}
+
+	@RequestMapping(value = {"/banks/add"}, method=RequestMethod.GET)
+	public String addB(Model model){
+		
+		List<LedgerAccount> ledgerAccounts = this.ledgerAccBo.getAssetLedgers();
+		List<Bank> banks = this.glSetupBo.getAllBanks();
+		
+		model.addAttribute("bankAccount", new BankAccForm());
+		model.addAttribute("banks", banks);
+		model.addAttribute("ledgerAccounts", ledgerAccounts);
+		return "ledger/gen_ledger/setup/banks/create";
+	}
+	
+
+	@RequestMapping(value = {"/banks/add"}, method=RequestMethod.POST)
+	public String addB_P(@Valid @ModelAttribute("bankAccount") BankAccForm bankAccForm, BindingResult result, Model model,
+			RedirectAttributes redirectAttributes){
+		this.glSetupBo.addBankAcc(bankAccForm);
+		return "ledger/gen_ledger/setup/banks/index";
 	}
 	
 }

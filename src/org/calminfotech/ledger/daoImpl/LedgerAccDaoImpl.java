@@ -6,6 +6,8 @@ import java.util.List;
 import org.calminfotech.ledger.daoInterface.LedgerAccDao;
 import org.calminfotech.ledger.models.LedgerAccount;
 import org.calminfotech.system.boInterface.SettingBo;
+import org.calminfotech.system.models.Organisation;
+import org.calminfotech.user.utils.UserIdentity;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -21,9 +23,12 @@ public class LedgerAccDaoImpl implements LedgerAccDao {
 	
 	@Autowired
 	private SettingBo settingBo;
+	
+	@Autowired
+	private UserIdentity userIdentity;
 
 	@SuppressWarnings("unchecked")
-	public List<LedgerAccount> fetchAll(int branch_id, int company_id){
+	public List<LedgerAccount> fetchAll(int company_id){
 		List<String> interfaces = this.settingBo.fetchAllGLSettings(company_id);
 		
 		if (interfaces == null) {
@@ -32,9 +37,8 @@ public class LedgerAccDaoImpl implements LedgerAccDao {
 		}
 		
 		List<LedgerAccount> ledgerAccounts = sessionFactory.getCurrentSession()
-				.createQuery(" from LedgerAccount WHERE organisation_id = ? AND company_id = ? AND account_no NOT IN ( :interfaces )")
-				.setParameter(0, branch_id)
-				.setParameter(1, company_id)
+				.createQuery(" from LedgerAccount WHERE  company_id = ? AND account_no NOT IN ( :interfaces )")
+				.setParameter(0, company_id)
 				.setParameterList("interfaces", interfaces)
 				.list();
 		
@@ -45,7 +49,7 @@ public class LedgerAccDaoImpl implements LedgerAccDao {
 	}
 	
 	@SuppressWarnings({ "unchecked" })
-	public List<LedgerAccount> fetchTop100(int branch_id, int company_id){
+	public List<LedgerAccount> fetchTop100(int company_id){
 		List<String> interfaces = this.settingBo.fetchAllGLSettings(company_id);
 		
 		if (interfaces == null) {
@@ -54,9 +58,8 @@ public class LedgerAccDaoImpl implements LedgerAccDao {
 		}
 		
 		List<LedgerAccount> ledgerAccounts = sessionFactory.getCurrentSession()
-				.createQuery(" from LedgerAccount WHERE organisation_id = ? AND company_id = ? AND account_no NOT IN ( :interfaces ) ORDER BY create_date DESC")
-				.setParameter(0, branch_id)
-				.setParameter(1, company_id)
+				.createQuery(" from LedgerAccount WHERE company_id = ? AND account_no NOT IN ( :interfaces ) ORDER BY create_date DESC")
+				.setParameter(0, company_id)
 				.setParameterList("interfaces", interfaces)
 				.setMaxResults(100)
 				.list();
@@ -106,6 +109,29 @@ public class LedgerAccDaoImpl implements LedgerAccDao {
 	public void update(LedgerAccount ledgerAccount){
 		System.out.println("Updating");
 		this.sessionFactory.getCurrentSession().update(ledgerAccount);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<LedgerAccount> getAssetLedgers() {
+		Organisation org = this.userIdentity.getOrganisation();
+		List<String> interfaces = this.settingBo.fetchAllGLSettings(org.getOrgCoy().getId());
+		
+		if (interfaces == null) {
+			interfaces = new ArrayList<String>();
+			interfaces.add("0-0000-000");
+		}
+		
+		List<LedgerAccount> ledgerAccounts = sessionFactory.getCurrentSession()
+				.createQuery(" from LedgerAccount WHERE organisation_id = ? AND company_id = ? AND account_no LIKE '1%' AND account_no NOT IN(:interfaces)")
+				.setParameter(0, org.getId())
+				.setParameter(1, org.getOrgCoy().getId())
+				.setParameterList("interfaces", interfaces)
+				.list();
+		
+		if (ledgerAccounts.size() > 0)
+			return ledgerAccounts;
+		
+		return null;
 	}
 
 }
