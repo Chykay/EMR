@@ -1,9 +1,9 @@
 /*<![CDATA[*/
            
 window.branches = "";
-window.random = 1;
 const saveBtn = document.getElementById('save');
 const postBtn = document.getElementById('post');
+//const searchButtons = document.querySelectorAll('.custSearch');
 
 if(saveBtn != null){
 	saveBtn.addEventListener('click', (e) => {
@@ -22,48 +22,30 @@ if(postBtn != null) {
  
  
 $(document).ready(function(){
-	getBranches();
-	$(".accountNo").select2().trigger("change");
-	$(".accountNo").each(function() {
-		$(this).trigger("change.select2");
-	});
+	getAccounts("GET GL", "GA");
+    $('.accountNo').select2();
 });
    
+$(document.body).on("change", ".accountType", function(){
+	var acc_type = $(this)[0].value;
+	accountSetup($(this).parent(), acc_type);
+});
+
+
+/*$(document.body).on("change", ".accountNo", function(){
+	var accNo = $(this)[0].value;
+	console.log($(this).prev().prev());
+	$(this).prev().prev()[0].value = accNo;
+});*/
+
+
 
 $('.add').click(function(){
 	div = document.createElement('div');
-	var $src = $("#accountNo0");
-
-	$src.select2("destroy");
-
-	if (true) {
-	$src.attr("data-select2-id",null);
-	  $src.find("[data-select2-id]").each(function() {
-	    $(this).attr("data-select2-id",null);
-	  })
-	};
-	var $dup = $src.clone();
-	if (true) {
-	  $dup.attr('id',"added" + window.random);
-	  var nrs='xxx';
-	  $dup.find('*[id]').attr('id',function(index,oldval) {
-	     return oldval.replace(/\d*$/,nrs);
-	  });
-	};
-	
-
-	markup = '<select id="postCode"  required="required"><option value="">Select..</option><option value="DR">GL Debit</option><option value="CR">GL Credit</option></select><select id="branchID"  required="required">' + window.branches + '</select><input type="text" class="amount" id="amount" oninput="this.value = this.value.replace(/[^0-9.]/g, ""); this.value = this.value.replace(/(\..*)\./g, "$1");" placeholder="amount"  required="required" /><input type="text" id="refNo"  placeholder="ref no"  required="required" /><input type="text" id="desc"  placeholder="description"  required="required" /><button type="button" class="btn btn-xs btn-default delete"><i class="fa fa-trash-o"></i></button>';
+	markup = '<select class="accountType"  required="required"><option value="">Select..</option><option value="CA">Customer</option><option value="GA">GL</option></select><div style="display:inline-table;"> <input type="text" class="accountNoSearch"  id="accountNoSearch" placeholder="account no" th:value="${journalEntry.accountNo}" required="required" disabled="disabled"/> <br /><select class="accountNo" id="accountNo"  style="margin-top:0px;"  required="required"  hidden="hidden"></select><button type="button" class="custSearch btn btn-xs btn-primary" hidden="hidden">searcn</button></div> <select id="postCode"  required="required"><option value="">Select..</option><option value="DR">GL Debit</option><option value="CR">GL Credit</option></select><select id="branchID"  required="required">' + window.branches + '</select><input type="text" id="amount"  placeholder="amount"  required="required" /><input type="text" id="refNo"  placeholder="ref no"  required="required" /><input type="text" id="desc"  placeholder="description"  required="required" /><button type="button" class="btn btn-xs btn-default delete"><i class="fa fa-trash-o"></i></button>';
 	
 	$(div).addClass("journal").html(markup);
-	$(div).prepend($dup);
-	
 	$('form').append(div);
-	
-	$src.select2({width: "120px"});
-	$src.trigger("change.select2");
-	$dup.select2({width: "120px"});
-
-	window.random++;
 });
 
 
@@ -76,23 +58,45 @@ $(document.body).on("click", ".custSearch", function(){
 });
 
 
-$(document.body).on("blur", ".amount", function(){
-	 var valuee = parseFloat(this.value.replace(/,/g, ""))
-	   .toFixed(2)
-	   .toString()
-	   .replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
-		
-		this.value = valuee;
-		
+/*$(document.body).on("keyup", ".accountNoSearch", function(){
+	var text = $(this)[0].value;
+	filter($(this), text);
 });
 
+$(document.body).on("blur", ".accountNoSearch", function(){
+	var text = $(this)[0].value;
+	selectAccount($(this), text);
+});
+*/
 
 function onSubmit(action){
 	var isFormValid = true;
 	$("#form input, textarea, select").each(function(){
 		if ($.trim($(this).val()).length == 0){
 			$(this).addClass("highlight");
-			isFormValid = false;
+			/* console.log($(this)[0].id, "outside", "no values");
+			 */
+			if($(this)[0].id == "accountNo"){
+				if($(this).parent().parent().find('.accountType option:selected')[0].value != 'CA') {
+					isFormValid = false;
+					/* console.log("no value: IT IS account no IT IS NOT CUSTOMERSELECTED"); */
+				}/*  else {
+
+					console.log("no value: IT IS account no IT IS CUSTOMERSELECTED");
+				} */
+				
+				
+			} else if($(this)[0].id == "accountNoSearch") {
+				if($(this).parent().parent().find('.accountType option:selected')[0].value != 'GA') {
+					isFormValid = false;
+					 console.log("no value: IT IS account no IT IS NOT CUSTOMERSELECTED"); 
+				}
+			} else {
+
+				/* console.log("no value: not account no");
+				 */
+				isFormValid = false;
+			}
 				
 		} else {
 			$(this).removeClass("highlight");
@@ -110,16 +114,22 @@ function onSubmit(action){
 		
 		 
 		$('.journal').each(function(){
-			/*let account_type = $(this).find('.accountType option:selected')[0].value;*/
+			let account_type = $(this).find('.accountType option:selected')[0].value;
 			  	 	
 			var entry = {
-				"account_no": $(this).find('.accountNo option:selected')[0].value,
+				"account_type": account_type,
 				"post_code": $(this).find('#postCode option:selected')[0].value,
 				"branch_id": $(this).find('#branchID option:selected')[0].value,
 				"amount": $(this).find('#amount')[0].value,
 				"ref_no": $(this).find('#refNo')[0].value,
 				"desc": $(this).find('#desc')[0].value
 			};
+			
+			if (account_type == "GA"){
+				entry.account_no = $(this).find('#accountNo option:selected')[0].value;
+			} else {
+				entry.account_no = $(this).find('#accountNoSearch')[0].value;
+			}
 			 		 
 			journalEntries.push(entry);
 		});
@@ -145,9 +155,11 @@ function onSubmit(action){
 			dataType: "json",
 			
 			success: function(response, data){
-				//window.location = '/../'+ window.location.pathname.split('/')[1] + '/ledger/journal/index';
+				alert("yuppie");
+				window.location = '/../'+ window.location.pathname.split('/')[1] + '/ledger/journal/index';
 			},
-			error: function(response, data){
+			error: function(response){
+				// alert("nopppiee");
 				window.location = '/../'+ window.location.pathname.split('/')[1] + '/ledger/journal/index';
 			}
 		});
@@ -179,37 +191,38 @@ function getBranches() {
 }
  
 function selectOptions() {
-	
-	
 	$("select").each(function(){
-		
-		var selClass = $(this)[0].id;
-			
-		if(selClass == "postCode")
-			var selValue = $(this)[0].value;
-		else
-			var selValue = $(this)[0]["attributes"]["value"]["value"];
-		
-		
+		var selValue = $(this)[0].value;
+		var selClass = $(this)[0].className;
 		var options = $(this)[0]["options"];
 		
+		if(selClass == "accountType") {
+			//console.log("setting up account no");
+			accountSetup($(this).parent(), $(this)[0].value);
+		} else if(selClass == "accountNo") {
+			//console.log
+			//var options = $(this)[0]["options"];
+			console.log(options, $(this));
+		}
+
 		
 
+		//console.log("now setting up selected account no");
 		$.each(options, function( index ) {
 			if(this.value == selValue) {
 				this.selected = true;
 			} 
 		});
-		
-		$(this).trigger("change");
 	});
 }
    
 function accountSetup(journalElem, acc_type) {
 
-	accNoElem = journalElem.find('.select2-container');
+	accNoElem = journalElem.find('.select2');
+	console.log(accNoElem);
 	
-	accNoElem2 = journalElem.querySelector('.select2');
+	/*accNoElem2 = journalElem.querySelector('.select2');
+	console.log("acc No 2", accNoElem2);*/
 	
 	searchBtn = journalElem.find('.custSearch')[0];
 	accNoSearchElem = journalElem.find('#accountNoSearch')[0];
@@ -229,6 +242,8 @@ function accountSetup(journalElem, acc_type) {
 		accNoSearchElem.style.display="inline-block";
 		searchBtn.style.display="inline-block";
 
+		/*if(accNoSearchElem.value.length < 1)
+			accNoSearchElem.value = "";*/
 	}
 }
    
@@ -239,8 +254,15 @@ function getAccounts(elem, account_type) {
 			url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/fetch/' + account_type,
 			
 			success : function(value) {
+				/* elem.html(value); */
 				window.generalLedgers = value;
-		
+				
+				selectLedgers = document.querySelectorAll('#accountNo');
+				
+				for(let selectLedger of selectLedgers) {
+					selectLedger.append(window.generalLedgers);
+				}
+				
 				getBranches();
 			},
 			error : function() {
@@ -258,7 +280,57 @@ function custSearch(searchBtn) {
 	return false
 }
 
+function updateAccNo(customerAccNo){/*
+	const accNoSearch = window.searchBtn.parent().find('#accountNoSearch')[0];*/
+	accNoSearch.value = customerAccNo;
+}
+
+/*function filter(elem, keyword) {
+	var fleet = elem.next().next()[0];
+	console.log(element, text);
+    var keyword = document.getElementById("pAccountNoSearch").value;
+    var fleet = document.getElementById("pAccountNo");
+    var selSize = 0;
+    for (var i = 0; i < fleet.length; i++) {
+        var txt = fleet.options[i].text.toLowerCase();
+        if (!txt.includes(keyword.toLowerCase())) {
+            fleet.options[i].style.display = 'none';
+        } else {
+            fleet.options[i].style.display = 'list-item';
+            selSize++;
+            fleet.style.width="200px";
+			fleet.size = selSize;
+        }
+    }
+}
+
+function selectAccount(elem, keyword){
+	var fleet = elem.next().next()[0];
+    for (var i = 0; i < fleet.length; i++) {
+        var txt = fleet.options[i].text.toLowerCase();
+        if (!txt.includes(keyword.toLowerCase())) {
+            fleet.options[i].style.display = 'none';
+        } else {
+        	fleet.options[i].selected = true;
+        	elem[0].value = txt;
+        	fleet.size = 0;
+        	
+            break;
+        }
+    }
+}*/
 
 
+
+
+
+/*function insertAccNo(elem, accNo){
+	var selected_option = $('#pAccountNo option:selected');
+	elem.prev().prev()[0].value = selected_option.val(); 
 	
+	var selected_branch = $('#rBranchID option:selected');
+	
+	
+}
+	*/	
 		/*]]>*/

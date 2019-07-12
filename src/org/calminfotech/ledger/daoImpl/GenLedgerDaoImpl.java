@@ -168,7 +168,7 @@ public class GenLedgerDaoImpl implements GenLedgerDao {
 	@Override
 	public List<JournalEntry> getJournalEntries() {
 		List<JournalEntry> entries = sessionFactory.getCurrentSession()
-				.createQuery("FROM JournalEntry WHERE company_id = 2 AND organisation_id = 2 ")/*
+				.createQuery("FROM JournalEntry WHERE company_id = ? AND organisation_id = ? ")/*
 				.setParameter(0, this.userIdentity.getOrganisation().getOrgCoy().getId())
 				.setParameter(1, this.userIdentity.getOrganisation().getId())
 				.setParameter(2, this.settingBo.fetchsettings("interbank-GLP", 2).getSettings_value())*/

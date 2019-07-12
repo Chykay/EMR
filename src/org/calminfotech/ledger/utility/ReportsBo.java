@@ -364,7 +364,7 @@ public class ReportsBo {
 		BranchAccChart branchAccChart = new BranchAccChart();
 		float reserve = this.getBranchCoA(branchID, type, "PandL").getBalance();
 		float balance = 0;
-		Boolean removeTemp = null;
+		Boolean removeTemp = false;
 		int catID = 0, ledgerID = 0;
 		
 		LedgerAccount reserveGL = this.glSetupBo.getReserveGL();
