@@ -2,20 +2,12 @@ package org.calminfotech.ledger.reports.models;
 
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-
-@Entity
-@org.hibernate.annotations.Entity(dynamicInsert = true)
 public class CompanyTB {
 	
-	@Id
 	private Integer id;
 
 	private String name;
 
-	@OneToMany
 	private List<BranchTB> branchTBs;
 	
 	private float totCredit;

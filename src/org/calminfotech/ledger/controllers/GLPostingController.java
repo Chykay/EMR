@@ -134,7 +134,7 @@ public class GLPostingController {
 	public String postGl(Model model) {		
 		Organisation org = userIdentity.getOrganisation();
 	
-		List<LedgerAccount> ledgerAccounts = this.ledgerAccBo.fetchAll(org.getId(), org.getOrgCoy().getId());
+		List<LedgerAccount> ledgerAccounts = this.ledgerAccBo.fetchAll(org.getOrgCoy().getId());
 		List<Organisation> branches = this.organisationBo.fetchAll(org.getOrgCoy().getId());
 		List<PostCode> postCodes = this.postCodeDaoImpl.fetchAll();
 

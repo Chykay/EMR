@@ -1,3 +1,4 @@
+<th:block xmlns:th="http://www.thymeleaf.org">
 <div class="page-header">
 	<h1>
 		Account: <small><span th:text="${account.account_no}">Account Number</span></small>
@@ -32,3 +33,4 @@
 		<a th:href="@{/ledger/gen_ledger/delete/{id} (id=${account.id})}" class="btn btn-danger c0l-md-6">Delete</a>
 	</div>
 </div>
+</th:block>

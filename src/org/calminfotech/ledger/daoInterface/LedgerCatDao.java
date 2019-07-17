@@ -7,7 +7,6 @@ import org.calminfotech.ledger.models.LedgerCategory;
 public interface LedgerCatDao {
 	public List<LedgerCategory> fetchAll();
 	
-	public List<LedgerCategory> fetchAllByOrg(int orgID);
 
 	public List<LedgerCategory> fetchParents(int id);
 
@@ -19,5 +18,7 @@ public interface LedgerCatDao {
 	
 	public void update(LedgerCategory balSheetCat);
 /*
+ * 
+	public List<LedgerCategory> fetchAllByOrgg(int orgID);
 	public List<LedgerCategory> fetchByLedgType(ArrayList<Integer> ledgerTypes);*/
 }

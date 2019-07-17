@@ -34,12 +34,12 @@ public class LedgerCatBoImpl implements LedgerCatBo {
 		return this.ledgerCatDao.getLedgerById(id);
 	}
 	
-	public LedgerCategory save(LedgerCatForm balSheetForm){
+	public LedgerCategory save(LedgerCatForm ledgerCatForm){
 		LedgerCategory ledgerCategory = new LedgerCategory();
 		
-		ledgerCategory.setParentID(balSheetForm.getParentID());
-		ledgerCategory.setName(balSheetForm.getName());
-		if (balSheetForm.getIsActive() == 1) {
+		ledgerCategory.setParentID(ledgerCatForm.getParentID());
+		ledgerCategory.setName(ledgerCatForm.getName());
+		if (ledgerCatForm.getIsActive() == 1) {
 			ledgerCategory.setIsActive(true);
 		} else {
 			ledgerCategory.setIsActive(false);
@@ -60,13 +60,13 @@ public class LedgerCatBoImpl implements LedgerCatBo {
 		this.ledgerCatDao.delete(ledgerCategory);
 	}
 	
-	public LedgerCategory update(LedgerCatForm balSheetForm, int id){
+	public LedgerCategory update(LedgerCatForm ledgerCatForm, int id){
 		
 		LedgerCategory ledgerCategory = this.ledgerCatDao.getLedgerById(id);
 	
-		ledgerCategory.setParentID(balSheetForm.getParentID());
-		ledgerCategory.setName(balSheetForm.getName());
-		if (balSheetForm.getIsActive() == 1) {
+		ledgerCategory.setParentID(ledgerCatForm.getParentID());
+		ledgerCategory.setName(ledgerCatForm.getName());
+		if (ledgerCatForm.getIsActive() == 1) {
 			ledgerCategory.setIsActive(true);
 		} else {
 			ledgerCategory.setIsActive(false);
@@ -79,11 +79,5 @@ public class LedgerCatBoImpl implements LedgerCatBo {
 		return ledgerCategory;
 	}
 
-	@Override
-	public List<LedgerCategory> fetchAllByOrg(int orgID) {
-		
-		return this.ledgerCatDao.fetchAllByOrg(orgID);
-		
-	}
 	
 }

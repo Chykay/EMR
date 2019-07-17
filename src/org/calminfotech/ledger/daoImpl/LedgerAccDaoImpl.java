@@ -28,7 +28,7 @@ public class LedgerAccDaoImpl implements LedgerAccDao {
 	private UserIdentity userIdentity;
 
 	@SuppressWarnings("unchecked")
-	public List<LedgerAccount> fetchAll(int branch_id, int company_id){
+	public List<LedgerAccount> fetchAll(int company_id){
 		List<String> interfaces = this.settingBo.fetchAllGLSettings(company_id);
 		
 		if (interfaces == null) {
@@ -37,9 +37,8 @@ public class LedgerAccDaoImpl implements LedgerAccDao {
 		}
 		
 		List<LedgerAccount> ledgerAccounts = sessionFactory.getCurrentSession()
-				.createQuery(" from LedgerAccount WHERE organisation_id = ? AND company_id = ? AND account_no NOT IN ( :interfaces )")
-				.setParameter(0, branch_id)
-				.setParameter(1, company_id)
+				.createQuery(" from LedgerAccount WHERE  company_id = ? AND account_no NOT IN ( :interfaces )")
+				.setParameter(0, company_id)
 				.setParameterList("interfaces", interfaces)
 				.list();
 		
@@ -50,7 +49,7 @@ public class LedgerAccDaoImpl implements LedgerAccDao {
 	}
 	
 	@SuppressWarnings({ "unchecked" })
-	public List<LedgerAccount> fetchTop100(int branch_id, int company_id){
+	public List<LedgerAccount> fetchTop100(int company_id){
 		List<String> interfaces = this.settingBo.fetchAllGLSettings(company_id);
 		
 		if (interfaces == null) {
@@ -59,9 +58,8 @@ public class LedgerAccDaoImpl implements LedgerAccDao {
 		}
 		
 		List<LedgerAccount> ledgerAccounts = sessionFactory.getCurrentSession()
-				.createQuery(" from LedgerAccount WHERE organisation_id = ? AND company_id = ? AND account_no NOT IN ( :interfaces ) ORDER BY create_date DESC")
-				.setParameter(0, branch_id)
-				.setParameter(1, company_id)
+				.createQuery(" from LedgerAccount WHERE company_id = ? AND account_no NOT IN ( :interfaces ) ORDER BY create_date DESC")
+				.setParameter(0, company_id)
 				.setParameterList("interfaces", interfaces)
 				.setMaxResults(100)
 				.list();

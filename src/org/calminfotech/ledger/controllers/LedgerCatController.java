@@ -10,8 +10,6 @@ import org.calminfotech.ledger.daoImpl.LedgerTypesImpl;
 import org.calminfotech.ledger.forms.LedgerCatForm;
 import org.calminfotech.ledger.models.LedgerCategory;
 import org.calminfotech.ledger.models.LedgerType;
-import org.calminfotech.user.utils.UserIdentity;
-import org.calminfotech.utils.Alert;
 import org.calminfotech.utils.Auditor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,12 +28,12 @@ public class LedgerCatController {
 	@Autowired
 	private LedgerCatBo ledgerCatBo;
 	
-	@Autowired
+/*	@Autowired
 	private Alert alert;
 
 	@Autowired
 	private UserIdentity userIdentity;
-
+*/
 	@Autowired
 	private Auditor auditor;
 	
@@ -83,17 +81,17 @@ public class LedgerCatController {
 	
 	
 	@RequestMapping(value = {"/create"}, method=RequestMethod.POST)
-	public String create(@Valid @ModelAttribute("account") LedgerCatForm balSheetForm, BindingResult result, Model model,
+	public String create(@Valid @ModelAttribute("account") LedgerCatForm ledgerCatForm, BindingResult result, Model model,
 			RedirectAttributes redirectAttributes) {
 				
-		LedgerCategory account = this.ledgerCatBo.save(balSheetForm);
-		
+		this.ledgerCatBo.save(ledgerCatForm);
+		/*
 		alert.setAlert(redirectAttributes, Alert.SUCCESS,
 				"Success! New ledgerCat Succesfully Added! ledgerCat id:  "
 						+ account.getId());
 
-		model.addAttribute("account", account);
-		return "redirect:/ledger/ledger_cat/view/" + account.getId();
+		model.addAttribute("account", account);*/
+		return "redirect:/ledger/ledger_cat/index";
 	}
 	
 	
@@ -103,35 +101,33 @@ public class LedgerCatController {
 	public String update(Model model, @PathVariable int id, HttpServletRequest request) {
 		LedgerCategory ledgerCat = this.ledgerCatBo.getLedgerById(id);
 		
-		LedgerCatForm balSheetForm = new LedgerCatForm();
-		balSheetForm.setName(ledgerCat.getName());
+		LedgerCatForm ledgerCatForm = new LedgerCatForm();
+		ledgerCatForm.setName(ledgerCat.getName());
 		if (ledgerCat.getIsActive()) {
-			balSheetForm.setIsActive(1);
+			ledgerCatForm.setIsActive(1);
 		} else {
-			balSheetForm.setIsActive(0);
+			ledgerCatForm.setIsActive(0);
 		}
 		
-
 		List<LedgerCategory> ledgerCats = this.ledgerCatBo.fetchParents(id);
 		List<LedgerType> ledger_types = this.ledgerTypesImpl.fetchAll();
 		
-
 		model.addAttribute("p_accounts", ledgerCats);
 		model.addAttribute("ledger_types", ledger_types);
-		model.addAttribute("account", balSheetForm);
+		model.addAttribute("account", ledgerCatForm);
 		
-		this.auditor.before(request, "BalSheetForm", balSheetForm);
+		this.auditor.before(request, "ledgerCatForm", ledgerCatForm);
 		return "/ledger/ledger_cat/edit";
 	}
 	
 	@RequestMapping(value = {"/edit/{id}"}, method=RequestMethod.POST)
-	public String update(@Valid @ModelAttribute("account") LedgerCatForm balSheetForm, BindingResult result, Model model,
+	public String update(@Valid @ModelAttribute("account") LedgerCatForm ledgerCatForm, BindingResult result, Model model,
 			RedirectAttributes redirectAttributes, @PathVariable int id, HttpServletRequest request) {
-				
-		try{
 
-		LedgerCategory ledgerCat = this.ledgerCatBo.update(balSheetForm, id);
-		this.auditor.after(request, "BalSheetForm", balSheetForm,
+		this.ledgerCatBo.update(ledgerCatForm, id);
+		/*try{
+			LedgerCategory ledgerCat = this.ledgerCatBo.update(ledgerCatForm, id);
+		this.auditor.after(request, "ledgerCatForm", ledgerCatForm,
 				this.userIdentity.getUsername(), id);
 		
 		alert.setAlert(redirectAttributes, Alert.SUCCESS,
@@ -144,9 +140,9 @@ public class LedgerCatController {
 					" Failed! FAILED Editing! ledgerCat id:  " + id + " Error: " + e.getMessage()
 							);
 			
-		}
+		}*/
 
-		return "redirect:/ledger/ledger_cat/view/" + id;
+		return "redirect:/ledger/ledger_cat/index";
 	}
 	
 		

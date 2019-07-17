@@ -134,7 +134,7 @@ public class JournalController {
 		}
 
 		Organisation org = userIdentity.getOrganisation();
-		List<LedgerAccount> ledgerAccounts = this.ledgerAccBo.fetchAll(org.getId(), org.getOrgCoy().getId());
+		List<LedgerAccount> ledgerAccounts = this.ledgerAccBo.fetchAll(org.getOrgCoy().getId());
 		model.addAttribute("generalLedgers", ledgerAccounts);
 		model.addAttribute("journalHeader", journalHeader);
 		return "/ledger/gen_ledger/journal/edit";
@@ -144,7 +144,7 @@ public class JournalController {
 	@RequestMapping(value = {"/edit"}, method=RequestMethod.POST, consumes = "application/json")
 	public String edit(@RequestBody Object journal) {
 		try {
-			Boolean value = this.journalBo.manageJournal(journal);
+			this.journalBo.manageJournal(journal);
 			
 			
 		} catch (LedgerException e) {
@@ -152,12 +152,7 @@ public class JournalController {
 			e.printStackTrace();
 		}
 		
-		System.out.println("oya redirect oo");
-		
-		if(true)
-			return "redirect:/ledger/journal/index";
-		else
-			return "redirect:/ledger/journal/index";
+		return "redirect:/ledger/journal/index";
 	}
 	
 }

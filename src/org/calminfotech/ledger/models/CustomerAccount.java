@@ -12,7 +12,7 @@ import org.hibernate.annotations.SQLDelete;
 @Entity
 @org.hibernate.annotations.Entity(dynamicInsert = true)
 @SQLDelete(sql = "UPDATE GL_setup_table SET is_active = 0 WHERE id = ?")
-@Table(name = "GL_customer_table")
+@Table(name = "GL_customer")
 public class CustomerAccount extends CommonLedger{
 	
 	@Id

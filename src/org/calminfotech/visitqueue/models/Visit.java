@@ -22,6 +22,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import org.calminfotech.patient.models.Patient;
 /*import org.calminfotech.billing.models.BillInvoice;
 import org.calminfotech.billing.models.BillInvoicePayment;
 import org.calminfotech.patient.models.Patient;
@@ -472,6 +473,15 @@ public class Visit implements Serializable {
 
 	public void setModifiedBy(String modifiedBy) {
 		this.modifiedBy = modifiedBy;
+	}
+
+
+
+
+
+	public Patient getPatient() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	

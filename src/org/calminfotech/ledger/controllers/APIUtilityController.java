@@ -95,7 +95,7 @@ public class APIUtilityController {
 		Organisation org = this.userIdentity.getOrganisation();
 		
 		String accounts = "";
-			List<LedgerAccount> ledgerAccounts = this.ledgerAccBo.fetchAll(org.getId(), org.getOrgCoy().getId());
+			List<LedgerAccount> ledgerAccounts = this.ledgerAccBo.fetchAll(org.getOrgCoy().getId());
 			
 			for (LedgerAccount ledgerAccount : ledgerAccounts) {
 				accounts += "<option value='" + ledgerAccount.getAccountNo() + "'>"

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.calminfotech.ledger.daoInterface.LedgerCatDao;
 import org.calminfotech.ledger.models.LedgerCategory;
+import org.calminfotech.user.utils.UserIdentity;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -12,9 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class LedgerCatDaoImpl implements LedgerCatDao {
-/*	
+
 	@Autowired
-	private UserIdentity userIdentity;*/
+	private UserIdentity userIdentity;
 	
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -23,7 +24,8 @@ public class LedgerCatDaoImpl implements LedgerCatDao {
 	public List<LedgerCategory> fetchAll(){
 		
 		List<LedgerCategory> ledgerCats = sessionFactory.getCurrentSession()
-				.createQuery(" from LedgerCategory")
+				.createQuery(" from LedgerCategory WHERE company_id = ?")
+				.setParameter(0, this.userIdentity.getOrganisation().getOrgCoy().getId())
 				.list();
 		return ledgerCats;
 	}
@@ -65,9 +67,9 @@ public class LedgerCatDaoImpl implements LedgerCatDao {
 		this.sessionFactory.getCurrentSession().update(balSheetCat);
 	}
 
-	@SuppressWarnings("unchecked")
+	/*@SuppressWarnings("unchecked")
 	@Override
-	public List<LedgerCategory> fetchAllByOrg(int orgID) {
+	public List<LedgerCategory> fetchAllByOrgg(int orgID) {
 		List<LedgerCategory> ledgerCats = sessionFactory.getCurrentSession()
 				.createQuery(" from LedgerCategory WHERE organisation_id = ?")
 				.setParameter(0, orgID)
@@ -76,7 +78,7 @@ public class LedgerCatDaoImpl implements LedgerCatDao {
 		return ledgerCats;
 	}
 	
-/*	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<LedgerCategory> fetchByLedgType(ArrayList<Integer> ledgerTypes) {
 		
