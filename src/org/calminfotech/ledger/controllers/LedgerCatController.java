@@ -10,8 +10,6 @@ import org.calminfotech.ledger.daoImpl.LedgerTypesImpl;
 import org.calminfotech.ledger.forms.LedgerCatForm;
 import org.calminfotech.ledger.models.LedgerCategory;
 import org.calminfotech.ledger.models.LedgerType;
-import org.calminfotech.user.utils.UserIdentity;
-import org.calminfotech.utils.Alert;
 import org.calminfotech.utils.Auditor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,12 +28,12 @@ public class LedgerCatController {
 	@Autowired
 	private LedgerCatBo ledgerCatBo;
 	
-	@Autowired
+/*	@Autowired
 	private Alert alert;
 
 	@Autowired
 	private UserIdentity userIdentity;
-
+*/
 	@Autowired
 	private Auditor auditor;
 	
@@ -86,14 +84,14 @@ public class LedgerCatController {
 	public String create(@Valid @ModelAttribute("account") LedgerCatForm ledgerCatForm, BindingResult result, Model model,
 			RedirectAttributes redirectAttributes) {
 				
-		LedgerCategory account = this.ledgerCatBo.save(ledgerCatForm);
-		
+		this.ledgerCatBo.save(ledgerCatForm);
+		/*
 		alert.setAlert(redirectAttributes, Alert.SUCCESS,
 				"Success! New ledgerCat Succesfully Added! ledgerCat id:  "
 						+ account.getId());
 
-		model.addAttribute("account", account);
-		return "redirect:/ledger/ledger_cat/view/" + account.getId();
+		model.addAttribute("account", account);*/
+		return "redirect:/ledger/ledger_cat/index";
 	}
 	
 	
@@ -125,10 +123,10 @@ public class LedgerCatController {
 	@RequestMapping(value = {"/edit/{id}"}, method=RequestMethod.POST)
 	public String update(@Valid @ModelAttribute("account") LedgerCatForm ledgerCatForm, BindingResult result, Model model,
 			RedirectAttributes redirectAttributes, @PathVariable int id, HttpServletRequest request) {
-				
-		try{
 
-		LedgerCategory ledgerCat = this.ledgerCatBo.update(ledgerCatForm, id);
+		this.ledgerCatBo.update(ledgerCatForm, id);
+		/*try{
+			LedgerCategory ledgerCat = this.ledgerCatBo.update(ledgerCatForm, id);
 		this.auditor.after(request, "ledgerCatForm", ledgerCatForm,
 				this.userIdentity.getUsername(), id);
 		
@@ -142,9 +140,9 @@ public class LedgerCatController {
 					" Failed! FAILED Editing! ledgerCat id:  " + id + " Error: " + e.getMessage()
 							);
 			
-		}
+		}*/
 
-		return "redirect:/ledger/ledger_cat/view/" + id;
+		return "redirect:/ledger/ledger_cat/index";
 	}
 	
 		

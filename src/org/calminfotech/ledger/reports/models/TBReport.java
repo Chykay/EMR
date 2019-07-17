@@ -2,18 +2,13 @@ package org.calminfotech.ledger.reports.models;
 
 import java.util.List;
 
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-
 public class TBReport {
 
-	@Id
 	private Integer id;
 
 	private String name;
 	
 
-	@OneToMany
 	private List<TrialBalEntry> entries;
 	
 	private float totCredit;

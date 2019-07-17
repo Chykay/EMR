@@ -1,3 +1,4 @@
+<th:block xmlns:th="http://www.thymeleaf.org">
 <div class="page-header">
 	<h1>
 		Posting
@@ -40,24 +41,27 @@
 			<button type="submit" class="btn btn-success" id="save">Save Entries</button>
 	 		<button type="submit" class="btn btn-default" id="post">Post Entries</button>
 	 	</th:bloock>
-		 <div th:each="journalEntry : ${journalEntries}" class=" journal nothing">
-		    <select class="accountType" required="required">
-		        <option th:value="${journalEntry.accountType}">Select..</option>
+		 <div th:each="journalEntry, counter : ${journalEntries}" class=" journal nothing">
+		    <select class="accountType" required="required" th:value="${journalEntry.accountType}">
+		        <option value="">Select..</option>
 		        <option value="CA">Customer</option>
 		        <option value="GA">GL</option>
+		        <option value="HA">HMO</option>
+		        <option value="VA">Vendor</option>
 		    </select>
-		    <select class="accountNo" id="accountNo"  style="margin-top:0px; width: 120px;"  required="required"  th:value="${journalEntry.accountNo}" >
+		    <select class="accountNo" th:id="'accountNo' + ${counter.index}"   style="margin-top:0px; width: 120px;"  required="required"  th:value="${journalEntry.accountNo}" hidden="hidden">
 		    		<option th:each="generalLedger: ${generalLedgers}" 
 							th:value="${generalLedger.id}"
-							th:text="${generalLedger.name}"></option>
+							th:text="${generalLedger.name}">
+					</option>
 			</select>
 		   <div style="display:inline-table;"> 
-		    	 <input type="text" class="accountNoSearch" id="accountNoSearch" placeholder="account no" th:value="${journalEntry.accountNo}" required="required" disabled="disabled"/>
-		    	 <select class="accountNo" id="accountNo"  style="margin-top:0px; width: 120px;"  required="required"  th:value="${journalEntry.accountNo}" >
+		    	 <input type="text" class="accountNoSearch" id="accountNoSearch"  th:value="${journalEntry.accountNo}" required="required" disabled="disabled" style="display:none;"/>
+		    	<!--  <select class="accountNo" id="accountNo"  style="margin-top:0px; width: 120px;"  required="required"  th:value="${journalEntry.accountNo}"  hidden="hidden">
 		    		<option th:value="${journalEntry.accountNo}" selected="selected">Select..</option>
 				</select>
-				
-				<button type="button" class="custSearch btn btn-xs btn-primary" hidden="hidden">searcn</button> 
+				 -->
+				<button type="button" class="custSearch btn btn-xs btn-primary" style="display:none;">searcn</button> 
 		   	</div>
 		    <select id="postCode" required="required">
 		        <option th:value="${journalEntry.postCode}">Select..</option>
@@ -103,3 +107,4 @@ function updateAccNo(customerAccNo){
 }
 /*]]>*/
 </script> -->
+</th:block>

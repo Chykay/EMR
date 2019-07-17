@@ -2,20 +2,16 @@ package org.calminfotech.ledger.reports.models;
 
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-
-@Entity
-@org.hibernate.annotations.Entity(dynamicInsert = true)
+/*@Entity
+@org.hibernate.annotations.Entity(dynamicInsert = true)*/
 public class CompanyAccChart {
 	
-	@Id
+	//@Id
 	private Integer id;
 
 	private String name;
 
-	@OneToMany
+	//@OneToMany
 	private List<BranchAccChart> branchAccCharts;
 
 	public String getName() {

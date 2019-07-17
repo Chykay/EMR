@@ -2,14 +2,9 @@ package org.calminfotech.ledger.reports.models;
 
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-
-@Entity
-@org.hibernate.annotations.Entity(dynamicInsert = true)
+//@org.hibernate.annotations.Entity(dynamicInsert = true)
 public class AccChartEntry {
-	@Id
+	//@Id
 	private Integer id;
 	
 	private String name;
@@ -24,9 +19,9 @@ public class AccChartEntry {
 	
 	private Integer show;
 	
-	@OneToMany
+	//@OneToMany
 	private List<AccChartEntry> accChartEntries;
-
+	
 	public Integer getId() {
 		return id;
 	}
@@ -91,8 +86,5 @@ public class AccChartEntry {
 	public void setShow(Integer show) {
 		this.show = show;
 	}
-	
-	
-	
-	
+
 }

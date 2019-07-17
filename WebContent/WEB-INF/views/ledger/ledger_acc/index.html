@@ -31,7 +31,6 @@
 			 <thead>
 				<tr>
 					<th>Account Number</th>
-					<th>Totaling Code</th>
 					<th>Name</th>
 					<th>Active</th>
 					
@@ -43,7 +42,6 @@
 			<tbody>
 				<tr th:each="account : ${accounts}">
 					<td th:text="${account.accountNo}">Account Number</td>
-					<td th:text="${account.totalingCode}">Code</td>
 					<td th:text="${account.name}">Name</td>
 					<td>
 					    <span th:if="${account.isActive}">Active</span>
@@ -51,20 +49,23 @@
 					</td>
 						
 					<td>
-						<a class="btn btn-xs btn-primary tooltips"
-							title="view category details" 		th:href="@{/ledger/ledger_acc/view/{id} (id=${account.id}) }"> <i
-								class="fa fa-eye"></i>
+					
+						<a class="btn btn-xs btn-warning tooltips"
+							title="Print GL report"
+							th:href="@{/ledger/ledger_acc/edit/{id} (id=${account.id}) }" ><i
+								class="fa fa-edit"></i>
 						</a> 
-						  <a class="btn btn-xs btn-danger tooltips deleteBtn" 
+						<a class="btn btn-xs btn-danger tooltips deleteBtn" 
 							title="Delete Item details"   th:id="${account.id}" 
 							href="#"> <i
 								class="fa fa-trash-o"></i>
 						</a>
-						<a class="btn btn-xs btn-warning tooltips"
-							title="Print GL report"
-							th:href="@{/ledger/reports/GL/{id}(id=${account.accountNo}) }"> <i
-								class="fa fa-edit"></i>
-						</a>
+							<!-- <a class="btn btn-xs btn-primary tooltips"
+							title="view category details" 		
+							th:href="@{/ledger/ledger_acc/view/{id} (id=${account.id}) }"> <i
+								class="fa fa-eye"></i>
+						</a>  
+						 th:href="@{/ledger/reports/GL/{id}(id=${account.accountNo}) }" -->
 					</td>
 				</tr>
 			</tbody>

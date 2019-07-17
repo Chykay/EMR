@@ -188,7 +188,7 @@ public class ReportsBo {
 			//totbalance += accChartEntry.getTotBalance();
 		}
 		
-
+/*
 		for (AccChartEntry accChartEntry : rootAccCharts) {
 			System.out.println("here");
 			System.out.println(accChartEntry.getName() + ":" + accChartEntry.getShow() + ":" + accChartEntry.getHasChildren());
@@ -217,38 +217,11 @@ public class ReportsBo {
 
 			}
 		}
-		
+		*/
 		System.out.println("AND NOW");
 		rootAccCharts.removeAll(emptyRootAccCharts);
 		
-		for (AccChartEntry accChartEntry : rootAccCharts) {
-			System.out.println("here");
-			System.out.println(accChartEntry.getName() + ":" + accChartEntry.getShow() + ":" + accChartEntry.getHasChildren());
-			if (accChartEntry.getAccChartEntries() != null && accChartEntry.getAccChartEntries().size() > 0) {
-				for (AccChartEntry accChartEntry2 : accChartEntry.getAccChartEntries()) {
-					System.out.println("  " + accChartEntry2.getName() + ":" + accChartEntry2.getShow() + ":" + accChartEntry2.getHasChildren());
-					
-					if (accChartEntry2.getAccChartEntries() != null && accChartEntry2.getAccChartEntries().size() > 0) {
-						for (AccChartEntry accChartEntry3 : accChartEntry2.getAccChartEntries()) {
-							System.out.println("    " + accChartEntry3.getName() + ":" + accChartEntry3.getShow() + ":" + accChartEntry3.getHasChildren());
-							if (accChartEntry3.getAccChartEntries() != null && accChartEntry3.getAccChartEntries().size() > 0) {
-								for (AccChartEntry accChartEntry4 : accChartEntry3.getAccChartEntries()) {
-									System.out.println("    " + accChartEntry4.getName() + ": " + accChartEntry4.getShow() + ": " + accChartEntry4.getHasChildren());
-									
-								}
-							} else {
-								System.out.println("  no children" );
-							}
-						}
-					} else {
-						System.out.println("  no children" );
-					}
-				}
-			} else {
-				System.out.println("no children" );
-
-			}
-		}
+	
 		
 		branchAccChart.setAccChartEntries(rootAccCharts);
 		branchAccChart.setBalance(rootAccCharts.get(0).getTotBalance() - rootAccCharts.get(1).getTotBalance());

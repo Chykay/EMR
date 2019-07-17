@@ -1,12 +1,6 @@
 package org.calminfotech.ledger.reports.models;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
-@Entity
-@org.hibernate.annotations.Entity(dynamicInsert = true)
 public class TrialBalEntry {
-	@Id
 	private Integer id;
 	
 	private String accountNo;
