@@ -1,20 +1,19 @@
 package org.calminfotech.patient.forms;
 
 import org.hibernate.validator.constraints.Range;
-import java.util.*;
-import java.util.Date;
 
 public class PatientHmoForm {
 	private Integer id;
 	@Range(min = 1, message = "select a patient")
 	private Integer patientId;
 
-	//@Range(min = 1, message = "Select an HMO package")
-	//private Integer packageId;
+	// @Range(min = 1, message = "Select an HMO package")
+	// private Integer packageId;
 	private Integer packageId;
 
-
 	private String fromdat;
+
+	private String patienthmocode;
 
 	public String getFromdat() {
 		return fromdat;
@@ -33,11 +32,8 @@ public class PatientHmoForm {
 	}
 
 	private String todat;
-	
-	private Integer hmostatusId;
-	
 
-	
+	private Integer hmostatusId;
 
 	public Integer getHmostatusId() {
 		return hmostatusId;
@@ -54,6 +50,7 @@ public class PatientHmoForm {
 	public void setPatientId(Integer patientId) {
 		this.patientId = patientId;
 	}
+
 	public Integer getId() {
 		return id;
 	}
@@ -61,9 +58,6 @@ public class PatientHmoForm {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
-	
-
 
 	public Integer getPackageId() {
 		return packageId;
@@ -73,5 +67,12 @@ public class PatientHmoForm {
 		this.packageId = packageId;
 	}
 
+	public String getPatienthmocode() {
+		return patienthmocode;
+	}
+
+	public void setPatienthmocode(String patienthmocode) {
+		this.patienthmocode = patienthmocode;
+	}
 
 }

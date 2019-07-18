@@ -13,6 +13,7 @@ import org.calminfotech.user.utils.Authorize;
 import org.calminfotech.user.utils.UserIdentity;
 import org.calminfotech.utils.Auditor;
 import org.calminfotech.utils.BankList;
+import org.calminfotech.utils.HmoTypesList;
 import org.calminfotech.utils.HmostatusList;
 import org.calminfotech.utils.hibernatesupport.CustomHibernateDaoSupport;
 
@@ -36,6 +37,11 @@ public class HmoBoImpl implements HmoBo {
 	
 	@Autowired
 	private HmostatusList  hmostatusList;
+	
+
+	@Autowired
+	private HmoTypesList  hmoTypeBo;
+	
 	
 	@Autowired
 	private Authorize  authorize;
@@ -70,11 +76,11 @@ public class HmoBoImpl implements HmoBo {
 		hmo.setPhone(hmoForm.getPhone());
 		hmo.setAdminName(hmoForm.getAdmin_name());
 		hmo.setAccoutno(hmoForm.getAccountno());
-		if (!hmoForm.getBank_id().equals(""))
-		{
-		hmo.setBank(this.bankList.getBankById(hmoForm.getBank_id()));
-		}
-		
+		//if (!hmoForm.getBank_id().equals(""))
+	//	{
+	//	hmo.setBank(this.bankList.getBankById(hmoForm.getBank_id()));
+	//	}
+		hmo.setHmoType(this.hmoTypeBo.getHmoTypeById(hmoForm.getHmotype_id()));
 		hmo.setHmostatus(this.hmostatusList.getHmostatusById(hmoForm.getStatus_id()));
 		
 		hmo.setBillScheme(this.billSchemeBo.getBillSchemeById(hmoForm.getBillingscheme_id()));
@@ -99,17 +105,21 @@ public class HmoBoImpl implements HmoBo {
 		hmo.setAddress(hmoForm.getAddress());
 		hmo.setEmail(hmoForm.getEmail());
 	    hmo.setPhone(hmoForm.getPhone());
-	    if (!hmoForm.getBank_id().equals(""))
-		{
-		hmo.setBank(this.bankList.getBankById(hmoForm.getBank_id()));
-		}
+//	    if (!hmoForm.getBank_id().equals(""))
+	//	{
+	//	hmo.setBank(this.bankList.getBankById(hmoForm.getBank_id()));
+	//	}
 		
-		if (authorize.isAllowed(userIdentity.getUserProfile().getUser().getUserId(),"HMO004"))
+		if (authorize.isAllowed("HMO004"))
 		{
 		hmo.setHmostatus(this.hmostatusList.getHmostatusById(hmoForm.getStatus_id()));
 		}
+		
+		
+		
 		hmo.setBillScheme(this.billSchemeBo.getBillSchemeById(hmoForm.getBillingscheme_id()));
 		
+		hmo.setHmoType(this.hmoTypeBo.getHmoTypeById(hmoForm.getHmotype_id()));
 		
 		hmo.setAdminName(hmoForm.getAdmin_name());
 		//hmo.setOrganisationId(userIdentity.getOrganisation().getId());

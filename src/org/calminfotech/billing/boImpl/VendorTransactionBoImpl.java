@@ -69,4 +69,10 @@ public class VendorTransactionBoImpl implements VendorTransactionBo {
 		return customerTranDao.fetchAllByOrganisation50();
 	}
 
+	@Override
+	public void save(org.calminfotech.inventory.models.VendorTransaction custtran) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

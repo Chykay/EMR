@@ -1,0 +1,366 @@
+package org.calminfotech.hmo.models;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.calminfotech.billing.models.BillScheme;
+import org.calminfotech.system.models.Organisation;
+import org.calminfotech.utils.models.Bank;
+import org.calminfotech.utils.models.Hmostatus;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+//import org.hibernate.annotations.SQLDelete;
+//import org.hibernate.annotations.Where;
+
+//import org.hibernate.annotations.SQLDelete;
+
+@Entity
+@org.hibernate.annotations.Entity(dynamicInsert = true)
+@Table(name = "hmo")
+@SQLDelete(sql = "UPDATE hmo SET is_deleted = 1 WHERE hmo_id = ?")
+// @Where(clause = "is_deleted <> 1")
+public class Hmo {
+
+	@Id
+	@GeneratedValue
+	@Column(name = "id")
+	private Integer id;
+
+	@ManyToOne
+	@JoinColumn(name = "organisation_id")
+	private Organisation organisation;
+
+	@ManyToOne
+	@JoinColumn(name = "hmocode")
+	private HmoCode hmocode;
+
+	@Column(name = "name")
+	private String name;
+
+	@Column(name = "address")
+	private String address;
+
+	@OneToMany
+	@JoinColumn(name = "hmo_id")
+	// @Where(clause = "is_deleted <> 1 and status=1")
+	private Set<HmoPackage> hmoPackage;
+
+	@ManyToOne
+	@JoinColumn(name = "billingscheme_id")
+	private BillScheme billScheme;
+
+	@ManyToOne
+	@JoinColumn(name = "hmostatus_id")
+	private Hmostatus hmostatus;
+
+	@ManyToOne
+	@JoinColumn(name = "bank_id")
+	private Bank bank;
+
+	@ManyToOne
+	@JoinColumn(name = "hmo_type_id")
+	private HmoType hmoType;
+
+	@Column(name = "phone")
+	private String phone;
+
+	@Column(name = "email")
+	private String email;
+
+	@Column(name = "accountno")
+	private String accoutno;
+
+	@Column(name = "admin_name")
+	private String adminName;
+
+	@Column(name = "created_date")
+	private Date createdDate;
+
+	@Column(name = "created_by")
+	private String createdBy;
+
+	@Column(name = "modified_by")
+	private String modifiedBy;
+
+	@Column(name = "modified_date")
+	private Date modifiedDate;
+
+	@Column(name = "is_deleted")
+	private boolean isDeleted;
+
+	@OneToMany(fetch = FetchType.LAZY)
+	@JoinColumn(name = "patient_id")
+	@Where(clause = "is_deleted <> 1")
+	@OrderBy("id DESC")
+	private Set<HmoTransaction> hmotransaction = new HashSet<HmoTransaction>();
+
+	public Set<HmoTransaction> getHmotransaction() {
+		return hmotransaction;
+	}
+
+	public void setHmotransaction(Set<HmoTransaction> hmotransaction) {
+		this.hmotransaction = hmotransaction;
+	}
+
+	@Transient
+	private Map mfig;
+
+	public Map getMfig() {
+
+		Double totamt = 0.00;
+		Double totpaymt = 0.00;
+		Double tothmo = 0.00;
+		Double totcash = 0.00;
+		Double totbal = 0.00;
+		Double totcashmode = 0.00;
+		Double totposmode = 0.00;
+		Double tottransfermode = 0.00;
+		Double totaccountmode = 0.00;
+		Double totdebit = 0.00;
+		Double totcredit = 0.00;
+		Double totcustbal = 0.00;
+
+		Map<String, Double> mfig = new HashMap<String, Double>();
+
+		try {
+			for (HmoTransaction pay : this.getHmotransaction()) {
+				try {
+					totcustbal = totcustbal + pay.getAmount();
+
+				} catch (Exception e) {
+					System.out
+							.println("Problem in getting hmotrtansaction attached to invoice set");
+				}
+
+				if (pay.getAmount().doubleValue() > 0
+						&& pay.getDrcr().equalsIgnoreCase("Dr")) {
+					try {
+						totdebit = totdebit + pay.getAmount();
+
+					} catch (Exception e) {
+						System.out
+								.println("Problem in getting hmotrtansaction debit to invoice set");
+					}
+				}
+
+				if (pay.getAmount().doubleValue() < 0
+						&& pay.getDrcr().equalsIgnoreCase("cr")) {
+					try {
+						totcredit = totcredit + pay.getAmount();
+
+					} catch (Exception e) {
+						System.out
+								.println("Problem in getting hmotrtansaction credit to invoice set");
+					}
+
+				}
+
+			}
+
+		} catch (Exception e) {
+			System.out
+					.println("Problem in getting hmotrtansaction bal attached to invoice set");
+		}
+
+		mfig.put("totamt", totamt);
+		mfig.put("totpaymt", totpaymt);
+		mfig.put("totcash", totcash);
+		mfig.put("tothmo", tothmo);
+		mfig.put("totbal", totbal);
+		mfig.put("totdebit", totdebit);
+		mfig.put("totcredit", totcredit);
+
+		mfig.put("totcustbal", totcustbal);
+		mfig.put("totcustavailablebal", totcustbal - totbal);
+
+		System.out.print("mifgavailable" + mfig.get("totcustavailablebal"));
+
+		System.out.print("totcash" + totcash);
+		System.out.print("totpayment" + totpaymt);
+
+		System.out.print("totbal" + totbal);
+
+		return mfig;
+
+	}
+
+	public void setMfig(Map mfig) {
+		this.mfig = mfig;
+	}
+
+	public HmoCode getHmocode() {
+		return hmocode;
+	}
+
+	public void setHmocode(HmoCode hmocode) {
+		this.hmocode = hmocode;
+	}
+
+	public Hmostatus getHmostatus() {
+		return hmostatus;
+	}
+
+	public void setHmostatus(Hmostatus hmostatus) {
+		this.hmostatus = hmostatus;
+	}
+
+	public BillScheme getBillScheme() {
+		return billScheme;
+	}
+
+	public void setBillScheme(BillScheme billScheme) {
+		this.billScheme = billScheme;
+	}
+
+	public HmoType getHmoType() {
+		return hmoType;
+	}
+
+	public void setHmoType(HmoType hmoType) {
+		this.hmoType = hmoType;
+	}
+
+	public boolean isDeleted() {
+		return isDeleted;
+	}
+
+	public void setDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+
+	public String getModifiedBy() {
+		return modifiedBy;
+	}
+
+	public void setModifiedBy(String modifiedBy) {
+		this.modifiedBy = modifiedBy;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public Bank getBank() {
+		return bank;
+	}
+
+	public void setBank(Bank bank) {
+		this.bank = bank;
+	}
+
+	public String getAccoutno() {
+		return accoutno;
+	}
+
+	public void setAccoutno(String accoutno) {
+		this.accoutno = accoutno;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getAdminName() {
+		return adminName;
+	}
+
+	public void setAdminName(String adminName) {
+		this.adminName = adminName;
+	}
+
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public Date getModifiedDate() {
+		return modifiedDate;
+	}
+
+	public void setModifiedDate(Date modifiedDate) {
+		this.modifiedDate = modifiedDate;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Set<HmoPackage> getHmoPackage() {
+		return hmoPackage;
+	}
+
+	public void setHmoPackage(Set<HmoPackage> hmoPackage) {
+		this.hmoPackage = hmoPackage;
+	}
+
+	public Set<HmoPackage> getEhmoPackage() {
+		return hmoPackage;
+	}
+
+	public void setEhmoPackage(Set<HmoPackage> hmoPackage) {
+		this.hmoPackage = hmoPackage;
+	}
+
+	public Organisation getOrganisation() {
+		return organisation;
+	}
+
+	public void setOrganisation(Organisation organisation) {
+		this.organisation = organisation;
+	}
+
+}

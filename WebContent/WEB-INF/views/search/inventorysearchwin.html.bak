@@ -32,7 +32,7 @@
 			class="fa fa-plus-circle"></i> Create New Patient profile 
 		</a>
 		<a class="btn btn-xs btn-primary" th:href="@{/patients/index/}"><i
-			class="fa fa-plus-circle"></i> View Top 50 Patients
+			class="fa fa-plus-circle"></i> View Recent Patients
 		</a>
 	</div>
 </div>
@@ -74,14 +74,14 @@
 			<div class="form-group">
 				<label for="gender" class="col-sm-3 control-label no-padding-right"> Item Type:</label>
 				<div class="col-sm-9">
-					<select th:field="*{globaltypeId}" class="col-xs-10 col-sm-5"  required="required" id="typeId">
+					<select th:field="*{inventorytypeId}" class="col-xs-10 col-sm-5"  required="required" id="typeId">
 						<!-- <option value="">Select..</option> -->
 					<!-- 	<option th:each="g: ${globalItemType}" th:value="${g.globalitemTypeId}"
 							th:text="${g.globalitemtypename}"></option> -->
 							 <option value="1">Equipment</option>
 							 <option value="2">Drug</option>
-					</select> <span class="text-danger" th:if="${#fields.hasErrors('globaltypeId')}"
-						th:errors="*{globaltypeId}"></span>
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('inventorytypeId')}"
+						th:errors="*{inventorytypeId}"></span>
 				</div>
 			</div>
 			
@@ -296,10 +296,10 @@ alert(g);  */
 var  h= g.split("##");
 /* alert(h); */
 
-            var txtid = window.opener.document.getElementById("globalItemid");
+            var txtid = window.opener.document.getElementById("globalitemId");
             //$('txtid').val(h[0]).trigger('change');
           txtid.value= h[0];
-          window.opener.document.getElementById("drugId").click(); 
+        window.opener.document.getElementById("globalitemId").click(); 
             
           /*   alert(h[0]); */
        

@@ -25,7 +25,7 @@
 			class="fa fa-plus-circle"></i> Create New Patient profile 
 		</a>
 		<a class="btn btn-xs btn-primary" th:href="@{/patients/index/}"><i
-			class="fa fa-plus-circle"></i> View Top 50 Patients
+			class="fa fa-plus-circle"></i> View Recent Patients
 		</a>
 	</div>
 </div>
@@ -281,12 +281,12 @@ alert(g);  */
 var  h= g.split("##");
 /* alert(h); */
 
-            var txtid = window.opener.document.getElementById("patientId");
+            var txtid = window.opener.document.getElementById("patientId2");
             txtid.value= h[0];
             
           /*   alert(h[0]); */
        
-            var txtName= window.opener.document.getElementById("patientname2");
+            var txtName= window.opener.document.getElementById("patientName2");
               
             txtName.value = h[h.length-1];
             

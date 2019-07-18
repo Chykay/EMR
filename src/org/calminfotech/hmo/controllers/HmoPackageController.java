@@ -7,21 +7,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.calminfotech.billing.boInterface.BillSchemeBo;
-import org.calminfotech.billing.models.BillScheme;
 import org.calminfotech.hmo.boInterface.HmoBo;
-
-import org.calminfotech.hmo.boInterface.HmoPackageItemBo;
 import org.calminfotech.hmo.boInterface.HmoPackageBo;
-
+import org.calminfotech.hmo.boInterface.HmoPackageItemBo;
 import org.calminfotech.hmo.forms.HmoForm;
-import org.calminfotech.hmo.forms.HmoPackageItemForm;
 import org.calminfotech.hmo.forms.HmoPackageForm;
-import org.calminfotech.hmo.models.Hmo;
-import org.calminfotech.hmo.models.HmoPackageItem;
+import org.calminfotech.hmo.forms.HmoPackageItemForm;
 import org.calminfotech.hmo.models.HmoPackage;
-import org.calminfotech.patient.forms.PatientAddressForm;
-import org.calminfotech.patient.forms.PatientHistoryForm;
-import org.calminfotech.patient.models.PatientAllergy;
 import org.calminfotech.user.utils.Authorize;
 import org.calminfotech.user.utils.UserIdentity;
 import org.calminfotech.utils.Alert;
@@ -29,10 +21,7 @@ import org.calminfotech.utils.Auditor;
 import org.calminfotech.utils.BankList;
 import org.calminfotech.utils.HmostatusList;
 import org.calminfotech.utils.PeriodList;
-
 import org.calminfotech.utils.annotations.Layout;
-import org.calminfotech.utils.models.Addresstype;
-import org.calminfotech.utils.models.Historytype;
 import org.calminfotech.utils.models.Hmostatus;
 import org.calminfotech.utils.models.Period;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,266 +40,237 @@ public class HmoPackageController {
 
 	@Autowired
 	private Alert alert;
-	
+
 	@Autowired
 	private HmoPackageBo hmoPackageBo;
-	
-	//@Autowired
-	//private ItemServiceGroupBo itemServiceGroupBo;
-	
+
+	// @Autowired
+	// private ItemServiceGroupBo itemServiceGroupBo;
+
 	@Autowired
 	private HmoPackageItemBo hmoItemBo;
-	
-	
+
 	@Autowired
 	private UserIdentity userIdentity;
-	
+
 	@Autowired
 	private HmoPackageBo hmopackageBo;
-	
-	
+
 	@Autowired
 	private HmoBo hmoBo;
-	
 
 	@Autowired
-	private BankList  bankList;
-	
-	
-	@Autowired
-	private HmostatusList  hmostatusList;
-	
+	private BankList bankList;
 
 	@Autowired
-	private PeriodList  periodList;
-	
-	
-	
+	private HmostatusList hmostatusList;
+
+	@Autowired
+	private PeriodList periodList;
+
 	@Autowired
 	private Auditor auditor;
-	
+
 	@Autowired
 	private BillSchemeBo billSchemeBo;
-
-	
 
 	@Autowired
 	private Authorize authorize;
 
-
-	
 	@RequestMapping(value = "/hmopackage/save")
-	public String addAction(RedirectAttributes redirectAttributes,Model model) {
-		if (authorize.isAllowed("HMP001"))
-		{
-		
-		//model.addAttribute("bank", this.bankList.fetchAll());
-		model.addAttribute("hmostatus", this.hmostatusList.fetchAll());
-		
-	//model.addAttribute("billscheme", this.billSchemeBo.fetchAllByOrganisation(userIdentity.getOrganisation().getId()));
-	
-	HmoForm hmoForm = new HmoForm();
-		model.addAttribute("hmoForm", hmoForm);
-		
-		return "hmo/add";
+	public String addAction(RedirectAttributes redirectAttributes, Model model) {
+		if (authorize.isAllowed("HMP001")) {
+
+			// model.addAttribute("bank", this.bankList.fetchAll());
+			model.addAttribute("hmostatus", this.hmostatusList.fetchAll());
+
+			// model.addAttribute("billscheme",
+			// this.billSchemeBo.fetchAllByOrganisation(userIdentity.getOrganisation().getId()));
+
+			HmoForm hmoForm = new HmoForm();
+			model.addAttribute("hmoForm", hmoForm);
+
+			return "hmo/add";
 		}
-		
-		else
-		{
+
+		else {
 			alert.setAlert(redirectAttributes, Alert.WARNING,
 					"You have no permission to Add HMO Package");
-			
+
 			return "redirect:/";
 		}
-		
 
-		}
+	}
 
 	@RequestMapping(value = "/hmopackage/save", method = RequestMethod.POST)
 	@Layout(value = "layouts/datatable")
-	public String saveAction2(@Valid @ModelAttribute("hmopackForm") HmoPackageForm hmopackForm,
+	public String saveAction2(
+			@Valid @ModelAttribute("hmopackForm") HmoPackageForm hmopackForm,
 			BindingResult result, RedirectAttributes redirectAttributes,
 			Model model) {
-		if (authorize.isAllowed("HMP001"))
-		{
-		if (result.hasErrors()) {
-			model.addAttribute("hmo", this.hmoBo.fetchAll(userIdentity.getOrganisation().getId()));
-			return "hmo/index";
+		if (authorize.isAllowed("HMP001")) {
+			if (result.hasErrors()) {
+				model.addAttribute("hmo",
+						this.hmoBo.fetchAll(userIdentity.getOrganisation()));
+				return "hmo/index";
+			}
+
+			HmoPackage hmopack = new HmoPackage();
+
+			hmopack.setHmo(this.hmoBo.getHmoById(hmopackForm.getHmo_id()));
+			hmopack.setPercentcover(hmopackForm.getPercentcover());
+			hmopack.setName(hmopackForm.getName());
+			hmopack.setClaims(hmopackForm.getClaims());
+			hmopack.setHmostatus(this.hmostatusList
+					.getHmostatusById(hmopackForm.getStatus_id()));
+			hmopack.setBillScheme(this.billSchemeBo
+					.getBillSchemeById(hmopackForm.getBillingscheme_id()));
+			hmopack.setCreatedBy(userIdentity.getUsername());
+			hmopack.setOrganisation(userIdentity.getOrganisation());
+			hmopack.setCreatedDate(new GregorianCalendar().getTime());
+
+			this.hmopackageBo.save(hmopack);
+			alert.setAlert(redirectAttributes, Alert.SUCCESS,
+					"Success! Hmo saved");
+			return "redirect:/hmo/view/" + hmopackForm.getHmo_id();
 		}
-		
-		
-		HmoPackage hmopack = new HmoPackage();
-		
-		
-		hmopack.setHmo(this.hmoBo.getHmoById(hmopackForm.getHmo_id()));
-		
-		hmopack.setName(hmopackForm.getName());
-		hmopack.setHmostatus(this.hmostatusList.getHmostatusById(hmopackForm.getStatus_id()));
-	
-		
-		
-		hmopack.setCreatedBy(userIdentity.getUsername());
-		hmopack.setOrganisationId(userIdentity.getOrganisation().getId());
-		hmopack.setCreatedDate(new GregorianCalendar().getTime());
-		
-		
-		
-	     this.hmopackageBo.save(hmopack);
-		alert.setAlert(redirectAttributes, Alert.SUCCESS, "Success! Hmo saved");
-		return "redirect:/hmo/view/" + hmopackForm.getHmo_id();
-}
-		
-		else
-		{
+
+		else {
 			alert.setAlert(redirectAttributes, Alert.WARNING,
 					"You have no permission to Add HMO Package");
-			
+
 			return "redirect:/";
 		}
-		
 
-		}
-	
-	
-	
-	
-	//form_wizard_layout
+	}
+
+	// form_wizard_layout
 	@RequestMapping(value = "/hmopackage/view/{id}")
 	@Layout(value = "layouts/datatable")
 	public String viewActionAll2(@PathVariable("id") Integer id, Model model,
 			RedirectAttributes redirectAttributes) {
-		
-		if (authorize.isAllowed("HMP002"))
-		{
-		
-		HmoPackage hmopack = hmopackageBo.getHmoPackageById(id);
-		if (null == hmopack) {
-			alert.setAlert(redirectAttributes, Alert.DANGER,
-					"Error! Invalid resource");
-			return "redirect:/hmo/index";
+
+		if (authorize.isAllowed("HMP002")) {
+
+			HmoPackage hmopack = hmopackageBo.getHmoPackageById(id);
+			if (null == hmopack) {
+				alert.setAlert(redirectAttributes, Alert.DANGER,
+						"Error! Invalid resource");
+				return "redirect:/hmo/index";
+			}
+			model.addAttribute("hmopackage", hmopack);
+
+			// HmoPackageItem
+			HmoPackageItemForm hmoPackageItemForm = new HmoPackageItemForm();
+
+			hmoPackageItemForm.setHmopackage_id(hmopack.getId());
+
+			List<Hmostatus> hmostatus = hmostatusList.fetchAll();
+			List<Period> period = periodList.fetchAll();
+
+			model.addAttribute("period", period);
+
+			model.addAttribute("hmostatus", hmostatus);
+			model.addAttribute("hmopackItemForm", hmoPackageItemForm);
+
+			return "hmo/hmopackage/view";
 		}
-		model.addAttribute("hmopackage", hmopack);
-		
 
-		
-		//HmoPackageItem
-		HmoPackageItemForm hmoPackageItemForm = new HmoPackageItemForm();
-		
-		hmoPackageItemForm.setHmopackage_id(hmopack.getId());
-		
-		List<Hmostatus> hmostatus =hmostatusList.fetchAll();
-		List<Period> period = periodList.fetchAll();
-		
-		model.addAttribute("period",period);
-		
-		model.addAttribute("hmostatus",hmostatus);
-		model.addAttribute("hmopackItemForm", hmoPackageItemForm);
-		
-		
-
-		
-		
-		
-		return "hmo/hmopackage/view";
-	}
-		
-		else
-		{
+		else {
 			alert.setAlert(redirectAttributes, Alert.WARNING,
 					"You have no permission to View HMO Package");
-			
+
 			return "redirect:/";
 		}
-		
 
-		}
-	
-	
-	
+	}
 
 	@RequestMapping(value = "/hmopackage/edit/{id}")
 	public String editAction2(@PathVariable("id") Integer id, Model model,
 			RedirectAttributes redirectAttributes, HttpServletRequest request) {
-		if (authorize.isAllowed("HMP003"))
-		{
-		HmoPackage hmopack = this.hmopackageBo.getHmoPackageById(id);
-		if (null == hmopack) {
-			alert.setAlert(redirectAttributes, Alert.DANGER,
-					"Error! Invalid resource");
-			return "redirect:/hmo/view/" + hmopack.getHmo().getId();
+		if (authorize.isAllowed("HMP003")) {
+			HmoPackage hmopack = this.hmopackageBo.getHmoPackageById(id);
+			if (null == hmopack) {
+				alert.setAlert(redirectAttributes, Alert.DANGER,
+						"Error! Invalid resource");
+				return "redirect:/hmo/view/" + hmopack.getHmo().getId();
+			}
+
+			HmoPackageForm hmopackageForm = new HmoPackageForm();
+
+			hmopackageForm.setName(hmopack.getName());
+			hmopackageForm.setClaims(hmopack.getClaims());
+			hmopackageForm.setStatus_id(hmopack.getHmostatus()
+					.getHmostatus_id());
+			if (hmopack.getBillScheme() != null) {
+				hmopackageForm.setBillingscheme_id(hmopack.getBillScheme()
+						.getId());
+			}
+			hmopackageForm.setPercentcover(hmopack.getPercentcover());
+			List<Hmostatus> hmostatus = hmostatusList.fetchAll();
+
+			model.addAttribute("hmostatus", hmostatus);
+
+			model.addAttribute("hmopackForm", hmopackageForm);
+			model.addAttribute("billscheme", this.billSchemeBo
+					.fetchAllByOrganisation(userIdentity.getOrganisation()));
+
+			this.auditor.before(request, "HMO Package", hmopackageForm);
+
+			return "hmo/hmopackage/edit";
+
 		}
 
-		HmoPackageForm hmopackageForm = new HmoPackageForm();
-	
-		hmopackageForm.setName(hmopack.getName());
-		hmopackageForm.setStatus_id(hmopack.getHmostatus().getHmostatus_id());
-	
-		List<Hmostatus> hmostatus = hmostatusList.fetchAll();
-		
-		model.addAttribute("hmostatus",hmostatus);
-		
-		
-		model.addAttribute("hmopackForm", hmopackageForm);
-	
-		this.auditor.before(request, "HMO Package", hmopackageForm);
-		
-	
-	return "hmo/hmopackage/edit";
-
-}
-		
-		else
-		{
+		else {
 			alert.setAlert(redirectAttributes, Alert.WARNING,
 					"You have no permission to Edit HMO Package");
-			
+
 			return "redirect:/";
 		}
-		
 
-		}
-	
+	}
 
 	@RequestMapping(value = "/hmopackage/edit/{id}", method = RequestMethod.POST)
 	public String updateActionEditpackage2(
 			@Valid @ModelAttribute("aForm") HmoPackageForm hmoPackageForm,
 			BindingResult result, RedirectAttributes redirectAttributes,
 			Model model, HttpServletRequest request) {
-		if (authorize.isAllowed("HMP003"))
-		{
-		if (result.hasErrors()) {
-			model.addAttribute("package", this.hmoPackageBo.fetchAll(userIdentity.getOrganisation().getId()));
-			return "redirect:/hmo/index" ;
+		if (authorize.isAllowed("HMP003")) {
+			if (result.hasErrors()) {
+				model.addAttribute("package", this.hmoPackageBo
+						.fetchAll(userIdentity.getOrganisation()));
+				return "redirect:/hmo/index";
+			}
+			// NEWWLY ADDED
+			HmoPackage hmoPackage = hmoPackageBo
+					.getHmoPackageById(hmoPackageForm.getId());
+			hmoPackage.setName(hmoPackageForm.getName());
+			hmoPackage.setClaims(hmoPackageForm.getClaims());
+			hmoPackage.setPercentcover(hmoPackageForm.getPercentcover());
+			hmoPackage.setHmostatus(this.hmostatusList
+					.getHmostatusById(hmoPackageForm.getStatus_id()));
+
+			hmoPackage.setModifiedDate(new GregorianCalendar().getTime());
+			hmoPackage.setModifiedBy(userIdentity.getUsername());
+
+			// end
+			hmoPackageBo.update(hmoPackage);
+			auditor.after(request, "HMO Package", hmoPackageForm,
+					userIdentity.getUsername(), hmoPackageForm.getId());
+
+			alert.setAlert(redirectAttributes, Alert.SUCCESS,
+					"Success! Package updated");
+			return "redirect:/hmo/view/" + hmoPackage.getHmo().getId();
+
 		}
-		// NEWWLY ADDED
-		HmoPackage hmoPackage = hmoPackageBo
-				.getHmoPackageById(hmoPackageForm.getId());
-		hmoPackage.setName(hmoPackageForm.getName());
-		hmoPackage.setHmostatus(this.hmostatusList.getHmostatusById(hmoPackageForm.getStatus_id()));
-		
-	hmoPackage.setModifiedDate(new GregorianCalendar().getTime());
-		hmoPackage.setModifiedBy(userIdentity.getUsername());
 
-		// end
-		hmoPackageBo.update(hmoPackage);
-		auditor.after(request, "HMO Package", hmoPackageForm,
-				userIdentity.getUsername(),hmoPackageForm.getId());
+		else {
+			alert.setAlert(redirectAttributes, Alert.WARNING,
+					"You have no permission to Edit HMO Package");
 
-		alert.setAlert(redirectAttributes, Alert.SUCCESS,
-				"Success! Package updated");
-		return "redirect:/hmo/view/" + hmoPackage.getHmo().getId();	
-		
-	}
-	
-	else
-	{
-		alert.setAlert(redirectAttributes, Alert.WARNING,
-				"You have no permission to Edit HMO Package");
-		
-		return "redirect:/";
-	}
-	
+			return "redirect:/";
+		}
 
 	}
-		
+
 }

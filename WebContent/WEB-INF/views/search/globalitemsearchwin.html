@@ -107,7 +107,7 @@
 			
 			-->
 			<div class="clearfix form-actions">
-				<div class="col-md-12 col-md-offset-5">
+				<div style="text-align:center">
 				
 				
 				<button class="btn btn-primary" id="submit" type="submit">
@@ -283,7 +283,7 @@ var  h= g.split("##");
 /*
 
 function myOpenwin() {
-   var myWindow = window.open("/EMR/patients/searchwindow", "MsgWindow", "width=400, height=400");
+   var myWindow = window.open("/../"+ window.location.pathname.split("/")[1] + "/patients/searchwindow", "MsgWindow", "width=400, height=400");
   //  myWindow.document.write("<p>This window's name is: " + myWindow.name + "</p>");
     myWindow.focus();
     return false

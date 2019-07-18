@@ -107,7 +107,7 @@
 			
 			-->
 			<div class="clearfix form-actions">
-				<div class="col-md-12 col-md-offset-5">
+				<div style="text-align:center">
 				
 				
 				<button class="btn btn-primary" id="submit" type="submit">
@@ -160,7 +160,7 @@
 					<td th:text="${personnel.name}">name</td>
 					<td><a class="btn btn-xs btn-primary tooltips"
 												title="Choose "
-												th:id="${personnel.id}+'##'+${personnel.name}"
+												th:id="${personnel.usid}+'##'+${personnel.name}"
 												 onclick="return myidselector(this.id);">
 										
 													<i class="fa fa-eye">  </i>
@@ -257,33 +257,61 @@ $('#delbutton').click(function() {
 });
 
 
-
 function myidselector(g){
 /*  alert("I'm inside selector");
 alert(g);  */
 
 var  h= g.split("##");
-/* alert(h); */
+/*  alert(h); */
 
-            var txtid = window.opener.document.getElementById("personnelId");
+
+            var txtid = window.opener.document.getElementById("personnelid");
             txtid.value= h[0];
             
-          /*   alert(h[0]); */
+    
+       
+      var txtName= window.opener.document.getElementById("personnelname");
+              
+          txtName.value = h[h.length-1];
+            
+           /*  alert(h[h.length-1]); */
+  
+             
+ // window.opener.setGlobalItemFieldsCallbck(g);
+   
+           
+           
+            window.close();
+           
+        
+}
+
+/*
+function myidselector(g){
+ 
+
+var  h= g.split("##");
+ 
+
+            var txtid = window.opener.document.getElementById("personnelid");
+            txtid.value= h[0];
+            
+         
        
             var txtName= window.opener.document.getElementById("personnelname");
               
             txtName.value = h[h.length-1];
             
-           /*  alert(h[h.length-1]); */
+          
             
             window.close();
 }
-
+*/
 
 /*
 
 function myOpenwin() {
-   var myWindow = window.open("/EMR/patients/searchwindow", "MsgWindow", "width=400, height=400");
+   var myWindow = window.open("/../"+ window.location.pathname.split("/")[1] + "/patients/searchwindow", "MsgWindow", "width=400, height=400");
   //  myWindow.document.write("<p>This window's name is: " + myWindow.name + "</p>");
     myWindow.focus();
     return false

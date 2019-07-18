@@ -75,7 +75,7 @@
 			<div class="form-group" >
 			<label for="title" class="col-sm-3 control-label no-padding-right">Enter Examination Name:</label>
 			<div class="col-sm-9">
-			<input type="text" class="col-xs-10 col-sm-5" placeholder="Value" th:field="*{mycriteriavalue}"  />					
+			<input type="text" class="col-xs-10 col-sm-5" placeholder="" th:field="*{mycriteriavalue}"  />					
 			</div>				
 			</div>
 			
@@ -113,7 +113,7 @@
 			
 			-->
 			<div class="clearfix form-actions">
-				<div class="col-md-12 col-md-offset-5">
+				<div style="text-align:center">
 				
 				
 				<button class="btn btn-primary" id="submit" type="submit">
@@ -163,10 +163,10 @@
 				<!-- <td th:text="${allergy.id}">id</td> -->	
 					 
 					
-					<td th:text="${examination.name}">name</td>
+					<td th:text="${examination.examinationName}">name</td>
 					<td><a class="btn btn-xs btn-primary tooltips"
 												title="Choose "
-												th:id="${examination.id}+'##'+${examination.name}"
+												th:id="${examination.examinationId}+'##'+${examination.examinationName}"
 												 onclick="return myidselector(this.id);">
 										
 													<i class="fa fa-eye">  </i>
@@ -294,7 +294,7 @@ var  h= g.split("##");
 /*
 
 function myOpenwin() {
-   var myWindow = window.open("/EMR/patients/searchwindow", "MsgWindow", "width=400, height=400");
+   var myWindow = window.open("/../"+ window.location.pathname.split("/")[1] + "/patients/searchwindow", "MsgWindow", "width=400, height=400");
   //  myWindow.document.write("<p>This window's name is: " + myWindow.name + "</p>");
     myWindow.focus();
     return false

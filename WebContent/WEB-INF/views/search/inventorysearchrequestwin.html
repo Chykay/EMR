@@ -71,7 +71,7 @@
 				</div>			
 			</div>-->
 			
-			<div class="form-group">
+			<div class="form-group" hidden="hidden">
 				<label for="gender" class="col-sm-3 control-label no-padding-right"> Item Type:</label>
 				<div class="col-sm-9">
 					<select th:field="*{inventorytypeId}" class="col-xs-10 col-sm-5"  required="required" id="typeId">
@@ -80,6 +80,8 @@
 							th:text="${g.globalitemtypename}"></option> -->
 							 <option value="1">Equipment</option>
 							 <option value="2">Drug</option>
+							 
+							   <option value="9">Consumables</option>
 					</select> <span class="text-danger" th:if="${#fields.hasErrors('inventorytypeId')}"
 						th:errors="*{inventorytypeId}"></span>
 				</div>
@@ -128,7 +130,7 @@
 			
 			-->
 			<div class="clearfix form-actions">
-				<div class="col-md-12 col-md-offset-5">
+				<div style="text-align:center">
 				
 				
 				<button class="btn btn-primary" id="submit" type="submit">
@@ -322,7 +324,7 @@ var  h= g.split("##");
 /*
 
 function myOpenwin() {
-   var myWindow = window.open("/EMR/patients/searchwindow", "MsgWindow", "width=400, height=400");
+   var myWindow = window.open("/../"+ window.location.pathname.split("/")[1] + "/patients/searchwindow", "MsgWindow", "width=400, height=400");
   //  myWindow.document.write("<p>This window's name is: " + myWindow.name + "</p>");
     myWindow.focus();
     return false

@@ -1,0 +1,783 @@
+package org.calminfotech.inventory.web;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
+import org.calminfotech.hrunit.boInterface.HrunitCategoryBo;
+import org.calminfotech.hrunit.models.HrunitCategory;
+import org.calminfotech.inventory.exceptions.InvalidOpeningStockBalanceException;
+import org.calminfotech.inventory.exceptions.InvalidUnitOfMeasureConfiguration;
+import org.calminfotech.inventory.exceptions.RecordNotFoundException;
+import org.calminfotech.inventory.forms.DateSearchForm;
+import org.calminfotech.inventory.forms.PointStockInForm;
+import org.calminfotech.inventory.forms.StockInForm;
+import org.calminfotech.inventory.forms.StockInLineForm;
+import org.calminfotech.inventory.models.PointStockIn;
+import org.calminfotech.inventory.models.PointStockInLine;
+import org.calminfotech.inventory.models.StockIn;
+import org.calminfotech.inventory.models.StockInLine;
+import org.calminfotech.inventory.models.Vendor;
+import org.calminfotech.inventory.serviceInterface.StockInManagerInterface;
+import org.calminfotech.inventory.utils.CustomValidator;
+import org.calminfotech.inventory.utils.Text;
+import org.calminfotech.inventory.utils.UnitOfMeasureConverter;
+import org.calminfotech.system.boInterface.GlobalItemBo;
+import org.calminfotech.system.models.GlobalItem;
+import org.calminfotech.system.models.GlobalUnitofMeasure;
+import org.calminfotech.user.utils.UserIdentity;
+import org.calminfotech.utils.Alert;
+import org.calminfotech.utils.GlobalItemList;
+import org.calminfotech.utils.VendorsList;
+import org.calminfotech.utils.annotations.Layout;
+import org.calminfotech.system.models.GlobalItemUnitofMeasureVw;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+@Controller
+@RequestMapping(value = "/inventory/point/stock_in")
+public class PointStockInController extends AbstractBaseController {
+
+	@Autowired
+	private VendorsList vendorsList;
+
+	@Autowired
+	private GlobalItemList globalItemList;
+
+	@Autowired
+	private GlobalItemBo globalItemBo;
+
+	@Autowired
+	private UserIdentity userIdentity;
+	
+
+	@Autowired
+	private UnitOfMeasureConverter  unitconvert;
+	
+	@Autowired
+	private Alert alert;
+	
+
+	@Autowired
+	private HrunitCategoryBo unitBo;
+	
+	@Autowired
+	private StockInManagerInterface stockInManager;
+
+	@RequestMapping(value = { "/", "" })
+	@Layout("layouts/datatable")
+	public String indexAction(ModelMap model, RedirectAttributes redirectAttributes) {
+	
+		 userIdentity.setCurrentUrl("redirect:/inventory/point/stock_in");	
+			
+			if (!unitconvert.checkCurrentunit(12))
+			{
+			alert.setAlert(redirectAttributes, Alert.DANGER, "Please confirm you are clocked into store unit");
+			
+			 return "redirect:/visits/queue/12";
+		    }	
+
+			DateSearchForm stockInSearchForm = new DateSearchForm();
+			
+			
+			this.loadStockInSearchForm(stockInSearchForm, model);
+					
+			return displayStockInBatchesListPage(stockInSearchForm,model);
+
+		
+	}
+	
+
+	private void loadStockInSearchForm(
+			DateSearchForm stockInSearchForm, ModelMap model) {
+		if (stockInSearchForm.getId() != 0
+				&& !model.containsKey("stockInSearchForm")) {
+			/*
+			 * try { } catch (RecordNotFoundException e) { }
+			 */
+		}
+		// load vendors list
+		// model.addAttribute("vendorsList", this.vendorsList.fetchAll());
+		String dte = stockInSearchForm.getDateOfRequest();
+		// set todays date as default if there exist none
+		if (dte == null || dte.isEmpty()) {
+			stockInSearchForm.setDateOfRequest(new SimpleDateFormat(
+					"yyyy-MM-dd").format(new Date()));
+		}
+		
+		// load request status
+		// model.addAttribute("pointRequestStatusList",
+		// PointRequestStatus.values());
+	}
+
+	private String displayStockInBatchesListPage(DateSearchForm stockInSearchForm,ModelMap model) {
+
+		List<PointStockIn> stockInBatches = null;
+		try {
+			stockInBatches = this.stockInManager.getPointStockInBatchesList(stockInSearchForm);
+		} catch (RecordNotFoundException e) {
+			this.alert(true, Alert.DANGER, e.getExceptionMsg(), model);
+		}
+		model.addAttribute("stockinSearchForm", stockInSearchForm);
+		model.addAttribute("stockInBatchesList", stockInBatches);
+		return "/inventory/pointstock_in/index";
+	}
+
+	@RequestMapping(value = "/new", method = RequestMethod.GET)
+	@Layout("layouts/datatable")
+	public String addAction(ModelMap model,
+			RedirectAttributes redirectAttributes) {
+		
+userIdentity.setCurrentUrl("redirect:/inventory/point/stock_in");	
+		
+		if (!unitconvert.checkCurrentunit(12))
+		{
+		alert.setAlert(redirectAttributes, Alert.DANGER, "Please confirm you are clocked into store unit");
+		
+		 return "redirect:/visits/queue/12";
+	    }	
+
+
+		String id = null;
+		PointStockInForm stockInBatchForm = this.getStockInBatchForm(id);
+List<HrunitCategory> hrunit = this.unitBo.fetchAllByOrganisationbyqueuebypoint(12);
+		
+		System.out.print("hrunitsize" + hrunit.size());
+		
+		model.addAttribute("unitcategory", hrunit);
+
+		try {
+			this.loadStockInBatchForm(stockInBatchForm, model);
+			return this.displayStockInBatchFormPage(stockInBatchForm, model);
+			
+		} catch (RecordNotFoundException e) {
+			Alert alert = (Alert) model.get("alert");
+			alert.setAlert(redirectAttributes, Alert.DANGER, e.getExceptionMsg());
+			return "redirect:/inventory/point/stock_in";
+		}
+
+	}
+
+	
+
+	@Layout(value = "layouts/datatable")
+	@RequestMapping(value = "/search", method = RequestMethod.POST)
+	public String searchRequestAction(
+			@Valid @ModelAttribute("stockinSearchForm") DateSearchForm stockInSearchForm,
+			BindingResult result, ModelMap model,
+			RedirectAttributes redirectAttributes) {
+
+		userIdentity.setCurrentUrl("redirect:/inventory/point/stock_in");	
+		
+		if (!unitconvert.checkCurrentunit(12))
+		{
+		alert.setAlert(redirectAttributes, Alert.DANGER, "Please confirm you are clocked into store unit");
+		
+		 return "redirect:/visits/queue/12";
+	    }	
+	
+
+		
+		this.loadStockInSearchForm(stockInSearchForm, model);
+		return displayStockInBatchesListPage(stockInSearchForm,model);
+
+	}
+
+	
+	@Layout("layouts/datatable")
+	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+	public String editPointStockIn(@PathVariable String id, ModelMap model,
+			RedirectAttributes redirectAttributes) {
+
+
+		 userIdentity.setCurrentUrl("redirect:/inventory/point/stock_in");	
+			
+			if (!unitconvert.checkCurrentunit(12))
+			{
+			alert.setAlert(redirectAttributes, Alert.DANGER, "Please confirm you are clocked into store unit");
+			
+			 return "redirect:/visits/queue/12";
+		    }	
+
+		PointStockInForm stockInBatchForm = this.getStockInBatchForm(id);
+List<HrunitCategory> hrunit = this.unitBo.fetchAllByOrganisationbyqueuebypoint(12);
+		
+		System.out.print("hrunitsize" + hrunit.size());
+		
+		model.addAttribute("unitcategory", hrunit);
+
+		try {
+			this.loadStockInBatchForm(stockInBatchForm, model);
+			model.addAttribute("pageEdit", true);
+			return this.displayStockInBatchFormPage(stockInBatchForm, model);
+
+		} catch (RecordNotFoundException e) {
+			Alert alert = (Alert) model.get("alert");
+			alert.setAlert(redirectAttributes, Alert.DANGER,
+					"Error! Invalid resource (Resource id:" + id + ")");
+			return "redirect:/inventory/point/stock_in";
+		}
+	}
+
+	private PointStockInForm getStockInBatchForm(String id) {
+
+		PointStockInForm stockInBatchForm = new PointStockInForm();
+		if (id != null) {
+			try {
+				stockInBatchForm.setId(Integer.parseInt(id));
+			} catch (NumberFormatException e) {
+			}
+		}
+		return stockInBatchForm;
+	}
+
+	private void loadStockInBatchForm(PointStockInForm stockInBatchForm,
+			ModelMap model) throws RecordNotFoundException {
+
+		// if BatchSupply id not empty then we are in edit mode so we populate
+		// form
+		if (stockInBatchForm.getId() != 0
+				&& !model.containsKey("stockInBatchForm")) {
+			// get BatchSupply details and populate form
+			PointStockIn stockInBatch = this.stockInManager
+					.getPointStockInBatchDetailsById(stockInBatchForm.getId());
+			if (stockInBatch != null) {
+				Date date = stockInBatch.getStockInDate();
+				if (date != null) {
+					stockInBatchForm.setStockInDate(date.toString());
+				}
+			}
+			// stockInBatchForm.setVendor(String.valueOf(stockInBatch.getVendor()
+			// .getId()));
+			
+			stockInBatchForm.setUnitId(stockInBatch.getUnitfrom().getCategoryId());
+			stockInBatchForm.setStockInDate(stockInBatch.getStockInDate().toString());
+			stockInBatchForm.setDescription(stockInBatch.getDescription());
+
+			
+		}
+		// load vendors list
+		/*
+		 * List<Vendor> vendorsList = this.vendorsList.fetchAll(); if
+		 * (vendorsList == null || vendorsList.isEmpty()) {
+		 * this.modalAlert(true, Alert.DANGER,
+		 * "No vendor record found in the database", model); }
+		 * model.addAttribute("vendorsList", vendorsList);
+		 */
+		String dte = stockInBatchForm.getStockInDate();
+		// set todays date as default if there exist none
+		if (dte == null || dte.isEmpty()) {
+			stockInBatchForm.setStockInDate(new SimpleDateFormat("yyyy-MM-dd")
+					.format(new Date()));
+		}
+
+	}
+
+	/* method display batch supply page */
+	private String displayStockInBatchFormPage(PointStockInForm stockInBatchForm,
+			ModelMap model) {
+
+		model.addAttribute("stockInBatchForm", stockInBatchForm);
+		model.addAttribute("pageRegister", true);
+
+
+		DateSearchForm stockinSearchForm = new DateSearchForm();
+		
+			stockinSearchForm.setDateOfRequest(stockInBatchForm.getStockInDate().toString());
+		
+
+		return this.displayStockInBatchesListPage(stockinSearchForm,model);
+	}
+	
+	
+
+	/* method display batch supply page */
+
+	
+	
+	
+
+	@Layout(value = "layouts/datatable")
+	@RequestMapping(value = "/new", method = RequestMethod.POST)
+	public String saveAction(
+			@Valid @ModelAttribute("stockInBatchForm") PointStockInForm stockInBatchForm,
+			BindingResult result, ModelMap model,
+			RedirectAttributes redirectAttributes) {
+
+		 userIdentity.setCurrentUrl("redirect:/inventory/point/stock_in");	
+			
+			if (!unitconvert.checkCurrentunit(12))
+			{
+			alert.setAlert(redirectAttributes, Alert.DANGER, "Please confirm you are clocked into store unit");
+			
+			 return "redirect:/visits/queue/12";
+		    }	
+
+		Alert alert = (Alert) model.get("alert");
+
+		CustomValidator validator = new CustomValidator();
+		String date = stockInBatchForm.getStockInDate();
+		if (!date.isEmpty() && !validator.validateDate(date, "yyyy-mm-dd")) {
+			result.rejectValue("stockInDate", "error.stockInBatchForm",
+					Text.INVALID_DATE_FORMAT);
+		}
+
+		if (!result.hasErrors()) {
+			PointStockIn stockInBatch = this.stockInManager
+					.savePointStockInBatch(stockInBatchForm);
+			alert.setAlert(redirectAttributes, Alert.SUCCESS,
+					" Success! New Stock-In Batch  Succesfully created! Stock In Batch id:  "
+							+ stockInBatch.getBatchId());
+			return "redirect:/inventory/point/stock_in";
+		}
+		try {
+			this.loadStockInBatchForm(stockInBatchForm, model);
+			return this.displayStockInBatchFormPage(stockInBatchForm, model);
+		} catch (RecordNotFoundException e) {
+			alert.setAlert(redirectAttributes, Alert.DANGER, e.getExceptionMsg());
+			return "redirect:/inventory/point/stock_in";
+
+		}
+	}
+
+	@RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
+	@Layout(value = "layouts/datatable")
+	public String editBatchSupply(
+			@Valid @ModelAttribute("stockInBatchForm") PointStockInForm stockInBatchForm,
+			BindingResult result, ModelMap model,
+			RedirectAttributes redirectAttributes) {
+
+		 userIdentity.setCurrentUrl("redirect:/inventory/point/stock_in");	
+			
+			if (!unitconvert.checkCurrentunit(12))
+			{
+			alert.setAlert(redirectAttributes, Alert.DANGER, "Please confirm you are clocked into store unit");
+			
+			 return "redirect:/visits/queue/12";
+		    }	
+
+		Alert alert = (Alert) model.get("alert");
+		CustomValidator validator = new CustomValidator();
+		String date = stockInBatchForm.getStockInDate();
+		if (!date.isEmpty() && !validator.validateDate(date, "yyyy-mm-dd")) {
+			result.rejectValue("dateOfSupply", "error.stockInBatchForm",
+					Text.INVALID_DATE_FORMAT);
+		}
+
+		if (!result.hasErrors()) {
+			try {
+				PointStockIn stockInBatch = this.stockInManager
+						.editPointStockInBatch(stockInBatchForm);
+				alert.setAlert(redirectAttributes, Alert.SUCCESS,
+						" Success! Stock-In updated succesfully ! ");
+				return "redirect:/inventory/point/stock_in";
+			} catch (RecordNotFoundException e) {
+				this.alert(true, Alert.DANGER, e.getExceptionMsg(), model);
+			}
+		}
+		try {
+			this.loadStockInBatchForm(stockInBatchForm, model);
+			model.addAttribute("pageEdit", true);
+			return this.displayStockInBatchFormPage(stockInBatchForm, model);
+		} catch (RecordNotFoundException e) {
+			alert.setAlert(
+					redirectAttributes,
+					Alert.DANGER,
+					"Error! Invalid resource (Resource id:"
+							+ stockInBatchForm.getId() + ")");
+			return "redirect:/inventory/point/stock_in";
+		}
+
+	}
+
+	@RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
+	@Layout("layouts/datatable")
+	public String deleteBatchSupply(@PathVariable int id,
+			RedirectAttributes redirectAttributes, ModelMap model) {
+
+userIdentity.setCurrentUrl("redirect:/inventory/point/stock_in");	
+		
+		if (!unitconvert.checkCurrentunit(12))
+		{
+		alert.setAlert(redirectAttributes, Alert.DANGER, "Please confirm you are clocked into store unit");
+		
+		 return "redirect:/visits/queue/12";
+	    }	
+
+		try {
+
+			PointStockIn stockInBatch = this.stockInManager
+					.getPointStockInBatchDetailsById(id);
+			model.addAttribute("stockInBatch", stockInBatch);
+			model.addAttribute("pageDelete", true);
+			DateSearchForm stockinSearchForm = new DateSearchForm();
+			if (stockInBatch != null) {
+				stockinSearchForm.setDateOfRequest(stockInBatch.getStockInDate().toString());
+			}
+			
+			return this.displayStockInBatchesListPage(stockinSearchForm,model);
+
+		} catch (RecordNotFoundException e) {
+			Alert alert = (Alert) model.get("alert");
+			alert.setAlert(redirectAttributes, Alert.DANGER,
+					"Error! Invalid resource (Resource id:" + id + ")");
+			return "redirect:/inventory/point/stock_in";
+		}
+
+	}
+
+	@RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
+	public String confirmDeleteAction(
+			@RequestParam(value = "batchId", required = false) String id,
+			RedirectAttributes redirectAttributes, ModelMap model) {
+
+		Alert alert = (Alert) model.get("alert");
+		PointStockIn stockInBatch = null;
+		try {
+			stockInBatch = this.stockInManager
+					.getPointStockInBatchDetailsById(Integer.parseInt(id));
+			this.stockInManager.deletePointStockIn(stockInBatch);
+			alert.setAlert(redirectAttributes, Alert.SUCCESS,
+					"Success! Stock-In Batch deleted successfully");
+			return "redirect:/inventory/point/stock_in/";
+
+		} catch (NumberFormatException e) {
+		} catch (RecordNotFoundException e) {
+		} catch (InvalidUnitOfMeasureConfiguration e) {
+			this.modalAlert(true, Alert.DANGER, e.getExceptionMsg(), model);
+			model.addAttribute("pageDelete", true);
+			model.addAttribute("stockInBatch", stockInBatch);
+			
+			DateSearchForm stockinSearchForm = new DateSearchForm();
+			if (stockInBatch != null) {
+				stockinSearchForm.setDateOfRequest(stockInBatch.getStockInDate().toString());
+			}
+			
+			
+			return this.displayStockInBatchesListPage(stockinSearchForm,model);
+		}
+		alert.setAlert(redirectAttributes, Alert.DANGER,
+				"Error! Invalid resource (Resource id:" + id + ")");
+		return "redirect:/inventory/point/stock_in/";
+	}
+
+	// line supply
+
+	@Layout("layouts/datatable")
+	@RequestMapping(value = "/line_item/{batch_id}", method = RequestMethod.GET)
+	public String findSupplyLine(@PathVariable int batch_id,
+			RedirectAttributes redirectAttributes, ModelMap model) {
+
+		try {
+			return displayPointStockInLineItemsListPage(batch_id, model);
+		} catch (RecordNotFoundException e) {
+			Alert alert = (Alert) model.get("alert");
+			alert.setAlert(redirectAttributes, Alert.DANGER,
+					"Error! Invalid resource (Resource id:" + batch_id + ")");
+			return "redirect:/inventory/point/stock_in";
+		}
+	}
+
+	/* method to display supply lines for given supply batchid */
+	private String displayPointStockInLineItemsListPage(int batchId,
+			ModelMap model) throws RecordNotFoundException {
+		// List<StockInLine> stockInLineItems = null;
+
+		// get the batch supply details
+		PointStockIn stockInBatch = this.stockInManager
+				.getPointStockInBatchDetailsById(batchId);
+		model.addAttribute("stockInBatch", stockInBatch);
+		if (stockInBatch != null) {
+			Set<PointStockInLine> stockInLines = stockInBatch.getStockInLines();
+			if (stockInLines == null || stockInLines.isEmpty()) {
+				this.alert(true, Alert.DANGER, Text.RECORD_NOT_FOUND, model);
+			}
+		}
+		return "/inventory/pointstock_in/line_item/index";
+	}
+
+	@Layout("layouts/datatable")
+	@RequestMapping(value = "/line_item/new/{batch_id}", method = RequestMethod.GET)
+	public String newPointStockInLineItem(@PathVariable int batch_id,
+			RedirectAttributes redirectAttributes, ModelMap model) {
+
+		String id = null;
+		StockInLineForm stockInLineItemForm = this.getPointStockInLineItemForm(
+				id, batch_id);
+
+		try {
+			this.loadPointStockInLineItemForm(stockInLineItemForm, model);
+			return this.displayPointStockInLineItemFormPage(batch_id,
+					stockInLineItemForm, model);
+		} catch (RecordNotFoundException e) {
+			Alert alert = (Alert) model.get("alert");
+			alert.setAlert(redirectAttributes, Alert.DANGER, e.getExceptionMsg());
+			return "redirect:/inventory/point/stock_in/line_item/" + batch_id;
+		}
+	}
+
+	private StockInLineForm getPointStockInLineItemForm(String id, int batchId) {
+
+		StockInLineForm stockInLineItemForm = new StockInLineForm();
+		stockInLineItemForm.setBatchId(batchId);
+		if (id != null) {
+			try {
+				stockInLineItemForm.setId(Integer.parseInt(id));
+			} catch (NumberFormatException e) {
+				stockInLineItemForm.setId(0);
+			}
+		}
+		return stockInLineItemForm;
+	}
+
+	private void loadPointStockInLineItemForm(
+			StockInLineForm stockInLineItemForm, ModelMap model)
+			throws RecordNotFoundException {
+		if (stockInLineItemForm.getId() != 0
+				&& !model.containsKey("stockInLineItemForm")) {
+			// get BatchSupply details and populate form
+			int id = stockInLineItemForm.getId();
+			PointStockInLine stockInLineItem = this.stockInManager
+					.getPointStockInLineItemDetailById(id);
+
+			// setglobal item
+			GlobalItem globalItem = stockInLineItem.getGlobalItem();
+			if (globalItem != null) {
+				stockInLineItemForm.setGlobalItem(String.valueOf(globalItem
+						.getItemId()));
+			}
+			// set unit of measure
+			//GlobalUnitofMeasure globalUnitofMeasure = stockInLineItem
+				//	.getGlobalUnitofMeasure();
+			GlobalItemUnitofMeasureVw globalUnitofMeasure = stockInLineItem
+					.getGlobalUnitofMeasure();
+			
+			if (globalUnitofMeasure != null) {
+				stockInLineItemForm.setUnitOfMeasure(String
+						.valueOf(globalUnitofMeasure.getId()));
+			}
+
+			stockInLineItemForm.setQuantity(String.valueOf(stockInLineItem
+					.getQuantity()));
+
+		}
+
+		// load products list
+	//	model.addAttribute("globalItemsList", this.globalItemList.fetchAll());
+		String globalItem = stockInLineItemForm.getGlobalItem();
+		if (globalItem != null && !globalItem.isEmpty()) {
+			try {
+				model.addAttribute("unitOfMeasuresList",
+						getGlobalItemUnitOfMeasureList(Integer
+								.parseInt(globalItem)));
+			} catch (NumberFormatException e) {
+
+			}
+		}
+
+	}
+
+	/* method display batch supply page */
+	private String displayPointStockInLineItemFormPage(int batchId,
+			StockInLineForm stockInLineItemForm, ModelMap model)
+			throws RecordNotFoundException {
+
+		model.addAttribute("stockInLineItemForm", stockInLineItemForm);
+		model.addAttribute("pageRegister", true);
+		return displayPointStockInLineItemsListPage(batchId, model);
+
+	}
+
+	@Layout("layouts/datatable")
+	@RequestMapping(value = "/line_item/edit/{id}/batch/{bid}", method = RequestMethod.GET)
+	public String editStockInLineItem(@PathVariable String id,
+			@PathVariable int bid, RedirectAttributes redirectAttributes,
+			ModelMap model) {
+
+		StockInLineForm stockInLineItemForm = this.getPointStockInLineItemForm(
+				id, bid);
+
+		try {
+			this.loadPointStockInLineItemForm(stockInLineItemForm, model);
+			model.addAttribute("pageEdit", true);
+
+			return this.displayPointStockInLineItemFormPage(bid,
+					stockInLineItemForm, model);
+
+		} catch (RecordNotFoundException e) {
+			Alert alert = (Alert) model.get("alert");
+			alert.setAlert(redirectAttributes, Alert.DANGER,
+					"Error! Invalid resource (Resource id:" + id + ")");
+			return "redirect:/inventory/point/stock_in/line_item/" + bid;
+		}
+
+	}
+
+	@Layout(value = "layouts/datatable")
+	@RequestMapping(value = "/line_item/new/{batch_id}", method = RequestMethod.POST)
+	public String addLineSupplyItem(
+			@Valid @ModelAttribute("stockInLineItemForm") StockInLineForm stockInLineItemForm,
+			BindingResult result, ModelMap model,
+			@RequestParam(value = "batchId", required = false) String batchId,
+			RedirectAttributes redirectAttributes, HttpServletRequest req) {
+
+		Alert alert = (Alert) model.get("alert");
+
+		// String[] arr = req.getParameterValues("unit_of_measures[]");
+		/*
+		 * List unitOfMeasures = null; if (arr != null) { unitOfMeasures =
+		 * Arrays.asList(arr); }
+		 */
+		// List unitOfMeasuresDetails = processUnitOfMeasuresDetails
+		// (unitOfMeasures, req, model,result);
+		// lineSupplyForm.setUnitOfMeasureQuantities(unitOfMeasuresDetails);
+		if (!result.hasErrors()) {
+			try {
+				PointStockInLine stockInLineItem = this.stockInManager
+						.savePointStockInLineItem(stockInLineItemForm);
+				alert.setAlert(redirectAttributes, Alert.SUCCESS,
+						" Success! item Succesfully added to supply chain!");
+
+				PointStockIn stockInBatch = stockInLineItem.getStockInBatch();
+				if (stockInBatch != null) {
+					return "redirect:/inventory/point/stock_in/line_item/"
+							+ stockInBatch.getId();
+				}
+				return "redirect:/inventory/point/stock_in";
+
+			} catch (InvalidUnitOfMeasureConfiguration e) {
+				this.modalAlert(true, Alert.DANGER, e.getExceptionMsg(), model);
+			} catch (InvalidOpeningStockBalanceException e) {
+				this.modalAlert(true, Alert.DANGER, e.getExceptionMsg(), model);
+			}
+		}
+
+		try {
+			this.loadPointStockInLineItemForm(stockInLineItemForm, model);
+			model.addAttribute("pageRegister", true);
+			return this.displayPointStockInLineItemFormPage(
+					stockInLineItemForm.getBatchId(), stockInLineItemForm,
+					model);
+		} catch (RecordNotFoundException e) {
+			alert.setAlert(redirectAttributes, Alert.DANGER, e.getExceptionMsg());
+			return "redirect:/inventory/point/stock_in/line_item/" + batchId;
+		}
+	}
+
+	@Layout(value = "layouts/datatable")
+	@RequestMapping(value = "/line_item/edit/{id}/batch/{bid}", method = RequestMethod.POST)
+	public String editStockInLineItem(
+			@Valid @ModelAttribute("stockInLineItemForm") StockInLineForm stockInLineItemForm,
+			BindingResult result, ModelMap model,
+			@RequestParam(value = "batchId", required = false) String batchId,
+			RedirectAttributes redirectAttributes, HttpServletRequest req) {
+
+		Alert alert = (Alert) model.get("alert");
+
+		if (!result.hasErrors()) {
+			try {
+				PointStockInLine stockInLineItem = this.stockInManager
+						.editPointStockInLineItem(stockInLineItemForm);
+				alert.setAlert(redirectAttributes, Alert.SUCCESS,
+						" Success! item updated Succesfully !");
+
+				PointStockIn stockInBatch = stockInLineItem.getStockInBatch();
+				if (stockInBatch != null) {
+					return "redirect:/inventory/point/stock_in/line_item/"
+							+ stockInBatch.getId();
+				}
+				return "redirect:/inventory/point/stock_in";
+
+			} catch (InvalidUnitOfMeasureConfiguration e) {
+				this.modalAlert(true, Alert.DANGER, e.getExceptionMsg(), model);
+			} catch (RecordNotFoundException e) {
+				this.alert(true, Alert.INFO, Text.RECORD_NOT_FOUND, model);
+			} catch (InvalidOpeningStockBalanceException e) {
+				this.modalAlert(true, Alert.DANGER, e.getExceptionMsg(), model);
+			}
+		}
+
+		try {
+			this.loadPointStockInLineItemForm(stockInLineItemForm, model);
+			model.addAttribute("pageEdit", true);
+			return this.displayPointStockInLineItemFormPage(
+					stockInLineItemForm.getBatchId(), stockInLineItemForm,
+					model);
+		} catch (RecordNotFoundException e) {
+			alert.setAlert(redirectAttributes, Alert.DANGER,
+					"Error! Invalid resource (Resource id:"
+							+ stockInLineItemForm.getId() + ")");
+			return "redirect:/inventory/point/stock_in/line_item/" + batchId;
+		}
+	}
+
+	@RequestMapping(value = "/line_item/delete/{id}/batch/{bid}", method = RequestMethod.GET)
+	@Layout("layouts/datatable")
+	public String deleteStockInLineItem(@PathVariable int id,
+			@PathVariable int bid, ModelMap model,
+			RedirectAttributes redirectAttributes) {
+
+		try {
+			PointStockInLine stockInLineItem = this.stockInManager
+					.getPointStockInLineItemDetailById(id);
+			model.addAttribute("stockInLineItem", stockInLineItem);
+			model.addAttribute("pageDelete", true);
+			return this.displayPointStockInLineItemsListPage(bid, model);
+
+		} catch (RecordNotFoundException e) {
+			Alert alert = (Alert) model.get("alert");
+			alert.setAlert(redirectAttributes, Alert.DANGER,
+					"Error! Invalid resource (Resource id:" + id + ")");
+			return "redirect:/inventory/point/stock_in/line_item/" + bid;
+		}
+
+	}
+
+	@RequestMapping(value = "/line_item/delete/{id}/batch/{bid}", method = RequestMethod.POST)
+	public String confirmStockInLineItemDeleteAction(
+			@RequestParam(value = "line_item_id", required = false) String lineItemId,
+			@RequestParam(value = "batch_id", required = false) String batchId,
+			RedirectAttributes redirectAttributes, ModelMap model) {
+
+		Alert alert = (Alert) model.get("alert");
+
+		PointStockInLine stockInLineItem = null;
+		int stockInBatchId = 0;
+		try {
+			stockInLineItem = this.stockInManager
+					.getPointStockInLineItemDetailById(Integer
+							.parseInt(lineItemId));
+			PointStockIn stockInBatch = stockInLineItem.getStockInBatch();
+			if (stockInBatch != null) {
+				stockInBatchId = stockInBatch.getId();
+			}
+
+			this.stockInManager.deletePointStockInLineItem(stockInLineItem);
+			alert.setAlert(redirectAttributes, Alert.SUCCESS,
+					"Success! Stock-In Line Item deleted successfully");
+			return "redirect:/inventory/point/stock_in/line_item/"
+					+ stockInBatchId;
+		} catch (NumberFormatException e) {
+			alert.setAlert(redirectAttributes, Alert.DANGER,
+					"Error! Invalid resource (Resource id:" + lineItemId + ")");
+		} catch (RecordNotFoundException e) {
+			alert.setAlert(redirectAttributes, Alert.DANGER,
+					"Error! Invalid resource (Resource id:" + lineItemId + ")");
+		}
+		return "redirect:/inventory/point/stock_in/line_item/delete/"
+				+ lineItemId + "/batch/" + batchId;
+	}
+
+}

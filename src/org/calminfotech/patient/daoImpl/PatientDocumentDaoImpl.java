@@ -2,17 +2,16 @@ package org.calminfotech.patient.daoImpl;
 
 import java.util.List;
 
-import org.calminfotech.system.models.Organisation;
 import org.calminfotech.patient.daoInterface.PatientDocumentDao;
 import org.calminfotech.patient.models.Patient;
 import org.calminfotech.patient.models.PatientDocument;
-import org.calminfotech.patient.models.PatientDocument;
-import org.calminfotech.patient.models.Patient;
+import org.calminfotech.system.models.Organisation;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
 @Repository
 @Transactional
 public class PatientDocumentDaoImpl implements PatientDocumentDao {
@@ -44,14 +43,21 @@ public class PatientDocumentDaoImpl implements PatientDocumentDao {
 		return this.sessionFactory.getCurrentSession()
 				.createCriteria(PatientDocument.class)
 				.createAlias("patient", "patient")
-				
-				.add(Restrictions.eq("patient.id", patient.getPatientId())).list();
+
+				.add(Restrictions.eq("patient.id", patient.getPatientId()))
+				.list();
 	}
 
 	@Override
 	public void update(PatientDocument patientDocument) {
 		// TODO Auto-generated method stub
 		this.sessionFactory.getCurrentSession().update(patientDocument);
+	}
+
+	@Override
+	public void save(PatientDocument patientDocument) {
+		// TODO Auto-generated method stub
+		this.sessionFactory.getCurrentSession().save(patientDocument);
 	}
 
 	@Override
@@ -72,5 +78,5 @@ public class PatientDocumentDaoImpl implements PatientDocumentDao {
 		// TODO Auto-generated method stub
 		this.sessionFactory.getCurrentSession().delete(patientDocument);
 	}
-	
+
 }

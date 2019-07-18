@@ -7,8 +7,6 @@
 	<session-factory>
 	<!-- Customer Model -->
 	
-	
-	
 		<mapping class="org.calminfotech.patient.models.Patient" />
 		<mapping class="org.calminfotech.patient.models.PatientRelated" />
 		<mapping class="org.calminfotech.patient.models.PatientDocument" />
@@ -58,18 +56,19 @@
 		
 		
 		
-		<!-- HMO 
-		
-		
-		<mapping class="org.calminfotech.hmo.models.HmoType" />
-		
+		<!-- HMO 	
 	-->
 	
+		
+		<mapping class="org.calminfotech.hmo.models.HmoType" />
+		<mapping class="org.calminfotech.hmo.models.HmoCode" />
+
 		<mapping class="org.calminfotech.hmo.models.HmoPackage" />
 		<mapping class="org.calminfotech.hmo.models.Hmo" />
     	<mapping class="org.calminfotech.hmo.models.HmoPackageItem" />
     	
     	<mapping class="org.calminfotech.hmo.models.HmoPackageItemContent" />
+    	<mapping class="org.calminfotech.hmo.models.HmoTransaction" />
     	
 
 
@@ -329,6 +328,7 @@
 		
 	
 		<!-- Billing and Inventory
+	-->
 		
 		<mapping class="org.calminfotech.billing.models.BillScheme" />
 		<mapping class="org.calminfotech.billing.models.BillSchemeItemPrice" />
@@ -340,7 +340,11 @@
 		<mapping class="org.calminfotech.billing.models.BillSchemeItem" />
 		<mapping class="org.calminfotech.billing.models.BillSchemeMeasurePrice" />
 		<mapping class="org.calminfotech.billing.models.BillSchemeRankingPrice" />
+		<mapping class="org.calminfotech.billing.models.BillInvoicePayment" />
+		<mapping class="org.calminfotech.billing.models.BillInvoicePaymentSummary" />
+		<mapping class="org.calminfotech.billing.models.CustomerTransaction" />
 		
+	
 		
 		<mapping class="org.calminfotech.billing.models.GetBillItem" />
 		
@@ -372,8 +376,8 @@
 		<mapping class="org.calminfotech.inventory.models.PointStockIn" />
 		<mapping class="org.calminfotech.inventory.models.PointStockInLine"/>
 		<mapping class="org.calminfotech.inventory.models.PointStockOpeningBalance" />
+		<mapping class="org.calminfotech.inventory.models.VendorTransaction" />
 		
-	-->
 	
 		<!-- visit queue stuffs --> 
 		<mapping class="org.calminfotech.visitqueue.models.VisitClerkingStatus"/>

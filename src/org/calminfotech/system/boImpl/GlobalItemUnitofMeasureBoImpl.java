@@ -110,4 +110,5 @@ public class GlobalItemUnitofMeasureBoImpl implements GlobalItemUnitofMeasureBo 
 	public Boolean IsExist(int itemid, int uomid) {
 		return itemunitofMeasureDao.IsExist(itemid, uomid);
 	}
+
 }

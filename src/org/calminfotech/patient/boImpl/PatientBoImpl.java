@@ -106,6 +106,18 @@ public class PatientBoImpl implements PatientBo {
 	}
 
 	@Override
+	public List<Patient> fetchByOrganisationrec(int organisationId) {
+		return this.patientDao.fetchByOrganisationrec(organisationId);
+
+	}
+
+	@Override
+	public List<Patient> fetchByOrganisationrecbypatient(int pid) {
+		return this.patientDao.fetchByOrganisationrecbypatient(pid);
+
+	}
+
+	@Override
 	public Patient getPatientById(int id) {
 		// TODO Auto-generated method stub
 		return this.patientDao.getPatientById(id);
@@ -152,6 +164,12 @@ public class PatientBoImpl implements PatientBo {
 
 		try {
 			patient.setHeight(patientForm.getHeight());
+		} catch (Exception e) {
+
+		}
+
+		try {
+			patient.setCreditlimit(patientForm.getCreditlimit());
 		} catch (Exception e) {
 
 		}
@@ -259,6 +277,7 @@ public class PatientBoImpl implements PatientBo {
 		patient.setCreatedDate(new GregorianCalendar().getTime());
 
 		patient.setOrganisation(userIdentity.getOrganisation());
+		patient.setOrgCoy(userIdentity.getOrganisation().getOrgCoy());
 
 		patient.setIsDeleted(false);
 
@@ -288,6 +307,11 @@ public class PatientBoImpl implements PatientBo {
 
 		if (!patientForm.getEmail().equals("")) {
 			patient.setEmail(patientForm.getEmail());
+		}
+
+		try {
+			patient.setCreditlimit(patientForm.getCreditlimit());
+		} catch (Exception e) {
 		}
 
 		try {
@@ -442,8 +466,8 @@ public class PatientBoImpl implements PatientBo {
 			patient.setTitle(null);
 		}
 
-		patient.setCreatedBy(userIdentity.getUsername());
-		patient.setCreatedDate(new GregorianCalendar().getTime());
+		patient.setModifiedBy(userIdentity.getUsername());
+		patient.setModifiedDate(new GregorianCalendar().getTime());
 
 		patient.setOrganisation(userIdentity.getOrganisation());
 

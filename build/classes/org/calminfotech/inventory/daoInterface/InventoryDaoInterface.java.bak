@@ -1,0 +1,65 @@
+package org.calminfotech.inventory.daoInterface;
+
+import java.util.List;
+
+import org.calminfotech.inventory.exceptions.InvalidOpeningStockBalanceException;
+import org.calminfotech.inventory.models.PointStockCurrentBalance;
+import org.calminfotech.system.models.GlobalItemUnitofMeasureVw;
+import org.calminfotech.system.models.GlobalUnitofMeasure;
+//import org.calminfotech.system.models.UnitItem;
+import org.calminfotech.system.models.GlobalItemUnitofMeasureVw;
+//import org.calminfotech.inventory.models.GlobalItemUnitofMeasure;
+
+public interface InventoryDaoInterface {
+
+
+
+	public List<GlobalUnitofMeasure> fetchGlobalItemUnitOfMeasure(
+			int globalItemId);
+
+//	public UnitItem getUnitOfMeasureToDetails(int globalItemId,
+	//		int currentUnitOfMeasureFrom);
+
+	
+	public int getGlobalItemCurrentBalance(int globalItemIdInt)throws InvalidOpeningStockBalanceException;
+
+	public void updateGlobalItemCurrentBalance(int currentBalance,int globalItemId);
+
+	//public UnitItem getUnitOfMeasureFromDetails(
+		//	int globalItemId, int unitOfMeasureToConvert);
+
+	public int getGlobalItemUnitOfMeasureContainedUnit(int globalItemId,
+			int unitOfMeasure);
+
+	public void updatePointGlobalItemCurrentBalance(
+			PointStockCurrentBalance pointStockCurrentBalance);
+
+	//public PointStockCurrentBalance getGlobalItemCurrentBalanceByPoint(
+		//	int globalItem, int pointId) throws InvalidOpeningStockBalanceException;
+	
+	public PointStockCurrentBalance getGlobalItemCurrentBalanceByPoint(
+			int globalItem, int pointId, int unitId) throws InvalidOpeningStockBalanceException;;
+
+	//public List<PointStockCurrentBalance> getPointStockCurrentBalances(
+		//	int currentPointId);
+	public List<PointStockCurrentBalance> getPointStockCurrentBalances(
+			int currentPointId, int currentUnitId);
+
+	public int getPointGlobalItemCurrentBalance(int globalItem,
+			int currentPointId, int currentUnitId) throws InvalidOpeningStockBalanceException;
+
+	//public List<UnitItem> getGlobalItemUnitOfMeasurements(
+		//	int globalItemId);
+	
+	public List<GlobalItemUnitofMeasureVw> getGlobalItemUnitOfMeasurements(
+			int globalItemId);
+	
+	//public  UnitItem getUnitOfMeasureFromDetailsRwId(int unitOfMeasureid);
+	public  GlobalItemUnitofMeasureVw getUnitOfMeasureFromDetailsRwId(int unitOfMeasureid);
+
+	//public int getPointGlobalItemCurrentBalance(int globalItem,
+	//		int currentPointId) throws InvalidOpeningStockBalanceException;
+
+
+
+}

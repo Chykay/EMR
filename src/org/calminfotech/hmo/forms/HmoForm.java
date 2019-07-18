@@ -8,57 +8,43 @@ public class HmoForm {
 	private Integer id;
 	private String name;
 	private Integer organisationId;
-	
+
 	private String admin_name;
-	
+
 	private String address;
-	
+
 	private String phone;
 
 	private Integer bank_id;
-	
-    private String accountno;
-    
+
+	private String accountno;
+
 	private String email;
-	
+
 	private Integer billingscheme_id;
-	
+
 	private Integer status_id;
-	
-	public Integer getStatus_id() {
-		return status_id;
+
+	private Integer hmotype_id;
+
+	private String globalhmocode;
+
+	private Boolean claims;
+
+	public Boolean getClaims() {
+		return claims;
 	}
 
-	public void setStatus_id(Integer status_id) {
-		this.status_id = status_id;
+	public void setClaims(Boolean claims) {
+		this.claims = claims;
 	}
 
-	
-	
-	public String getName() {
-		return name;
+	public String getGlobalhmocode() {
+		return globalhmocode;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-
-
-	private String created_date;
-	
-	private Integer created_by;
-	
-	private String modified_date;
-	
-	private Integer modified_by;
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
+	public void setGlobalhmocode(String globalhmocode) {
+		this.globalhmocode = globalhmocode;
 	}
 
 	public Integer getOrganisationId() {
@@ -69,13 +55,49 @@ public class HmoForm {
 		this.organisationId = organisationId;
 	}
 
+	public Integer getHmotype_id() {
+		return hmotype_id;
+	}
 
+	public void setHmotype_id(Integer hmotype_id) {
+		this.hmotype_id = hmotype_id;
+	}
+
+	public Integer getStatus_id() {
+		return status_id;
+	}
+
+	public void setStatus_id(Integer status_id) {
+		this.status_id = status_id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	private String created_date;
+
+	private Integer created_by;
+
+	private String modified_date;
+
+	private Integer modified_by;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
 	public String getAdmin_name() {
 		return admin_name;
 	}
-
-	
 
 	public String getAddress() {
 		return address;
@@ -96,8 +118,6 @@ public class HmoForm {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-
-	
 
 	public Integer getBank_id() {
 		return bank_id;
@@ -162,9 +182,5 @@ public class HmoForm {
 	public void setModified_by(Integer modified_by) {
 		this.modified_by = modified_by;
 	}
-	
-	
-
-	
 
 }

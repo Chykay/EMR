@@ -35,6 +35,7 @@ public class PatientForm {
 	private Integer genotypeId;
 	private Integer bldgrpId;
 	private Double height;
+	private Double creditlimit;
 	private Integer organisationId;
 	private Integer lifestatusId;
 
@@ -284,6 +285,14 @@ public class PatientForm {
 
 	public void setLifestatusId(Integer lifestatusId) {
 		this.lifestatusId = lifestatusId;
+	}
+
+	public Double getCreditlimit() {
+		return creditlimit;
+	}
+
+	public void setCreditlimit(Double creditlimit) {
+		this.creditlimit = creditlimit;
 	}
 
 }

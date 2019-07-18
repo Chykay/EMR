@@ -2,8 +2,6 @@ package org.calminfotech.patient.boImpl;
 
 import org.calminfotech.patient.boInterface.PatientDocumentBo;
 import org.calminfotech.patient.daoInterface.PatientDocumentDao;
-import org.calminfotech.patient.daoInterface.PatientDocumentDao;
-import org.calminfotech.patient.models.PatientDocument;
 import org.calminfotech.patient.models.PatientDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class PatientDocumentBoImpl implements PatientDocumentBo {
-	
+
 	@Autowired
 	private PatientDocumentDao patientDocumentDao;
 
@@ -20,6 +18,12 @@ public class PatientDocumentBoImpl implements PatientDocumentBo {
 	public void update(PatientDocument patientDocument) {
 		// TODO Auto-generated method stub
 		this.patientDocumentDao.update(patientDocument);
+	}
+
+	@Override
+	public void save(PatientDocument patientDocument) {
+		// TODO Auto-generated method stub
+		this.patientDocumentDao.save(patientDocument);
 	}
 
 	@Override

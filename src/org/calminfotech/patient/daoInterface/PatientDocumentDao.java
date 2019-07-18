@@ -2,14 +2,12 @@ package org.calminfotech.patient.daoInterface;
 
 import java.util.List;
 
+import org.calminfotech.patient.models.Patient;
+import org.calminfotech.patient.models.PatientDocument;
 import org.calminfotech.system.models.Organisation;
-import org.calminfotech.patient.models.Patient;
-import org.calminfotech.patient.models.PatientDocument;
-import org.calminfotech.patient.models.PatientDocument;
-import org.calminfotech.patient.models.Patient;
 
 public interface PatientDocumentDao {
-	
+
 	public List<PatientDocument> fetchAll();
 
 	public List<PatientDocument> fetchAllByOrgainsation(
@@ -22,5 +20,7 @@ public interface PatientDocumentDao {
 	public PatientDocument getPatientDocumentById(int id);
 
 	public void delete(PatientDocument patientDocument);
+
+	public void save(PatientDocument patientDocument);
 
 }

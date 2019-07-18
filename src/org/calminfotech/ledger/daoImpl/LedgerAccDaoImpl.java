@@ -58,7 +58,7 @@ public class LedgerAccDaoImpl implements LedgerAccDao {
 		}
 		
 		List<LedgerAccount> ledgerAccounts = sessionFactory.getCurrentSession()
-				.createQuery(" from LedgerAccount WHERE company_id = ? AND account_no NOT IN ( :interfaces ) ORDER BY create_date DESC")
+				.createQuery(" from LedgerAccount WHERE company_id = ? AND is_active = 1 AND account_no NOT IN ( :interfaces ) ORDER BY create_date DESC")
 				.setParameter(0, company_id)
 				.setParameterList("interfaces", interfaces)
 				.setMaxResults(100)

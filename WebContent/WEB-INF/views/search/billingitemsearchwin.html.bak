@@ -15,18 +15,24 @@
 	</h1>
 </div>
 
- <!-- 
+  
 <div class="row">
 	<div class="col-xs-12">
 		
-		<a class="btn btn-xs btn-info" th:href="@{/system}"><i
-			class="fa fa-home"></i> System Dashboard
+		<a class="btn btn-xs btn-danger" href="javascript: window.history.back();"><i
+			class="fa fa-reply-all"></i> Back 
 		</a> 
+		
+		
+	</div>
+	</div>
+	
+	<!--
 		<a class="btn btn-xs btn-primary" th:href="@{/patients/add}"><i
 			class="fa fa-plus-circle"></i> Create New Patient profile 
 		</a>
 		<a class="btn btn-xs btn-primary" th:href="@{/patients/index/}"><i
-			class="fa fa-plus-circle"></i> View Top 50 Patients
+			class="fa fa-plus-circle"></i> View Recent Patients
 		</a>
 	</div>
 </div>
@@ -40,7 +46,7 @@
 	
 	
 	<form role="form" class="form-horizontal" method="POST" 
-		  th:object="${billingitemSearch}" >
+		  th:object="${billingSearch}" >
 			<!-- <legend>Patient Search Form</legend> -->
 			<!-- 
 		 <div class="form-group">				
@@ -51,25 +57,44 @@
 					</div>				
 			</div> -->
 			
+			<!--  
 			<div class="form-group">
-				<!-- <label for="title" class="col-sm-3 control-label no-padding-right">Search Criteria:</label>-->
+				<label for="title" class="col-sm-3 control-label no-padding-right">Search Criteria:</label>
 				<div class="col-sm-9">
 		
 					<select id = "select"  th:field="*{mycriteria}" class="col-xs-10 col-sm-5"  hidden="hidden" >					
 						<option value="name">Name</option>
-						<!-- <option value="email">Email</option>
-						<option value="phoneNumber">Phone Number</option>	-->					
+						<option value="email">Email</option>
+						<option value="phoneNumber">Phone Number</option>				
 					</select> 					
 			
 				</div>			
+			</div>-->
+			
+			<div class="form-group">
+				<label for="gender" class="col-sm-3 control-label no-padding-right"> Item Type:</label>
+				<div class="col-sm-9">
+					<select th:field="*{billingtypeId}" class="col-xs-10 col-sm-5"  required="required" id="typeId">
+						<!-- <option value="">Select..</option> -->
+					<!-- 	<option th:each="g: ${globalItemType}" th:value="${g.globalitemTypeId}"
+							th:text="${g.globalitemtypename}"></option> -->
+							 <option value="1">Equipment</option>
+							 <option value="2">Drug</option>
+							 <option value="3">Services</option>
+							  <option value="4">Laboratory Test</option>
+							    <option value="5">Surgery</option>
+	
+					</select> <span class="text-danger" th:if="${#fields.hasErrors('billingtypeId')}"
+						th:errors="*{billingtypeId}"></span>
+				</div>
 			</div>
 			
 			
 			<!-- Criteriavalue -->
 			<div class="form-group" >
-			<label for="title" class="col-sm-3 control-label no-padding-right">Enter Billing Item:</label>
+			<label for="title" class="col-sm-3 control-label no-padding-right">Enter Item Name:</label>
 			<div class="col-sm-9">
-			<input type="text" class="col-xs-10 col-sm-5" th:field="*{mycriteriavalue}"  />					
+			<input type="text" class="col-xs-10 col-sm-5"  th:field="*{mycriteriavalue}"  />					
 			</div>				
 			</div>
 			
@@ -135,7 +160,7 @@
 <div class="row">
 	<div class="col-xs-12">
 		<!-- View contents here -->
-		<div class="table-header">Result for Billing Item</div>
+		<div class="table-header">Result for Item</div>
 		<table id="dTable"
 			class="table table-striped table-bordered table-hover">
 				<!-- Table heading -->
@@ -143,7 +168,7 @@
 				<tr>
 				
 					<!--<th>Allergy Id</th>-->
-					 <th>Billing Item Name</th>
+					 <th>Item Name</th>
 					
 					<th><i class="glyphicon glyphicon-asterisk"></i></th>
 				</tr>
@@ -151,18 +176,18 @@
 				 <!-- Table heading END -->
 				<!-- Table body -->
 			<tbody>
-				<tr th:each="billingitem : ${billingitem}">
+				<tr th:each="billing : ${billingitem}">
 						
 				
-				<!--<td th:text="${billingitem.id}">id</td>-->
+				<!-- <td th:text="${allergy.id}">id</td> -->	
 					 
 					
-					<td th:text="${billingitem.name}">name</td>
+					<td th:text="${billing.name}">name</td>
 					<td><a class="btn btn-xs btn-primary tooltips"
 												title="Choose "
-												th:id="${billingitem.id}+'##'+${billingitem.name}"
+												th:id="${billing.id}+'##'+${billing.name}"
 												 onclick="return myidselector(this.id);">
-										<!-- return myidselector(this.id); -->
+										
 													<i class="fa fa-eye">  </i>
 											</a>
 											<!--  <a class="btn btn-xs btn-warning tooltips"
@@ -234,6 +259,16 @@ $('#mycriteriavalue').keydown(function(){
 	});
 	
 
+
+$('#typeId').keydown(function(){
+	//var selectedVal = $('#select').val();
+	/* alert('selectedVal: '+selectedVal); */
+	//alert("Oooo");
+	$('#mysp').val('0');
+			
+});
+
+
 $('#button').click(function(){
 	//var selectedVal = $('#select').val();
 	/* alert('selectedVal: '+selectedVal); */
@@ -266,16 +301,20 @@ var  h= g.split("##");
 /* alert(h); */
 
             var txtid = window.opener.document.getElementById("billingitem_id");
-            txtid.value= h[0];
+            //$('txtid').val(h[0]).trigger('change');
+          txtid.value= h[0];
+        window.opener.document.getElementById("billingitem_id").click(); 
             
-          /* alert(h[0]); */
+          /*   alert(h[0]); */
        
             var txtName= window.opener.document.getElementById("billingitem");
               
             txtName.value = h[h.length-1];
+                
             
            /*  alert(h[h.length-1]); */
             
+      
             window.close();
 }
 

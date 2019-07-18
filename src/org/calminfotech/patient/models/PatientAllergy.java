@@ -11,8 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.calminfotech.system.models.GlobalItem;
 import org.calminfotech.system.models.Organisation;
-import org.calminfotech.utils.models.Allergywinsearch;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -35,7 +35,7 @@ public class PatientAllergy {
 
 	@ManyToOne
 	@JoinColumn(name = "allergy_id")
-	private Allergywinsearch allergy;
+	private GlobalItem allergy;
 
 	@Column(name = "reaction")
 	private String reaction;
@@ -103,11 +103,11 @@ public class PatientAllergy {
 		return modifiedBy;
 	}
 
-	public Allergywinsearch getAllergy() {
+	public GlobalItem getAllergy() {
 		return allergy;
 	}
 
-	public void setAllergy(Allergywinsearch allergy) {
+	public void setAllergy(GlobalItem allergy) {
 		this.allergy = allergy;
 	}
 

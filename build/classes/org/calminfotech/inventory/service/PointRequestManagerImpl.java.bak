@@ -1,0 +1,929 @@
+package org.calminfotech.inventory.service;
+
+import java.util.Collection;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.calminfotech.hrunit.boInterface.HrunitCategoryBo;
+import org.calminfotech.hrunit.models.HrunitCategory;
+import org.calminfotech.inventory.daoInterface.PointRequestDaoInterface;
+import org.calminfotech.inventory.exceptions.InvalidStockLevelException;
+import org.calminfotech.inventory.exceptions.InvalidUnitOfMeasureConfiguration;
+import org.calminfotech.inventory.exceptions.RecordNotFoundException;
+import org.calminfotech.inventory.forms.DateSearchForm;
+import org.calminfotech.inventory.forms.RequestForm;
+import org.calminfotech.inventory.models.PointRequest;
+import org.calminfotech.inventory.models.PointRequestLine;
+import org.calminfotech.inventory.models.StockCurrentBalance;
+import org.calminfotech.inventory.models.Storeissue_log;
+import org.calminfotech.inventory.serviceInterface.InventoryManagerInterface;
+import org.calminfotech.inventory.serviceInterface.PointRequestManagerInterface;
+import org.calminfotech.inventory.utils.PointRequestStatus;
+import org.calminfotech.inventory.utils.UnitOfMeasureConverter;
+import org.calminfotech.system.models.GlobalItem;
+import org.calminfotech.system.models.GlobalItemUnitofMeasureVw;
+import org.calminfotech.user.boInterface.UserBo;
+import org.calminfotech.user.utils.UserIdentity;
+import org.calminfotech.utils.DateUtils;
+import org.calminfotech.visitqueue.forms.VisitWorkflowUserConfigurationForm;
+import org.calminfotech.visitqueue.models.VisitWorkflowPoint;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+//import org.calminfotech.system.models.Department;
+
+@Service
+public class PointRequestManagerImpl implements PointRequestManagerInterface {
+
+	@Autowired
+	private PointRequestDaoInterface orderRequestDaoImpl;
+
+	@Autowired
+	private InventoryManagerInterface inventoryManagerImpl;
+
+	@Autowired
+	private CodeGenerator codeGenerator;
+
+	@Autowired
+	private UnitOfMeasureConverter unitOfMeasureConverter;
+
+	@Autowired
+	private UserBo userBo;
+
+	@Autowired
+	private HrunitCategoryBo hrunitcat;
+
+	@Autowired
+	private UserIdentity userIdentity;
+
+	@Override
+	public PointRequest savePointRequest(RequestForm orderRequestForm) {
+		// TODO Auto-generated method stub
+
+		PointRequest pointRequest = new PointRequest();
+		pointRequest.setRequestBatchId(this.codeGenerator
+				.generatePointRequestCode());
+
+		Date date = new Date();
+		pointRequest.setCreateDate(date);
+		pointRequest.setRequestDate(date);
+		pointRequest.setRequestStatus(PointRequestStatus.Pending.getCode());
+
+		String userName = userIdentity.getUsername();
+		pointRequest.setCreatedBy(userName);
+
+		/*
+		 * User user = userBo.getUserByEmail(userIdentity.getUsername()); int
+		 * loginPoint = 0; int loginUnit=0; if (user != null) {
+		 * LoginSectionPoint loginSectionPoint = user.getLoginSectionPoint(); if
+		 * (loginSectionPoint != null) { loginPoint = loginSectionPoint.getId();
+		 * }
+		 * 
+		 * }
+		 */
+
+		VisitWorkflowPoint visitWorkflowPoint = new VisitWorkflowPoint();
+		visitWorkflowPoint.setId(this.userIdentity.getCurrentPointId());
+		pointRequest.setVisitWorkflowPoint(visitWorkflowPoint);
+
+		HrunitCategory unit = new HrunitCategory();
+
+		// unit.setCategoryId(this.userIdentity.getCurrentUnitId());
+		// System.out.print("Whala");
+		// System.out.print(this.userIdentity.getStaffregistration());
+
+		try {
+			if (this.userIdentity.getStaffregistration().getHrunitcategory() != null) {
+
+				pointRequest.setUnit(this.hrunitcat
+						.getHrunitCategoryById(this.userIdentity
+								.getStaffregistration().getHrunitcategory()
+								.getCategoryId()));
+				System.out.println("I no made error. My unit is real");
+			}
+		} catch (Exception e) {
+			System.out.println("I made error. My unit is null");
+			pointRequest.setUnit(null);
+		}
+
+		pointRequest.setUnitto(this.hrunitcat
+				.getHrunitCategoryById(orderRequestForm.getUnitId()));
+		pointRequest.setOrganisation(this.userIdentity.getOrganisation()
+				.getId());
+
+		// Department department = new Department();
+		// department.setId(this.userIdentity.getCurrentDepartmentId());
+		// pointRequest.setDepartment(department);
+
+		// get the request line
+
+		Collection<Map> requestLinesMapList = orderRequestForm
+				.getOptionalOrders();
+
+		if (requestLinesMapList != null && !requestLinesMapList.isEmpty()) {
+
+			Set<PointRequestLine> pointRequestLines = new HashSet();
+			PointRequestLine pointRequestLine = null;
+
+			GlobalItem globalItem = null;
+			// GlobalUnitofMeasure globalUnitofMeasure = null;
+			GlobalItemUnitofMeasureVw globalUnitofMeasure = null;
+
+			for (Map requestLineMap : requestLinesMapList) {
+				pointRequestLine = new PointRequestLine();
+				pointRequestLine.setCreateDate(date);
+				pointRequestLine.setOrganisation(this.userIdentity
+						.getOrganisation().getId());
+
+				pointRequestLine.setCreatedBy(userName);
+
+				globalItem = new GlobalItem();
+				globalItem.setItemId(Integer.parseInt((String) requestLineMap
+						.get("globalItem")));
+
+				pointRequestLine.setGlobalItem(globalItem);
+				pointRequestLine.setRequestStatus(PointRequestStatus.Pending
+						.getCode());
+
+				// globalUnitofMeasure = new GlobalUnitofMeasure();
+				globalUnitofMeasure = new GlobalItemUnitofMeasureVw();
+
+				globalUnitofMeasure.setId((Integer) requestLineMap
+						.get("unitOfMeasure"));
+
+				pointRequestLine.setGlobalUnitofMeasure(globalUnitofMeasure);
+				pointRequestLine.setQuantity((Integer) requestLineMap
+						.get("qty"));
+				pointRequestLine.setPointRequest(pointRequest);
+				pointRequestLines.add(pointRequestLine);
+
+			}
+
+			pointRequest.setPointRequestLines(pointRequestLines);
+		}
+
+		this.orderRequestDaoImpl.savePointRequest(pointRequest);
+		return pointRequest;
+	}
+
+	@Override
+	public PointRequest getPointRequestById(int reqId)
+			throws RecordNotFoundException {
+		return this.orderRequestDaoImpl.getPointRequestById(reqId);
+	}
+
+	public Storeissue_log getStoreIssueById(int logId)
+			throws RecordNotFoundException {
+		return this.orderRequestDaoImpl.getStoreIssueById(logId);
+	}
+
+	@Override
+	public List<PointRequest> getPointRequests(
+			DateSearchForm pointRequestSearchForm) {
+
+		return this.orderRequestDaoImpl.getPointRequests(
+				pointRequestSearchForm.getDateOfRequest(),
+				pointRequestSearchForm.getSearchCriteria());
+	}
+
+	@Override
+	public List<PointRequest> getPointRequestsMake(
+			DateSearchForm pointRequestSearchForm) {
+
+		return this.orderRequestDaoImpl.getPointRequestsMake(
+				pointRequestSearchForm.getDateOfRequest(),
+				pointRequestSearchForm.getSearchCriteria());
+	}
+
+	@Override
+	public void approvePointLineRequest(int reqLineId, int qtyToApprove)
+			throws InvalidStockLevelException, RecordNotFoundException,
+
+			InvalidUnitOfMeasureConfiguration {
+
+		// get request line details
+		PointRequestLine pointRequestLine = this.orderRequestDaoImpl
+				.getPointRequestLineById(reqLineId);
+		// get current balance of the global item associated with this request
+		// line
+		GlobalItem g = pointRequestLine.getGlobalItem();
+		// GlobalUnitofMeasure u = pointRequestLine.getGlobalUnitofMeasure();
+		GlobalItemUnitofMeasureVw u = pointRequestLine.getGlobalUnitofMeasure();
+
+		int globalItem = 0;
+		String globalItemName = null;
+		int unitOfMeasure = 0;
+		String unitOfMeasureName = null;
+		if (g != null) {
+			globalItem = g.getItemId();
+			globalItemName = g.getGlobalitemName();
+		}
+		// deduct all approved to get actual current balance
+
+		int actualGlobalItemCurrBal = 0;
+		try {
+			actualGlobalItemCurrBal = this
+					.getActualGlobalItemCurrentBalance(globalItem);
+		} catch (InvalidUnitOfMeasureConfiguration e) {
+
+			System.out
+					.print("Function name : getActualGlobalItemCurrentBalance");
+
+			e.setExceptionMsg("Invalid Unit Of Measure for   " + globalItemName);
+			throw e;
+		} catch (InvalidStockLevelException e) {
+			System.out
+					.print("Function name : getActualGlobalItemCurrentBalance");
+
+			e.setExceptionMsg("No Opening Balance found for " + globalItemName);
+			throw e;
+		}
+
+		// check stock level for qty of item to be approved
+		if (u != null) {
+			unitOfMeasure = u.getId();
+			// unitOfMeasureName = u.getUnit_of_measure();
+			unitOfMeasureName = u.getSearchname();
+
+		}
+		int totalUnitsToApprove;
+		try {
+			/*
+			 * totalUnitsToApprove = this.unitOfMeasureConverter
+			 * .convertUnitOfMeasureToUnitOptionB(globalItem, unitOfMeasure,
+			 * qtyToApprove, AppConfig.UNIT_OF_MEASURE_UNIT);
+			 */
+			/*
+			 * totalUnitsToApprove = this.unitOfMeasureConverter
+			 * .convertUnitOfMeasureToUnitOptionA(globalItem, unitOfMeasure,
+			 * qtyToApprove);
+			 */
+
+			totalUnitsToApprove = this.unitOfMeasureConverter
+					.convertmeasuretounits(qtyToApprove, unitOfMeasure);
+
+		} catch (InvalidUnitOfMeasureConfiguration e) {
+			e.setExceptionMsg("Invalid Unit Of Measure for " + globalItemName);
+			throw e;
+		}
+		// System.out.print(currBalance+"/"+actualGlobalItemCurrBal+"/"+currQtyApproved+"/"+totalUnitsToApprove)
+		// ;
+		if (actualGlobalItemCurrBal < totalUnitsToApprove) {
+			// throw new InvalidStockLevelException("Invalid Stock Level for "
+			// + globalItemName + ":" + "Quantity To Approve:"
+			// + qtyToApprove + " " + u.getMeasurename()
+			// + ", Quantity Available:" +
+			// pointRequestLine.getQuantityAvailable()
+			// );
+		}
+
+		pointRequestLine.setQuantityApproved(qtyToApprove);
+		pointRequestLine
+				.setRequestStatus(PointRequestStatus.Approved.getCode());
+
+		this.orderRequestDaoImpl.updatePointRequestLine(pointRequestLine);
+		// update parent point request status based on the status of this point
+		// request line
+		// parent point request is loaded along with each point line
+		PointRequest pointRequest = pointRequestLine.getPointRequest();
+
+		Collection<Character> pntRequestLineRequestsStatuses = this
+				.getPointRequestLineRequestsStatuses(pointRequestLine.getId(),
+						pointRequest.getId());
+
+		if (pntRequestLineRequestsStatuses != null) {
+			if (pntRequestLineRequestsStatuses
+					.contains(PointRequestStatus.Pending.getCode())) {
+				pointRequest.setRequestStatus(PointRequestStatus.Processing
+						.getCode());
+			} else {
+				pointRequest.setRequestStatus(PointRequestStatus.Approved
+						.getCode());
+			}
+		}
+		this.orderRequestDaoImpl.updatePointRequest(pointRequest);
+		this.storeissurelog(pointRequestLine, userIdentity.getUsername(),
+				new Date(System.currentTimeMillis()), userIdentity
+						.getOrganisation().getId(), "Approved",
+				pointRequestLine.getQuantityApproved());
+
+	}
+
+	private Collection<Character> getPointRequestLineRequestsStatuses(
+			int pointRequestLineId, int pointRequestId) {
+		return this.orderRequestDaoImpl.getPntRequestLineRequestsStatuses(
+				pointRequestLineId, pointRequestId);
+
+	}
+
+	private int getTotalGlobalItemRequestApproved(int globalItem)
+			throws InvalidUnitOfMeasureConfiguration {
+		// TODO Auto-generated method stub
+		return this.orderRequestDaoImpl
+				.getTotalGlobalItemRequestApproved(globalItem);
+	}
+
+	@Override
+	public PointRequestLine getPointRequestLineById(int id)
+			throws RecordNotFoundException {
+		return this.orderRequestDaoImpl.getPointRequestLineById(id);
+	}
+
+	@Override
+	public void disapprovePointRequestLine(PointRequestLine pointRequestLine) {
+		pointRequestLine.setQuantityApproved(0);
+		pointRequestLine.setRequestStatus(PointRequestStatus.Pending.getCode());
+
+		this.orderRequestDaoImpl.updatePointRequestLine(pointRequestLine);
+
+		// update parent point request status based on the status of this point
+		// request line
+		// parent point request is loaded along with each point line
+		PointRequest pointRequest = pointRequestLine.getPointRequest();
+
+		Collection<Character> pntRequestLineRequestsStatuses = this
+				.getPointRequestLineRequestsStatuses(pointRequestLine.getId(),
+						pointRequest.getId());
+
+		if (pntRequestLineRequestsStatuses != null) {
+			if (!pntRequestLineRequestsStatuses
+					.contains(PointRequestStatus.Approved.getCode())
+					|| !pntRequestLineRequestsStatuses
+							.contains(PointRequestStatus.Issued.getCode())) {
+				pointRequest.setRequestStatus(PointRequestStatus.Pending
+						.getCode());
+			}
+		}
+		this.orderRequestDaoImpl.updatePointRequest(pointRequest);
+
+		this.storeissurelog(pointRequestLine, userIdentity.getUsername(),
+				new Date(System.currentTimeMillis()), userIdentity
+						.getOrganisation().getId(), "Reverse Approve",
+				-pointRequestLine.getQuantityApproved());
+
+	}
+
+	@Override
+	@Transactional
+	/* method to issue a request line belonging to a point request */
+	public void issuePointRequestLine(PointRequestLine pointRequestLine,
+			VisitWorkflowUserConfigurationForm vform)
+			throws InvalidStockLevelException,
+			InvalidUnitOfMeasureConfiguration {
+
+		GlobalItem g = pointRequestLine.getGlobalItem();
+		// GlobalUnitofMeasure u = pointRequestLine.getGlobalUnitofMeasure();
+		GlobalItemUnitofMeasureVw u = pointRequestLine.getGlobalUnitofMeasure();
+
+		int currBalance = 0;
+		int globalItem = 0;
+		String globalItemName = null;
+		int unitOfMeasure = 0;
+		String unitOfMeasureName = null;
+		if (g != null) {
+			globalItem = g.getItemId();
+			globalItemName = g.getGlobalitemName();
+			try {
+				currBalance = this.inventoryManagerImpl
+						.getGlobalItemCurrentBalance(globalItem);
+			} catch (InvalidStockLevelException e) {
+				e.setExceptionMsg("No Current balance Balance found for "
+						+ globalItemName);
+				throw e;
+			}
+		}
+		if (u != null) {
+			unitOfMeasure = u.getId();
+			// unitOfMeasureName = u.getUnit_of_measure();
+			unitOfMeasureName = u.getSearchname();
+		}
+
+		int totalQtyIssued = 0;
+		try {
+			/*
+			 * totalQtyIssued = this.unitOfMeasureConverter
+			 * .convertUnitOfMeasureToUnitOptionB(globalItem, unitOfMeasure,
+			 * pointRequestLine.getQuantityApproved(),
+			 * AppConfig.UNIT_OF_MEASURE_UNIT);
+			 */
+			/*
+			 * totalQtyIssued = this.unitOfMeasureConverter
+			 * .convertUnitOfMeasureToUnitOptionA(globalItem, unitOfMeasure,
+			 * pointRequestLine.getQuantityApproved());
+			 */
+			totalQtyIssued = this.unitOfMeasureConverter.convertmeasuretounits(
+					pointRequestLine.getQuantityApproved(), unitOfMeasure);
+
+			StockCurrentBalance stockCurrentBalance = null;
+
+			try {
+
+				stockCurrentBalance = this.inventoryManagerImpl
+						.getGlobalItemCurrentBalanceByStock(globalItem,
+								this.userIdentity.getCurrentPointId(),
+								this.userIdentity.getCurrentUnitId());
+
+			} catch (InvalidStockLevelException e) {
+
+				// if stock has not yet been registered in opening balance table
+
+				stockCurrentBalance = new StockCurrentBalance();
+				stockCurrentBalance.setGlobalItem(g);
+				VisitWorkflowPoint visitWorkflowPoint = new VisitWorkflowPoint();
+				visitWorkflowPoint.setId(12);
+				stockCurrentBalance.setVisitWorkflowPoint(visitWorkflowPoint);
+
+				stockCurrentBalance.setUnit(userIdentity.getCurrentUnit());
+				stockCurrentBalance.setCurrentBalance(0);
+				stockCurrentBalance.setOrganisation(userIdentity
+						.getOrganisation().getId());
+
+				stockCurrentBalance.setCreateDate(new Date());
+
+				stockCurrentBalance.setCreatedBy(this.userIdentity
+						.getUsername());
+
+			}
+
+			this.inventoryManagerImpl.updateGlobalItemCurrentBalance(
+					0 - totalQtyIssued, 0, stockCurrentBalance);
+
+		} catch (InvalidUnitOfMeasureConfiguration e) {
+			e.setExceptionMsg("Invalid Unit Of Measure for " + globalItemName);
+			throw e;
+
+		}
+
+		pointRequestLine.setRequestStatus(PointRequestStatus.Issued.getCode());
+
+		this.orderRequestDaoImpl.updatePointRequestLine(pointRequestLine);
+
+		// update parent point request status based on the status of this point
+		// request line
+		// parent point request is loaded along with each point line
+		PointRequest pointRequest = pointRequestLine.getPointRequest();
+
+		Collection<Character> pntRequestLineRequestsStatuses = this
+				.getPointRequestLineRequestsStatuses(pointRequestLine.getId(),
+						pointRequest.getId());
+
+		if (pntRequestLineRequestsStatuses != null) {
+			if (pntRequestLineRequestsStatuses
+					.contains(PointRequestStatus.Pending.getCode())
+					|| pntRequestLineRequestsStatuses
+							.contains(PointRequestStatus.Approved.getCode())) {
+				pointRequest.setRequestStatus(PointRequestStatus.Processing
+						.getCode());
+			} else {
+				pointRequest.setRequestStatus(PointRequestStatus.Approved
+						.getCode());
+			}
+		}
+
+		this.orderRequestDaoImpl.updatePointRequest(pointRequest);
+
+		Storeissue_log displog = new Storeissue_log();
+
+		displog.setPointrequestline(pointRequestLine);
+		displog.setCreatedBy(userIdentity.getUsername());
+		displog.setCreatedDate(new GregorianCalendar().getTime());
+		displog.setOrganisationId(userIdentity.getOrganisation().getId());
+		displog.setAction("Given");
+		displog.setQty(vform.getQty());
+		displog.setBatchno(vform.getBatchno());
+		displog.setManulicno(vform.getManulicno());
+		displog.setOtherinfo(vform.getOtherinfo());
+		displog.setDispensedate(DateUtils.formatStringToDate(
+				vform.getDispensedate(), "yyyy-MM-dd hh:mm"));
+
+		if (!vform.getManufacturedate().equals("")
+				&& DateUtils.isValidDate(vform.getManufacturedate()))
+
+		{
+			displog.setManufacturedate(DateUtils.formatStringToDate(vform
+					.getManufacturedate()));
+		}
+
+		if (!vform.getExpirydate().equals("")
+				&& DateUtils.isValidDate(vform.getExpirydate()))
+
+		{
+			displog.setExpirydate(DateUtils.formatStringToDate(vform
+					.getExpirydate()));
+		}
+
+		// displog.getPrescribemeasure().setQtydisp(qtyIssued);
+		// prescriptionDispense.getPrepscribemeasure()
+
+		this.orderRequestDaoImpl.save(displog);
+
+	}
+
+	public void revissuePointRequestLine(PointRequestLine pointRequestLine)
+			throws InvalidStockLevelException,
+			InvalidUnitOfMeasureConfiguration {
+
+		GlobalItem g = pointRequestLine.getGlobalItem();
+		// GlobalUnitofMeasure u = pointRequestLine.getGlobalUnitofMeasure();
+		GlobalItemUnitofMeasureVw u = pointRequestLine.getGlobalUnitofMeasure();
+
+		int currBalance = 0;
+		int globalItem = 0;
+		String globalItemName = null;
+		int unitOfMeasure = 0;
+		String unitOfMeasureName = null;
+		if (g != null) {
+			globalItem = g.getItemId();
+			globalItemName = g.getGlobalitemName();
+			try {
+				currBalance = this.inventoryManagerImpl
+						.getGlobalItemCurrentBalance(globalItem);
+			} catch (InvalidStockLevelException e) {
+				e.setExceptionMsg("No Current balance Balance found for "
+						+ globalItemName);
+				throw e;
+			}
+		}
+		if (u != null) {
+			unitOfMeasure = u.getId();
+			// unitOfMeasureName = u.getUnit_of_measure();
+			unitOfMeasureName = u.getSearchname();
+		}
+
+		int totalQtyIssued = 0;
+		try {
+			/*
+			 * totalQtyIssued = this.unitOfMeasureConverter
+			 * .convertUnitOfMeasureToUnitOptionB(globalItem, unitOfMeasure,
+			 * pointRequestLine.getQuantityApproved(),
+			 * AppConfig.UNIT_OF_MEASURE_UNIT);
+			 */
+			/*
+			 * totalQtyIssued = this.unitOfMeasureConverter
+			 * .convertUnitOfMeasureToUnitOptionA(globalItem, unitOfMeasure,
+			 * pointRequestLine.getQuantityApproved());
+			 */
+			totalQtyIssued = this.unitOfMeasureConverter.convertmeasuretounits(
+					pointRequestLine.getQuantityApproved(), unitOfMeasure);
+
+			StockCurrentBalance stockCurrentBalance = null;
+
+			try {
+
+				stockCurrentBalance = this.inventoryManagerImpl
+						.getGlobalItemCurrentBalanceByStock(globalItem,
+								this.userIdentity.getCurrentPointId(),
+								this.userIdentity.getCurrentUnitId());
+
+			} catch (InvalidStockLevelException e) {
+
+				// if stock has not yet been registered in opening balance table
+
+				stockCurrentBalance = new StockCurrentBalance();
+				stockCurrentBalance.setGlobalItem(g);
+				VisitWorkflowPoint visitWorkflowPoint = new VisitWorkflowPoint();
+				visitWorkflowPoint.setId(12);
+				stockCurrentBalance.setVisitWorkflowPoint(visitWorkflowPoint);
+
+				stockCurrentBalance.setUnit(userIdentity.getCurrentUnit());
+				stockCurrentBalance.setCurrentBalance(0);
+				stockCurrentBalance.setOrganisation(userIdentity
+						.getOrganisation().getId());
+
+				stockCurrentBalance.setCreateDate(new Date());
+
+				stockCurrentBalance.setCreatedBy(this.userIdentity
+						.getUsername());
+
+			}
+
+			this.inventoryManagerImpl.updateGlobalItemCurrentBalance(
+					totalQtyIssued, 0, stockCurrentBalance);
+
+		} catch (InvalidUnitOfMeasureConfiguration e) {
+			e.setExceptionMsg("Invalid Unit Of Measure for " + globalItemName);
+			throw e;
+
+		}
+
+		pointRequestLine
+				.setRequestStatus(PointRequestStatus.Approved.getCode());
+
+		this.orderRequestDaoImpl.updatePointRequestLine(pointRequestLine);
+
+		// update parent point request status based on the status of this point
+		// request line
+		// parent point request is loaded along with each point line
+		PointRequest pointRequest = pointRequestLine.getPointRequest();
+
+		Collection<Character> pntRequestLineRequestsStatuses = this
+				.getPointRequestLineRequestsStatuses(pointRequestLine.getId(),
+						pointRequest.getId());
+
+		if (pntRequestLineRequestsStatuses != null) {
+			if (pntRequestLineRequestsStatuses
+					.contains(PointRequestStatus.Pending.getCode())
+					|| pntRequestLineRequestsStatuses
+							.contains(PointRequestStatus.Approved.getCode())) {
+				pointRequest.setRequestStatus(PointRequestStatus.Processing
+						.getCode());
+			} else {
+				pointRequest.setRequestStatus(PointRequestStatus.Approved
+						.getCode());
+			}
+		}
+
+		this.orderRequestDaoImpl.updatePointRequest(pointRequest);
+
+		this.storeissurelog(pointRequestLine, userIdentity.getUsername(),
+				new Date(System.currentTimeMillis()), userIdentity
+						.getOrganisation().getId(), "Reverse Issue",
+				-pointRequestLine.getQuantityApproved());
+
+	}
+
+	/* method to get the actual balance of global item */
+	private int getActualGlobalItemCurrentBalance(int globalItem)
+			throws InvalidStockLevelException,
+			InvalidUnitOfMeasureConfiguration {
+
+		int currBalance = this.inventoryManagerImpl
+				.getGlobalItemCurrentBalance(globalItem);
+
+		// deduct all approved to get actual current balance
+		int currQtyApproved;
+		currQtyApproved = this.getTotalGlobalItemRequestApproved(globalItem);
+
+		return currBalance - currQtyApproved;
+	}
+
+	@Override
+	public Map getGlobalItemsQuantityAvailable(
+			Set<PointRequestLine> pointRequestLines) {
+		// TODO Auto-generated method stub
+
+		if (pointRequestLines != null) {
+			GlobalItem globalItem = null;
+			// GlobalUnitofMeasure u = null;
+			GlobalItemUnitofMeasureVw u = null;
+
+			int containedUnit = 0;
+			Map<Integer, Integer> m = new HashMap();
+			int actualCurrentBal = 0;
+			int globalItemId;
+			int unitOfMeasure;
+			for (PointRequestLine line : pointRequestLines) {
+				globalItem = line.getGlobalItem();
+				if (globalItem != null) {
+					globalItemId = globalItem.getItemId();
+					u = line.getGlobalUnitofMeasure();
+					// if (u != null && !m.containsKey(globalItemId)) {
+					if (u != null) {
+						unitOfMeasure = u.getId();
+						try {
+							/*
+							 * containedUnit = this.unitOfMeasureConverter
+							 * .convertUnitOfMeasureToContainedUnitOptionB(1,
+							 * globalItemId, u.getId());
+							 */
+
+							/*
+							 * if unit of measure is unit our contained unit is
+							 * 1, otherwise get contained unit if other unit of
+							 * measure
+							 */
+							// if (unitOfMeasure ==
+							// AppConfig.UNIT_OF_MEASURE_UNIT) {
+							// containedUnit = 1;
+							// } else {
+							containedUnit = this.unitOfMeasureConverter
+									.convertmeasuretounits(1, unitOfMeasure);
+							/*
+							 * get global item actual current balance from map
+							 * if already cached (since one item can be
+							 * available more than once in a single request)
+							 */
+							if (m.containsKey(globalItemId)) {
+								actualCurrentBal = m.get(globalItemId);
+							} else {
+								/*
+								 * get global item actual current balance and
+								 * cached
+								 */
+								actualCurrentBal = this
+										.getActualGlobalItemCurrentBalance(globalItemId);
+								m.put(globalItemId, actualCurrentBal);
+							}
+							line.setQuantityAvailable((int) actualCurrentBal
+									/ containedUnit);
+							// System.out.print(Math.ceil(actualCurrentBal/containedUnit)+"/ceil");
+							// System.out.print(Math.floor(actualCurrentBal/containedUnit)+"/floor");
+						} catch (InvalidUnitOfMeasureConfiguration e) {
+						} catch (InvalidStockLevelException e) {
+						}
+					}
+				}
+			}
+			// System.out.print(m);
+		}
+		return null;
+	}
+
+	@Override
+	public List<PointRequest> getUserPointRequests(
+			DateSearchForm pointRequestSearchForm)
+			throws RecordNotFoundException {
+
+		/*
+		 * User user = userBo.getUserByEmail(userIdentity.getUsername()); int
+		 * loginPoint = 0; int loginUnit=0; if (user != null) {
+		 * LoginSectionPoint loginSectionPoint = user.getLoginSectionPoint(); if
+		 * (loginSectionPoint != null) { loginPoint = loginSectionPoint.getId();
+		 * } } loginUnit=6;
+		 */
+		return this.orderRequestDaoImpl.getPointRequestsByPoint(
+				pointRequestSearchForm.getDateOfRequest(),
+				this.userIdentity.getCurrentPointId(),
+				this.userIdentity.getCurrentUnitId());
+	}
+
+	@Override
+	public void deletePointRequest(PointRequest pointRequest) {
+		// TODO Auto-generated method stub
+		this.orderRequestDaoImpl.deletePointRequest(pointRequest);
+	}
+
+	@Override
+	public void deletePointRequestLine(PointRequestLine pointRequestLine) {
+		// TODO Auto-generated method stub
+		this.orderRequestDaoImpl.deletePointRequestLine(pointRequestLine);
+
+	}
+
+	public void storeissurelog(PointRequestLine request, String createdBy,
+			Date createdDate, Integer organisationId, String action, Integer qty)
+
+	{
+
+		Storeissue_log storeissuelog = new Storeissue_log();
+
+		storeissuelog.setPointrequestline(request);
+		storeissuelog.setCreatedBy(createdBy);
+		storeissuelog.setCreatedDate(createdDate);
+		storeissuelog.setOrganisationId(organisationId);
+		storeissuelog.setAction(action);
+		storeissuelog.setQty(qty);
+
+		this.orderRequestDaoImpl.save(storeissuelog);
+
+	}
+
+	@Override
+	public void issuePointRequestLine(PointRequestLine pointRequestLine)
+			throws InvalidStockLevelException,
+			InvalidUnitOfMeasureConfiguration {
+		// TODO Auto-generated method stub
+		this.orderRequestDaoImpl.issuePointRequestLine(pointRequestLine);
+
+	}
+
+	@Override
+	@Transactional
+	public void revissuePointRequestLine(Storeissue_log storeissueLog)
+			throws InvalidUnitOfMeasureConfiguration,
+			InvalidStockLevelException {
+		// TODO Auto-generated method stub
+
+		GlobalItem g = storeissueLog.getPointrequestline().getGlobalItem();
+		// GlobalUnitofMeasure u = pointRequestLine.getGlobalUnitofMeasure();
+		GlobalItemUnitofMeasureVw u = storeissueLog.getPointrequestline()
+				.getGlobalUnitofMeasure();
+
+		int currBalance = 0;
+		int globalItem = 0;
+		String globalItemName = null;
+		int unitOfMeasure = 0;
+		String unitOfMeasureName = null;
+		if (g != null) {
+			globalItem = g.getItemId();
+			globalItemName = g.getGlobalitemName();
+			try {
+				currBalance = this.inventoryManagerImpl
+						.getGlobalItemCurrentBalance(globalItem);
+			} catch (InvalidStockLevelException e) {
+				e.setExceptionMsg("No Current balance Balance found for "
+						+ globalItemName);
+				throw e;
+			}
+		}
+		if (u != null) {
+			unitOfMeasure = u.getId();
+			// unitOfMeasureName = u.getUnit_of_measure();
+			unitOfMeasureName = u.getSearchname();
+		}
+
+		int totalQtyIssued = 0;
+		try {
+			/*
+			 * totalQtyIssued = this.unitOfMeasureConverter
+			 * .convertUnitOfMeasureToUnitOptionB(globalItem, unitOfMeasure,
+			 * pointRequestLine.getQuantityApproved(),
+			 * AppConfig.UNIT_OF_MEASURE_UNIT);
+			 */
+			/*
+			 * totalQtyIssued = this.unitOfMeasureConverter
+			 * .convertUnitOfMeasureToUnitOptionA(globalItem, unitOfMeasure,
+			 * pointRequestLine.getQuantityApproved());
+			 */
+			totalQtyIssued = this.unitOfMeasureConverter.convertmeasuretounits(
+					storeissueLog.getQty(), unitOfMeasure);
+
+			StockCurrentBalance stockCurrentBalance = null;
+
+			try {
+
+				stockCurrentBalance = this.inventoryManagerImpl
+						.getGlobalItemCurrentBalanceByStock(globalItem,
+								this.userIdentity.getCurrentPointId(),
+								this.userIdentity.getCurrentUnitId());
+
+			} catch (InvalidStockLevelException e) {
+
+				// if stock has not yet been registered in opening balance table
+
+				stockCurrentBalance = new StockCurrentBalance();
+				stockCurrentBalance.setGlobalItem(g);
+				VisitWorkflowPoint visitWorkflowPoint = new VisitWorkflowPoint();
+				visitWorkflowPoint.setId(12);
+				stockCurrentBalance.setVisitWorkflowPoint(visitWorkflowPoint);
+
+				stockCurrentBalance.setUnit(userIdentity.getCurrentUnit());
+				stockCurrentBalance.setCurrentBalance(0);
+				stockCurrentBalance.setOrganisation(userIdentity
+						.getOrganisation().getId());
+
+				stockCurrentBalance.setCreateDate(new Date());
+
+				stockCurrentBalance.setCreatedBy(this.userIdentity
+						.getUsername());
+
+			}
+
+			this.inventoryManagerImpl.updateGlobalItemCurrentBalance(
+					totalQtyIssued, 0, stockCurrentBalance);
+
+		} catch (InvalidUnitOfMeasureConfiguration e) {
+			e.setExceptionMsg("Invalid Unit Of Measure for " + globalItemName);
+			throw e;
+
+		}
+
+		storeissueLog.getPointrequestline().setRequestStatus(
+				PointRequestStatus.Approved.getCode());
+
+		this.orderRequestDaoImpl.updatePointRequestLine(storeissueLog
+				.getPointrequestline());
+
+		// update parent point request status based on the status of this point
+		// request line
+		// parent point request is loaded along with each point line
+		PointRequest pointRequest = storeissueLog.getPointrequestline()
+				.getPointRequest();
+
+		Collection<Character> pntRequestLineRequestsStatuses = this
+				.getPointRequestLineRequestsStatuses(storeissueLog
+						.getPointrequestline().getId(), pointRequest.getId());
+
+		if (pntRequestLineRequestsStatuses != null) {
+			if (pntRequestLineRequestsStatuses
+					.contains(PointRequestStatus.Pending.getCode())
+					|| pntRequestLineRequestsStatuses
+							.contains(PointRequestStatus.Approved.getCode())) {
+				pointRequest.setRequestStatus(PointRequestStatus.Processing
+						.getCode());
+			} else {
+				pointRequest.setRequestStatus(PointRequestStatus.Approved
+						.getCode());
+			}
+		}
+
+		this.orderRequestDaoImpl.updatePointRequest(pointRequest);
+
+		storeissueLog.setAction("Reversed");
+		storeissueLog.setModifiedBy(userIdentity.getUsername());
+		storeissueLog.setModifydate(new Date(System.currentTimeMillis()));
+		orderRequestDaoImpl.update(storeissueLog);
+		// this.storeissurelog(pointRequestLine, userIdentity.getUsername(), new
+		// Date(System.currentTimeMillis()),
+		// userIdentity.getOrganisation().getId(),
+		// "Reverse Issue",-pointRequestLine.getQuantityApproved());
+
+	}
+
+}

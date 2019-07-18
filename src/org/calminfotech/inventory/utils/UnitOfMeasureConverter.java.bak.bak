@@ -1,0 +1,680 @@
+package org.calminfotech.inventory.utils;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.calminfotech.consultation.models.PrescriptionMeasurement;
+import org.calminfotech.consultation.models.VisitPrescribedDrug;
+import org.calminfotech.consultation.utils.PrescriptionMeasurementStatus;
+import org.calminfotech.inventory.daoInterface.InventoryDaoInterface;
+import org.calminfotech.inventory.exceptions.InvalidUnitOfMeasureConfiguration;
+import org.calminfotech.system.models.GlobalItem;
+//import org.calminfotech.inventory.models.GlobalItemUnitofMeasure;
+import org.calminfotech.system.models.GlobalUnitofMeasure;
+import org.calminfotech.system.models.UnitItem;
+import org.calminfotech.user.utils.UserIdentity;
+import org.calminfotech.utils.AppConfig;
+import org.calminfotech.system.models.GlobalItemUnitofMeasureVw;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UnitOfMeasureConverter {
+
+	@Autowired
+	private InventoryDaoInterface inventoryDaoImpl;
+
+	@Autowired
+	private UserIdentity userIdentity;
+
+	public int convertUnitOfMeasureToUnitOptionA_temp(int globalItemId,
+			int unitOfMeasure, int qty)
+			throws InvalidUnitOfMeasureConfiguration {
+		// if unit of measure to convert to/selected by user is unit, then we
+		// simply return the qty
+
+		int unit = AppConfig.UNIT_OF_MEASURE_UNIT;
+		if (unitOfMeasure == unit) {
+			return qty;
+		}
+		int containedUnit = this.inventoryDaoImpl
+				.getGlobalItemUnitOfMeasureContainedUnit(globalItemId,
+						unitOfMeasure);
+		if (containedUnit > 0) {
+			return containedUnit * qty;
+		}
+		throw new InvalidUnitOfMeasureConfiguration(
+				"invalid unit of measure configuration");
+	}
+
+	public int convertUnitOfMeasureToContainedUnitOptionA(int globalItemId,
+			int unitOfMeasure) throws InvalidUnitOfMeasureConfiguration {
+
+		int containedUnit = this.inventoryDaoImpl
+				.getGlobalItemUnitOfMeasureContainedUnit(globalItemId,
+						unitOfMeasure);
+		if (containedUnit > 0) {
+			return containedUnit;
+
+		}
+		throw new InvalidUnitOfMeasureConfiguration(
+				"invalid unit of measure configuration");
+
+	}
+
+	public int convertUnitOfMeasureToContainedUnitOptionBRwId(
+			int totalContainedUnit, Integer unitOfMeasureToConvert)
+			throws InvalidUnitOfMeasureConfiguration {
+
+		// if unit of measure to convert to/selected by user is unit, then we
+		// simply return the qty
+		// int unit = AppConfig.UNIT_OF_MEASURE_UNIT;
+
+		// System.out.println(globalItemId + "/itmid/" +
+		// unitOfMeasureToConvert);
+
+		//UnitItem globalItemUnitofMeasure = null;
+		GlobalItemUnitofMeasureVw globalItemUnitofMeasure = null;
+
+		if (unitOfMeasureToConvert != null) {
+			globalItemUnitofMeasure = this.inventoryDaoImpl
+					.getUnitOfMeasureFromDetailsRwId(unitOfMeasureToConvert);
+		}
+
+		/*
+		 * if no record found and current unit of measure is unit, then unit has
+		 * not been configured for current item
+		 */
+		if (globalItemUnitofMeasure == null) {
+			if (unitOfMeasureToConvert == null) {
+				// return
+				// totalContainedUnit*=globalItemUnitofMeasure.getContainedValue();
+				System.out.print("end/" + totalContainedUnit + "/"
+						+ unitOfMeasureToConvert);
+				return totalContainedUnit;
+			} else {
+				throw new InvalidUnitOfMeasureConfiguration(
+						"invalid unit of measure configuration:"
+								+ unitOfMeasureToConvert);
+			}
+
+		} else {
+
+			//totalContainedUnit *= globalItemUnitofMeasure.getContdValue();
+			totalContainedUnit *= globalItemUnitofMeasure.getContained_value();
+
+			System.out.print("totalcontain/" + totalContainedUnit + "/"
+					+ unitOfMeasureToConvert);
+			if (unitOfMeasureToConvert != globalItemUnitofMeasure
+					.getContained_measurement()) {
+				return this.convertUnitOfMeasureToContainedUnitOptionBRwId(
+						totalContainedUnit,
+						globalItemUnitofMeasure.getContained_measurement());
+			} else {
+				throw new InvalidUnitOfMeasureConfiguration(
+						"unit of measure cannot be converted to itself:"
+								+ unitOfMeasureToConvert);
+			}
+
+		}
+
+	}
+
+	/*
+	 * public int convertUnitOfMeasureToContainedUnitOptionB( int
+	 * totalContainedUnit, int globalItemId, int unitOfMeasureToConvert) throws
+	 * InvalidUnitOfMeasureConfiguration {
+	 * 
+	 * // if unit of measure to convert to/selected by user is unit, then we //
+	 * simply return the qty int unit = AppConfig.UNIT_OF_MEASURE_UNIT; //
+	 * if(unitOfMeasureToConvert==unit){ // return qty; // }
+	 * GlobalItemUnitofMeasure globalItemUnitofMeasure = this.inventoryDaoImpl
+	 * .getUnitOfMeasureFromDetails(globalItemId, unitOfMeasureToConvert);
+	 * 
+	 * // if no record found and current unit of measure is unit, then unit has
+	 * // not been configured for current item
+	 * 
+	 * if (globalItemUnitofMeasure == null) { if (unitOfMeasureToConvert ==
+	 * unit) { // return //
+	 * totalContainedUnit*=globalItemUnitofMeasure.getContainedValue(); return
+	 * totalContainedUnit; } else { throw new InvalidUnitOfMeasureConfiguration(
+	 * "invalid unit of measure configuration"); } } else {
+	 * 
+	 * totalContainedUnit *= globalItemUnitofMeasure.getContainedValue();
+	 * this.convertUnitOfMeasureToContainedUnitOptionB(totalContainedUnit,
+	 * globalItemId, globalItemUnitofMeasure.getUnitOfMeasureFrom()); }
+	 * 
+	 * return totalContainedUnit;
+	 * 
+	 * }
+	 */
+
+	/*
+	 * recursive method to convert prescribed drug dosage qty to unit of measure
+	 * quantity
+	 */
+	/*
+	 * public Set<PrescriptionMeasurement>
+	 * convertPrescriptionsQtyToUnitOfMeasurement( int prescriptionQty,
+	 * List<UnitItem> unitOfMeasurements, VisitPrescribedDrug
+	 * visitPrescribedDrug) throws InvalidUnitOfMeasureConfiguration {
+	 */
+	public Set<PrescriptionMeasurement> convertPrescriptionsQtyToUnitOfMeasurement(
+			int prescriptionQty,
+			List<GlobalItemUnitofMeasureVw> unitOfMeasurements,
+			VisitPrescribedDrug visitPrescribedDrug)
+			throws InvalidUnitOfMeasureConfiguration {
+
+		Set<PrescriptionMeasurement> prescriptionMeasurements = null;
+
+		if (unitOfMeasurements != null) {
+
+			// int prescriptionQty = 0;// arg
+			// List<UnitItem> unitOfMeasurements = null;// arg
+			/*
+			 * if (globalItem != null) { unitOfMeasurements =
+			 * this.inventoryDaoImpl
+			 * .getGlobalItemUnitOfMeasurements(globalItem.getId()); }
+			 * 
+			 * if (visitPrescribedDrug != null) { prescriptionQty =
+			 * visitPrescribedDrug.getQuantity(); }
+			 */
+			if (visitPrescribedDrug != null) {
+				GlobalItem globalItem = visitPrescribedDrug.getDrugs();
+				prescriptionMeasurements = new HashSet<>();
+				List<Map<String, Object>> wrapperList = new ArrayList<>();
+				Map<String, Object> unitOfMeasureInfoMap = null;
+				int unitOfMeasureQty = 0;
+				int remainderQty = 0;
+
+				// get contained quantities/units
+				// for (UnitItem unitOfMeasurement : unitOfMeasurements) {
+				for (GlobalItemUnitofMeasureVw unitOfMeasurement : unitOfMeasurements) {
+
+					unitOfMeasureInfoMap = new HashMap<>();
+					unitOfMeasureInfoMap.put("unitofmeasre", unitOfMeasurement);
+					/*
+					 * unitOfMeasureInfoMap.put("contained_unit", this
+					 * .convertUnitOfMeasureToUnitOptionB( globalItem.getId(),
+					 * AppConfig.UNIT_OF_MEASURE_UNIT, 0,
+					 * unitOfMeasurement.getUnitId()));
+					 */
+					unitOfMeasureInfoMap.put("qty", this
+							.convertUnitOfMeasureToContainedUnitOptionBRwId(1,
+									unitOfMeasurement.getId()
+
+							));
+					wrapperList.add(unitOfMeasureInfoMap);
+				}
+
+				// sort list
+				Collections.sort(wrapperList, new SortUnitOfMeasureByQty());
+
+				// System.out.println("wraplst/" + wrapperList);
+				int unitOfMeasureId = 0;
+				// process
+				for (Map<String, Object> unitOfMeasureInfo : wrapperList) {
+
+					unitOfMeasureQty = (Integer) unitOfMeasureInfo.get("qty");
+					unitOfMeasureId = ((GlobalItemUnitofMeasureVw) unitOfMeasureInfo
+							.get("unitofmeasre")).getId();
+					if (unitOfMeasureQty > prescriptionQty) {
+						continue;
+					}
+					remainderQty = prescriptionQty / unitOfMeasureQty;
+
+					prescriptionMeasurements.add(this
+							.getNewPresrciptionMeasurement(unitOfMeasureId,
+									remainderQty, visitPrescribedDrug));
+					prescriptionQty = prescriptionQty
+							- (remainderQty * unitOfMeasureQty);
+				}
+
+				if (prescriptionQty > 0) {
+					prescriptionMeasurements.add(this
+							.getNewPresrciptionMeasurement(
+									AppConfig.UNIT_OF_MEASURE_UNIT,
+									prescriptionQty, visitPrescribedDrug));
+				}
+
+			}
+		}
+
+		return prescriptionMeasurements;
+
+	}
+
+	private class SortUnitOfMeasureByQty implements
+			Comparator<Map<String, Object>> {
+
+		@Override
+		public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+			int retVal = 0;
+			int qty1 = (Integer) o1.get("qty");
+			int qty2 = (Integer) o2.get("qty");
+			if (qty1 < qty2) {
+				retVal = 1;
+			} else if (qty1 == qty2) {
+				retVal = 0;
+			} else if (qty1 > qty2) {
+				retVal = -1;
+			}
+			return retVal;
+		}
+
+	}
+
+	/*
+	 * recursive method to convert prescribed drug dosage qty to unit of measure
+	 * quantity
+	 */
+	public Set<PrescriptionMeasurement> convertPrescriptionsQtyToUnitOfMeasurement_temp(
+			int prescriptionQty, List<UnitItem> unitOfMeasurements,
+			VisitPrescribedDrug visitPrescribedDrug)
+			throws InvalidUnitOfMeasureConfiguration {
+
+		Set<PrescriptionMeasurement> prescriptionMeasurements = null;
+		System.out.println("unitmeasrures/" + unitOfMeasurements);
+
+		if (unitOfMeasurements != null) {
+
+			// int prescriptionQty = 0;// arg
+			// List<UnitItem> unitOfMeasurements = null;// arg
+			/*
+			 * if (globalItem != null) { unitOfMeasurements =
+			 * this.inventoryDaoImpl
+			 * .getGlobalItemUnitOfMeasurements(globalItem.getId()); }
+			 * 
+			 * if (visitPrescribedDrug != null) { prescriptionQty =
+			 * visitPrescribedDrug.getQuantity(); }
+			 */
+			if (visitPrescribedDrug != null) {
+				GlobalItem globalItem = visitPrescribedDrug.getDrugs();
+				prescriptionMeasurements = new HashSet<>();
+				List<Map<String, Object>> wrapperList = new ArrayList<>();
+				Map<String, Object> unitOfMeasureInfoMap = null;
+				int unitOfMeasureQty = 0;
+				int remainderQty = 0;
+
+				// get contained quantities/units
+				for (UnitItem unitOfMeasurement : unitOfMeasurements) {
+					unitOfMeasureInfoMap = new HashMap<>();
+					unitOfMeasureInfoMap.put("unitofmeasre", unitOfMeasurement);
+					/*
+					 * unitOfMeasureInfoMap.put("contained_unit", this
+					 * .convertUnitOfMeasureToUnitOptionB( globalItem.getId(),
+					 * AppConfig.UNIT_OF_MEASURE_UNIT, 0,
+					 * unitOfMeasurement.getUnitId()));
+					 */
+					unitOfMeasureInfoMap.put("qty", this
+							.convertUnitOfMeasureToContainedUnitOptionB(1,
+									globalItem.getId(),
+									unitOfMeasurement.getUnitId()
+
+							));
+					wrapperList.add(unitOfMeasureInfoMap);
+				}
+
+				// sort list
+				Collections.sort(wrapperList, new SortUnitOfMeasureByQty());
+
+				System.out.println("wraplst/" + wrapperList);
+				int unitOfMeasureId = 0;
+				// process
+				for (Map<String, Object> unitOfMeasureInfo : wrapperList) {
+
+					unitOfMeasureQty = (Integer) unitOfMeasureInfo.get("qty");
+					System.out.println("orderliitm/" + unitOfMeasureQty);
+					unitOfMeasureId = ((UnitItem) unitOfMeasureInfo
+							.get("unitofmeasre")).getUnitId();
+					if (unitOfMeasureQty > prescriptionQty) {
+						continue;
+					}
+					remainderQty = prescriptionQty / unitOfMeasureQty;
+
+					prescriptionMeasurements.add(this
+							.getNewPresrciptionMeasurement(unitOfMeasureId,
+									remainderQty, visitPrescribedDrug));
+					prescriptionQty = prescriptionQty
+							- (remainderQty * unitOfMeasureQty);
+				}
+
+				if (prescriptionQty > 0) {
+					prescriptionMeasurements.add(this
+							.getNewPresrciptionMeasurement(
+									AppConfig.UNIT_OF_MEASURE_UNIT,
+									prescriptionQty, visitPrescribedDrug));
+				}
+
+			}
+		}
+		System.out.println("prescmeas1/" + prescriptionMeasurements);
+		return prescriptionMeasurements;
+
+	}
+
+	/*
+	 * create unit of measurement object for this prescribed drug and return
+	 */
+	private PrescriptionMeasurement getNewPresrciptionMeasurement(
+			int unitOfMeasureId, int unitOfMeasureQty,
+			VisitPrescribedDrug visitPrescribedDrug) {
+		PrescriptionMeasurement prescriptionMeasurement = new PrescriptionMeasurement();
+		// GlobalUnitofMeasure g = new GlobalUnitofMeasure();
+		GlobalItemUnitofMeasureVw g = new GlobalItemUnitofMeasureVw();
+
+		g.setId(unitOfMeasureId);
+		prescriptionMeasurement.setGlobalUnitofMeasure(g);
+		prescriptionMeasurement.setVisitPrescribedDrug(visitPrescribedDrug);
+		prescriptionMeasurement.setQuantity(unitOfMeasureQty);
+		prescriptionMeasurement.setCreatedBy(this.userIdentity.getUsername());
+		prescriptionMeasurement.setCreatedDate(new Date());
+		prescriptionMeasurement
+				.setPrescriptionMeasurementStatus(PrescriptionMeasurementStatus.Pending
+						.getCode());
+
+		// prescriptionMeasurements.add(prescriptionMeasurement);
+		return prescriptionMeasurement;
+	}
+
+	/*
+	 * recursive method to convert prescribed drug dosage qty to unit of measure
+	 * quantity
+	 */
+	public void convertPrescriptionsQtyToUnitOfMeasurement_old(
+			VisitPrescribedDrug visitPrescribedDrug, int qtyToConvert,
+			Set<PrescriptionMeasurement> prescriptionMeasurements,
+			List<Map<String, Object>> pack, int minUnitOfMeasureId, int indx)
+			throws InvalidUnitOfMeasureConfiguration {
+
+		if (pack != null && !pack.isEmpty()) {
+
+			Map<String, Object> map = pack.get(indx);
+
+			@SuppressWarnings("unchecked")
+			List<Integer> containedValues = (List) map.get("contval");
+			int unitOfMeasureId = (Integer) map.get("unitofmeasreid");
+			int unitOfMeasureContainedVal = 0;
+			int unitOfMeasureQty = 0;
+			int leftOver = 0;
+
+			/*
+			 * first we need to check if qty to convert is greater than current
+			 * unit of measure contained value. if it is greater then we can
+			 * convert this qty to unit of measure else we flow thru to the next
+			 * unit of measure. in situatiation where current unit of measure
+			 * contained more than one contained value we must first resolve the
+			 * ambiguity to get the actual contained value to use
+			 */
+
+			/*
+			 * current unit of measure contained value is more than one for
+			 * prescribed drug
+			 */
+			if (containedValues != null && !containedValues.isEmpty()) {
+
+				if (containedValues.size() > 1) { /*
+												 * we need to resolve ambiguity
+												 * here
+												 */
+					unitOfMeasureContainedVal = resolveContainedValueAmbiguity(
+							qtyToConvert, containedValues);
+				} else {
+					unitOfMeasureContainedVal = containedValues.get(0);
+				}
+
+				/* process */
+				if (qtyToConvert < unitOfMeasureContainedVal) {/*
+																 * since we cant
+																 * convert here
+																 * we flow thru
+																 * to next unit
+																 * of measure
+																 */
+					// System.out.print(qtyToConvert+"/"+indx+"/"+unitOfMeasureQty+"/x/"+
+					// unitOfMeasureContainedVal);
+					/*
+					 * if this is the least/minimum unit of measure then we have
+					 * completed our computation so we create new measurement
+					 * and return
+					 */
+					if (unitOfMeasureId == minUnitOfMeasureId) {
+						unitOfMeasureQty = 1;
+						prescriptionMeasurements.add(this
+								.getNewPresrciptionMeasurement(unitOfMeasureId,
+										unitOfMeasureQty, visitPrescribedDrug));
+						return;
+					} else { /* we continue to try the next unit of measure */
+						indx++;
+						this.convertPrescriptionsQtyToUnitOfMeasurement_old(
+								visitPrescribedDrug, qtyToConvert,
+								prescriptionMeasurements, pack,
+								minUnitOfMeasureId, indx);
+					}
+
+				} else {
+
+					if (unitOfMeasureContainedVal == 0) {// invalid unit of
+															// measurement
+						throw new InvalidUnitOfMeasureConfiguration(
+								"invalid unit of measure configuration:");
+					} else {
+						// compute measurement
+						/*
+						 * get the integer part of computaion as unit of measure
+						 * qty
+						 */
+
+						unitOfMeasureQty = qtyToConvert
+								/ unitOfMeasureContainedVal;
+
+						leftOver = qtyToConvert
+								- (unitOfMeasureQty * unitOfMeasureContainedVal);
+
+						/*
+						 * if there is left over, then we proceed otherwise
+						 * create new measurement, add to collection and return
+						 */
+						if (leftOver > 0) {
+
+							/*
+							 * chck if if this is the least/last unit of
+							 * measure, if true, then it has to be the contain
+							 * measurement for the left over so we increment the
+							 * unit of measure Qty,create new measurement and
+							 * return
+							 */
+							if (unitOfMeasureId == minUnitOfMeasureId) {
+								unitOfMeasureQty++;
+								prescriptionMeasurements.add(this
+										.getNewPresrciptionMeasurement(
+												unitOfMeasureId,
+												unitOfMeasureQty,
+												visitPrescribedDrug));
+								return;
+							} else {// we still have more to consider so do
+									// next/continue
+								prescriptionMeasurements.add(this
+										.getNewPresrciptionMeasurement(
+												unitOfMeasureId,
+												unitOfMeasureQty,
+												visitPrescribedDrug));
+								indx++;
+								this.convertPrescriptionsQtyToUnitOfMeasurement_old(
+										visitPrescribedDrug, leftOver,
+										prescriptionMeasurements, pack,
+										minUnitOfMeasureId, indx);
+							}
+						} else { /*
+								 * if there is no left over we create new
+								 * prescription measurement and return
+								 */
+							prescriptionMeasurements.add(this
+									.getNewPresrciptionMeasurement(
+											unitOfMeasureId, unitOfMeasureQty,
+											visitPrescribedDrug));
+							return;// i.e we have completed our conversion
+						}
+					}
+				}
+			}
+		}
+		return;
+	}
+
+	private int resolveContainedValueAmbiguity(int qtyToConvert,
+			List<Integer> containedValues) {
+		int max = 0;
+		if (containedValues != null && !containedValues.isEmpty()) {
+			for (int val : containedValues) {
+				if (val >= max && val < qtyToConvert) {
+					max = val;
+				}
+			}
+		}
+		return max;
+	}
+
+	public int convertUnitOfMeasureToUnitOptionB(int globalItemId,
+			int unitOfMeasureToConvertTo, int qty, int currentUnitOfMeasureFrom)
+			throws InvalidUnitOfMeasureConfiguration {
+
+		// if unit of measure to convert to/selected by user is unit, then we
+		// simply return the qty
+		int unit = AppConfig.UNIT_OF_MEASURE_UNIT;
+		if (unitOfMeasureToConvertTo == unit) {
+			return qty;
+		}
+
+		UnitItem globalItemUnitofMeasure = this.inventoryDaoImpl
+				.getUnitOfMeasureToDetails(globalItemId,
+						currentUnitOfMeasureFrom);
+
+		/*
+		 * if no record found and current unit of measure is unit, then unit has
+		 * not been configured for current item
+		 */
+		if (globalItemUnitofMeasure == null) {
+			if (currentUnitOfMeasureFrom == unit) {
+				throw new InvalidUnitOfMeasureConfiguration(
+						"invalid unit of measure configuration");
+			} else {
+				return qty;
+			}
+		}
+
+		// if there exist record continue
+		qty *= globalItemUnitofMeasure.getContdValue();
+		currentUnitOfMeasureFrom = globalItemUnitofMeasure
+				.getContdMeasurement();
+		/*
+		 * if unit of measure selected by user equals next unitof measure
+		 * selected from db then we ve gotten our qty
+		 */
+		if (unitOfMeasureToConvertTo == currentUnitOfMeasureFrom) {
+			return qty;
+		}
+		return this.convertUnitOfMeasureToUnitOptionB(globalItemId,
+				unitOfMeasureToConvertTo, qty, currentUnitOfMeasureFrom);
+
+	}
+
+	/*
+	 * 
+	 * public int convertUnitOfMeasureToUnitOptionB(int globalItemId, int
+	 * unitOfMeasureToConvertTo, int qty, int currentUnitOfMeasureFrom) throws
+	 * InvalidUnitOfMeasureConfiguration {
+	 * 
+	 * // if unit of measure to convert to/selected by user is unit, then we //
+	 * simply return the qty int unit = AppConfig.UNIT_OF_MEASURE_UNIT; if
+	 * (unitOfMeasureToConvertTo == unit) { return qty; }
+	 * 
+	 * GlobalItemUnitofMeasure globalItemUnitofMeasure = this.inventoryDaoImpl
+	 * .getUnitOfMeasureToDetails(globalItemId, currentUnitOfMeasureFrom);
+	 * 
+	 * 
+	 * // if no record found and current unit of measure is unit, then unit has
+	 * // not been configured for current item
+	 * 
+	 * if (globalItemUnitofMeasure == null) { if (currentUnitOfMeasureFrom ==
+	 * unit) { throw new InvalidUnitOfMeasureConfiguration(
+	 * "invalid unit of measure configuration"); } else { return qty; } }
+	 * 
+	 * // if there exist record continue qty *=
+	 * globalItemUnitofMeasure.getContainedValue(); currentUnitOfMeasureFrom =
+	 * globalItemUnitofMeasure.getUnitOfMeasureTo(); // if unit of measure
+	 * selected by user equals next unitof measure // selected from db then we
+	 * ve gotten our qty
+	 * 
+	 * if (unitOfMeasureToConvertTo == currentUnitOfMeasureFrom) { return qty; }
+	 * return this.convertUnitOfMeasureToUnitOptionB(globalItemId,
+	 * unitOfMeasureToConvertTo, qty, currentUnitOfMeasureFrom);
+	 * 
+	 * }
+	 */
+
+	public int convertUnitOfMeasureToContainedUnitOptionB(
+			int totalContainedUnit, int globalItemId, int unitOfMeasureToConvert)
+			throws InvalidUnitOfMeasureConfiguration {
+
+		// if unit of measure to convert to/selected by user is unit, then we
+		// simply return the qty
+		int unit = AppConfig.UNIT_OF_MEASURE_UNIT;
+		// if(unitOfMeasureToConvert==unit){
+		// return qty;
+		// }
+
+		// System.out.println(globalItemId + "/itmid/" +
+		// unitOfMeasureToConvert);
+
+		/*
+		 * UnitItem globalItemUnitofMeasure = this.inventoryDaoImpl
+		 * .getUnitOfMeasureFromDetails(globalItemId, unitOfMeasureToConvert);
+		 */
+
+		UnitItem globalItemUnitofMeasure = this.inventoryDaoImpl
+				.getUnitOfMeasureFromDetails(globalItemId,
+						unitOfMeasureToConvert);
+
+		/*
+		 * if no record found and current unit of measure is unit, then unit has
+		 * not been configured for current item
+		 */
+
+		if (globalItemUnitofMeasure == null) {
+			if (unitOfMeasureToConvert == unit) {
+				// return
+				// totalContainedUnit*=globalItemUnitofMeasure.getContainedValue();
+				System.out.print("end/" + totalContainedUnit + "/"
+						+ unitOfMeasureToConvert);
+				return totalContainedUnit;
+			} else {
+				throw new InvalidUnitOfMeasureConfiguration(
+						"invalid unit of measure configuration:"
+								+ unitOfMeasureToConvert);
+			}
+
+		} else {
+
+			totalContainedUnit *= globalItemUnitofMeasure.getContdValue();
+			System.out.print("totalcontain/" + totalContainedUnit + "/"
+					+ unitOfMeasureToConvert);
+			return this.convertUnitOfMeasureToContainedUnitOptionB(
+					totalContainedUnit, globalItemId,
+					globalItemUnitofMeasure.getContdMeasurement());
+
+		}
+
+		// System.out.print("rtntotal/"+totalContainedUnit);
+		// return totalContainedUnit;
+
+	}
+
+}

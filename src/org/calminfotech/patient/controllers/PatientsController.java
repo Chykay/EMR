@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -13,7 +14,6 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.apache.commons.io.IOUtils;
-//import org.calminfotech.consultation.forms.VisitationForm;
 import org.calminfotech.hmo.boInterface.HmoBo;
 import org.calminfotech.hmo.boInterface.HmoPackageBo;
 import org.calminfotech.hmo.models.HmoPackage;
@@ -202,6 +202,11 @@ public class PatientsController {
 		// List<Patient> plist =
 		// this.patientBo.fetchAllByOrganisation(userIdentity.getOrganisation().getId());
 		// model.addAttribute("plist",plist);
+		/*
+		 * if (userIdentity.getCurrentPointId() != 1) {
+		 * userIdentity.setCurrentUrl("redirect:/patients/index/all"); return
+		 * "redirect:/visits/queue/1"; }
+		 */
 		if (authorize.isAllowed("PATIENT002")) {
 			PatientSearchForm pf = new PatientSearchForm();
 			pf.setMysp(0);
@@ -225,6 +230,11 @@ public class PatientsController {
 			@ModelAttribute("patientSearch") PatientSearchForm patientSearchForm,
 			BindingResult result, Model model, HttpSession session,
 			RedirectAttributes redirectAttributes) {
+		/*
+		 * if (userIdentity.getCurrentPointId() != 1) {
+		 * userIdentity.setCurrentUrl("redirect:/patients/index/all"); return
+		 * "redirect:/visits/queue/1"; }
+		 */
 		if (authorize.isAllowed("PATIENT002")) {
 			// List<Patient> patientList =
 			// searchBo.searchPatient(patientSearchForm, session);
@@ -262,10 +272,96 @@ public class PatientsController {
 
 	}
 
+	@RequestMapping(value = { "/indexrec" })
+	@Layout("layouts/datatable")
+	public String listrec(RedirectAttributes redirectAttributes, Model model) {
+
+		/*
+		 * if (userIdentity.getCurrentPointId() != 1) {
+		 * userIdentity.setCurrentUrl("redirect:/patients/index/all");
+		 * 
+		 * return "redirect:/visits/queue/1";
+		 * 
+		 * }
+		 */
+		// if (authorize.isAllowed("PATIENT002")) {
+		List<Patient> plist = this.patientBo
+				.fetchByOrganisationrec(userIdentity.getOrganisation()
+						.getOrgCoy().getId());
+
+		List<Patient> plist2 = new ArrayList();
+		/*
+		 * for (Patient pat : plist) { if ((Double)
+		 * pat.getMfig().get("totcustbal") != 0.00) { plist2.add(pat); } }
+		 */
+		model.addAttribute("patient", plist);
+		// PatientSearchForm pf = new PatientSearchForm();
+		// pf.setMysp(0);
+
+		// model.addAttribute("patientSearch", pf);
+
+		return "customers/patients/indexallrec";
+
+		// } else {
+		// alert.setAlert(redirectAttributes, Alert.WARNING,
+		// "You have no permission to do List Patient");
+
+		// return "redirect:/";
+		// }
+
+	}
+
+	@RequestMapping(value = { "/indexrec/{pid}" })
+	@Layout("layouts/datatable")
+	public String listrec(@PathVariable("pid") Integer pid,
+			RedirectAttributes redirectAttributes, Model model) {
+
+		/*
+		 * if (userIdentity.getCurrentPointId() != 1) {
+		 * userIdentity.setCurrentUrl("redirect:/patients/index/all");
+		 * 
+		 * return "redirect:/visits/queue/1";
+		 * 
+		 * }
+		 */
+		// if (authorize.isAllowed("PATIENT002")) {
+		List<Patient> plist = this.patientBo
+				.fetchByOrganisationrecbypatient(pid);
+
+		List<Patient> plist2 = new ArrayList();
+		/*
+		 * for (Patient pat : plist) { if ((Double)
+		 * pat.getMfig().get("totcustbal") != 0.00) { plist2.add(pat); } }
+		 */
+		model.addAttribute("patient", plist);
+		// PatientSearchForm pf = new PatientSearchForm();
+		// pf.setMysp(0);
+
+		// model.addAttribute("patientSearch", pf);
+
+		return "customers/patients/indexallrec";
+
+		// } else {
+		// alert.setAlert(redirectAttributes, Alert.WARNING,
+		// "You have no permission to do List Patient");
+
+		// return "redirect:/";
+		// }
+
+	}
+
 	@RequestMapping(value = { "/index" })
 	@Layout("layouts/datatable")
 	public String list(RedirectAttributes redirectAttributes, Model model) {
 
+		/*
+		 * if (userIdentity.getCurrentPointId() != 1) {
+		 * userIdentity.setCurrentUrl("redirect:/patients/index/all");
+		 * 
+		 * return "redirect:/visits/queue/1";
+		 * 
+		 * }
+		 */
 		if (authorize.isAllowed("PATIENT002")) {
 			List<Patient> plist = this.patientBo
 					.fetchTop50ByOrganisation(userIdentity.getOrganisation()
@@ -325,47 +421,54 @@ public class PatientsController {
 			BindingResult result, Model model,
 			RedirectAttributes redirectAttributes) {
 
-		// try {
-		if (authorize.isAllowed("PATIENT001")) {
+		try {
+			if (authorize.isAllowed("PATIENT001")) {
 
-			if (result.hasErrors()) {
+				if (result.hasErrors()) {
 
-				/*
-				 * model.addAttribute("titles", this.titleBo.fetchAll());
-				 * model.addAttribute("language",
-				 * this.languageBo.fetchAllByOrganisation());
-				 * model.addAttribute("genders", this.genderBo.fetchAll());
-				 * model.addAttribute("lgas", this.lgasList.fetchAll());
-				 * model.addAttribute("states", this.stateList.fetchAll());
-				 * model.addAttribute("maritalstat", this.MSList.fetchAll());
-				 * model.addAttribute("bloodgroup", this.groupList.fetchAll());
-				 * model.addAttribute("bloodgenotype",
-				 * this.genoList.fetchAll()); model.addAttribute("lifestatus",
-				 * this.lifeList.fetchAll()); model.addAttribute("occupation",
-				 * this.occuList.fetchAll());
-				 */
-				return "redirect:/patients/add";
+					/*
+					 * model.addAttribute("titles", this.titleBo.fetchAll());
+					 * model.addAttribute("language",
+					 * this.languageBo.fetchAllByOrganisation());
+					 * model.addAttribute("genders", this.genderBo.fetchAll());
+					 * model.addAttribute("lgas", this.lgasList.fetchAll());
+					 * model.addAttribute("states", this.stateList.fetchAll());
+					 * model.addAttribute("maritalstat",
+					 * this.MSList.fetchAll()); model.addAttribute("bloodgroup",
+					 * this.groupList.fetchAll());
+					 * model.addAttribute("bloodgenotype",
+					 * this.genoList.fetchAll());
+					 * model.addAttribute("lifestatus",
+					 * this.lifeList.fetchAll());
+					 * model.addAttribute("occupation",
+					 * this.occuList.fetchAll());
+					 */
+					return "redirect:/patients/add";
 
+				}
+
+				Patient patient = this.patientBo.save(patientForm);
+				alert.setAlert(redirectAttributes, Alert.SUCCESS,
+						" Success! New Patient Succesfully Added! Patient id:  "
+								+ patient.getPatientId());
+				return "redirect:/patients/index";
+
+			} else {
+				alert.setAlert(redirectAttributes, Alert.WARNING,
+						"You have no permission to do Add Patient");
+
+				return "redirect:/";
 			}
 
-			Patient patient = this.patientBo.save(patientForm);
-			alert.setAlert(redirectAttributes, Alert.SUCCESS,
-					" Success! New Patient Succesfully Added! Patient id:  "
-							+ patient.getPatientId());
+		} catch (Exception e) {
+			alert.setAlert(
+					redirectAttributes,
+					Alert.WARNING,
+					"Make Sure file no or email has not existed"
+							+ e.getMessage());
 			return "redirect:/patients/index";
 
-		} else {
-			alert.setAlert(redirectAttributes, Alert.WARNING,
-					"You have no permission to do Add Patient");
-
-			return "redirect:/";
 		}
-
-		// } catch (Exception e) {
-		// alert.setAlert(redirectAttributes, Alert.WARNING, e.getMessage());
-		// return "redirect:/";
-
-		// }
 
 	}
 
@@ -439,20 +542,20 @@ public class PatientsController {
 
 			// HMO Package
 
-//			PatientHmoForm hmoForm = new PatientHmoForm();
-//			hmoForm.setPatientId(patient.getPatientId());
-//			List<HmoPackage> hmopackage = hmoPackageBo
-//					.fetchAllForuse(userIdentity.getOrganisation());
-//			model.addAttribute("hmostatus", this.hmoList.fetchAll());
-//			model.addAttribute("hmoForm", hmoForm);
-//			model.addAttribute("hmolist", hmopackage);
-//
-//			// visit
-//
-//			VisitationForm visitform = new VisitationForm();
+			PatientHmoForm hmoForm = new PatientHmoForm();
+			hmoForm.setPatientId(patient.getPatientId());
+			List<HmoPackage> hmopackage = hmoPackageBo
+					.fetchAllForuse(userIdentity.getOrganisation());
+			model.addAttribute("hmostatus", this.hmoList.fetchAll());
+			model.addAttribute("hmoForm", hmoForm);
+			model.addAttribute("hmolist", hmopackage);
 
-//			model.addAttribute("visitform", visitform);
+			// visit
 
+			/*VisitationForm visitform = new VisitationForm();
+
+			model.addAttribute("visitform", visitform);
+*/
 			return "customers/patients/view";
 
 		} else {
@@ -464,6 +567,7 @@ public class PatientsController {
 	}
 
 	@RequestMapping(value = "/edit/{id}")
+	@Layout(value = "layouts/form_wizard_layout")
 	public String editAction(@PathVariable("id") Integer id, Model model,
 			RedirectAttributes redirectAttributes, HttpServletRequest request) {
 		if (authorize.isAllowed("PATIENT003")) {
@@ -485,6 +589,8 @@ public class PatientsController {
 			patientForm.setSurname(patient.getSurname());
 
 			patientForm.setHeight(patient.getHeight());
+
+			patientForm.setCreditlimit(patient.getCreditlimit());
 
 			if (patient.getDob() != null) {
 				patientForm.setDob(DateUtils.formatDateToString(patient
@@ -625,6 +731,7 @@ public class PatientsController {
 	}
 
 	@RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
+	@Layout(value = "layouts/form_wizard_layout")
 	public String updateAction(
 			@Valid @ModelAttribute("pForm") PatientForm patientForm,
 			BindingResult result, Model model,
@@ -656,9 +763,14 @@ public class PatientsController {
 
 				return "redirect:/";
 			}
+
 		} catch (Exception e) {
-			alert.setAlert(redirectAttributes, Alert.WARNING, e.getMessage());
-			return "redirect:/";
+			alert.setAlert(
+					redirectAttributes,
+					Alert.WARNING,
+					"make sure file no or email has not existed"
+							+ e.getMessage());
+			return "redirect:/patients/view/" + patientForm.getPatientId();
 
 		}
 
@@ -741,7 +853,7 @@ public class PatientsController {
 						&& !imageForm.getImageFile().getContentType()
 								.toString().toLowerCase().equals("image/jpeg")) {
 
-					alert.setAlert(redirectAttributes, Alert.SUCCESS,
+					alert.setAlert(redirectAttributes, Alert.DANGER,
 							"Image type should be jpg or png");
 
 					return "redirect:/patients/view/" + patient.getPatientId();

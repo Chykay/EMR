@@ -82,6 +82,30 @@ public class PatientDaoImpl implements PatientDao {
 	}
 
 	@Override
+	public List<Patient> fetchByOrganisationrec(int organisationId) {
+		// System.out.println("name");
+		List<Patient> list = sessionFactory
+				.getCurrentSession()
+				.createQuery(
+						"from Patientrec where organisation.orgCoy.Id = ?  ORDER BY patientId DESC")
+				.setParameter(0, organisationId).list();
+		// System.out.println(list.get(0).getHmoId());
+		return list;
+	}
+
+	@Override
+	public List<Patient> fetchByOrganisationrecbypatient(int pid) {
+		// System.out.println("name");
+		List<Patient> list = sessionFactory
+				.getCurrentSession()
+				.createQuery(
+						"from Patientrec where patient.patientId = ?  ORDER BY patientId DESC")
+				.setParameter(0, pid).list();
+		// System.out.println(list.get(0).getHmoId());
+		return list;
+	}
+
+	@Override
 	public Patient getPatientById(int id) {
 		// TODO Auto-generated method stub
 		List list = this.sessionFactory.getCurrentSession()

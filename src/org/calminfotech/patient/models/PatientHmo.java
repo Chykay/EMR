@@ -35,6 +35,9 @@ public class PatientHmo {
 	@Column(name = "todat")
 	private Date todat;
 
+	@Column(name = "patienthmocode")
+	private String patienthmocode;
+
 	@ManyToOne
 	@JoinColumn(name = "hmopackage_id")
 	private HmoPackage hmoPackage;
@@ -159,6 +162,14 @@ public class PatientHmo {
 
 	public void setModifiedBy(String modifiedBy) {
 		this.modifiedBy = modifiedBy;
+	}
+
+	public String getPatienthmocode() {
+		return patienthmocode;
+	}
+
+	public void setPatienthmocode(String patienthmocode) {
+		this.patienthmocode = patienthmocode;
 	}
 
 }

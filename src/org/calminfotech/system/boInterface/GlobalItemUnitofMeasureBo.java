@@ -40,4 +40,6 @@ public interface GlobalItemUnitofMeasureBo {
 
 	Boolean IsExist(int itemid, int uomid);
 
+	//public Set<VisitConsultationPrescriptionMeasurement> getGlobalItemUnitOfMeasurementsIsnull(Integer globalitem_id);
+
 }

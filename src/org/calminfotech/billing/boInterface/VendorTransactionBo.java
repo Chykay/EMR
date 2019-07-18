@@ -20,4 +20,6 @@ public interface VendorTransactionBo {
 	public List<VendorTransaction> fetchAllByOrganisation50();
 
 	List<VendorTransaction> fetchAllByOrganisation();
+
+	public void save(org.calminfotech.inventory.models.VendorTransaction custtran);
 }
