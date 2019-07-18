@@ -9,13 +9,13 @@ import org.calminfotech.ledger.boInterface.LedgerCatBo;
 import org.calminfotech.ledger.boInterface.CustomerAccBo;
 import org.calminfotech.ledger.boInterface.GenLedgerBo;
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
-import org.calminfotech.ledger.boInterface.TotAccBo;
+import org.calminfotech.ledger.boInterface.TotCodeBo;
 import org.calminfotech.ledger.forms.LedgerAccForm;
 import org.calminfotech.ledger.models.LedgerCategory;
 import org.calminfotech.ledger.models.CustomerAccount;
 import org.calminfotech.ledger.models.CustomerEntry;
 import org.calminfotech.ledger.models.LedgerAccount;
-import org.calminfotech.ledger.models.TotalingAccount;
+import org.calminfotech.ledger.models.TotalingCode;
 import org.calminfotech.ledger.utility.LedgerException;
 import org.calminfotech.system.models.Organisation;
 import org.calminfotech.user.utils.UserIdentity;
@@ -43,7 +43,7 @@ public class CustomerAccController {
 	private LedgerCatBo balSheetCatBo;
 
 	@Autowired
-	private TotAccBo totAccBo;
+	private TotCodeBo totCodeBo;
 	
 	@Autowired
 	private Alert alert;
@@ -138,12 +138,12 @@ public class CustomerAccController {
 	@RequestMapping(value = {"/create"}, method=RequestMethod.GET)
 	public String create(Model model) {		
 		
-		List<TotalingAccount> totalingAccounts = this.totAccBo.fetchAll();
+		List<TotalingCode> totalingCodes = this.totCodeBo.fetchAll();
 		List<LedgerCategory> balSheetCats = this.balSheetCatBo.fetchAll();
 		
 		model.addAttribute("account", new LedgerAccForm());
 		model.addAttribute("balSheetCats", balSheetCats);
-		model.addAttribute("totalingAccounts", totalingAccounts);
+		model.addAttribute("totalingAccounts", totalingCodes);
 		return "/ledger/ledger_acc/create";
 	}
 	

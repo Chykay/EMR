@@ -10,7 +10,9 @@ import org.calminfotech.ledger.daoImpl.LedgerTypesImpl;
 import org.calminfotech.ledger.forms.LedgerCatForm;
 import org.calminfotech.ledger.models.LedgerCategory;
 import org.calminfotech.ledger.models.LedgerType;
+import org.calminfotech.utils.Alert;
 import org.calminfotech.utils.Auditor;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,9 +30,9 @@ public class LedgerCatController {
 	@Autowired
 	private LedgerCatBo ledgerCatBo;
 	
-/*	@Autowired
+	@Autowired
 	private Alert alert;
-
+	/*
 	@Autowired
 	private UserIdentity userIdentity;
 */
@@ -52,7 +54,7 @@ public class LedgerCatController {
 			}
 		}
 		
-		model.addAttribute("accounts", ledgerCats);
+		model.addAttribute("categories", ledgerCats);
 		// model.addAttribute("id", id);
 		return "/ledger/ledger_cat/index";
 	}
@@ -61,7 +63,7 @@ public class LedgerCatController {
 	@RequestMapping(value = {"/view/{id}"}, method=RequestMethod.GET)
 	public String show(Model model, @PathVariable int id) {
 		LedgerCategory ledgerCat = this.ledgerCatBo.getLedgerById(id);
-		model.addAttribute("account", ledgerCat);
+		model.addAttribute("category", ledgerCat);
 		return "/ledger/ledger_cat/show";
 	}
 	
@@ -75,22 +77,29 @@ public class LedgerCatController {
 		
 		model.addAttribute("ledgerCats", ledgerCats);
 		//model.addAttribute("ledgerTypes", ledgerTypes);
-		model.addAttribute("account", new LedgerCatForm());
+		model.addAttribute("category", new LedgerCatForm());
 		return "/ledger/ledger_cat/create";
 	}
 	
 	
 	@RequestMapping(value = {"/create"}, method=RequestMethod.POST)
-	public String create(@Valid @ModelAttribute("account") LedgerCatForm ledgerCatForm, BindingResult result, Model model,
+	public String create(@Valid @ModelAttribute("category") LedgerCatForm ledgerCatForm, BindingResult result, Model model,
 			RedirectAttributes redirectAttributes) {
 				
-		this.ledgerCatBo.save(ledgerCatForm);
+		try {
+			this.ledgerCatBo.save(ledgerCatForm);
+		} catch (Exception e) {
+			if(e instanceof ConstraintViolationException){
+				alert.setAlert(redirectAttributes, Alert.DANGER,
+						"Error Category '" + ledgerCatForm.getName() + "' already exist");
+			}
+		}
 		/*
 		alert.setAlert(redirectAttributes, Alert.SUCCESS,
 				"Success! New ledgerCat Succesfully Added! ledgerCat id:  "
-						+ account.getId());
+						+ category.getId());
 
-		model.addAttribute("account", account);*/
+		model.addAttribute("category", category);*/
 		return "redirect:/ledger/ledger_cat/index";
 	}
 	
@@ -109,19 +118,21 @@ public class LedgerCatController {
 			ledgerCatForm.setIsActive(0);
 		}
 		
+		ledgerCatForm.setParentID(ledgerCat.getParentID());
+		
 		List<LedgerCategory> ledgerCats = this.ledgerCatBo.fetchParents(id);
 		List<LedgerType> ledger_types = this.ledgerTypesImpl.fetchAll();
 		
-		model.addAttribute("p_accounts", ledgerCats);
+		model.addAttribute("pCategories", ledgerCats);
 		model.addAttribute("ledger_types", ledger_types);
-		model.addAttribute("account", ledgerCatForm);
+		model.addAttribute("category", ledgerCatForm);
 		
 		this.auditor.before(request, "ledgerCatForm", ledgerCatForm);
 		return "/ledger/ledger_cat/edit";
 	}
 	
 	@RequestMapping(value = {"/edit/{id}"}, method=RequestMethod.POST)
-	public String update(@Valid @ModelAttribute("account") LedgerCatForm ledgerCatForm, BindingResult result, Model model,
+	public String update(@Valid @ModelAttribute("category") LedgerCatForm ledgerCatForm, BindingResult result, Model model,
 			RedirectAttributes redirectAttributes, @PathVariable int id, HttpServletRequest request) {
 
 		this.ledgerCatBo.update(ledgerCatForm, id);
@@ -134,7 +145,7 @@ public class LedgerCatController {
 				" Success! ledgerCat Succesfully Edited! ledgerCat id:  "
 						+ id);
 
-		model.addAttribute("account", ledgerCat);
+		model.addAttribute("category", ledgerCat);
 		} catch(Exception e) {
 			alert.setAlert(redirectAttributes, Alert.DANGER,
 					" Failed! FAILED Editing! ledgerCat id:  " + id + " Error: " + e.getMessage()

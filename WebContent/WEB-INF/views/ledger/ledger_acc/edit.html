@@ -21,18 +21,18 @@
 </div>
 
 
-<div>
+<div style="margin-top: 50px;">
 	<form role="form" class="form-horizontal" method="POST"
-			th:object="${account}">
+			th:object="${ledgerAccForm}">
 			
 		<div class="form-group">
 			<label for="gender" class="col-sm-3 control-label no-padding-right">Totaling Account:</label>
 			<div class="col-sm-9">
 				<select th:field="*{totalingCode}" class="col-xs-10 col-sm-5"  required="required">
 					<option value="">Select..</option>
-						<option th:each="totalingAccount: ${totalingAccounts}" 
-					th:value = "${totalingAccount.code}" 
-					th:text="${totalingAccount.ledgerType.id} + '-' + ${totalingAccount.code} + '-' + ${totalingAccount.name}">Totaling Code</option>
+						<option th:each="totalingCode: ${totalingCodes}" 
+					th:value = "${totalingCode.code}" 
+					th:text="${totalingCode.ledgerType.id} + '-' + ${totalingCode.code} + '-' + ${totalingCode.name}">Totaling Code</option>
 				</select>
 				<span class="text-danger" th:if="${#fields.hasErrors('totalingCode')}"
 					th:errors="*{totalingCode}">
@@ -62,14 +62,14 @@
 		<div class="form-group">
 			<label for="gender" class="col-sm-3 control-label no-padding-right">Balance Sheet Category:</label>
 			<div class="col-sm-9">
-				<select th:field="*{bal_sheet_cat_id}" class="col-xs-10 col-sm-5"  required="required" id="bal_sheet_cat_id">
+				<select th:field="*{ledgerCatID}" class="col-xs-10 col-sm-5"  required="required" id="bal_sheet_cat_id">
 					<option value="">Select..</option>
 						<option th:each="balSheetCat: ${balSheetCats}" 
 					th:value = "${balSheetCat.id}" 
 					th:text="${balSheetCat.name}">Balance Sheet Category</option>
 				</select>
-				<span class="text-danger" th:if="${#fields.hasErrors('bal_sheet_cat_id')}"
-					th:errors="*{bal_sheet_cat_id}">
+				<span class="text-danger" th:if="${#fields.hasErrors('ledgerCatID')}"
+					th:errors="*{ledgerCatID}">
 				</span>
 			</div>
 		</div>

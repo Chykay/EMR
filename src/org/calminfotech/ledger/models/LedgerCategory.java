@@ -6,13 +6,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.SQLDelete;
 
 @Entity
 @org.hibernate.annotations.Entity(dynamicInsert = true)
 @SQLDelete(sql = "UPDATE GL_ledger_category SET isActive = 0 WHERE id = ?")
-@Table(name = "GL_ledger_category")
+@Table(name = "GL_ledger_category", uniqueConstraints = @UniqueConstraint(columnNames={"name", "company_id"}))
 public class LedgerCategory extends CommonLedger{
 	@Id
 	@GeneratedValue

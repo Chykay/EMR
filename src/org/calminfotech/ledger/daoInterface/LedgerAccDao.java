@@ -21,4 +21,8 @@ public interface LedgerAccDao {
 	public void update(LedgerAccount ledgerAccount);
 
 	public List<LedgerAccount> getAssetLedgers();
+
+	public boolean isTotUsed(String code);
+
+	public boolean isUsed(String accountNo);
 }

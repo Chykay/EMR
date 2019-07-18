@@ -1,6 +1,6 @@
 <div class="page-header">
 	<h1>
-		Edit Account: <small><span th:text="${account.code}">Code</span></small>
+		Edit Totaling
 	</h1>
 </div>
 
@@ -11,17 +11,17 @@
 			<i class="fa fa-home"></i> System Dashboard
 		</a> 
 		<a class="btn btn-xs btn-primary" th:href="@{/ledger/totaling/create}">
-			<i class="fa fa-plus-circle"></i> Add Account 
+			<i class="fa fa-plus-circle"></i> Add Totaling Code 
 		</a>
 	
  		<span   id="imgId" hidden="hidden" > 
  			<img th:src="@{/resources/assets/images/ajax-loader.gif}" id="loading_img" />  
- 		</span>      
+ 		</span>  
 	</div>
 </div>
-<div>
+<div style="margin-top: 50px;">
 	<form role="form" class="form-horizontal" method="POST"
-			th:object="${account}">
+			th:object="${totalingCode}">
 			
 		<div class="form-group">
 			<label for="gender" class="col-sm-3 control-label no-padding-right">Ledger  Type:</label>
@@ -43,7 +43,8 @@
 			<label for="code" class="col-sm-3 control-label no-padding-right">Code:</label>
 			<div class="col-sm-9">
 				<input type="text" class="col-xs-10 col-sm-5" placeholder="Description"
-					th:field="*{code}" required="required" /> <span
+					th:field="*{code}"/> 
+					<span
 					class="text-danger" th:if="${#fields.hasErrors('code')}"
 					th:errors="*{code}"></span>
 			</div>

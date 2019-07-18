@@ -19,9 +19,14 @@ public interface LedgerAccBo {
 	
 	public LedgerAccount update(LedgerAccForm ledgerAccForm, int id);
 
-
 	public List<LedgerAccount> fetchTop100(int company_id);
 
 	public List<LedgerAccount> getAssetLedgers();
+
+	public boolean isTotUsed(String code);
+
+	public void updateStatus(LedgerAccount ledgerAccount);
+
+	public boolean isUsed(String accountNo);
 	
 }

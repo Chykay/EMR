@@ -7,12 +7,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 
 @Entity
 @org.hibernate.annotations.Entity(dynamicInsert = true)
-//@SQLDelete(sql = "UPDATE TotalingAccount SET is_deleted = 1 WHERE id = ?")
-@Table(name = "GL_totaling_ledger")
-public class TotalingAccount extends CommonLedger{
+@Table(name = "GL_totaling_code", uniqueConstraints = @UniqueConstraint(columnNames={"code", "company_id"}))
+public class TotalingCode extends CommonLedger{
 	@Id
 	@GeneratedValue
 	@Column(name ="id")
@@ -32,6 +33,9 @@ public class TotalingAccount extends CommonLedger{
 	
 	@Column(name = "is_active")
 	private boolean isActive;
+	
+	@Transient
+	public boolean isEditable;
 
 	public Integer getId() {
 		return id;
@@ -73,6 +77,14 @@ public class TotalingAccount extends CommonLedger{
 		this.isActive = isActive;
 	}
 
+/*	public boolean getIsEditable() {
+		return isEditable;
 	
+
+	}*/
+
+	public void setEditable(boolean isEditable) {
+		this.isEditable = isEditable;
+	}
 
 }

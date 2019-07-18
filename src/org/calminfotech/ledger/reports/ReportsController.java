@@ -2,8 +2,8 @@ package org.calminfotech.ledger.reports;
 
 import java.util.List;
 
-import org.calminfotech.ledger.boInterface.TotAccBo;
-import org.calminfotech.ledger.models.TotalingAccount;
+import org.calminfotech.ledger.boInterface.TotCodeBo;
+import org.calminfotech.ledger.models.TotalingCode;
 import org.calminfotech.ledger.utility.ReportsBo;
 import org.calminfotech.system.boInterface.OrganisationBo;
 import org.calminfotech.system.models.Organisation;
@@ -33,7 +33,7 @@ public class ReportsController {
 	private Auditor auditor;
 	*/
 	@Autowired
-	private TotAccBo totAccBo;
+	private TotCodeBo totCodeBo;
 
 	@Autowired
 	private ReportsBo reportsBo;
@@ -47,12 +47,12 @@ public class ReportsController {
 	@RequestMapping(value = "/sample", method = RequestMethod.GET)
 	public String listAll(Model model) {
 
-		List<TotalingAccount> totalingAccounts = this.totAccBo.fetchAll();
+		List<TotalingCode> totalingCodes = this.totCodeBo.fetchAll();
 		
-		model.addAttribute("totalingAccounts", totalingAccounts);
+		model.addAttribute("totalingAccounts", totalingCodes);
 		
-		for (TotalingAccount totalingAccount : totalingAccounts) {
-			System.out.println(totalingAccount.getName());
+		for (TotalingCode totalingCode : totalingCodes) {
+			System.out.println(totalingCode.getName());
 		}
 		return "ledger/reports/sample";
 	}

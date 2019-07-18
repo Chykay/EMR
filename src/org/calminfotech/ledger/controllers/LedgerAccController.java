@@ -7,11 +7,11 @@ import javax.validation.Valid;
 
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
 import org.calminfotech.ledger.boInterface.LedgerCatBo;
-import org.calminfotech.ledger.boInterface.TotAccBo;
+import org.calminfotech.ledger.boInterface.TotCodeBo;
 import org.calminfotech.ledger.forms.LedgerAccForm;
 import org.calminfotech.ledger.models.LedgerAccount;
 import org.calminfotech.ledger.models.LedgerCategory;
-import org.calminfotech.ledger.models.TotalingAccount;
+import org.calminfotech.ledger.models.TotalingCode;
 import org.calminfotech.system.models.Organisation;
 import org.calminfotech.user.utils.UserIdentity;
 import org.calminfotech.utils.Alert;
@@ -38,7 +38,7 @@ public class LedgerAccController {
 	private LedgerCatBo ledgerCatBo;
 
 	@Autowired
-	private TotAccBo totAccBo;
+	private TotCodeBo totCodeBo;
 	
 	@Autowired
 	private Alert alert;
@@ -56,31 +56,35 @@ public class LedgerAccController {
 		
 		if (this.ledgerAccBo.fetchTop100(org.getOrgCoy().getId()) != null) {
 			List<LedgerAccount> ledgerAccounts = this.ledgerAccBo.fetchTop100(org.getOrgCoy().getId());
+			
+			for (LedgerAccount ledgerAccount : ledgerAccounts) {
+				ledgerAccount.setEditable(!this.ledgerAccBo.isUsed(ledgerAccount.getAccountNo()));
+			}
 			model.addAttribute("accounts", ledgerAccounts);
 		} 
 		
 		return "/ledger/ledger_acc/index";
 	}
 	
-	/* SHOW ALL */
+	/* SHOW ALL 
 	@RequestMapping(value = {"/view/{id}"}, method=RequestMethod.GET)
 	public String show(Model model, @PathVariable int id) {
 		LedgerAccount genLedger = this.ledgerAccBo.getLedgerById(id);
 		model.addAttribute("account", genLedger);
 		return "/ledger/ledger_acc/show";
 	}
-	
+	*/
 	/* CREATE */
 	@Layout(value = "layouts/form_wizard_layout")
 	@RequestMapping(value = {"/create"}, method=RequestMethod.GET)
 	public String create(Model model) {		
 		
-		List<TotalingAccount> totalingAccounts = this.totAccBo.fetchAll();
+		List<TotalingCode> totalingCodes = this.totCodeBo.fetchAllActive();
 		List<LedgerCategory> ledgerCats = this.ledgerCatBo.fetchAll();
 		
 		model.addAttribute("account", new LedgerAccForm());
 		model.addAttribute("ledgerCats", ledgerCats);
-		model.addAttribute("totalingAccounts", totalingAccounts);
+		model.addAttribute("totalingCodes", totalingCodes);
 		return "/ledger/ledger_acc/create";
 	}
 	
@@ -94,8 +98,7 @@ public class LedgerAccController {
 		} catch (Exception e) {
 			
 			alert.setAlert(redirectAttributes, Alert.DANGER,
-					"Failure! Account Number Already Exists for this branch  "
-							+ account.getId());
+					"Failure! Account Number '" + ledgerAccForm.getAccountNo() + "' Already Exists for this company  ");
 			return "redirect:/ledger/ledger_acc/index";
 		}
 		
@@ -112,7 +115,13 @@ public class LedgerAccController {
 	/* UPDATE */
 	@RequestMapping(value = {"/edit/{id}"}, method=RequestMethod.GET)
 	public String update(Model model, @PathVariable int id, HttpServletRequest request) {
+		if (this.ledgerAccBo.isUsed(this.ledgerAccBo.getLedgerById(id).getAccountNo())) {
+			return "redirect:/ledger/ledger_acc/index";
+		}
+		
 		LedgerAccount genLedger = this.ledgerAccBo.getLedgerById(id);
+		List<TotalingCode> totalingCodes = this.totCodeBo.fetchAllActive();
+		List<LedgerCategory> ledgerCats = this.ledgerCatBo.fetchAll();
 		
 		LedgerAccForm ledgerAccForm = new LedgerAccForm();
 		ledgerAccForm.setName(genLedger.getName());
@@ -124,8 +133,11 @@ public class LedgerAccController {
 			ledgerAccForm.setIsActive(0);
 		}
 
-		model.addAttribute("account", ledgerAccForm);
-		
+		ledgerAccForm.setLedgerCatID(genLedger.getLedgerCatID());
+
+		model.addAttribute("ledgerCats", ledgerCats);
+		model.addAttribute("ledgerAccForm", ledgerAccForm);
+		model.addAttribute("totalingCodes", totalingCodes);
 		this.auditor.before(request, "GenLedgerForm", ledgerAccForm);
 		return "/ledger/ledger_acc/edit";
 	}
@@ -155,13 +167,18 @@ public class LedgerAccController {
 		return "redirect:/ledger/ledger_acc/view/" + id;
 	}
 	
+	@RequestMapping(value = {"/status/{id}"}, method=RequestMethod.GET)
+	public String updateStatus(Model model, @PathVariable int id, HttpServletRequest request) {
 		
-	/* DELETE */
-	@RequestMapping(value={"/delete/{id}"}, method=RequestMethod.GET)
-	public String delete(@PathVariable int id) {
-		LedgerAccount genLedger = this.ledgerAccBo.getLedgerById(id);
+		LedgerAccount ledgerAccount = this.ledgerAccBo.getLedgerById(id);
+		this.auditor.before(request, "LedgerAccount", ledgerAccount);
+
+		this.ledgerAccBo.updateStatus(ledgerAccount);
 		
-		this.ledgerAccBo.delete(genLedger);
+		this.auditor.after(request, "LedgerAccount", ledgerAccount,
+				this.userIdentity.getUsername(), id);
 		return "redirect:/ledger/ledger_acc/index";
 	}
+	
+	
 }

@@ -1,6 +1,6 @@
 <div class="page-header">
 	<h1>
-		All Account
+		All Categories
 	</h1>
 </div>
 
@@ -13,7 +13,13 @@
 		<a class="btn btn-xs btn-primary" th:href="@{/ledger/ledger_cat/create}">
 			<i class="fa fa-plus-circle"></i> Add Category
 		</a>
-	
+		<a class="btn btn-xs btn-success" th:href="@{/ledger/ledger_acc/create}">
+			<i class="fa fa-plus-circle"></i> Add General Ledger
+		</a>
+		<a class="btn btn-xs btn-warning" th:href="@{/ledger/totaling/create}">
+			<i class="fa fa-plus-circle"></i> Add Totaling Code 
+		</a>
+		
  		<span   id="imgId" hidden="hidden" > 
  			<img th:src="@{/resources/assets/images/ajax-loader.gif}" id="loading_img" />  
  		</span>      
@@ -40,28 +46,29 @@
 
 			<!-- Table body -->
 			<tbody>
-				<tr th:each="account : ${accounts}">
-					<td th:text="${account.name}">Name</td>
+				<tr th:each="category : ${categories}">
+					<td th:text="${category.name}">Name</td>
 					<td>
-					    <span th:if="${account.isActive}">Active</span>
-					    <span th:if="${!account.isActive}">Inactive</span>
+					    <span th:if="${category.isActive}">Active</span>
+					    <span th:if="${!category.isActive}">Inactive</span>
 					</td>	
-					<td th:text="${account.parentName}">Parent Name</td>
+					<td th:text="${category.parentName}">Parent Name</td>
 					
 					<td>
-						<a class="btn btn-xs btn-primary tooltips"
-							title="view category details" 		th:href="@{/ledger/ledger_cat/view/{id} (id=${account.id}) }"> <i
-								class="fa fa-eye"></i>
-						</a> 
 						 <a class="btn btn-xs btn-warning tooltips"
 							title="Edit Item details"
-							th:href="@{/ledger/ledger_cat/edit/{id}(id=${account.id}) }"> <i
+							th:href="@{/ledger/ledger_cat/edit/{id}(id=${category.id}) }"> <i
 								class="fa fa-edit"></i>
-						</a> <a class="btn btn-xs btn-danger tooltips" 
-							title="Delete Item details"   th:id="${account.id}"  onclick="return Confirm(this.id)"
-							th:href="@{/ledger/ledger_cat/delete/{id}(id=${account.id}) }"> <i
+						</a> 
+						<!-- <a class="btn btn-xs btn-primary tooltips"
+							title="view category details" 		th:href="@{/ledger/ledger_cat/view/{id} (id=${category.id}) }"> <i
+								class="fa fa-eye"></i>
+						</a> 
+						<a class="btn btn-xs btn-danger tooltips" 
+							title="Delete Item details"   th:id="${category.id}"  onclick="return Confirm(this.id)"
+							th:href="@{/ledger/ledger_cat/delete/{id}(id=${category.id}) }"> <i
 								class="fa fa-trash-o"></i>
-						</a>
+						</a> -->
 					</td>
 				</tr>
 			</tbody>

@@ -7,13 +7,13 @@ import javax.validation.Valid;
 import org.calminfotech.ledger.boInterface.GLSetupBo;
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
 import org.calminfotech.ledger.boInterface.LedgerCatBo;
-import org.calminfotech.ledger.boInterface.TotAccBo;
+import org.calminfotech.ledger.boInterface.TotCodeBo;
 import org.calminfotech.ledger.forms.BankAccForm;
 import org.calminfotech.ledger.forms.LedgerAccForm;
 import org.calminfotech.ledger.models.BankAccount;
 import org.calminfotech.ledger.models.LedgerAccount;
 import org.calminfotech.ledger.models.LedgerCategory;
-import org.calminfotech.ledger.models.TotalingAccount;
+import org.calminfotech.ledger.models.TotalingCode;
 import org.calminfotech.user.utils.UserIdentity;
 import org.calminfotech.utils.Alert;
 import org.calminfotech.utils.models.Bank;
@@ -31,7 +31,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class GLSetupController {
 
 	@Autowired
-	private TotAccBo totAccBo;
+	private TotCodeBo totCodeBo;
 
 	@Autowired
 	private LedgerCatBo ledgerCatBo;
@@ -52,12 +52,12 @@ public class GLSetupController {
 	public String PandL(Model model){
 		
 
-		List<TotalingAccount> totalingAccounts = this.totAccBo.fetchAll();
+		List<TotalingCode> totalingCodes = this.totCodeBo.fetchAll();
 		List<LedgerCategory> ledgerCats = this.ledgerCatBo.fetchAll();
 		
 		model.addAttribute("account", new LedgerAccForm());
 		model.addAttribute("ledgerCats", ledgerCats);
-		model.addAttribute("totalingAccounts", totalingAccounts);
+		model.addAttribute("totalingAccounts", totalingCodes);
 		return "ledger/gen_ledger/setup/PandL";
 	}
 	

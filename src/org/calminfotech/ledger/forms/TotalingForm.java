@@ -6,17 +6,17 @@ public class TotalingForm {
 	
 	private String name;
 	
-	private String ledgerType;
+	private Integer ledgerType;
 	
 	private String code;
 	
 	private Integer isActive;
 	
-	public String getLedgerType() {
+	public Integer getLedgerType() {
 		return ledgerType;
 	}
 
-	public void setLedgerType(String ledgerType) {
+	public void setLedgerType(Integer ledgerType) {
 		this.ledgerType = ledgerType;
 	}
 

@@ -10,10 +10,18 @@
 		<a class="btn btn-xs btn-info" th:href="@{/ledger/ledger_acc/index}">
 			<i class="fa fa-home"></i> System Dashboard
 		</a> 
+		
 		<a class="btn btn-xs btn-primary" th:href="@{/ledger/ledger_acc/create}">
 			<i class="fa fa-plus-circle"></i> Add Account 
 		</a>
-	
+		
+		<a class="btn btn-xs btn-success" th:href="@{/ledger/ledger_cat/create}">
+			<i class="fa fa-plus-circle"></i> Add Category
+		</a>
+		
+		<a class="btn btn-xs btn-warning" th:href="@{/ledger/totaling/create}">
+			<i class="fa fa-plus-circle"></i> Add Totaling Code 
+		</a>
  		<span   id="imgId" hidden="hidden" > 
  			<img th:src="@{/resources/assets/images/ajax-loader.gif}" id="loading_img" />  
  		</span>      
@@ -50,16 +58,20 @@
 						
 					<td>
 					
-						<a class="btn btn-xs btn-warning tooltips"
-							title="Print GL report"
-							th:href="@{/ledger/ledger_acc/edit/{id} (id=${account.id}) }" ><i
-								class="fa fa-edit"></i>
+						<th:block th:if="${account.isEditable}">
+							<a class="btn btn-xs btn-warning tooltips"
+								title="Edit Item details"
+								th:href="@{/ledger/ledger_acc/edit/{id}(id=${account.id}) }"> <i
+									class="fa fa-edit"></i>
+							</a> 
+						</th:block>
+						
+						
+						 <a class="btn btn-xs btn-danger tooltips" 
+							title="Update Status"   th:id="${account.id}" 
+							th:href="@{/ledger/ledger_acc/status/{id}(id=${account.id}) }"> <i
+								class="fa fa-eye"></i>
 						</a> 
-						<a class="btn btn-xs btn-danger tooltips deleteBtn" 
-							title="Delete Item details"   th:id="${account.id}" 
-							href="#"> <i
-								class="fa fa-trash-o"></i>
-						</a>
 							<!-- <a class="btn btn-xs btn-primary tooltips"
 							title="view category details" 		
 							th:href="@{/ledger/ledger_acc/view/{id} (id=${account.id}) }"> <i

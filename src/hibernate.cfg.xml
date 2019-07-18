@@ -406,7 +406,7 @@
 		 <mapping class="org.calminfotech.ledger.models.LedgerCategory" />
 		 <mapping class="org.calminfotech.ledger.models.LedgerType" />
 		 <mapping class="org.calminfotech.ledger.models.PostCode" />
-		 <mapping class="org.calminfotech.ledger.models.TotalingAccount" />
+		 <mapping class="org.calminfotech.ledger.models.TotalingCode" />
 		 
 		 <mapping class="org.calminfotech.ledger.reports.models.AccChartEntry" />
 		 <mapping class="org.calminfotech.ledger.reports.models.BranchAccChart" />

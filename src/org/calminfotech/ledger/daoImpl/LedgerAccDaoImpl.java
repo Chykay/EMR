@@ -134,4 +134,33 @@ public class LedgerAccDaoImpl implements LedgerAccDao {
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public boolean isTotUsed(String code) {
+		List<LedgerAccount> ledgerAccounts = sessionFactory.getCurrentSession()
+				.createQuery(" from LedgerAccount WHERE  company_id = ? AND totaling_code = ?")
+				.setParameter(0, this.userIdentity.getOrganisation().getOrgCoy().getId())
+				.setParameter(1, code)
+				.list();
+		
+		if (ledgerAccounts.size() > 0)
+			return true;
+		
+		return false;
+	}
+
+	@SuppressWarnings("unchecked")
+	public boolean isUsed(String accountNo) {
+		List<LedgerAccount> ledgerAccounts = sessionFactory.getCurrentSession()
+				.createQuery(" from GLEntry WHERE  company_id = ? AND account_no = ?")
+				.setParameter(0, this.userIdentity.getOrganisation().getOrgCoy().getId())
+				.setParameter(1, accountNo)
+				.list();
+		
+		if (ledgerAccounts.size() > 0)
+			return true;
+		
+		return false;
+	}
+
 }

@@ -47,6 +47,10 @@ public class LedgerAccount extends CommonLedger{
 	
 	@Transient
 	private float amount;
+	
+
+	@Transient
+	public boolean isEditable;
 
 	public int getId() {
 		return id;
@@ -118,6 +122,10 @@ public class LedgerAccount extends CommonLedger{
 
 	public void setAmount(float amount) {
 		this.amount = amount;
+	}
+
+	public void setEditable(boolean isEditable) {
+		this.isEditable = isEditable;
 	}
 
 

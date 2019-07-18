@@ -119,4 +119,26 @@ public class LedgerAccBoImpl implements LedgerAccBo {
 	
 		return this.ledgerAccDao.getAssetLedgers();
 	}
+
+	@Override
+	public boolean isTotUsed(String code) {
+
+		return this.ledgerAccDao.isTotUsed(code);
+	}
+	
+	
+	public void updateStatus(LedgerAccount ledgerAccount) {
+
+		ledgerAccount.setIsActive(!ledgerAccount.getIsActive());
+		
+		
+		ledgerAccount.setModified_by(userIdentity.getUser());
+		ledgerAccount.setModify_date(new Date(System.currentTimeMillis()));
+		
+		this.ledgerAccDao.update(ledgerAccount);
+	}
+
+	public boolean isUsed(String accountNo) {
+		return this.ledgerAccDao.isUsed(accountNo);
+	}
 }
