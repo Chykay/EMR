@@ -128,7 +128,7 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 			gLEntry1.setProductID(glPostingForm.getPAccountNo());
 			gLEntry1.setAccountNo(customerGl);
 		} else {*/
-		gLEntry1.setBranch(this.organisationBo.getOrganisationById(glPostingForm.getPBranchID()).getId());
+		gLEntry1.setBranch(this.organisationBo.getOrganisationById(glPostingForm.getPBranchID()));
 		//}
 		
 		/*if (account2.equals("CA")) {
@@ -158,7 +158,7 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 			gLEntry2.setAccountNo(customerGl);
 		} else {*/
 			
-			gLEntry2.setBranch(this.organisationBo.getOrganisationById(glPostingForm.getRBranchID()).getId());
+			gLEntry2.setBranch(this.organisationBo.getOrganisationById(glPostingForm.getRBranchID()));
 		//}
 
 
@@ -187,10 +187,10 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		glEntry.setAmount(ledgerAccount.getAmount());
 		this.genLedgerDao.GLEntry(glEntry);
 		
-		this.updateGLBalance(ledgerAccount, glEntry.getBranch());
+		this.updateGLBalance(ledgerAccount, glEntry.getBranch().getId());
 
 		
-		if (glEntry.getBranch() != glEntry.getOrganisation().getId()) {
+		if (glEntry.getBranch().getId() != glEntry.getOrganisation().getId()) {
 			System.out.println("different branches: " + glEntry.getBranch() + " : " + glEntry.getOrganisation().getId());
 			System.out.println(Math.abs(glEntry.getAmount()));
 			glEntry.setAmount(Math.abs(glEntry.getAmount()));
@@ -290,7 +290,7 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 			gLEntry1.setAmount(amount);
 			/*System.out.println("amount three: " + this.getAmount(amount, sysAccountNo.charAt(0), "DR"));
 		*/}
-		gLEntry1.setOrganisation(this.organisationBo.getOrganisationById(glEntry.getBranch()));
+		gLEntry1.setOrganisation(glEntry.getBranch());
 		gLEntry1.setOrgCoy(this.userIdentity.getOrganisation().getOrgCoy());
 		gLEntry1.setBranch(glEntry.getBranch());
 		gLEntry1.setCreated_by(user);		
@@ -324,7 +324,7 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		*/}
 		gLEntry2.setOrganisation(glEntry.getOrganisation());
 		gLEntry2.setOrgCoy(this.userIdentity.getOrganisation().getOrgCoy());
-		gLEntry2.setBranch(glEntry.getOrganisation().getId());
+		gLEntry2.setBranch(glEntry.getOrganisation());
 		gLEntry2.setCreated_by(user);
 		gLEntry2.setCreate_date(new Date(System.currentTimeMillis()));
 		gLEntry2.setBatchNo(glEntry.getBatchNo());
@@ -368,7 +368,7 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 			GLEntry glEntry1 = new GLEntry();
 			glEntry1.setAccountNo(glEntry.getAccountNo());
 			glEntry1.setAmount(glEntry.getAmount());
-			glEntry1.setOrganisation(this.organisationBo.getOrganisationById(glEntry.getBranch()));
+			glEntry1.setOrganisation(glEntry.getBranch());
 			glEntry1.setOrgCoy(user.getOrganisation().getOrgCoy());
 			glEntry1.setBranch(glEntry.getBranch());
 			glEntry1.setCreated_by(user);		
@@ -447,7 +447,7 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 			GLEntry glEntry1 = new GLEntry();
 			glEntry1.setAccountNo(glEntry.getAccountNo());
 			glEntry1.setAmount(Math.abs(glEntry.getAmount()));
-			glEntry1.setOrganisation(this.organisationBo.getOrganisationById(glEntry.getBranch()));
+			glEntry1.setOrganisation(glEntry.getBranch());
 			glEntry1.setOrgCoy(user.getOrganisation().getOrgCoy());
 			glEntry1.setBranch(glEntry.getBranch());
 			glEntry1.setCreated_by(user);		

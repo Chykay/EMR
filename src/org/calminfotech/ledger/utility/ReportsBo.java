@@ -424,7 +424,6 @@ public class ReportsBo {
 		tbReport.setTotCredit(totCredit);
 		tbReport.setTotDebit(totDebit);
 		tbReport.setTotBalance(totCredit - totDebit);
-		tbReport.setBranchName(this.userIdentity.getOrganisation().getName());
 		tbReport.setCompanyName(this.userIdentity.getOrganisation().getOrgCoy().getName());
 		return tbReport;
 	}

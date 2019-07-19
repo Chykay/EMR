@@ -178,6 +178,6 @@ public class ReportsController {
 		
 		model.addAttribute("gLReport", this.reportsBo.GLReportCompany(company_id, accountNo));
 
-		return "ledger/reports/GL/report";
+		return "ledger/reports/GL/com_report";
 	}
 }

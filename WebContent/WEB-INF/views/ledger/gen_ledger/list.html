@@ -61,7 +61,7 @@
 					<th>Account Number</th>
 					<th>Amount</th>
 					<th>Post Code</th>
-					<th>Branch ID</th>
+					<th>Branch</th>
 					<th>Batch No</th>
 					<th>Ref No</th>
 					<th>Description</th>
@@ -76,7 +76,7 @@
 					<td th:text="${glEntry.accountNo}">Account Number</td>
 					<td th:text="${glEntry.amount}">Amount</td>
 					<td th:text="${glEntry.postCode}">Post Code</td>
-					<td th:text="${glEntry.branch}">Branch ID</td>
+					<td th:text="${glEntry.branch.name}">Branch ID</td>
 					<td th:text="${glEntry.batchNo}">Batch No</td>
 					<td th:text="${glEntry.refNo1}">Ref No</td>
 					<td th:text="${glEntry.description}">Description</td>
