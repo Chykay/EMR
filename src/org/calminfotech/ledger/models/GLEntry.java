@@ -7,10 +7,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+
+import org.calminfotech.system.models.Organisation;
 
 
 @Entity
@@ -39,8 +43,9 @@ public class GLEntry extends CommonLedger {
 	@Column(name="account_no")
 	private String accountNo;
 	
-	@Column(name="branch")
-	private Integer branch;
+	@ManyToOne
+	@JoinColumn(name="branch")
+	private Organisation branch;
 	
 	@Column(name="description")
 	private String description;
@@ -122,11 +127,12 @@ public class GLEntry extends CommonLedger {
 		this.description = description;
 	}
 
-	public Integer getBranch() {
+	
+	public Organisation getBranch() {
 		return branch;
 	}
 
-	public void setBranch(Integer branch) {
+	public void setBranch(Organisation branch) {
 		this.branch = branch;
 	}
 

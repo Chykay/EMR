@@ -4,7 +4,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.calminfotech.system.models.Organisation;
 
 @Entity
 @Table(name="GL_journal_entry")
@@ -20,8 +24,10 @@ public class JournalEntry extends CommonLedger {
 	@Column(name="account_no")
 	private String accountNo;
 	
-	@Column(name="branch_id")
-	private Integer branchID;
+	
+	@ManyToOne
+	@JoinColumn(name="branch_id")
+	private Organisation branch;
 	
 	@Column(name="post_code")
 	private String postCode;
@@ -62,12 +68,12 @@ public class JournalEntry extends CommonLedger {
 		this.accountNo = accountNo;
 	}
 
-	public Integer getBranchID() {
-		return branchID;
+	public Organisation getBranch() {
+		return branch;
 	}
 
-	public void setBranchID(Integer branchID) {
-		this.branchID = branchID;
+	public void setBranch(Organisation branch) {
+		this.branch = branch;
 	}
 
 	public String getPostCode() {
