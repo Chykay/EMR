@@ -16,6 +16,11 @@ public class TBReport {
 	private float totDebit;
 	
 	private float totBalance;
+	
+	private String branchName;
+	
+	private String companyName;
+
 
 	public String getName() {
 		return name;
@@ -56,5 +61,23 @@ public class TBReport {
 	public void setTotBalance(float totBalance) {
 		this.totBalance = totBalance;
 	}
+
+	public String getBranchName() {
+		return branchName;
+	}
+
+	public void setBranchName(String branchName) {
+		this.branchName = branchName;
+	}
+
+	public String getCompanyName() {
+		return companyName;
+	}
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
+	
+	
 	
 }

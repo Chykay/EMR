@@ -10,6 +10,10 @@ public class TrialBalEntry {
 	private float credit;
 	
 	private float debit;
+	
+	private String createDate;
+	
+	private String effectiveDate;
 
 	public Integer getId() {
 		return id;
@@ -52,6 +56,21 @@ public class TrialBalEntry {
 	public void setDebit(float debit) {
 		this.debit = debit;
 	}
-	
+
+	public String getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(String createDate) {
+		this.createDate = createDate;
+	}
+
+	public String getEffectiveDate() {
+		return effectiveDate;
+	}
+
+	public void setEffectiveDate(String effectiveDate) {
+		this.effectiveDate = effectiveDate;
+	}
 	
 }

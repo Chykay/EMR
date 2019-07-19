@@ -340,6 +340,9 @@ public class ReportsBo {
 		List<TrialBalEntry> trialBalEntries = new ArrayList<TrialBalEntry>();
 		float totDebit = 0, totCredit = 0;
 		List<GLEntry> glEntries = new ArrayList<GLEntry>();
+		
+		LedgerAccount ledgerAccount = this.ledgerAccBo.getLedgerByAccount_no(accountNo);
+		
 		try {
 			glEntries = this.genLedgerBo.getGLEntriesListing(accountNo, "", "2222-09-09");
 		} catch (LedgerException e) {
@@ -353,7 +356,8 @@ public class ReportsBo {
 			TrialBalEntry trialBalEntry = new TrialBalEntry();
 			trialBalEntry.setAccountNo(accountNo);
 			trialBalEntry.setName(glEntry.getName());
-			
+			trialBalEntry.setCreateDate(glEntry.getCreate_date().toString());
+			trialBalEntry.setEffectiveDate(glEntry.getPostingDate().toString());
 			
 			if (postCode.equals("DR")) {
 				trialBalEntry.setDebit(amount);
@@ -367,11 +371,61 @@ public class ReportsBo {
 			trialBalEntries.add(trialBalEntry);
 		}
 		
-		tbReport.setName(accountNo);
+		tbReport.setName(ledgerAccount.getName() + "( " + ledgerAccount.getAccountNo() +")");
 		tbReport.setEntries(trialBalEntries);
 		tbReport.setTotCredit(totCredit);
 		tbReport.setTotDebit(totDebit);
 		tbReport.setTotBalance(totCredit - totDebit);
+		tbReport.setBranchName(this.userIdentity.getOrganisation().getName());
+		tbReport.setCompanyName(this.userIdentity.getOrganisation().getOrgCoy().getName());
+		return tbReport;
+	}
+	
+
+
+	public TBReport GLReportCompany(Integer companyID, String accountNo) {
+		TBReport tbReport = new TBReport();
+		List<TrialBalEntry> trialBalEntries = new ArrayList<TrialBalEntry>();
+		float totDebit = 0, totCredit = 0;
+		List<GLEntry> glEntries = new ArrayList<GLEntry>();
+		
+		LedgerAccount ledgerAccount = this.ledgerAccBo.getLedgerByAccount_no(accountNo);
+		
+		try {
+			glEntries = this.genLedgerBo.getGLEntriesListingCom(accountNo, "", "2222-09-09");
+		} catch (LedgerException e) {
+			e.printStackTrace();
+		}
+		
+		for (GLEntry glEntry : glEntries) {
+			String postCode = glEntry.getPostCode();
+			float amount = Math.abs(glEntry.getAmount());
+			
+			TrialBalEntry trialBalEntry = new TrialBalEntry();
+			trialBalEntry.setAccountNo(accountNo);
+			trialBalEntry.setName(glEntry.getName());
+			trialBalEntry.setCreateDate(glEntry.getCreate_date().toString());
+			trialBalEntry.setEffectiveDate(glEntry.getPostingDate().toString());
+			
+			if (postCode.equals("DR")) {
+				trialBalEntry.setDebit(amount);
+				totDebit += amount;
+			} else {
+				trialBalEntry.setCredit(amount);
+				totCredit += amount;
+			}
+				
+			
+			trialBalEntries.add(trialBalEntry);
+		}
+		
+		tbReport.setName(ledgerAccount.getName() + "( " + ledgerAccount.getAccountNo() +")");
+		tbReport.setEntries(trialBalEntries);
+		tbReport.setTotCredit(totCredit);
+		tbReport.setTotDebit(totDebit);
+		tbReport.setTotBalance(totCredit - totDebit);
+		tbReport.setBranchName(this.userIdentity.getOrganisation().getName());
+		tbReport.setCompanyName(this.userIdentity.getOrganisation().getOrgCoy().getName());
 		return tbReport;
 	}
 	
@@ -423,4 +477,5 @@ public class ReportsBo {
 		}
 		return branchAccChart;
 	}
+
 }

@@ -28,7 +28,7 @@
 <br></br>
 <br></br>
 <br></br>
-<p style="float: center;"><h4>GL REPORT for: <span th:text="${gLReport.name}"></span> </h4></p>
+<p style="float: center;"><h4>GL REPORT for: <span th:text="${gLReport.name}"></span> <th:block th:text="|(Branch: ${gLReport.branchName}; Company: ${gLReport.companyName})|"></th:block></h4></p>
 
 	
 	
@@ -37,8 +37,9 @@
     <thead>
       <tr>
     				
+		<th>Create Date</th>
+		<th>Effective Date</th>
 		<th>Account No</th>
-		<th>Name</th>
 		<th>DR</th>
 		<th>CR</th>
 				
@@ -49,8 +50,9 @@
      	<tr th:each="reportEntry : *{gLReport.entries}">
  	
 					
+					<td th:text="${reportEntry.createDate}"></td> 
+					<td th:text="${reportEntry.effectiveDate}"></td> 
 					<td th:text="${reportEntry.accountNo}"></td> 
-					<td th:text="${reportEntry.name}"></td> 
 					<td th:text="${#numbers.formatDecimal(reportEntry.debit, 0, 'COMMA', 2, 'POINT')}" ></td>
 					<td th:text="${#numbers.formatDecimal(reportEntry.credit, 0, 'COMMA', 2, 'POINT')}" ></td>
 					

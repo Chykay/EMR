@@ -2,7 +2,9 @@ package org.calminfotech.ledger.reports;
 
 import java.util.List;
 
+import org.calminfotech.ledger.boInterface.LedgerAccBo;
 import org.calminfotech.ledger.boInterface.TotCodeBo;
+import org.calminfotech.ledger.models.LedgerAccount;
 import org.calminfotech.ledger.models.TotalingCode;
 import org.calminfotech.ledger.utility.ReportsBo;
 import org.calminfotech.system.boInterface.OrganisationBo;
@@ -26,6 +28,9 @@ public class ReportsController {
 	@Autowired
 	private Alert alert;
 */
+	@Autowired
+	private LedgerAccBo ledgerAccBo;
+	
 	@Autowired
 	private UserIdentity userIdentity;
 
@@ -142,11 +147,36 @@ public class ReportsController {
 	}
 	
 	
+	@Layout("layouts/datatable")
+	@RequestMapping(value = "/GL", method = RequestMethod.GET)
+	public String indexGL(Model model) {
+		Organisation org = userIdentity.getOrganisation();
+		System.out.println(org.getId() + " : " + org.getOrgCoy().getId());
+		
+		if (this.ledgerAccBo.fetchTop100(org.getOrgCoy().getId()) != null) {
+			List<LedgerAccount> ledgerAccounts = this.ledgerAccBo.fetchTop100(org.getOrgCoy().getId());
+			model.addAttribute("accounts", ledgerAccounts);
+		} 
+		
+		return "ledger/reports/GL/index";
+	}
+
+	
 	@Layout("layouts/reportblank")
 	@RequestMapping(value = "/GL/{accountNo}", method = RequestMethod.GET)
 	public String generalLedger(Model model, @PathVariable String accountNo) {
 		
 		model.addAttribute("gLReport", this.reportsBo.GLReport(accountNo));
+
+		return "ledger/reports/GL/report";
+	}
+
+	
+	@Layout("layouts/reportblank")
+	@RequestMapping(value = "/GL/{company_id}/{accountNo}", method = RequestMethod.GET)
+	public String generalLedgerCompany(Model model, @PathVariable Integer company_id, @PathVariable String accountNo) {
+		
+		model.addAttribute("gLReport", this.reportsBo.GLReportCompany(company_id, accountNo));
 
 		return "ledger/reports/GL/report";
 	}
