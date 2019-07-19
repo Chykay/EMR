@@ -486,6 +486,11 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 	public List<GLEntry> getGLEntriesListing(String account_no, String start_date, String end_date) throws LedgerException {
 		return this.genLedgerDao.getGLEntriesListing(account_no, start_date, end_date);
 	}
+	
+	@Override
+	public List<GLEntry> getGLEntriesListingCom(String account_no, String start_date, String end_date) throws LedgerException {
+		return this.genLedgerDao.getGLEntriesListingCom(account_no, start_date, end_date);
+	}
 
 	@Override
 	public List<CustomerEntry> getCustEntriesListing(String account_no, String start_date, String end_date) throws LedgerException {
@@ -500,5 +505,15 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		}
 		
 		return glEntries;
+	}
+
+	@Override
+	public List<GLEntry> getEntriesForGL(Integer org_id, String accountNo) {
+		return this.addNameToGLEntries(this.genLedgerDao.getEntriesForGL(org_id, accountNo));
+	}
+
+	@Override
+	public List<GLEntry> getEntriesForGLCompany(int company_id, String accountNo) {
+		return this.addNameToGLEntries(this.genLedgerDao.getEntriesForGLCompany(company_id, accountNo));
 	}
 }

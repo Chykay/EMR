@@ -114,6 +114,83 @@ public class GLPostingController {
 		return "/ledger/gen_ledger/list";
 	}
 	
+	@RequestMapping(value = {"/listings/{id}"}, method=RequestMethod.GET)
+	public String listingsGL(Model model, @PathVariable("id") String accountNo) {
+		
+		List<GLEntry> glEntries = null;
+		model.addAttribute("criteria", new LedgerListingForm());
+		try {
+			glEntries = this.genLedgerBo.getEntriesForGL(this.userIdentity.getOrganisation().getId(), accountNo);
+		} catch (LedgerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		model.addAttribute("glEntries", glEntries);
+		return "/ledger/gen_ledger/listGL";
+	}
+	
+	@RequestMapping(value = {"/listings/{id}"}, method=RequestMethod.POST)
+	public String postListingsGL(Model model, @PathVariable("id") String accountNo, @Valid @ModelAttribute("criteria") LedgerListingForm criteria) {
+		String start_date = criteria.getStartDate();
+		String end_date = criteria.getEndDate();
+		String account_no = accountNo;
+		
+		List<GLEntry>  glEntries = null;
+
+		System.out.println(account_no + " : " + start_date + " : " + end_date);
+		if (end_date.equals("")) end_date = "2999-01-01";
+		System.out.println(account_no + " : " + start_date + " : " + end_date);
+		try {
+			glEntries = this.genLedgerBo.getGLEntriesListing(account_no, start_date, end_date);
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.err.println("error oo");
+		}
+
+		model.addAttribute("criteria", criteria);
+		model.addAttribute("glEntries", glEntries);
+		
+		
+		return "/ledger/gen_ledger/listGL";
+	}
+	
+	@RequestMapping(value = {"/listings/{company_id}/{id}"}, method=RequestMethod.GET)
+	public String listingsGLCompany(Model model, @PathVariable("company_id") int company_id, @PathVariable("id") String accountNo) {
+		
+		List<GLEntry> glEntries = null;
+		model.addAttribute("criteria", new LedgerListingForm());
+		try {
+			glEntries = this.genLedgerBo.getEntriesForGLCompany(company_id, accountNo);
+		} catch (LedgerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		model.addAttribute("glEntries", glEntries);
+		return "/ledger/gen_ledger/listGL";
+	}
+	
+	@RequestMapping(value = {"/listings/{company_id}/{id}"}, method=RequestMethod.POST)
+	public String listingsGLCompany(Model model, @PathVariable("company_id") int company_id,  @PathVariable("id") String accountNo, @Valid @ModelAttribute("criteria") LedgerListingForm criteria) {
+		String start_date = criteria.getStartDate();
+		String end_date = criteria.getEndDate();
+		String account_no = accountNo;
+		
+		List<GLEntry>  glEntries = null;
+
+		if (end_date.equals("")) end_date = "2999-01-01";
+		try {
+			glEntries = this.genLedgerBo.getGLEntriesListingCom(account_no, start_date, end_date);
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.err.println("error oo");
+		}
+
+		model.addAttribute("criteria", criteria);
+		model.addAttribute("glEntries", glEntries);
+		
+		
+		return "/ledger/gen_ledger/listGL";
+	}
 	
 	/* REVERSE ENTRY */
 	@RequestMapping(value = {"/reversal/{batch_no}"}, method=RequestMethod.GET)

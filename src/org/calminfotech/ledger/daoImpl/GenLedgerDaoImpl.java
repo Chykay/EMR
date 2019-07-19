@@ -183,10 +183,28 @@ public class GenLedgerDaoImpl implements GenLedgerDao {
 
 		System.out.println("dao " + account_no + " : " + start_date + " : " + end_date);
 		List<GLEntry> entries = sessionFactory.getCurrentSession()
-				.createQuery("FROM GLEntry WHERE company_id = ? AND organisation_id = ? AND account_no like '%' + ? + '%'   AND posting_date >= '" + start_date + "'  AND posting_date < '" + end_date + "'")
+				.createQuery("FROM GLEntry WHERE company_id = ? AND organisation_id = ? AND account_no like '%' + ? + '%'   AND posting_date BETWEEN ? AND ?")
 				.setParameter(0, userIdentity.getOrganisation().getOrgCoy().getId())
 				.setParameter(1, userIdentity.getOrganisation().getId())
 				.setParameter(2, account_no)
+				.setParameter(3, start_date)
+				.setParameter(4, end_date)
+				/*
+				.setParameter(2, this.settingBo.fetchsettings("interbank-GLP", 2).getSettings_value())*/
+				.list();
+		
+		return entries;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<GLEntry> getGLEntriesListingCom(String account_no, String start_date, String end_date) {
+
+		System.out.println("dao " + account_no + " : " + start_date + " : " + end_date);
+		List<GLEntry> entries = sessionFactory.getCurrentSession()
+				.createQuery("FROM GLEntry WHERE company_id = ?  AND account_no like '%' + ? + '%'   AND posting_date >= '" + start_date + "'  AND posting_date < '" + end_date + "'")
+				.setParameter(0, userIdentity.getOrganisation().getOrgCoy().getId())
+				.setParameter(1, account_no)
 				/*
 				.setParameter(2, this.settingBo.fetchsettings("interbank-GLP", 2).getSettings_value())*/
 				.list();
@@ -206,6 +224,33 @@ public class GenLedgerDaoImpl implements GenLedgerDao {
 				.list();
 		
 		System.out.println(entries.size() + "what now");
+		return entries;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<GLEntry> getEntriesForGL(Integer org_id, String accountNo) {
+		List<GLEntry> entries = sessionFactory.getCurrentSession()
+				.createQuery("FROM GLEntry WHERE company_id = ? AND organisation_id = ? AND account_no = ? ")
+				.setParameter(0, userIdentity.getOrganisation().getOrgCoy().getId())
+				.setParameter(1, org_id)
+				.setParameter(2, accountNo)
+				.list();
+		
+		
+		return entries;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<org.calminfotech.ledger.models.GLEntry> getEntriesForGLCompany(int company_id, String accountNo) {
+		List<GLEntry> entries = sessionFactory.getCurrentSession()
+				.createQuery("FROM GLEntry WHERE company_id = ? AND account_no = ? ")
+				.setParameter(0, company_id)
+				.setParameter(1, accountNo)
+				.list();
+		
+		
 		return entries;
 	}
 }

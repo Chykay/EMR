@@ -31,4 +31,10 @@ public interface GenLedgerDao {
 	public List<GLEntry> getGLEntriesListing(String account_no, String start_date, String end_date);
 
 	public List<CustomerEntry> getCustEntriesListing(String account_no, String start_date, String end_date);
+
+	public List<GLEntry> getEntriesForGL(Integer org_id, String accountNo);
+
+	List<GLEntry> getGLEntriesListingCom(String account_no, String start_date, String end_date);
+
+	public List<GLEntry> getEntriesForGLCompany(int company_id, String accountNo);
 }
