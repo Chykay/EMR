@@ -7,9 +7,9 @@ import javax.validation.Valid;
 
 import org.calminfotech.ledger.boInterface.LedgerCatBo;
 import org.calminfotech.ledger.boInterface.CustomerAccBo;
-import org.calminfotech.ledger.boInterface.GenLedgerBo;
+import org.calminfotech.ledger.boInterface.LedgerPostingBo;
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
-import org.calminfotech.ledger.boInterface.TotCodeBo;
+import org.calminfotech.ledger.boInterface.LedgerTotallingBo;
 import org.calminfotech.ledger.forms.LedgerAccForm;
 import org.calminfotech.ledger.models.LedgerCategory;
 import org.calminfotech.ledger.models.CustomerAccount;
@@ -43,7 +43,7 @@ public class CustomerAccController {
 	private LedgerCatBo balSheetCatBo;
 
 	@Autowired
-	private TotCodeBo totCodeBo;
+	private LedgerTotallingBo ledgerTotallingBo;
 	
 	@Autowired
 	private Alert alert;
@@ -55,7 +55,7 @@ public class CustomerAccController {
 	private Auditor auditor;
 	
 	@Autowired
-	private GenLedgerBo genLedgerBo;
+	private LedgerPostingBo ledgerPostingBo;
 	
 	@Autowired
 	private CustomerAccBo customerAccBo;
@@ -64,7 +64,7 @@ public class CustomerAccController {
 	public String index(Model model) {
 		List<CustomerEntry> customerEntries = null;
 		try {
-			customerEntries = this.genLedgerBo.getCustEntries();
+			customerEntries = this.ledgerPostingBo.getCustEntries();
 		} catch (LedgerException e) {
 			e.printStackTrace();
 		}
@@ -91,7 +91,7 @@ public class CustomerAccController {
 			System.out.println(productType + "got here  2 : " );
 			List<CustomerEntry>  customerEntries = null;
 			try {
-				customerEntries = this.genLedgerBo.getCustEntriesListing(accountNo, startDate, endDate);
+				customerEntries = this.ledgerPostingBo.getCustEntriesListing(accountNo, startDate, endDate);
 			} catch (Exception e) {
 				// TODO: handle exception
 				System.err.println("error oo");
@@ -101,7 +101,7 @@ public class CustomerAccController {
 		
 		List<CustomerEntry>  customerEntries = null;
 		try {
-			customerEntries = this.genLedgerBo.getCustEntriesListing(accountNo, startDate, endDate);
+			customerEntries = this.ledgerPostingBo.getCustEntriesListing(accountNo, startDate, endDate);
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.err.println("error oo");
@@ -116,7 +116,7 @@ public class CustomerAccController {
 	public String GLReversal(@PathVariable("batchNo") String batchNo, Model model) {
 		
 		try {
-			this.genLedgerBo.CustReversal(batchNo);
+			this.ledgerPostingBo.CustReversal(batchNo);
 		} catch (LedgerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -138,7 +138,7 @@ public class CustomerAccController {
 	@RequestMapping(value = {"/create"}, method=RequestMethod.GET)
 	public String create(Model model) {		
 		
-		List<TotalingCode> totalingCodes = this.totCodeBo.fetchAll();
+		List<TotalingCode> totalingCodes = this.ledgerTotallingBo.fetchAll();
 		List<LedgerCategory> balSheetCats = this.balSheetCatBo.fetchAll();
 		
 		model.addAttribute("account", new LedgerAccForm());

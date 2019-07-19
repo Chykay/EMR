@@ -5,7 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.calminfotech.ledger.boInterface.TotCodeBo;
+import org.calminfotech.ledger.boInterface.LedgerTotallingBo;
 import org.calminfotech.ledger.daoImpl.LedgerTypesImpl;
 import org.calminfotech.ledger.forms.TotalingForm;
 import org.calminfotech.ledger.models.LedgerType;
@@ -26,10 +26,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping(value = "/ledger/totaling")
-public class TotCodeController {
+public class LedgerTotallingController {
 	
 	@Autowired
-	private TotCodeBo totCodeBo;
+	private LedgerTotallingBo ledgerTotallingBo;
 	
 	@Autowired
 	private Alert alert;
@@ -45,10 +45,10 @@ public class TotCodeController {
 	
 	@RequestMapping(value = {"/index"}, method=RequestMethod.GET)
 	public String indexTotaling(Model model) {
-		List<TotalingCode> totalingCodes = this.totCodeBo.fetchAll();
+		List<TotalingCode> totalingCodes = this.ledgerTotallingBo.fetchAll();
 		
 		for (TotalingCode totalingCode : totalingCodes) {
-			totalingCode.setEditable(!this.totCodeBo.isUsed(totalingCode));
+			totalingCode.setEditable(!this.ledgerTotallingBo.isUsed(totalingCode));
 		}
 		
 		model.addAttribute("totalingCodes", totalingCodes);
@@ -72,7 +72,7 @@ public class TotCodeController {
 			RedirectAttributes redirectAttributes) {
 		TotalingCode totalingCode = new TotalingCode();
 		try {
-			totalingCode = this.totCodeBo.save(totalingForm);
+			totalingCode = this.ledgerTotallingBo.save(totalingForm);
 		} catch (Exception e) {
 			
 			if(e instanceof ConstraintViolationException){
@@ -92,10 +92,10 @@ public class TotCodeController {
 	@RequestMapping(value = {"/edit/{id}"}, method=RequestMethod.GET)
 	public String update(Model model, @PathVariable int id, HttpServletRequest request) {
 
-		if (this.totCodeBo.isUsed(this.totCodeBo.getLedgerById(id))) {
+		if (this.ledgerTotallingBo.isUsed(this.ledgerTotallingBo.getLedgerById(id))) {
 			return "redirect:/ledger/totaling/index";
 		}
-		TotalingCode totalingCode = this.totCodeBo.getLedgerById(id);
+		TotalingCode totalingCode = this.ledgerTotallingBo.getLedgerById(id);
 		
 		TotalingForm totalingForm = new TotalingForm();
 		
@@ -125,7 +125,7 @@ public class TotCodeController {
 					
 			try{
 
-			TotalingCode totalingCode = this.totCodeBo.update(totalingForm, id);
+			TotalingCode totalingCode = this.ledgerTotallingBo.update(totalingForm, id);
 			this.auditor.after(request, "TotalingForm", totalingForm,
 					this.userIdentity.getUsername(), id);
 			
@@ -146,10 +146,10 @@ public class TotCodeController {
 	@RequestMapping(value = {"/status/{id}"}, method=RequestMethod.GET)
 	public String updateStatus(Model model, @PathVariable int id, HttpServletRequest request) {
 		
-		TotalingCode totalingCode = this.totCodeBo.getLedgerById(id);
+		TotalingCode totalingCode = this.ledgerTotallingBo.getLedgerById(id);
 		this.auditor.before(request, "TotalingCode", totalingCode);
 
-		this.totCodeBo.updateStatus(totalingCode);
+		this.ledgerTotallingBo.updateStatus(totalingCode);
 		
 		this.auditor.after(request, "TotalingCode", totalingCode,
 				this.userIdentity.getUsername(), id);

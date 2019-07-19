@@ -2,7 +2,7 @@ package org.calminfotech.ledger.daoImpl;
 
 import java.util.List;
 
-import org.calminfotech.ledger.daoInterface.GLSetupDao;
+import org.calminfotech.ledger.daoInterface.GLMappingDao;
 import org.calminfotech.ledger.models.BankAccount;
 import org.calminfotech.ledger.models.LedgerAccount;
 import org.calminfotech.system.models.Organisation;
@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class GLSetupDaoImpl implements GLSetupDao{
+public class GLMappingDaoImpl implements GLMappingDao{
 	
 	@Autowired
 	private SessionFactory sessionFactory;

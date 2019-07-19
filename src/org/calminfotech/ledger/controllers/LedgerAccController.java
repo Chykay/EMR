@@ -7,7 +7,7 @@ import javax.validation.Valid;
 
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
 import org.calminfotech.ledger.boInterface.LedgerCatBo;
-import org.calminfotech.ledger.boInterface.TotCodeBo;
+import org.calminfotech.ledger.boInterface.LedgerTotallingBo;
 import org.calminfotech.ledger.forms.LedgerAccForm;
 import org.calminfotech.ledger.models.LedgerAccount;
 import org.calminfotech.ledger.models.LedgerCategory;
@@ -38,7 +38,7 @@ public class LedgerAccController {
 	private LedgerCatBo ledgerCatBo;
 
 	@Autowired
-	private TotCodeBo totCodeBo;
+	private LedgerTotallingBo ledgerTotallingBo;
 	
 	@Autowired
 	private Alert alert;
@@ -79,7 +79,7 @@ public class LedgerAccController {
 	@RequestMapping(value = {"/create"}, method=RequestMethod.GET)
 	public String create(Model model) {		
 		
-		List<TotalingCode> totalingCodes = this.totCodeBo.fetchAllActive();
+		List<TotalingCode> totalingCodes = this.ledgerTotallingBo.fetchAllActive();
 		List<LedgerCategory> ledgerCats = this.ledgerCatBo.fetchAll();
 		
 		model.addAttribute("account", new LedgerAccForm());
@@ -120,7 +120,7 @@ public class LedgerAccController {
 		}
 		
 		LedgerAccount genLedger = this.ledgerAccBo.getLedgerById(id);
-		List<TotalingCode> totalingCodes = this.totCodeBo.fetchAllActive();
+		List<TotalingCode> totalingCodes = this.ledgerTotallingBo.fetchAllActive();
 		List<LedgerCategory> ledgerCats = this.ledgerCatBo.fetchAll();
 		
 		LedgerAccForm ledgerAccForm = new LedgerAccForm();

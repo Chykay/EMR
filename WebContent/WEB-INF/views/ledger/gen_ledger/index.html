@@ -93,20 +93,24 @@
 
 	jQuery(function($) {
 		var oTable1 = $('#dTable').dataTable({
-			bAutoWidth : false,
-			"aoColumns" : [ {
-				"bSortable" : true
-			},null,	null,
-			 {
-				"bSortable" : true
-			},	null,null,null,null
-		,null	
-			]
-
+		bAutoWidth : false
 		,
+		"aoColumns" : [ 
+		{ "bSortable" : true },
+		{ "bSortable" : true },
+		{ "bSortable" : true },
+		{ "bSortable" : true },
+		{ "bSortable" : true },
+		{ "bSortable" : true },
+		{ "bSortable" : true },
+		{ "bSortable" : true }
+
+
+		],
+
+		//,
 		//"sScrollY": "200px",
 		"bPaginate": true,
-
 		//"sScrollX": "100%",
 		//"sScrollXInner": "120%",
 		//"bScrollCollapse": true,
@@ -116,8 +120,7 @@
 		//"iDisplayLength": 50
 		});
 
-	});
-
+		});
 
 
 /*]]>*/

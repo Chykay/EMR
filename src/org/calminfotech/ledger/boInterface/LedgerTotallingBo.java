@@ -5,7 +5,7 @@ import java.util.List;
 import org.calminfotech.ledger.forms.TotalingForm;
 import org.calminfotech.ledger.models.TotalingCode;
 
-public interface TotCodeBo {
+public interface LedgerTotallingBo {
 	public List<TotalingCode> fetchAll();
 
 	public List<TotalingCode> fetchAllActive();

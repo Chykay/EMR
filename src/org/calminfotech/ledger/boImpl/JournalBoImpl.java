@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.calminfotech.ledger.boInterface.GenLedgerBo;
+import org.calminfotech.ledger.boInterface.LedgerPostingBo;
 import org.calminfotech.ledger.boInterface.JournalBo;
 import org.calminfotech.ledger.daoInterface.JournalDao;
 import org.calminfotech.ledger.models.GLEntry;
@@ -33,7 +33,7 @@ public class JournalBoImpl implements JournalBo{
 	private UserIdentity userIdentity;
 	
 	@Autowired
-	private GenLedgerBo genLedgerBo;
+	private LedgerPostingBo ledgerPostingBo;
 
 	@Autowired
 	private OrganisationBo organisationBo;
@@ -251,7 +251,7 @@ public class JournalBoImpl implements JournalBo{
 				gLEntry.setBranch(customerAccount.getOrganisation().getId());
 				gLEntry.setAccountNo(customerGl);
 			} */
-			this.genLedgerBo.GLEntry(gLEntry);
+			this.ledgerPostingBo.GLEntry(gLEntry);
 		}
 	}
 }

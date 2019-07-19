@@ -4,10 +4,10 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.calminfotech.ledger.boInterface.GLSetupBo;
+import org.calminfotech.ledger.boInterface.GLMappingBo;
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
 import org.calminfotech.ledger.boInterface.LedgerCatBo;
-import org.calminfotech.ledger.boInterface.TotCodeBo;
+import org.calminfotech.ledger.boInterface.LedgerTotallingBo;
 import org.calminfotech.ledger.forms.BankAccForm;
 import org.calminfotech.ledger.forms.LedgerAccForm;
 import org.calminfotech.ledger.models.BankAccount;
@@ -28,10 +28,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping(value = "/ledger/setup")
-public class GLSetupController {
+public class GLMappingController {
 
 	@Autowired
-	private TotCodeBo totCodeBo;
+	private LedgerTotallingBo ledgerTotallingBo;
 
 	@Autowired
 	private LedgerCatBo ledgerCatBo;
@@ -46,13 +46,13 @@ public class GLSetupController {
 	private UserIdentity userIdentity;
 
 	@Autowired
-	private GLSetupBo glSetupBo;
+	private GLMappingBo glSetupBo;
 	
 	@RequestMapping(value = {"/P_L"}, method=RequestMethod.GET)
 	public String PandL(Model model){
 		
 
-		List<TotalingCode> totalingCodes = this.totCodeBo.fetchAll();
+		List<TotalingCode> totalingCodes = this.ledgerTotallingBo.fetchAll();
 		List<LedgerCategory> ledgerCats = this.ledgerCatBo.fetchAll();
 		
 		model.addAttribute("account", new LedgerAccForm());

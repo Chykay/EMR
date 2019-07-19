@@ -3,9 +3,9 @@ package org.calminfotech.ledger.boImpl;
 import java.util.Date;
 import java.util.List;
 
-import org.calminfotech.ledger.boInterface.GLSetupBo;
+import org.calminfotech.ledger.boInterface.GLMappingBo;
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
-import org.calminfotech.ledger.daoInterface.GLSetupDao;
+import org.calminfotech.ledger.daoInterface.GLMappingDao;
 import org.calminfotech.ledger.forms.BankAccForm;
 import org.calminfotech.ledger.forms.LedgerAccForm;
 import org.calminfotech.ledger.models.BankAccount;
@@ -21,9 +21,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class GLSetupBoImpl implements GLSetupBo{
+public class GLMappingBoImpl implements GLMappingBo{
 	@Autowired
-	private GLSetupDao glSetupDao;
+	private GLMappingDao glSetupDao;
 	
 	@Autowired
 	private LedgerAccBo ledgerAccBo;

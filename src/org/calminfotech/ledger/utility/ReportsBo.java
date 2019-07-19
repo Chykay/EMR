@@ -3,8 +3,8 @@ package org.calminfotech.ledger.utility;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.calminfotech.ledger.boInterface.GLSetupBo;
-import org.calminfotech.ledger.boInterface.GenLedgerBo;
+import org.calminfotech.ledger.boInterface.GLMappingBo;
+import org.calminfotech.ledger.boInterface.LedgerPostingBo;
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
 import org.calminfotech.ledger.boInterface.LedgerCatBo;
 import org.calminfotech.ledger.forms.LedgerAccForm;
@@ -47,10 +47,10 @@ public class ReportsBo {
 	private LedgerCatBo ledgerCatBo;
 	
 	@Autowired
-	private GenLedgerBo genLedgerBo;
+	private LedgerPostingBo ledgerPostingBo;
 	
 	@Autowired
-	private GLSetupBo glSetupBo;
+	private GLMappingBo glSetupBo;
 
 	public BranchTB getBranchTB(int org_id) {
 		List<TrialBalEntry> trialBalEntries = new ArrayList<TrialBalEntry>();
@@ -295,7 +295,7 @@ public class ReportsBo {
 			accChartEntry.setAccountNo(ledgerAccount.getAccountNo());
 			accChartEntry.setAccChartEntries(new ArrayList<AccChartEntry>());
 			try {
-				balance = this.genLedgerBo.getBalance(ledgerAccount.getAccountNo(), ledgerAccount.getOrganisation().getId(), ledgerAccount.getOrgCoy().getId()).getCurrBalance();
+				balance = this.ledgerPostingBo.getBalance(ledgerAccount.getAccountNo(), ledgerAccount.getOrganisation().getId(), ledgerAccount.getOrgCoy().getId()).getCurrBalance();
 				accChartEntry.setTotBalance(balance);
 				
 				totBalance += balance;
@@ -344,7 +344,7 @@ public class ReportsBo {
 		LedgerAccount ledgerAccount = this.ledgerAccBo.getLedgerByAccount_no(accountNo);
 		
 		try {
-			glEntries = this.genLedgerBo.getGLEntriesListing(accountNo, "", "2222-09-09");
+			glEntries = this.ledgerPostingBo.getGLEntriesListing(accountNo, "", "2222-09-09");
 		} catch (LedgerException e) {
 			e.printStackTrace();
 		}
@@ -392,7 +392,7 @@ public class ReportsBo {
 		LedgerAccount ledgerAccount = this.ledgerAccBo.getLedgerByAccount_no(accountNo);
 		
 		try {
-			glEntries = this.genLedgerBo.getGLEntriesListingCom(accountNo, "", "2222-09-09");
+			glEntries = this.ledgerPostingBo.getGLEntriesListingCom(accountNo, "", "2222-09-09");
 		} catch (LedgerException e) {
 			e.printStackTrace();
 		}
@@ -458,9 +458,9 @@ public class ReportsBo {
 			ledgerID = this.ledgerAccBo.save(ledgerAccForm).getId();
 		}
 		try {
-			balance = this.genLedgerBo.getBalance(reserveGL.getAccountNo(), org.getId(), org.getOrgCoy().getId()).getCurrBalance();
+			balance = this.ledgerPostingBo.getBalance(reserveGL.getAccountNo(), org.getId(), org.getOrgCoy().getId()).getCurrBalance();
 			reserveGL.setAmount(reserve - balance);
-			this.genLedgerBo.updateGLBalance(reserveGL, org.getId());
+			this.ledgerPostingBo.updateGLBalance(reserveGL, org.getId());
 		} catch (LedgerException e) {
 			e.printStackTrace();
 		}

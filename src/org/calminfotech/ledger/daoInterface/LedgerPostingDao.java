@@ -7,7 +7,7 @@ import org.calminfotech.ledger.models.GLEntry;
 import org.calminfotech.ledger.models.GenLedgBalance;
 import org.calminfotech.ledger.models.JournalEntry;
 
-public interface GenLedgerDao {
+public interface LedgerPostingDao {
 	public GenLedgBalance getBalance(String account_no, int branch_id, int company_id);
 	
 	public void updateGLBalance(GenLedgBalance genLedgBalance);
