@@ -23,9 +23,10 @@
 
 
 <div>
-	<form role="form" class="form-horizontal" method="POST" style="margin-top:20px;"
-			th:object="${posting}">
-		<div class="col-md-5 col-md-offset-1">
+	<form role="form" class="form-horizontal" method="POST" style="margin-top:20px;" th:object="${posting}">
+		<div class="row">
+		
+			<div class="col-md-6">
 			
 				<!-- <div class="form-group">
 					<label for="pAccountType" class="col-sm-3 control-label no-padding-right">Account Type:</label>
@@ -40,35 +41,28 @@
 						</span>
 					</div>
 				</div> -->
-						
-							
+									
 				
 				<div class="form-group">
-							<label class="control-label col-sm-3 no-padding-right"
-								for="date-picker">Date from:</label>
+					<label class="control-label col-sm-3 no-padding-right" for="date-picker">Date from:</label>
 
-							<div class="col-xs-12 col-sm-9">
-								<div class="clearfix">
-
-									<input type="text" class="col-xs-10 col-sm-7 date-picker" 
-										id="date-picker-1" th:field="*{postingDate}"
-										data-date-format="yyyy-mm-dd" /> <span class="text-danger"
-										th:if="${#fields.hasErrors('postingDate')}" th:errors="postingDate"></span>
-
-								</div>
-							</div>
+					<div class="col-sm-9">
+						<div class="clearfix">
+							<input type="text"  th:field="*{postingDate}" class="col-xs-10 col-sm-7 date-picker" id="date-picker-1" data-date-format="yyyy-mm-dd" /> 
+						</div>
+					</div>
 				</div>
 				
 				<div class="form-group">
 					<label for="pAccountNo" class="col-sm-3 control-label no-padding-right">Posting Account:</label>
 					<div class="col-sm-9">
-						<!-- <input id="pAccountNoSearch"  name="pAccountNoSearch" class="col-xs-10 col-sm-7" style="margin-bottom:0px;" disabled="disabled"/>
-						<button class="pCustSearch" hidden="hidden">searcn</button> 
-						<br /> -->
+						
 						<select th:field="*{pAccountNo}" id="pAccountNo" size="" class="col-xs-10 col-sm-7" style="margin-top:0px;"  required="required">
-							<option th:each="generalLedger: ${generalLedgers}" 
-							th:value="${generalLedger.id}"
-							th:text="${generalLedger.name}"></option>
+							<option
+								th:each="generalLedger: ${generalLedgers}" 
+								th:value="${generalLedger.id}"
+								th:text="${generalLedger.name}">
+							</option>
 						</select>
 						<span class="text-danger" th:if="${#fields.hasErrors('pAccountNo')}"
 							th:errors="*{pAccountNo}">
@@ -81,128 +75,94 @@
 					<div class="col-sm-9">
 						<select th:field="*{pBranchID}" class="col-xs-10 col-sm-7"  required="required">
 							<option value="">Select..</option>
-								<option th:each="branch : ${branches}" 
-							th:value = "${branch.Id}" 
-							th:text="${branch.name}">Receiving Branch</option>
+							<option th:each="branch : ${branches}" 
+								th:value = "${branch.Id}" 
+								th:text="${branch.name}">Receiving Branch
+							</option>
 						</select>
 						<span class="text-danger" th:if="${#fields.hasErrors('pBranchID')}"
 							th:errors="*{pBranchID}">
 						</span>
 					</div>
-				</div>
+				</div>	
 				
 				
-		</div>
-		
-		
-		<div class="row">
-			<div class="col-md-6">
-				<div class="col-md-5 " style="">
-					<div class="form-group">
-						<label for="refNo1" class="col-sm-4 control-label  no-t no-padding-right">Ref No:</label>
-						<div class="col-sm-8">
-							<input type="text" class="col-xs-12 col-sm-12" placeholder="Ref No:"
-								th:field="*{refNo1}" required="required" /> <span
-								class="text-danger" th:if="${#fields.hasErrors('refNo1')}"
-								th:errors="*{refNo1}"></span>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-6">
-	    			<div class="form-group">
-						<label for="pBranchBal" class="col-sm-4 control-label no-padding-right  no-padding-left">Balance:</label>
-						<div class="col-sm-8">
-							<input type="text" class="col-xs-12 col-sm-12" 
-								th:field="*{pBranchBal}" readonly="readonly" /> <span
-								class="text-danger" th:if="${#fields.hasErrors('pBranchBal')}"
-								th:errors="*{pBranchBal}"></span>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-5 ">
-	    			<div class="form-group">
-						<label for="pPostCode" class="col-sm-5 control-label no-padding-right">Post Code:</label>
-						<div class="col-sm-7">
-							<select th:field="*{pPostCode}" class="col-xs-12 col-sm-12"  required="required" >
-								<option value="">Select..</option>
-									<option th:each="postCode: ${postCodes}" 
-								th:value = "${postCode.code}" 
-								th:text="${postCode.description}">Post Code</option>
-							</select>
-							<span class="text-danger" th:if="${#fields.hasErrors('pPostCode')}"
-								th:errors="*{pPostCode}">
-							</span>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-6">
-	    			<div class="form-group">
-						<label for="amount" class="col-sm-4 control-label no-padding-right">Amount:</label>
-						<div class="col-sm-8">
-							<input type="text" class="col-xs-12 col-sm-12" 
-								th:field="*{amount}"
-								oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"
-							disabled="disabled"/> <span
-								class="text-danger" th:if="${#fields.hasErrors('amount')}"
-								th:errors="*{amount}"></span>
-						</div>
+				<div class="form-group">
+					<label for="pBranchBal" class="col-sm-3 control-label no-padding-right  no-padding-left">Balance:</label>
+					<div class="col-sm-9">
+						<input type="text" class="col-xs-10 col-sm-7" 
+							th:field="*{pBranchBal}" readonly="readonly" /> <span
+							class="text-danger" th:if="${#fields.hasErrors('pBranchBal')}"
+							th:errors="*{pBranchBal}"></span>
 					</div>
 				</div>
 				
-				<div class="col-md-12">
-					<div class="form-group">
-						<div class="col-sm-9">
-						<!--  <label for="pDescription" class="col-sm-3 control-label no-padding-right">Description:</label>
-						-->
-							<textarea class="col-xs-10 col-sm-7" 
-								th:field="*{pDescription}"
-								th:value="${pDescription}"
-								onblur="setDesc()"  rows="4" style="width:220px"
-								placeholder="Description">
-							
-							</textarea>
-							<span
-								class="text-danger" th:if="${#fields.hasErrors('pDescription')}"
-								th:errors="*{pDescription}"></span>
-						</div>
-					</div>
-				</div>
 			</div>
-		</div>
 		
+			<div class="col-md-6">
+				<div class="form-group">
+					<label for="refNo1" class="col-sm-3 control-label  no-t no-padding-right">Ref No:</label>
+					<div class="col-sm-9">
+						<input type="text" class="col-xs-10 col-sm-7" placeholder="Ref No:"
+							th:field="*{refNo1}" required="required" /> <span
+							class="text-danger" th:if="${#fields.hasErrors('refNo1')}"
+							th:errors="*{refNo1}"></span>
+					</div>
+				</div>
+					
+				<div class="form-group">
+					<label for="pPostCode" class="col-sm-3 control-label no-padding-right">Post Code:</label>
+					<div class="col-sm-9">
+						<select th:field="*{pPostCode}" class="col-xs-10 col-sm-7"  required="required" >
+							<option value="">Select..</option>
+								<option th:each="postCode: ${postCodes}" 
+							th:value = "${postCode.code}" 
+							th:text="${postCode.description}">Post Code</option>
+						</select>
+						<span class="text-danger" th:if="${#fields.hasErrors('pPostCode')}"
+							th:errors="*{pPostCode}">
+						</span>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="amount" class="col-sm-3 control-label no-padding-right">Amount:</label>
+					<div class="col-sm-9">
+						<input type="text" class="col-xs-10 col-sm-7" 
+							th:field="*{amount}"
+							oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"
+							disabled="disabled"/> 
+						<span
+							class="text-danger" th:if="${#fields.hasErrors('amount')}"
+							th:errors="*{amount}"></span>
+					</div>
+				</div>
+			
+				<div class="form-group">
+					<label for="pDescription" class="col-sm-3 control-label no-padding-right">Description:</label>
+					<div class="col-sm-9">
+						<input type="text" class="col-xs-12 col-sm-12" 
+							th:field="*{pDescription}"
+							/> 
+					<span
+							class="text-danger" th:if="${#fields.hasErrors('pDescription')}"
+							th:errors="*{pDescription}"></span>
+					</div>
+					
+				</div>
+					
+			</div>
+		</div>		
 		
 		<div class="row" style="border-top: 3px double #E5E5E5;margin-bottom: 10px;"></div> 
 		
 		
 		<!-- RECEIVING BRANCH -->
-			<div class="col-md-5 col-md-offset-1">
-				<!-- <div class="form-group">
-					<label for="rAccountType" class="col-sm-3 control-label no-padding-right">Account Type:</label>
-					<div class="col-sm-9">
-						<select th:field="*{rAccountType}" size="" class="col-xs-10 col-sm-7" style="margin-top:0px;"  required="required">
-							<option value="">Select account type</option>
-							<option th:value="GA">GL</option>
-							<option th:value="CA">Customer</option>
-						</select>
-						<span class="text-danger" th:if="${#fields.hasErrors('rAccountType')}"
-							th:errors="*{rAccountType}">
-						</span>
-					</div>
-				</div> -->
-				 
+		<div class="row">
+			<div class="col-md-6">				 
 				<div class="form-group">
 					<label for="rAccountNo" class="col-sm-3 control-label no-padding-right">Account:</label>
 					<div class="col-sm-9">
-					<!-- <input id="rAccountNoSearch"  name="rAccountNoSearch" class="col-xs-10 col-sm-7" style="margin-bottom:0px;" onkeyup="filterR()" onblur="selectAccountR()" disabled="disabled"/> 
-					<button class="rCustSearch" hidden="hidden">searcn</button> 
-						<br /> -->
-						
-						<select th:field="*{rAccountNo}" size="" style="margin-top:0px;" class="col-xs-10 col-sm-7"  required="required" >
-							
-								<!-- <option th:each="generalLedger: ${generalLedgers}" 
-							th:value = "${generalLedger.accountNo}" 
-							th:text="|${generalLedger.accountNo}-${generalLedger.name} |">Account</option> -->
-						</select>
+						<select th:field="*{rAccountNo}" size="" style="margin-top:0px;" class="col-xs-10 col-sm-7"  required="required" ></select>
 						<span class="text-danger" th:if="${#fields.hasErrors('rAccountNo')}"
 							th:errors="*{rAccountNo}">
 						</span>
@@ -214,7 +174,7 @@
 					<div class="col-sm-9">
 						<select th:field="*{rBranchID}" class="col-xs-10 col-sm-7"  required="required">
 							<option value="">Select..</option>
-								<option th:each="branch : ${branches}" 
+							<option th:each="branch : ${branches}" 
 							th:value = "${branch.Id}" 
 							th:text="${branch.name}">Receiving Branch</option>
 						</select>
@@ -224,51 +184,37 @@
 					</div>
 				</div>	
 				
-				
-				
-				
-				
-		</div>
-		<div class="col-md-6">
-			<div class="row">	
-						
-				
-				<div class="col-md-5 " style="margin-left: 20px;padding:0;">
-					<div class="form-group">
-						<label for="rBranchBal" class="col-sm-4 control-label no-padding-right">Balance:</label>
-						<div class="col-sm-8">
-							<input type="text" class="col-xs-12 col-sm-12" 
-								th:field="*{rBranchBal}" readonly="readonly" /> <span
-								class="text-danger" th:if="${#fields.hasErrors('rBranchBal')}"
-								th:errors="*{rBranchBal}"></span>
-						</div>
+				<div class="form-group">
+					<label for="rBranchBal" class="col-sm-3 control-label no-padding-right">Balance:</label>
+					<div class="col-sm-9">
+						<input type="text" class="col-xs-10 col-sm-7" 
+							th:field="*{rBranchBal}" readonly="readonly" /> <span
+							class="text-danger" th:if="${#fields.hasErrors('rBranchBal')}"
+							th:errors="*{rBranchBal}"></span>
 					</div>
-	    			
 				</div>
-				<div class="col-md-6 no-padding-left">
-					<div class="form-group">
-						<label for="rPostCode" class="col-sm-5 control-label no-padding-right">Post Code:</label>
-						<div class="col-sm-7">
-							<select th:field="*{rPostCode}" class="col-xs-12 col-sm-12"  required="required">
-								<option value="">Select..</option>
-									<option th:each="postCode: ${postCodes}" 
+	    				
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					<label for="rPostCode" class="col-sm-3 control-label no-padding-right">Post Code:</label>
+					<div class="col-sm-9">
+						<select th:field="*{rPostCode}" class="col-xs-10 col-sm-7"  required="required">
+							<option value="">Select..</option>
+							<option th:each="postCode: ${postCodes}" 
 								th:value = "${postCode.code}" 
 								th:text="${postCode.description}">Post Code</option>
-							</select>
-							<span class="text-danger" th:if="${#fields.hasErrors('rPostCode')}"
-								th:errors="*{rPostCode}">
-							</span>
-						</div>
+						</select>
+						<span class="text-danger" th:if="${#fields.hasErrors('rPostCode')}"
+							th:errors="*{rPostCode}">
+						</span>
 					</div>
-	    			
 				</div>
-				
-			</div>
-				<div class="col-md-5" style="margin-left: 20px;padding:0;">
+	
 					<div class="form-group">
-						<label for="rAmount" class="col-sm-4 control-label no-padding-right">Amount:</label>
-						<div class="col-sm-8">
-							<input type="text" class="col-xs-12 col-sm-12" 
+						<label for="rAmount" class="col-sm-3 control-label no-padding-right">Amount:</label>
+						<div class="col-sm-9">
+							<input type="text" class="col-xs-10 col-sm-7" 
 								th:field="*{rAmount}"
 								th:value="${amount}"
 								readonly="readonly" /> <span
@@ -276,27 +222,25 @@
 								th:errors="*{rAmount}"></span>
 						</div>
 					</div>
-				</div>
-				
-				<div class="col-md-6">
+		
 					<div class="form-group">
-						<div class="col-sm-9 col-md-offset-2">
-						
-							<textarea class="col-xs-10 col-sm-5" 
+						<label for="rDescription" class="col-sm-3 control-label no-padding-right">Description:</label>
+						<div class="col-sm-9">
+							<input type="text" class="col-xs-12 col-sm-12" 
 								th:field="*{rDescription}"
-								th:value="${rDescription}" rows="4" style="width:220px"
-								placeholder="Description">
-							
-							</textarea>
-							<span
+								/> <span
 								class="text-danger" th:if="${#fields.hasErrors('rDescription')}"
 								th:errors="*{rDescription}"></span>
 						</div>
+						
 					</div>
-				</div>
-		</div>
+			</div>
 		
-		<input type="hidden" id="generalLedgerss" value="${generalLedgerss}" /> 
+		</div>
+		<!-- 
+		<input type="hidden" id="generalLedgerss" value="${generalLedgerss}" />  -->
+		
+		<div class="row" style="border-top: 3px double #E5E5E5;margin-bottom: 10px;"></div> 
 		
 		<div class="clearfix">
 			<div class="col-md-offset-4 col-md-6">
@@ -313,6 +257,3 @@
 </div>
 
 <script th:src="@{/resources/assets/js/custom-posting.js}"></script></th:block>
-<!-- <script type="text/javascript">
-
-</script> -->

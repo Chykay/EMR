@@ -2,7 +2,7 @@ package org.calminfotech.ledger.daoImpl;
 
 import java.util.List;
 
-import org.calminfotech.ledger.daoInterface.TotCodeDao;
+import org.calminfotech.ledger.daoInterface.LedgerTotallingDao;
 import org.calminfotech.ledger.models.TotalingCode;
 import org.calminfotech.user.utils.UserIdentity;
 import org.hibernate.SessionFactory;
@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional
-public class TotCodeDaoImpl implements TotCodeDao {
+public class LedgerTotallingDaoImpl implements LedgerTotallingDao {
 	
 	
 	@Autowired

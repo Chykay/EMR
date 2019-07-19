@@ -4,9 +4,9 @@ import java.util.Date;
 import java.util.List;
 
 import org.calminfotech.ledger.boInterface.CustomerAccBo;
-import org.calminfotech.ledger.boInterface.GenLedgerBo;
+import org.calminfotech.ledger.boInterface.LedgerPostingBo;
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
-import org.calminfotech.ledger.daoInterface.GenLedgerDao;
+import org.calminfotech.ledger.daoInterface.LedgerPostingDao;
 import org.calminfotech.ledger.forms.GLPostingForm;
 import org.calminfotech.ledger.models.CustomerEntry;
 import org.calminfotech.ledger.models.GLEntry;
@@ -26,10 +26,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class GenLedgerBoImpl implements GenLedgerBo{
+public class LedgerPostingBoImpl implements LedgerPostingBo{
 
 	@Autowired
-	private GenLedgerDao genLedgerDao;
+	private LedgerPostingDao ledgerPostingDao;
 	
 	@Autowired
 	private UserIdentity userIdentity;
@@ -55,7 +55,7 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 	
 	@Override
 	public GenLedgBalance getBalance(String account_no, int branch_id, int company_id)  throws LedgerException{
-		return this.genLedgerDao.getBalance(account_no, branch_id, company_id);
+		return this.ledgerPostingDao.getBalance(account_no, branch_id, company_id);
 	}
 	
 	@Override
@@ -185,7 +185,7 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		
 		
 		glEntry.setAmount(ledgerAccount.getAmount());
-		this.genLedgerDao.GLEntry(glEntry);
+		this.ledgerPostingDao.GLEntry(glEntry);
 		
 		this.updateGLBalance(ledgerAccount, glEntry.getBranch().getId());
 
@@ -208,7 +208,7 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 		
 		
 		genLedgBalance.setCurrBalance(ledgerAccount.getAmount() + genLedgBalance.getCurrBalance());
-		this.genLedgerDao.updateGLBalance(genLedgBalance);
+		this.ledgerPostingDao.updateGLBalance(genLedgBalance);
 		
 	}
 
@@ -338,15 +338,15 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 	
 	public boolean getLedgerStat(String account_no, int branch_id, int company_id) throws LedgerException{
 		
-		return this.genLedgerDao.getLedgerStat(account_no, branch_id, company_id);
+		return this.ledgerPostingDao.getLedgerStat(account_no, branch_id, company_id);
 	}
 	
 	public List<GLEntry> getGLEntries(int org_id) {
-		return this.addNameToGLEntries(this.genLedgerDao.getGLEntries(org_id));
+		return this.addNameToGLEntries(this.ledgerPostingDao.getGLEntries(org_id));
 	}
 
 	public List<GLEntry> getGLEntriesByBatch_no(String batch_no) {
-		return this.genLedgerDao.getGLEntriesByBatch_no(batch_no);
+		return this.ledgerPostingDao.getGLEntriesByBatch_no(batch_no);
 	}
 
 
@@ -363,7 +363,7 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 			glEntry.setRefNo2("REVERSED");
 			glEntry.setDescription("REVERSED-".concat(desc));
 			
-			this.genLedgerDao.GLEntry(glEntry);
+			this.ledgerPostingDao.GLEntry(glEntry);
 			
 			GLEntry glEntry1 = new GLEntry();
 			glEntry1.setAccountNo(glEntry.getAccountNo());
@@ -395,7 +395,7 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 	@Override
 	public List<CustomerEntry> getCustEntries() {
 
-		return this.genLedgerDao.getCustEntries();
+		return this.ledgerPostingDao.getCustEntries();
 	}
 
 	@Override
@@ -442,7 +442,7 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 			glEntry.setRefNo2("REVERSED");
 			glEntry.setDescription("REVERSED-".concat(desc));
 			
-			this.genLedgerDao.GLEntry(glEntry);
+			this.ledgerPostingDao.GLEntry(glEntry);
 			
 			GLEntry glEntry1 = new GLEntry();
 			glEntry1.setAccountNo(glEntry.getAccountNo());
@@ -474,27 +474,27 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 	}
 
 	private List<CustomerEntry> getCustEntriesByBatch_no(String batch_no) {
-		return this.genLedgerDao.getCustEntriesByBatch_no(batch_no);
+		return this.ledgerPostingDao.getCustEntriesByBatch_no(batch_no);
 	}
 
 	@Override
 	public List<JournalEntry> getJournalEntries() throws LedgerException {
-		return this.genLedgerDao.getJournalEntries();
+		return this.ledgerPostingDao.getJournalEntries();
 	}
 
 	@Override
 	public List<GLEntry> getGLEntriesListing(String account_no, String start_date, String end_date) throws LedgerException {
-		return this.genLedgerDao.getGLEntriesListing(account_no, start_date, end_date);
+		return this.ledgerPostingDao.getGLEntriesListing(account_no, start_date, end_date);
 	}
 	
 	@Override
 	public List<GLEntry> getGLEntriesListingCom(String account_no, String start_date, String end_date) throws LedgerException {
-		return this.genLedgerDao.getGLEntriesListingCom(account_no, start_date, end_date);
+		return this.ledgerPostingDao.getGLEntriesListingCom(account_no, start_date, end_date);
 	}
 
 	@Override
 	public List<CustomerEntry> getCustEntriesListing(String account_no, String start_date, String end_date) throws LedgerException {
-		return this.genLedgerDao.getCustEntriesListing(account_no, start_date, end_date);
+		return this.ledgerPostingDao.getCustEntriesListing(account_no, start_date, end_date);
 	}
 	
 	public List<GLEntry> addNameToGLEntries(List<GLEntry> glEntries) {
@@ -509,11 +509,11 @@ public class GenLedgerBoImpl implements GenLedgerBo{
 
 	@Override
 	public List<GLEntry> getEntriesForGL(Integer org_id, String accountNo) {
-		return this.addNameToGLEntries(this.genLedgerDao.getEntriesForGL(org_id, accountNo));
+		return this.addNameToGLEntries(this.ledgerPostingDao.getEntriesForGL(org_id, accountNo));
 	}
 
 	@Override
 	public List<GLEntry> getEntriesForGLCompany(int company_id, String accountNo) {
-		return this.addNameToGLEntries(this.genLedgerDao.getEntriesForGLCompany(company_id, accountNo));
+		return this.addNameToGLEntries(this.ledgerPostingDao.getEntriesForGLCompany(company_id, accountNo));
 	}
 }

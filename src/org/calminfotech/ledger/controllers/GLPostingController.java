@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.calminfotech.ledger.boInterface.GenLedgerBo;
+import org.calminfotech.ledger.boInterface.LedgerPostingBo;
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
 import org.calminfotech.ledger.daoImpl.PostCodeDaoImpl;
 import org.calminfotech.ledger.forms.GLPostingForm;
@@ -41,7 +41,7 @@ public class GLPostingController {
 	private OrganisationBo organisationBo;
 	
 	@Autowired
-	private GenLedgerBo genLedgerBo;
+	private LedgerPostingBo ledgerPostingBo;
 	
 	
 	@Autowired
@@ -68,12 +68,13 @@ public class GLPostingController {
 
 	
 	/* GET ALL GL ENTRIES*/
+	@Layout("layouts/datatable")
 	@RequestMapping(value = {"/index"}, method=RequestMethod.GET)
 	public String index(Model model) {		
 		
 		List<GLEntry> glEntries = null;
 		try {
-			glEntries = this.genLedgerBo.getGLEntries(this.userIdentity.getOrganisation().getId());
+			glEntries = this.ledgerPostingBo.getGLEntries(this.userIdentity.getOrganisation().getId());
 		} catch (LedgerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -81,14 +82,16 @@ public class GLPostingController {
 		model.addAttribute("glEntries", glEntries);
 		return "/ledger/gen_ledger/index";
 	}
-	
+
+	@Layout("layouts/datatable")
 	@RequestMapping(value = {"/listings"}, method=RequestMethod.GET)
 	public String listings(Model model) {
 		model.addAttribute("criteria", new LedgerListingForm());
 		model.addAttribute("glEntries");
 		return "/ledger/gen_ledger/list";
 	}
-	
+
+	@Layout("layouts/datatable")
 	@RequestMapping(value = {"/listings"}, method=RequestMethod.POST)
 	public String postListings(Model model, @Valid @ModelAttribute("criteria") LedgerListingForm criteria) {
 		String start_date = criteria.getStartDate();
@@ -101,7 +104,7 @@ public class GLPostingController {
 		if (end_date.equals("")) end_date = "2999-01-01";
 		System.out.println(account_no + " : " + start_date + " : " + end_date);
 		try {
-			glEntries = this.genLedgerBo.getGLEntriesListing(account_no, start_date, end_date);
+			glEntries = this.ledgerPostingBo.getGLEntriesListing(account_no, start_date, end_date);
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.err.println("error oo");
@@ -113,14 +116,15 @@ public class GLPostingController {
 		
 		return "/ledger/gen_ledger/list";
 	}
-	
+
+	@Layout("layouts/datatable")
 	@RequestMapping(value = {"/listings/{id}"}, method=RequestMethod.GET)
 	public String listingsGL(Model model, @PathVariable("id") String accountNo) {
 		
 		List<GLEntry> glEntries = null;
 		model.addAttribute("criteria", new LedgerListingForm());
 		try {
-			glEntries = this.genLedgerBo.getEntriesForGL(this.userIdentity.getOrganisation().getId(), accountNo);
+			glEntries = this.ledgerPostingBo.getEntriesForGL(this.userIdentity.getOrganisation().getId(), accountNo);
 		} catch (LedgerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -128,7 +132,8 @@ public class GLPostingController {
 		model.addAttribute("glEntries", glEntries);
 		return "/ledger/gen_ledger/listGL";
 	}
-	
+
+	@Layout("layouts/datatable")
 	@RequestMapping(value = {"/listings/{id}"}, method=RequestMethod.POST)
 	public String postListingsGL(Model model, @PathVariable("id") String accountNo, @Valid @ModelAttribute("criteria") LedgerListingForm criteria) {
 		String start_date = criteria.getStartDate();
@@ -141,7 +146,7 @@ public class GLPostingController {
 		if (end_date.equals("")) end_date = "2999-01-01";
 		System.out.println(account_no + " : " + start_date + " : " + end_date);
 		try {
-			glEntries = this.genLedgerBo.getGLEntriesListing(account_no, start_date, end_date);
+			glEntries = this.ledgerPostingBo.getGLEntriesListing(account_no, start_date, end_date);
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.err.println("error oo");
@@ -153,14 +158,15 @@ public class GLPostingController {
 		
 		return "/ledger/gen_ledger/listGL";
 	}
-	
+
+	@Layout("layouts/datatable")
 	@RequestMapping(value = {"/listings/{company_id}/{id}"}, method=RequestMethod.GET)
 	public String listingsGLCompany(Model model, @PathVariable("company_id") int company_id, @PathVariable("id") String accountNo) {
 		
 		List<GLEntry> glEntries = null;
 		model.addAttribute("criteria", new LedgerListingForm());
 		try {
-			glEntries = this.genLedgerBo.getEntriesForGLCompany(company_id, accountNo);
+			glEntries = this.ledgerPostingBo.getEntriesForGLCompany(company_id, accountNo);
 		} catch (LedgerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -168,7 +174,8 @@ public class GLPostingController {
 		model.addAttribute("glEntries", glEntries);
 		return "/ledger/gen_ledger/listGL";
 	}
-	
+
+	@Layout("layouts/datatable")
 	@RequestMapping(value = {"/listings/{company_id}/{id}"}, method=RequestMethod.POST)
 	public String listingsGLCompany(Model model, @PathVariable("company_id") int company_id,  @PathVariable("id") String accountNo, @Valid @ModelAttribute("criteria") LedgerListingForm criteria) {
 		String start_date = criteria.getStartDate();
@@ -179,7 +186,7 @@ public class GLPostingController {
 
 		if (end_date.equals("")) end_date = "2999-01-01";
 		try {
-			glEntries = this.genLedgerBo.getGLEntriesListingCom(account_no, start_date, end_date);
+			glEntries = this.ledgerPostingBo.getGLEntriesListingCom(account_no, start_date, end_date);
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.err.println("error oo");
@@ -197,13 +204,13 @@ public class GLPostingController {
 	public String GLReversal(@PathVariable("batch_no") String batch_no, Model model) {
 		
 		try {
-			this.genLedgerBo.GLReversal(batch_no);
+			this.ledgerPostingBo.GLReversal(batch_no);
 		} catch (LedgerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		return "/ledger/gen_ledger/index";
+		return "redirect:/ledger/gen_ledger/index";
 	}
 	
 	@Layout(value = "layouts/form_wizard_layout")
@@ -234,7 +241,7 @@ public class GLPostingController {
 
 					System.out.println("GLPostingController");
 					try {
-						this.genLedgerBo.GLPosting(glPostingForm);
+						this.ledgerPostingBo.GLPosting(glPostingForm);
 					} catch (LedgerException e) {
 						// TODO Auto-generated catch block
 						alert.setAlert(redirectAttributes, Alert.DANGER, e.getExceptionMsg());

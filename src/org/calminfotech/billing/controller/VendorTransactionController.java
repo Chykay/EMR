@@ -16,6 +16,8 @@ import org.calminfotech.hmo.boInterface.HmoPackageBo;
 import org.calminfotech.hmo.boInterface.HmoPackageItemBo;
 import org.calminfotech.hrunit.boInterface.HrunitCategoryBo;
 import org.calminfotech.hrunit.boInterface.StaffRegBoInterface;
+import org.calminfotech.inventory.exceptions.RecordNotFoundException;
+import org.calminfotech.inventory.serviceInterface.VendorManagerInterface;
 /*import org.calminfotech.inventory.exceptions.RecordNotFoundException;
 import org.calminfotech.inventory.models.Vendor;
 import org.calminfotech.inventory.serviceInterface.VendorManagerInterface;*/
@@ -63,9 +65,9 @@ public class VendorTransactionController {
 	@Autowired
 	private GlobalItemUnitofMeasureBo globalitemunitBo;
 
-/*	@Autowired
+	@Autowired
 	private VendorManagerInterface vendorBo;
-*/
+
 	@Autowired
 	private GlobalItemBo globalitemBo;
 
@@ -239,13 +241,16 @@ public class VendorTransactionController {
 		custtran.setEffectivedate(DateUtils.formatStringToDate(
 				tranform.getEffectivedate(), "yyyy-MM-dd HH:mm"));
 		custtran.setDescription(tranform.getDescription());
-		/*try {
+		try {
 			custtran.setVendor(this.vendorBo.getVendorDetailsById(tranform
 					.getVendorId()));
 		} catch (RecordNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
+
+			alert.setAlert(redirectAttributes, Alert.DANGER,
+					"Error saving Customer Information!");
+			// return "redirect:/invoice/invoicelist/" + payform.getVisitId();
+			return "redirect:/transaction/vendor";
+		}
 		custtran.setDrcr(tranform.getDrcr());
 
 		if (tranform.getDrcr().equalsIgnoreCase("dr")) {

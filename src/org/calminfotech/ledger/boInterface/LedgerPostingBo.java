@@ -10,7 +10,7 @@ import org.calminfotech.ledger.models.JournalEntry;
 import org.calminfotech.ledger.models.LedgerAccount;
 import org.calminfotech.ledger.utility.LedgerException;
 
-public interface GenLedgerBo {
+public interface LedgerPostingBo {
 	
 	public void GLPosting(GLPostingForm glPostingForm) throws LedgerException;
 	

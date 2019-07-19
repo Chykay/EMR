@@ -3,7 +3,7 @@ package org.calminfotech.ledger.reports;
 import java.util.List;
 
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
-import org.calminfotech.ledger.boInterface.TotCodeBo;
+import org.calminfotech.ledger.boInterface.LedgerTotallingBo;
 import org.calminfotech.ledger.models.LedgerAccount;
 import org.calminfotech.ledger.models.TotalingCode;
 import org.calminfotech.ledger.utility.ReportsBo;
@@ -38,7 +38,7 @@ public class ReportsController {
 	private Auditor auditor;
 	*/
 	@Autowired
-	private TotCodeBo totCodeBo;
+	private LedgerTotallingBo ledgerTotallingBo;
 
 	@Autowired
 	private ReportsBo reportsBo;
@@ -52,7 +52,7 @@ public class ReportsController {
 	@RequestMapping(value = "/sample", method = RequestMethod.GET)
 	public String listAll(Model model) {
 
-		List<TotalingCode> totalingCodes = this.totCodeBo.fetchAll();
+		List<TotalingCode> totalingCodes = this.ledgerTotallingBo.fetchAll();
 		
 		model.addAttribute("totalingAccounts", totalingCodes);
 		

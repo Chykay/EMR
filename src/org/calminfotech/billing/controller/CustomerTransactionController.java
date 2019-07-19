@@ -288,7 +288,7 @@ public class CustomerTransactionController {
 		custtran.setCode(new AutoGenerate().mygen());
 
 		if (tranform.getDrcr().equalsIgnoreCase("dr")) {
-			/*System.out
+			System.out
 					.print("asiri"
 							+ ((Double) custtran.getPatient().getMfig()
 									.get("totcustavailablebal") + tranform
@@ -305,7 +305,7 @@ public class CustomerTransactionController {
 			}
 
 			custtran.setAmount(tranform.getAmount());
-			custtran.setTrantype("withdrawal");*/
+			custtran.setTrantype("withdrawal");
 
 		} else {
 			custtran.setAmount(-tranform.getAmount());

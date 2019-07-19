@@ -3,7 +3,7 @@ package org.calminfotech.ledger.daoImpl;
 import java.util.Date;
 import java.util.List;
 
-import org.calminfotech.ledger.daoInterface.GenLedgerDao;
+import org.calminfotech.ledger.daoInterface.LedgerPostingDao;
 import org.calminfotech.ledger.models.CustomerEntry;
 import org.calminfotech.ledger.models.GLEntry;
 import org.calminfotech.ledger.models.GenLedgBalance;
@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class GenLedgerDaoImpl implements GenLedgerDao {
+public class LedgerPostingDaoImpl implements LedgerPostingDao {
 
 	@Autowired
 	private SessionFactory sessionFactory;

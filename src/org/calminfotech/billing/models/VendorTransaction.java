@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.calminfotech.inventory.models.Vendor;
 //import org.calminfotech.inventory.models.Vendor;
 import org.calminfotech.system.models.Organisation;
 import org.calminfotech.user.models.User;
@@ -247,6 +248,11 @@ public class VendorTransaction {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public void setVendor(Vendor vendorDetailsById) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

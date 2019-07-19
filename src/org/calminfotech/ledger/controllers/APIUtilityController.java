@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.calminfotech.ledger.boInterface.CustomerAccBo;
-import org.calminfotech.ledger.boInterface.GenLedgerBo;
+import org.calminfotech.ledger.boInterface.LedgerPostingBo;
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
 import org.calminfotech.ledger.models.CustomerEntry;
 import org.calminfotech.ledger.models.GLEntry;
@@ -38,7 +38,7 @@ public class APIUtilityController {
 	private LedgerAccBo ledgerAccBo;
 	
 	@Autowired
-	private GenLedgerBo genLedgerBo;
+	private LedgerPostingBo ledgerPostingBo;
 
 	@Autowired
 	private OrganisationBo organisationBo;
@@ -62,7 +62,7 @@ public class APIUtilityController {
 		} else {
 			OrganisationCompany org = this.organisationBo.getOrganisationById(branch_id).getOrgCoy();
 			try {
-				balance = String.valueOf(this.genLedgerBo.getBalance(account_no, branch_id, org.getId()).getCurrBalance());
+				balance = String.valueOf(this.ledgerPostingBo.getBalance(account_no, branch_id, org.getId()).getCurrBalance());
 				
 			} catch (LedgerException e) {
 				e.printStackTrace();
@@ -82,7 +82,7 @@ public class APIUtilityController {
 		Integer company_id = org.getOrgCoy().getId();
 		
 		try {
-			return Boolean.toString(this.genLedgerBo.getLedgerStat(account_no, branch_id, company_id));
+			return Boolean.toString(this.ledgerPostingBo.getLedgerStat(account_no, branch_id, company_id));
 		} catch (LedgerException e) {
 			e.printStackTrace();
 		}
@@ -113,7 +113,7 @@ public class APIUtilityController {
 			System.err.println("error oo");
 		if (end_date.equals("")) start_date = "2999-01-01";
 		try {
-			 glEntries = this.genLedgerBo.getGLEntriesListing(account_no, start_date, end_date);
+			 glEntries = this.ledgerPostingBo.getGLEntriesListing(account_no, start_date, end_date);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
@@ -149,7 +149,7 @@ public class APIUtilityController {
 		
 		List<CustomerEntry>  customerEntries = null;
 		try {
-			customerEntries = this.genLedgerBo.getCustEntriesListing(account_no, start_date, end_date);
+			customerEntries = this.ledgerPostingBo.getCustEntriesListing(account_no, start_date, end_date);
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.err.println("error oo");

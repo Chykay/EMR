@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.calminfotech.ledger.models.TotalingCode;
 
-public interface TotCodeDao {
+public interface LedgerTotallingDao {
 
 	public List<TotalingCode> fetchAll();
 

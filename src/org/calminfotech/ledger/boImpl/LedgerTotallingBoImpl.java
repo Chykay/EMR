@@ -4,8 +4,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
-import org.calminfotech.ledger.boInterface.TotCodeBo;
-import org.calminfotech.ledger.daoInterface.TotCodeDao;
+import org.calminfotech.ledger.boInterface.LedgerTotallingBo;
+import org.calminfotech.ledger.daoInterface.LedgerTotallingDao;
 import org.calminfotech.ledger.forms.TotalingForm;
 import org.calminfotech.ledger.models.LedgerType;
 import org.calminfotech.ledger.models.TotalingCode;
@@ -14,12 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class TotCodeBoImpl implements  TotCodeBo{
+public class LedgerTotallingBoImpl implements  LedgerTotallingBo{
 	public List<TotalingForm> totalingAccounts;
 	public TotalingForm totalingAccount;
 	
 	@Autowired
-	private TotCodeDao totCodeDao;
+	private LedgerTotallingDao ledgerTotallingDao;
 	
 	@Autowired
 	private UserIdentity userIdentity;
@@ -28,15 +28,15 @@ public class TotCodeBoImpl implements  TotCodeBo{
 	private LedgerAccBo ledgerAccBo;
 
 	public List<TotalingCode> fetchAll(){
-		return this.totCodeDao.fetchAll();
+		return this.ledgerTotallingDao.fetchAll();
 	}
 
 	public List<TotalingCode> fetchAllActive(){
-		return this.totCodeDao.fetchAllActive();
+		return this.ledgerTotallingDao.fetchAllActive();
 	}
 	
 	public TotalingCode getLedgerById(int id){
-		return this.totCodeDao.getLedgerById(id);
+		return this.ledgerTotallingDao.getLedgerById(id);
 	}
 	
 	public TotalingCode save(TotalingForm totalingForm){
@@ -63,12 +63,12 @@ public class TotCodeBoImpl implements  TotCodeBo{
 		totalingCode.setCreate_date(new Date(System.currentTimeMillis()));
 		totalingCode.setIs_deleted(false);
 		
-		this.totCodeDao.save(totalingCode);
+		this.ledgerTotallingDao.save(totalingCode);
 		return totalingCode;
 	}
 	
 	public void delete(TotalingCode totalingCode){
-		this.totCodeDao.delete(totalingCode);
+		this.ledgerTotallingDao.delete(totalingCode);
 	}
 	
 	public TotalingCode update(TotalingForm totalingForm, int id){
@@ -89,7 +89,7 @@ public class TotCodeBoImpl implements  TotCodeBo{
 		totalingCode.setModified_by(userIdentity.getUser());
 		totalingCode.setModify_date(new Date(System.currentTimeMillis()));
 
-		this.totCodeDao.update(totalingCode);
+		this.ledgerTotallingDao.update(totalingCode);
 		return totalingCode;
 		
 	}
@@ -102,7 +102,7 @@ public class TotCodeBoImpl implements  TotCodeBo{
 		totalingCode.setModified_by(userIdentity.getUser());
 		totalingCode.setModify_date(new Date(System.currentTimeMillis()));
 		
-		this.totCodeDao.update(totalingCode);
+		this.ledgerTotallingDao.update(totalingCode);
 		return totalingCode;
 	}
 
