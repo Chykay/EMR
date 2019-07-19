@@ -12,6 +12,7 @@ import org.calminfotech.ledger.models.JournalEntry;
 import org.calminfotech.ledger.models.JournalHeader;
 import org.calminfotech.ledger.utility.LedgerException;
 import org.calminfotech.ledger.utility.LedgerUtility;
+import org.calminfotech.system.boInterface.OrganisationBo;
 import org.calminfotech.user.utils.UserIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,15 +34,15 @@ public class JournalBoImpl implements JournalBo{
 	
 	@Autowired
 	private GenLedgerBo genLedgerBo;
+
+	@Autowired
+	private OrganisationBo organisationBo;
 	
 	/*@Autowired
 	private CustomerAccBo cAccBo;
 
 	@Autowired
 	private SettingBo settingBo;
-
-	@Autowired
-	private OrganisationBo organisationBo;
 
 	@Autowired
 	private LedgerAccBo ledgerAccBo;
@@ -152,7 +153,7 @@ public class JournalBoImpl implements JournalBo{
 			journalEntry.setAccountNo(jEntryObj.get("account_no").getAsString());
 			journalEntry.setAmount(Float.parseFloat(jEntryObj.get("amount").getAsString().replace(",", "")));
 			journalEntry.setPostCode(jEntryObj.get("post_code").getAsString());
-			journalEntry.setBranchID(Integer.parseInt(jEntryObj.get("branch_id").getAsString()));
+			journalEntry.setBranch(this.organisationBo.getOrganisationById(Integer.parseInt(jEntryObj.get("branch_id").getAsString())));
 			journalEntry.setRefNo(jEntryObj.get("ref_no").getAsString());
 			journalEntry.setDescription(jEntryObj.get("desc").getAsString());
 			journalEntry.setCreate_date(new Date(System.currentTimeMillis()));
@@ -217,7 +218,7 @@ public class JournalBoImpl implements JournalBo{
 			gLEntry.setBatchNo(batch_no);
 			gLEntry.setPostingDate(new Date(System.currentTimeMillis()));
 			gLEntry.setRef_no3(journalID);
-			gLEntry.setBranch(journalEntry.getBranchID());
+			gLEntry.setBranch(journalEntry.getBranch());
 			
 			/*if (journalEntry.getAccountType().contains("CA")) {
 				CustomerEntry customerEntry= new CustomerEntry();

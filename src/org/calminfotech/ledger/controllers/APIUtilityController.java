@@ -124,7 +124,7 @@ public class APIUtilityController {
 					+ glEntry.getAccountNo().concat("</td><td>") 
 					+ Float.toString(glEntry.getAmount()).concat("</td><td>") 
 					+ glEntry.getPostCode().concat("</td><td>") 
-					+ Integer.toString(glEntry.getBranch()).concat("</td><td>") 
+					+ Integer.toString(glEntry.getBranch().getId()).concat("</td><td>") 
 					+ glEntry.getBatchNo().concat("</td><td>") 
 					+ glEntry.getRefNo1().concat("</td><td>") 
 					+ glEntry.getDescription().concat("</td>");
