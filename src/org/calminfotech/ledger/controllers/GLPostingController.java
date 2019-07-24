@@ -4,8 +4,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.calminfotech.ledger.boInterface.LedgerPostingBo;
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
+import org.calminfotech.ledger.boInterface.LedgerPostingBo;
 import org.calminfotech.ledger.daoImpl.PostCodeDaoImpl;
 import org.calminfotech.ledger.forms.GLPostingForm;
 import org.calminfotech.ledger.forms.LedgerListingForm;
@@ -83,6 +83,63 @@ public class GLPostingController {
 		return "/ledger/gen_ledger/index";
 	}
 
+	@Layout(value = "layouts/form_wizard_layout")
+	@RequestMapping(value = {"/direct/post"}, method=RequestMethod.GET)
+	public String postGl(Model model) {		
+		Organisation org = userIdentity.getOrganisation();
+	
+		List<LedgerAccount> ledgerAccounts = this.ledgerAccBo.fetchPostingGLS(org.getOrgCoy().getId());
+		List<Organisation> branches = this.organisationBo.fetchAll(org.getOrgCoy().getId());
+		List<PostCode> postCodes = this.postCodeDaoImpl.fetchAll();
+
+		
+		model.addAttribute("posting", new GLPostingForm());
+		model.addAttribute("generalLedgers", ledgerAccounts);
+		model.addAttribute("postCodes", postCodes);
+		model.addAttribute("branches", branches);
+		return "/ledger/gen_ledger/direct/create";
+	}
+
+	
+	@RequestMapping(value = {"/direct/post"}, method=RequestMethod.POST)
+	public String postGl(@Valid @ModelAttribute("posting") GLPostingForm glPostingForm, BindingResult result, Model model,
+			RedirectAttributes redirectAttributes) {
+				
+		/* begin Transaction 
+		Transaction tx = sessionFactory.getCurrentSession().beginTransaction();*/
+				/*try {*/
+
+					System.out.println("GLPostingController");
+					try {
+						this.ledgerPostingBo.GLPosting(glPostingForm);
+					} catch (LedgerException e) {
+						// TODO Auto-generated catch block
+						alert.setAlert(redirectAttributes, Alert.DANGER, e.getExceptionMsg());
+					}
+/*					if (!tx.wasCommitted()){
+						tx.commit();
+					}
+				} catch (LedgerException e) {
+				    if(tx!=null){
+				        tx.rollback();
+				        System.out.println("Ledger Exception");
+				    }
+				    alert.setAlert(redirectAttributes, Alert.DANGER,
+							e.getExceptionMsg());
+
+				} catch (Exception e) {
+					 if(tx!=null){
+					        tx.rollback();
+					    }
+					 alert.setAlert(redirectAttributes, Alert.DANGER,
+								e.getMessage() + " exception");
+				}*/
+	
+		
+		return "redirect:/ledger/gen_ledger/index";
+	}
+	
+	
 	@Layout("layouts/datatable")
 	@RequestMapping(value = {"/listings"}, method=RequestMethod.GET)
 	public String listings(Model model) {
@@ -213,62 +270,7 @@ public class GLPostingController {
 		return "redirect:/ledger/gen_ledger/index";
 	}
 	
-	@Layout(value = "layouts/form_wizard_layout")
-	@RequestMapping(value = {"/direct/post"}, method=RequestMethod.GET)
-	public String postGl(Model model) {		
-		Organisation org = userIdentity.getOrganisation();
-	
-		List<LedgerAccount> ledgerAccounts = this.ledgerAccBo.fetchAll(org.getOrgCoy().getId());
-		List<Organisation> branches = this.organisationBo.fetchAll(org.getOrgCoy().getId());
-		List<PostCode> postCodes = this.postCodeDaoImpl.fetchAll();
 
-		
-		model.addAttribute("posting", new GLPostingForm());
-		model.addAttribute("generalLedgers", ledgerAccounts);
-		model.addAttribute("postCodes", postCodes);
-		model.addAttribute("branches", branches);
-		return "/ledger/gen_ledger/direct/create";
-	}
-
-	
-	@RequestMapping(value = {"/direct/post"}, method=RequestMethod.POST)
-	public String postGl(@Valid @ModelAttribute("posting") GLPostingForm glPostingForm, BindingResult result, Model model,
-			RedirectAttributes redirectAttributes) {
-				
-		/* begin Transaction 
-		Transaction tx = sessionFactory.getCurrentSession().beginTransaction();*/
-				/*try {*/
-
-					System.out.println("GLPostingController");
-					try {
-						this.ledgerPostingBo.GLPosting(glPostingForm);
-					} catch (LedgerException e) {
-						// TODO Auto-generated catch block
-						alert.setAlert(redirectAttributes, Alert.DANGER, e.getExceptionMsg());
-					}
-/*					if (!tx.wasCommitted()){
-						tx.commit();
-					}
-				} catch (LedgerException e) {
-				    if(tx!=null){
-				        tx.rollback();
-				        System.out.println("Ledger Exception");
-				    }
-				    alert.setAlert(redirectAttributes, Alert.DANGER,
-							e.getExceptionMsg());
-
-				} catch (Exception e) {
-					 if(tx!=null){
-					        tx.rollback();
-					    }
-					 alert.setAlert(redirectAttributes, Alert.DANGER,
-								e.getMessage() + " exception");
-				}*/
-	
-		
-		return "redirect:/ledger/gen_ledger/index";
-	}
-	
 	@RequestMapping(value = {"/direct/dummy"}, method=RequestMethod.POST)
 	public Object dummy(@RequestBody Object jsonObject){
 		

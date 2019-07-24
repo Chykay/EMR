@@ -29,6 +29,21 @@ public class LedgerAccDaoImpl implements LedgerAccDao {
 
 	@SuppressWarnings("unchecked")
 	public List<LedgerAccount> fetchAll(int company_id){
+		
+		
+		List<LedgerAccount> ledgerAccounts = sessionFactory.getCurrentSession()
+				.createQuery(" from LedgerAccount WHERE  company_id = ?")
+				.setParameter(0, company_id)
+				.list();
+		
+		if (ledgerAccounts.size() > 0)
+			return ledgerAccounts;
+		
+		return null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<LedgerAccount> fetchPostingGLS(int company_id){
 		List<String> interfaces = this.settingBo.fetchAllGLSettings(company_id);
 		
 		if (interfaces == null) {

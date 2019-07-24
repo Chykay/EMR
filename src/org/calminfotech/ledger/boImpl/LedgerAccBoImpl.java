@@ -22,12 +22,25 @@ public class LedgerAccBoImpl implements LedgerAccBo {
 	@Autowired
 	private UserIdentity userIdentity;
 	
-	
+
 	public List<LedgerAccount> fetchAll(int company_id){
 		List<LedgerAccount> list = null;
 		try {
 			
 			list = this.ledgerAccDao.fetchAll(company_id);	
+		} catch (Exception e) {
+			System.out.println("null");
+		}
+		
+		return list;
+	}
+	
+
+	public List<LedgerAccount> fetchPostingGLS(int company_id){
+		List<LedgerAccount> list = null;
+		try {
+			
+			list = this.ledgerAccDao.fetchPostingGLS(company_id);	
 		} catch (Exception e) {
 			System.out.println("null");
 		}
@@ -95,7 +108,7 @@ public class LedgerAccBoImpl implements LedgerAccBo {
 		
 		LedgerAccount ledgerAccount = this.ledgerAccDao.getLedgerById(id);
 		
-
+		System.out.println(ledgerAccForm.getAccountNo());
 		ledgerAccount.setCode(ledgerAccForm.getCode());
 		ledgerAccount.setTotalingCode(ledgerAccForm.getTotalingCode());
 		ledgerAccount.setAccountNo(ledgerAccForm.getAccountNo());

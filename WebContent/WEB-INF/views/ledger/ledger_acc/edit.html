@@ -22,20 +22,19 @@
 
 
 <div style="margin-top: 50px;">
-	<form role="form" class="form-horizontal" method="POST"
-			th:object="${ledgerAccForm}">
+	<form role="form" class="form-horizontal" method="POST" th:object="${ledgerAccForm}">
 			
 		<div class="form-group">
 			<label for="gender" class="col-sm-3 control-label no-padding-right">Totaling Account:</label>
 			<div class="col-sm-9">
 				<select th:field="*{totalingCode}" class="col-xs-10 col-sm-5"  required="required">
-					<option value="">Select..</option>
+					<option value="">Selectnn..</option>
 						<option th:each="totalingCode: ${totalingCodes}" 
 					th:value = "${totalingCode.code}" 
 					th:text="${totalingCode.ledgerType.id} + '-' + ${totalingCode.code} + '-' + ${totalingCode.name}">Totaling Code</option>
 				</select>
 				<span class="text-danger" th:if="${#fields.hasErrors('totalingCode')}"
-					th:errors="*{totalingCode}">
+					th:errors="${totalingCode}">
 				</span>
 			</div>
 		</div>
@@ -46,7 +45,7 @@
 				<input type="text" class="col-xs-10 col-sm-5" placeholder="code"
 					th:field="*{code}" required="required" /> <span
 					class="text-danger" th:if="${#fields.hasErrors('code')}"
-					th:errors="*{code}"></span>
+					th:errors="${code}"></span>
 			</div>
 		</div>
 		<div class="form-group">
@@ -55,7 +54,7 @@
 				<input type="text" class="col-xs-10 col-sm-5" placeholder="Name"
 					th:field="*{name}" required="required" /> <span
 					class="text-danger" th:if="${#fields.hasErrors('name')}"
-					th:errors="*{name}"></span>
+					th:errors="${name}"></span>
 			</div>
 		</div>
 		
@@ -64,25 +63,25 @@
 			<div class="col-sm-9">
 				<select th:field="*{ledgerCatID}" class="col-xs-10 col-sm-5"  required="required" id="bal_sheet_cat_id">
 					<option value="">Select..</option>
-						<option th:each="balSheetCat: ${balSheetCats}" 
-					th:value = "${balSheetCat.id}" 
-					th:text="${balSheetCat.name}">Balance Sheet Category</option>
+						<option th:each="ledgerCat: ${ledgerCats}" 
+					th:value = "${ledgerCat.id}" 
+					th:text="${ledgerCat.name}">Balance Sheet Category</option>
 				</select>
 				<span class="text-danger" th:if="${#fields.hasErrors('ledgerCatID')}"
-					th:errors="*{ledgerCatID}">
+					th:errors="${ledgerCatID}">
 				</span>
 			</div>
 		</div>
-		
 		<div class="form-group">
 			<label for="accountNo" class="col-sm-3 control-label no-padding-right">Account Number:</label>
 			<div class="col-sm-9">
 				<input type="text" class="col-xs-10 col-sm-5" placeholder="Account Number"
-					th:field="*{accountNo}" disabled="disabled" /> <span
+					th:field="*{accountNo}" readonly="readonly" /> <span
 					class="text-danger" th:if="${#fields.hasErrors('accountNo')}"
 					th:errors="*{accountNo}"></span>
 			</div>
 		</div>
+		
 
 		<div class="form-group">
 			<label for="gender" class="col-sm-3 control-label no-padding-right">Active Status:</label>
@@ -93,7 +92,7 @@
 					<option value="1">Active</option>
 				</select>
 				<span class="text-danger" th:if="${#fields.hasErrors('isActive')}"
-					th:errors="*{isActive}">
+					th:errors="${isActive}">
 				</span>
 			</div>
 		</div>
@@ -113,33 +112,48 @@
 </div>
 
 <script>
-	$(function() {
-		/* Form Account Number*/
-		$('#totalingCode').change(function(){
-			var selElement = $(this);
-			var optValue = selElement[0].selectedOptions[0].innerText;
-		
-			var code = $('#code')[0].value;
-			var splitOption = optValue.split("-");	
-			console.log(splitOption[0]);
-			var accountNo = splitOption[0] + "-" + splitOption[1] + "-" + code;
-			$('#accountNo')[0].value = accountNo;
-			});
-		
-		$('#code').blur(function(){
-			var code = $(this)[0].value;
-			
-			var optValue = $('#totalingCode')[0].selectedOptions[0].innerText;
-			if(optValue != '' || optValue != null){
-				var splitOption = optValue.split("-");	
-				
-				var accountNo = splitOption[0] + "-" + splitOption[1] + "-" + code;
-			} else {
-				accountNo = "-" + code;
-			}
-			$('#accountNo').attr('value', accountNo);
-		});
-		
-		})
+/*<![CDATA[*/
+$('#totalingCode').change(function(){
+	var selElement = $(this);
+	var optValue = selElement[0].selectedOptions[0].innerText;
+
+	var code = $('#code')[0].value;
+	var splitOption = optValue.split("-");
+	var accountNo = splitOption[0] + "-" + splitOption[1] + "-" + code;
+	$('#accountNo')[0].value = accountNo;
+	});
+
+
+$('#code').blur(function(){
+
+var code = this.value;
+
+if(code.length > 3) {
+	$.gritter.add({
+		title : "Invalid Action!",
+		text : "code cannot be MORE than 3 values",
+		time : 4000
+	}); 
+	code = "";
+	$('#code')[0].value = "";
+} else if (code.length < 3){
+
+	var x = 3 - code.length;
+	for(i=0; i<x; i++){
+		code = "0" + code;
+	}
+
+	$('#code')[0].value = code;
 	
+}
+
+var optValue = $('#totalingCode')[0].selectedOptions[0].innerText;
+
+var splitOption = optValue.split("-");	
+var accountNo = splitOption[0] + "-" + splitOption[1] + "-" + code;
+ 
+$('#accountNo')[0].value = accountNo;
+});
+
+/*]]>*/
 </script>
