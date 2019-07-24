@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.calminfotech.ledger.boInterface.GLMappingBo;
-import org.calminfotech.ledger.boInterface.LedgerPostingBo;
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
 import org.calminfotech.ledger.boInterface.LedgerCatBo;
+import org.calminfotech.ledger.boInterface.LedgerPostingBo;
 import org.calminfotech.ledger.forms.LedgerAccForm;
 import org.calminfotech.ledger.forms.LedgerCatForm;
 import org.calminfotech.ledger.models.GLEntry;
@@ -284,7 +284,7 @@ public class ReportsBo {
 		float totBalance = 0, balance;
 		
 		if (chartType.equals("balSheet")) {
-			childLedgers = this.reportsDao.getGLBalancesByParentR(parentID, "1", "2");
+			childLedgers = this.reportsDao.getGLBalancesByParentR(parentID, "1", "2", "3");
 		} else {
 			childLedgers = this.reportsDao.getGLBalancesByParent(parentID, "4", "5");
 		}

@@ -54,9 +54,9 @@ public class ReportsDao {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<LedgerAccount> getGLBalancesByParentR(Integer categoryID, String ledgerType1, String ledgerType2) {
+	public List<LedgerAccount> getGLBalancesByParentR(Integer categoryID, String ledgerType1, String ledgerType2, String ledgerType3) {
 		String hsql="SELECT A FROM LedgerAccount A "
-		+ "WHERE  ledgerCatID = ? AND organisation_id = ? AND company_id = ?  AND (account_no LIKE ''+ ? + '%' OR account_no LIKE ''+ ? + '%' OR account_no LIKE '6%')";
+		+ "WHERE  ledgerCatID = ? AND organisation_id = ? AND company_id = ?  AND (account_no LIKE ''+ ? + '%' OR account_no LIKE ''+ ? + '%' OR account_no LIKE ''+ ? + '%' OR account_no LIKE '6%')";
 		
 		
 		/*String hsql="SELECT A FROM LedgerAccount A, GenLedgBalance B "
@@ -68,7 +68,8 @@ public class ReportsDao {
 			.setParameter(1, userIdentity.getOrganisation().getId())
 			.setParameter(2, this.userIdentity.getOrganisation().getOrgCoy().getId())
 			.setParameter(3, ledgerType1)
-			.setParameter(4, ledgerType2);
+			.setParameter(4, ledgerType2)
+			.setParameter(5, ledgerType3);
 			
        List<LedgerAccount> list = (List<LedgerAccount>) query.list();  
        

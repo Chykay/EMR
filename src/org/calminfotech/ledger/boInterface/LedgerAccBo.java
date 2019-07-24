@@ -8,6 +8,8 @@ import org.calminfotech.ledger.models.LedgerAccount;
 
 public interface LedgerAccBo {
 	public List<LedgerAccount> fetchAll(int company_id);
+
+	public List<LedgerAccount> fetchPostingGLS(int company_id);
 	
 	public LedgerAccount getLedgerById(int id);
 	

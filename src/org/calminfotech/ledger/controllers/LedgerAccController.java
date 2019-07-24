@@ -54,8 +54,8 @@ public class LedgerAccController {
 		Organisation org = userIdentity.getOrganisation();
 		System.out.println(org.getId() + " : " + org.getOrgCoy().getId());
 		
-		if (this.ledgerAccBo.fetchTop100(org.getOrgCoy().getId()) != null) {
-			List<LedgerAccount> ledgerAccounts = this.ledgerAccBo.fetchTop100(org.getOrgCoy().getId());
+		if (this.ledgerAccBo.fetchAll(org.getOrgCoy().getId()) != null) {
+			List<LedgerAccount> ledgerAccounts = this.ledgerAccBo.fetchAll(org.getOrgCoy().getId());
 			
 			for (LedgerAccount ledgerAccount : ledgerAccounts) {
 				ledgerAccount.setEditable(!this.ledgerAccBo.isUsed(ledgerAccount.getAccountNo()));
@@ -82,7 +82,7 @@ public class LedgerAccController {
 		List<TotalingCode> totalingCodes = this.ledgerTotallingBo.fetchAllActive();
 		List<LedgerCategory> ledgerCats = this.ledgerCatBo.fetchAll();
 		
-		model.addAttribute("account", new LedgerAccForm());
+		model.addAttribute("ledgerAccForm", new LedgerAccForm());
 		model.addAttribute("ledgerCats", ledgerCats);
 		model.addAttribute("totalingCodes", totalingCodes);
 		return "/ledger/ledger_acc/create";
@@ -90,7 +90,7 @@ public class LedgerAccController {
 	
 	
 	@RequestMapping(value = {"/create"}, method=RequestMethod.POST)
-	public String create(@Valid @ModelAttribute("account") LedgerAccForm ledgerAccForm, BindingResult result, Model model,
+	public String create(@Valid @ModelAttribute("ledgerAccForm") LedgerAccForm ledgerAccForm, BindingResult result, Model model,
 			RedirectAttributes redirectAttributes) {
 		LedgerAccount account = new LedgerAccount();
 		try {
@@ -124,6 +124,7 @@ public class LedgerAccController {
 		List<LedgerCategory> ledgerCats = this.ledgerCatBo.fetchAll();
 		
 		LedgerAccForm ledgerAccForm = new LedgerAccForm();
+		ledgerAccForm.setTotalingCode(genLedger.getTotalingCode());
 		ledgerAccForm.setName(genLedger.getName());
 		ledgerAccForm.setCode(genLedger.getCode());
 		ledgerAccForm.setAccountNo(genLedger.getAccountNo());
@@ -143,11 +144,12 @@ public class LedgerAccController {
 	}
 	
 	@RequestMapping(value = {"/edit/{id}"}, method=RequestMethod.POST)
-	public String update(@Valid @ModelAttribute("account") LedgerAccForm ledgerAccForm, BindingResult result, Model model,
+	public String update(@Valid @ModelAttribute("ledgerAccForm") LedgerAccForm ledgerAccForm, BindingResult result, Model model,
 			RedirectAttributes redirectAttributes, @PathVariable int id, HttpServletRequest request) {
-				
-		try{
 
+		System.out.println(ledgerAccForm.getTotalingCode() + "kolade");
+		System.out.println(ledgerAccForm.getAccountNo() + "kolade");
+		try{
 		LedgerAccount genLedger = this.ledgerAccBo.update(ledgerAccForm, id);
 		this.auditor.after(request, "GenLedgerForm", ledgerAccForm,
 				this.userIdentity.getUsername(), id);
@@ -158,13 +160,14 @@ public class LedgerAccController {
 
 		model.addAttribute("account", genLedger);
 		} catch(Exception e) {
+			e.printStackTrace();
 			alert.setAlert(redirectAttributes, Alert.DANGER,
 					" Failed! FAILED Editing! GeneralLedger id:  " + id + " Error: " + e.getMessage()
 							);
 			
 		}
 
-		return "redirect:/ledger/ledger_acc/view/" + id;
+		return "redirect:/ledger/ledger_acc/index";
 	}
 	
 	@RequestMapping(value = {"/status/{id}"}, method=RequestMethod.GET)
