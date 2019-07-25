@@ -4,10 +4,9 @@ import java.util.List;
 
 public class TBReport {
 
-	private Integer id;
+	// private Integer id;
 
 	private String name;
-	
 
 	private List<TrialBalEntry> entries;
 	

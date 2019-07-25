@@ -6,8 +6,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.calminfotech.ledger.boInterface.CustomerAccBo;
-import org.calminfotech.ledger.boInterface.LedgerPostingBo;
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
+import org.calminfotech.ledger.boInterface.LedgerPostingBo;
 import org.calminfotech.ledger.models.CustomerEntry;
 import org.calminfotech.ledger.models.GLEntry;
 import org.calminfotech.ledger.models.LedgerAccount;
@@ -95,7 +95,7 @@ public class APIUtilityController {
 		Organisation org = this.userIdentity.getOrganisation();
 		
 		String accounts = "";
-			List<LedgerAccount> ledgerAccounts = this.ledgerAccBo.fetchAll(org.getOrgCoy().getId());
+			List<LedgerAccount> ledgerAccounts = this.ledgerAccBo.fetchPostingGLS(org.getOrgCoy().getId());
 			
 			for (LedgerAccount ledgerAccount : ledgerAccounts) {
 				accounts += "<option value='" + ledgerAccount.getAccountNo() + "'>"

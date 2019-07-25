@@ -4,7 +4,6 @@ import java.util.List;
 
 //@org.hibernate.annotations.Entity(dynamicInsert = true)
 public class AccChartEntry {
-	//@Id
 	private Integer id;
 	
 	private String name;

@@ -49,6 +49,8 @@ public class LedgerAccDaoImpl implements LedgerAccDao {
 		if (interfaces == null) {
 			interfaces = new ArrayList<String>();
 			interfaces.add("0-0000-000");
+		} else {
+			System.out.println("nut null");
 		}
 		
 		List<LedgerAccount> ledgerAccounts = sessionFactory.getCurrentSession()

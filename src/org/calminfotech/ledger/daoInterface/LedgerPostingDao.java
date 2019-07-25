@@ -37,4 +37,6 @@ public interface LedgerPostingDao {
 	List<GLEntry> getGLEntriesListingCom(String account_no, String start_date, String end_date);
 
 	public List<GLEntry> getEntriesForGLCompany(int company_id, String accountNo);
+
+	public GenLedgBalance getBalanceCompany(String account_no, int company_id);
 }
