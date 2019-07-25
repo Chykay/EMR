@@ -413,8 +413,7 @@
 		 <mapping class="org.calminfotech.ledger.models.TotalingCode" />
 		 
 		 <mapping class="org.calminfotech.ledger.reports.models.AccChartEntry" />
-		 <mapping class="org.calminfotech.ledger.reports.models.BranchAccChart" />
-		 <mapping class="org.calminfotech.ledger.reports.models.CompanyAccChart" />
+		 <mapping class="org.calminfotech.ledger.reports.models.AccChartReport" />
 		 <mapping class="org.calminfotech.ledger.reports.models.TBReport" />
 		 <mapping class="org.calminfotech.ledger.reports.models.TrialBalEntry" />
 		 

@@ -24,9 +24,8 @@ public class GLMappingDaoImpl implements GLMappingDao{
 	@SuppressWarnings("unchecked")
 	public LedgerAccount getReserveGL() {
 		List<LedgerAccount> ledgerAccounts = sessionFactory.getCurrentSession()
-				.createQuery(" from LedgerAccount WHERE organisation_id = ? AND company_id = ? AND account_no LIKE '6%'")
-				.setParameter(0, this.userIdentity.getOrganisation().getId())
-				.setParameter(1, this.userIdentity.getOrganisation().getOrgCoy().getId())
+				.createQuery(" from LedgerAccount WHERE company_id = ? AND account_no LIKE '6%'")
+				.setParameter(0, this.userIdentity.getOrganisation().getOrgCoy().getId())
 				.list();
 		
 		if (ledgerAccounts.size() > 0)

@@ -11,7 +11,7 @@
 
 
 
-<div class="container" id="printableArea"   xmlns:th="http://www.thymeleaf.org">
+<div class="container" id="printableArea"  xmlns:th="http://www.thymeleaf.org">
 
   <span style="float: left;"> 
 								<img th:if="${@userIdentity.getOrganisation().getOrgCoy().getLogo() == null}" id="avatar2"
@@ -23,20 +23,12 @@
 									alt="" class="img-responsive" style="width:100px; height:100px"/>
 								</span>
 
-<div style="padding-top: 25px">  <span style="float: left;"> <h2><span th:text="${@userIdentity.getOrganisation().getOrgCoy().getName()}"></span></h2> </span></div>
+<div style="padding-top: 25px">  <th:block style="float: left;"> <h2><span th:text="${@userIdentity.getOrganisation().getOrgCoy().getName()}"></span></h2> </th:block></div>
 <br></br>
-<br></br>
-<br></br>
-<br></br>
-<p style="float: center;"><h4>P and L For <span th:text="${companyPL.name}"></span></h4></p>
-
-	
-	
-<th:block th:each=" branchPL : ${companyPL.branchAccCharts}">
-
-  <p style="float: center;"><h4>P and L For <span th:text="${branchPL.name}"></span></h4></p>
-
-
+<th:block style="float: center;">
+	<h4>Profit and Loss as at <th:block th:text="${#dates.format(#dates.createNow(), 'dd MMM yyyy')}"></th:block> For: <th:block th:text="${companyPL.companyName}"></th:block> 
+	</h4>
+</th:block>
 <table class="table table-condensed" id="printtable">
     <thead>
       <tr>
@@ -49,12 +41,37 @@
       </tr>
     </thead>
     <tbody>
-
-     <th:block th:replace="ledger/reports/P_L/branchFragment :: branch(PandLList=${branchPL.accChartEntries}, margin=0)">P and L</th:block>
-
-
+     <th:block th:replace="ledger/reports/P_L/branchFragment :: branch(PandLList=${companyPL.accChartEntries}, margin=0)">P and L</th:block>
+	
+	<tr>
+		
+	    <th:block th:if="${companyPL.balance} > 0">
+		    <td colspan="2">
+				<b>TOTAL PROFIT</b>
+			</td>
+			<td><b th:text="${#numbers.formatDecimal(companyPL.balance, 0, 'COMMA', 2, 'POINT')}" style="color: blue;"></b></td>
+		</th:block>
+	    <th:block th:unless="${companyPL.balance} > 0">
+	    	<td colspan="2">
+				TOTAL LOSS
+			</td>
+			<td><b th:text="${#numbers.formatDecimal(companyPL.balance, 0, 'COMMA', 2, 'POINT')}" style="color: red;"></b></td>
+		</th:block>
+		
+	</tr>	
     </tbody>
   </table>
-</th:block>
-  </div>
+<!-- 
+<div th:switch="${companyPL.name}">
+    <span th:case="'Calm 1'"> User is a manager</span>
+    <span th:case="*"> Not a man</span>
+    
+</div>
+
+
+
+<div th:replace="ledger/reports/P_L/branchFragment :: branch(PandLList=${companyPL.accChartEntries})">Sidebar</div>
+
+ -->
+</div>
   	

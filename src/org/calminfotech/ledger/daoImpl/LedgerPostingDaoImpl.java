@@ -9,6 +9,7 @@ import org.calminfotech.ledger.models.GLEntry;
 import org.calminfotech.ledger.models.GenLedgBalance;
 import org.calminfotech.ledger.models.JournalEntry;
 import org.calminfotech.system.boInterface.OrganisationBo;
+import org.calminfotech.system.models.Organisation;
 import org.calminfotech.user.utils.UserIdentity;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +27,6 @@ public class LedgerPostingDaoImpl implements LedgerPostingDao {
 	@Autowired
 	private OrganisationBo organisationBo;
 
-	
-
 	@SuppressWarnings("unchecked")
 	public GenLedgBalance getBalance(String account_no, int branch_id, int company_id) {
 		List<GenLedgBalance> balance = sessionFactory.getCurrentSession()
@@ -37,10 +36,14 @@ public class LedgerPostingDaoImpl implements LedgerPostingDao {
 				.setParameter(2, company_id)
 				.list();
 				
-		if (balance.size() > 0)
+		if (balance.size() > 0){
+			System.out.println("STOP IT");
+			System.out.println(balance.get(0).getCurrBalance() + "KDKD" + account_no);
 			return (GenLedgBalance) balance.get(0);
+		}
 		
 
+		System.out.println("NONSTOP IT");
 		GenLedgBalance genLedgBalance = new GenLedgBalance();
 		
 		genLedgBalance.setCreate_date(new Date(System.currentTimeMillis()));
@@ -48,6 +51,44 @@ public class LedgerPostingDaoImpl implements LedgerPostingDao {
 		genLedgBalance.setCurrBalance(0);
 		genLedgBalance.setOrganisation(this.organisationBo.getOrganisationById(branch_id));
 		genLedgBalance.setOrgCoy(this.organisationBo.getOrganisationById(branch_id).getOrgCoy());
+		genLedgBalance.setGLAccountNo(account_no);
+		genLedgBalance.setCurrency("NGN");
+		
+		
+		return this.saveGLBalance(genLedgBalance);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public GenLedgBalance getBalanceCompany(String account_no, int company_id) {
+		Organisation org = this.userIdentity.getOrganisation();
+
+		float balance = 0;
+		List<GenLedgBalance> genLedgBalances = sessionFactory.getCurrentSession()
+				.createQuery("FROM GenLedgBalance WHERE gl_account_no = ? AND company_id = ? ")
+				.setParameter(0, account_no)
+				.setParameter(1, company_id)
+				.list();
+				
+		if (genLedgBalances.size() > 0){
+			for (GenLedgBalance genLedgBalance : genLedgBalances) {
+				balance += genLedgBalance.getCurrBalance();
+			}
+			
+			System.out.println(balance + "OLAKOLADE");
+			GenLedgBalance firstBalance = new GenLedgBalance();
+			firstBalance.setCurrBalance(balance);
+			
+			return firstBalance;
+		}
+		
+
+		GenLedgBalance genLedgBalance = new GenLedgBalance();
+		
+		genLedgBalance.setCreate_date(new Date(System.currentTimeMillis()));
+		genLedgBalance.setCreated_by(this.userIdentity.getUser());
+		genLedgBalance.setCurrBalance(0);
+		genLedgBalance.setOrganisation(org);
+		genLedgBalance.setOrgCoy(org.getOrgCoy());
 		genLedgBalance.setGLAccountNo(account_no);
 		genLedgBalance.setCurrency("NGN");
 		

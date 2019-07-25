@@ -31,18 +31,13 @@ public class ReportsDao {
 
 	@SuppressWarnings("unchecked")
 	public List<Object> getGLBalancesCompany() {
-		/*List<GenLedgBalance> list = sessionFactory.getCurrentSession()
-				.createQuery("from GenLedgBalance  where company_id = ? ")
-				.setParameter(0, this.userIdentity.getOrganisation().getOrgCoy().getId())
-				.list();
-		*/
+		
 		String hsql="SELECT A.gLAccountNo,  SUM(A.currBalance) AS curr_balance "
-				+ "FROM GenLedgBalance A WHERE A.orgCoy.id = 2 GROUP BY A.gLAccountNo ";
+				+ "FROM GenLedgBalance A WHERE A.orgCoy.id = ? GROUP BY A.gLAccountNo ";
 				
 				Query query = sessionFactory.getCurrentSession()
 					.createQuery(hsql)
-					//.setParameter(0, this.userIdentity.getOrganisation().getOrgCoy().getId())
-					;
+					.setParameter(0, this.userIdentity.getOrganisation().getOrgCoy().getId());
 
 				List<Object> result = (List<Object>) query.list();
 				
@@ -53,16 +48,15 @@ public class ReportsDao {
 	@SuppressWarnings("unchecked")
 	public List<LedgerAccount> getGLBalancesByParent(Integer categoryID, String ledgerType1, String ledgerType2) {
 		String hsql="SELECT A FROM LedgerAccount A "
-		+ "WHERE  ledgerCatID = ? AND organisation_id = ? AND company_id = ?  AND (account_no LIKE ''+ ? + '%' OR account_no LIKE ''+ ? + '%')";
+		+ "WHERE  ledgerCatID = ? AND company_id = ?  AND (account_no LIKE ''+ ? + '%' OR account_no LIKE ''+ ? + '%')";
 		
 		
 		Query query = sessionFactory.getCurrentSession()
 			.createQuery(hsql)
 			.setParameter(0, categoryID)
-			.setParameter(1, userIdentity.getOrganisation().getId())
-			.setParameter(2, this.userIdentity.getOrganisation().getOrgCoy().getId())
-			.setParameter(3, ledgerType1)
-			.setParameter(4, ledgerType2);
+			.setParameter(1, this.userIdentity.getOrganisation().getOrgCoy().getId())
+			.setParameter(2, ledgerType1)
+			.setParameter(3, ledgerType2);
 			
        List<LedgerAccount> list = (List<LedgerAccount>) query.list();  
        
@@ -75,7 +69,7 @@ public class ReportsDao {
 	@SuppressWarnings("unchecked")
 	public List<LedgerAccount> getGLBalancesByParentReserve(Integer categoryID, String ledgerType1, String ledgerType2, String ledgerType3) {
 		String hsql="SELECT A FROM LedgerAccount A "
-		+ "WHERE  ledgerCatID = ? AND organisation_id = ? AND company_id = ?  AND (account_no LIKE ''+ ? + '%' OR account_no LIKE ''+ ? + '%' OR account_no LIKE ''+ ? + '%' OR account_no LIKE '6%')";
+		+ "WHERE  ledgerCatID = ? AND company_id = ?  AND (account_no LIKE ''+ ? + '%' OR account_no LIKE ''+ ? + '%' OR account_no LIKE ''+ ? + '%' OR account_no LIKE '6%')";
 		
 		
 		/*String hsql="SELECT A FROM LedgerAccount A, GenLedgBalance B "
@@ -84,11 +78,10 @@ public class ReportsDao {
 		Query query = sessionFactory.getCurrentSession()
 			.createQuery(hsql)
 			.setParameter(0, categoryID)
-			.setParameter(1, userIdentity.getOrganisation().getId())
-			.setParameter(2, this.userIdentity.getOrganisation().getOrgCoy().getId())
-			.setParameter(3, ledgerType1)
-			.setParameter(4, ledgerType2)
-			.setParameter(5, ledgerType3);
+			.setParameter(1, this.userIdentity.getOrganisation().getOrgCoy().getId())
+			.setParameter(2, ledgerType1)
+			.setParameter(3, ledgerType2)
+			.setParameter(4, ledgerType3);
 			
        List<LedgerAccount> list = (List<LedgerAccount>) query.list();  
        
@@ -97,5 +90,50 @@ public class ReportsDao {
 
 		
 	}
+	
+/*	@SuppressWarnings("unchecked")
+	public List<LedgerAccount> getGLBalancesByParentCompany(Integer categoryID, String ledgerType1, String ledgerType2) {
+		String hsql="SELECT A FROM LedgerAccount A "
+		+ "WHERE  ledgerCatID = ? AND company_id = ?  AND (account_no LIKE ''+ ? + '%' OR account_no LIKE ''+ ? + '%')";
+		
+		
+		Query query = sessionFactory.getCurrentSession()
+			.createQuery(hsql)
+			.setParameter(0, categoryID)
+			.setParameter(1, this.userIdentity.getOrganisation().getOrgCoy().getId())
+			.setParameter(2, ledgerType1)
+			.setParameter(3, ledgerType2);
+			
+       List<LedgerAccount> list = (List<LedgerAccount>) query.list();  
+       
+       
+       return list;
 
+		
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public List<LedgerAccount> getGLBalancesByParentReserveCompany(Integer categoryID, String ledgerType1, String ledgerType2, String ledgerType3) {
+		String hsql="SELECT A FROM LedgerAccount A "
+		+ "WHERE  ledgerCatID = ?  AND company_id = ?  AND (account_no LIKE ''+ ? + '%' OR account_no LIKE ''+ ? + '%' OR account_no LIKE ''+ ? + '%' OR account_no LIKE '6%')";
+		
+		
+		
+		Query query = sessionFactory.getCurrentSession()
+			.createQuery(hsql)
+			.setParameter(0, categoryID)
+			.setParameter(1, this.userIdentity.getOrganisation().getOrgCoy().getId())
+			.setParameter(2, ledgerType1)
+			.setParameter(3, ledgerType2)
+			.setParameter(4, ledgerType3);
+			
+       List<LedgerAccount> list = (List<LedgerAccount>) query.list();  
+       
+       
+       return list;
+
+	}
+
+		*/
 }

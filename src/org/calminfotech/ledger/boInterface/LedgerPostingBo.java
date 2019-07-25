@@ -45,4 +45,6 @@ public interface LedgerPostingBo {
 	public List<GLEntry> getEntriesForGLCompany(int company_id, String accountNo)throws LedgerException;
 
 	List<GLEntry> getGLEntriesListingCom(String account_no, String start_date, String end_date) throws LedgerException;
+
+	GenLedgBalance getBalanceCompany(String account_no, int company_id) throws LedgerException;
 }
