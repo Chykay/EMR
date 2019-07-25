@@ -1,6 +1,7 @@
 package org.calminfotech.ledger.utility;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.calminfotech.ledger.boInterface.GLMappingBo;
@@ -15,9 +16,7 @@ import org.calminfotech.ledger.models.LedgerAccount;
 import org.calminfotech.ledger.models.LedgerCategory;
 import org.calminfotech.ledger.reports.models.AccChartEntry;
 import org.calminfotech.ledger.reports.models.BranchAccChart;
-import org.calminfotech.ledger.reports.models.BranchTB;
 import org.calminfotech.ledger.reports.models.CompanyAccChart;
-import org.calminfotech.ledger.reports.models.CompanyTB;
 import org.calminfotech.ledger.reports.models.TBReport;
 import org.calminfotech.ledger.reports.models.TrialBalEntry;
 import org.calminfotech.system.boInterface.OrganisationBo;
@@ -52,10 +51,10 @@ public class ReportsBo {
 	@Autowired
 	private GLMappingBo glSetupBo;
 
-	public BranchTB getBranchTB(int org_id) {
+	public TBReport getBranchTB(int org_id) {
 		List<TrialBalEntry> trialBalEntries = new ArrayList<TrialBalEntry>();
 		float tot_debit = 0, tot_credit = 0, balance = 0;
-		BranchTB branchTB = new BranchTB();
+		TBReport tbReport = new TBReport();
 		
 		List<GenLedgBalance> genLedgBalances = this.reportsDao.getGLBalances(org_id);
 		
@@ -95,38 +94,69 @@ public class ReportsBo {
 		}
 		
 		
-		branchTB.setName(this.organisationBo.getOrganisationById(org_id).getName());
-		branchTB.setCompanyName(this.organisationBo.getOrganisationById(org_id).getOrgCoy().getName());
-		branchTB.setEntries(trialBalEntries);
-		branchTB.setTotBalance(tot_credit - tot_debit);
-		branchTB.setTotCredit(tot_credit);
-		branchTB.setTotDebit(tot_debit);
-		return branchTB;
+		tbReport.setName(this.organisationBo.getOrganisationById(org_id).getName());
+		tbReport.setCompanyName(this.organisationBo.getOrganisationById(org_id).getOrgCoy().getName());
+		tbReport.setEntries(trialBalEntries);
+		tbReport.setTotBalance(tot_credit - tot_debit);
+		tbReport.setTotCredit(tot_credit);
+		tbReport.setTotDebit(tot_debit);
+		return tbReport;
 	}
 	
 
-	public CompanyTB getCompanyTB(int comp_id) {
-		
-		List<Organisation> organisations = this.organisationBo.fetchAll(comp_id);
-		CompanyTB companyTB = new CompanyTB();
+	public TBReport getCompanyTB(int comp_id) {
+		List<TrialBalEntry> trialBalEntries = new ArrayList<TrialBalEntry>();
 		float tot_debit = 0, tot_credit = 0, balance = 0;
-		List<BranchTB> branchTBs = new ArrayList<BranchTB>();
+		TBReport tbReport = new TBReport();
 		
-		for (Organisation organisation : organisations) {
-			BranchTB branchTB = this.getBranchTB(organisation.getId());
-			tot_credit += branchTB.getTotCredit();
-			tot_debit += branchTB.getTotDebit();
-			balance += branchTB.getTotBalance();
-			branchTBs.add(branchTB);
+		List<Object> genLedgBalances = this.reportsDao.getGLBalancesCompany();
+		 Iterator<Object> itr = genLedgBalances.iterator();
+	      while(itr.hasNext()){
+	        Object[] obj = (Object[]) itr.next();
+	        
+	        String accountNo = String.valueOf(obj[0]);
+			if (accountNo.charAt(0) == '6') {
+				continue;
+			}
+			
+			balance = Float.parseFloat(String.valueOf(obj[1])); 
+			
+			TrialBalEntry trialBalEntry = new TrialBalEntry();
+			trialBalEntry.setName(this.ledgerAccBo.getLedgerByAccount_no(accountNo).getName());
+			trialBalEntry.setAccountNo(accountNo);
+			
+			
+			if (accountNo.charAt(0) == '1' || accountNo.charAt(0) ==  '5') {
+				if (balance >= 0) {
+					trialBalEntry.setDebit(balance);
+					tot_debit += balance;		
+				} else {
+					balance = Math.abs(balance);
+					trialBalEntry.setCredit(balance);
+					tot_credit += balance;
+				}
+			} else {
+				if (balance >= 0) {
+					trialBalEntry.setCredit(balance);
+					tot_credit += balance;		
+				} else {
+					balance = Math.abs(balance);
+					trialBalEntry.setDebit(balance);
+					tot_debit += balance;
+				}
+				
+			}
+			trialBalEntries.add(trialBalEntry);
 		}
 		
-		companyTB.setBranchTBs(branchTBs);
-		companyTB.setTotBalance(balance);
-		companyTB.setTotCredit(tot_credit);
-		companyTB.setTotDebit(tot_debit);
-		companyTB.setName(this.userIdentity.getOrganisation().getOrgCoy().getName());
 		
-		return companyTB;
+		tbReport.setName(this.userIdentity.getOrganisation().getOrgCoy().getName());
+		//tbReport.setCompanyName(this.organisationBo.getOrganisationById(org_id).getOrgCoy().getName());
+		tbReport.setEntries(trialBalEntries);
+		tbReport.setTotBalance(tot_credit - tot_debit);
+		tbReport.setTotCredit(tot_credit);
+		tbReport.setTotDebit(tot_debit);
+		return tbReport;
 	}
 
 
@@ -284,7 +314,7 @@ public class ReportsBo {
 		float totBalance = 0, balance;
 		
 		if (chartType.equals("balSheet")) {
-			childLedgers = this.reportsDao.getGLBalancesByParentR(parentID, "1", "2", "3");
+			childLedgers = this.reportsDao.getGLBalancesByParentReserve(parentID, "1", "2", "3");
 		} else {
 			childLedgers = this.reportsDao.getGLBalancesByParent(parentID, "4", "5");
 		}
@@ -323,7 +353,7 @@ public class ReportsBo {
 		
 		for (Organisation organisation : organisations) {
 
-			BranchAccChart branchAccChart = this.getBranchCoA(organisation.getId(), type, chartType);
+			BranchAccChart branchAccChart = this.addReserve(organisation.getId(), type);
 
 			branchAccCharts.add(branchAccChart);
 		}

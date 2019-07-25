@@ -28,7 +28,7 @@
 <br></br>
 <br></br>
 <br></br>
-<p style="float: center;"><h4>Trial Balance For Company: <span th:text="${companyTB.name}"></span></h4></p>
+<p style="float: center;"><h4>Trial Balance For Company: <span th:text="${companyTB.companyName}"></span></h4></p>
 
 	
 	
@@ -36,8 +36,7 @@
   <table class="table table-condensed" id="printtable">
     <thead>
       <tr>
-    	
-    	<th>Branch</th>
+    				
 		<th>Account No</th>
 		<th>Name</th>
 		<th>DR</th>
@@ -47,26 +46,23 @@
       </tr>
     </thead>
     <tbody>
-    	<span th:each="branchTB : *{companyTB.branchTBs}">
-    	
-     	  <tr th:each="tBalEntry : *{branchTB.entries}">
+     	<tr th:each="tBalEntry : *{companyTB.entries}">
  	
-					<td th:text="${branchTB.name}"></td>
+					
 					<td th:text="${tBalEntry.accountNo}"></td> 
 					<td th:text="${tBalEntry.name}"></td> 
 					<td th:text="${#numbers.formatDecimal(tBalEntry.debit, 0, 'COMMA', 2, 'POINT')}" ></td>
 					<td th:text="${#numbers.formatDecimal(tBalEntry.credit, 0, 'COMMA', 2, 'POINT')}" ></td>
+					<!-- <td th:text="${tBalEntry.credit}" ></td> -->
+			
 					 
-      	</tr>
-      </span>
+      </tr>
       <tr>
       	<td></td>
-      	<td></td>
       	<td>TOTAL</td>
-        <td th:text="${#numbers.formatDecimal(companyTB.totDebit, 0, 'COMMA', 2, 'POINT')}"></td>
+      	<td th:text="${#numbers.formatDecimal(companyTB.totDebit, 0, 'COMMA', 2, 'POINT')}"></td>
       	<td th:text="${#numbers.formatDecimal(companyTB.totCredit, 0, 'COMMA', 2, 'POINT')}"></td>
-      	<td th:text="${#numbers.formatDecimal(companyTB.totBalance, 0, 'COMMA', 2, 'POINT')}"></td>  
-      	
+      	<td th:text="${#numbers.formatDecimal(companyTB.totBalance, 0, 'COMMA', 2, 'POINT')}"></td>      	
       </tr>
     </tbody>
   </table>

@@ -168,7 +168,7 @@ public class LedgerPostingBoImpl implements LedgerPostingBo{
 	}
 	
 
-	@Transactional
+	@Override
 	public void GLEntry(GLEntry glEntry) throws LedgerException 
 	{
 		LedgerAccount ledgerAccount = new LedgerAccount();
@@ -260,7 +260,7 @@ public class LedgerPostingBoImpl implements LedgerPostingBo{
 		
 		Organisation org = this.userIdentity.getOrganisation();
 		float amount = glEntry.getAmount();
-		SettingsAssignment settingsAssignment = this.settingBo.fetchsettings("interbranch-GLP", org.getOrgCoy().getId());
+		SettingsAssignment settingsAssignment = this.settingBo.fetchsettings("interbank-GLP", org.getOrgCoy().getId());
 		String sysAccountNo = settingsAssignment.getSettings_value();
 		this.getBalance(sysAccountNo, org.getId(), org.getOrgCoy().getId());
 		User user = new User();
@@ -368,7 +368,7 @@ public class LedgerPostingBoImpl implements LedgerPostingBo{
 			
 			GLEntry glEntry1 = new GLEntry();
 			glEntry1.setAccountNo(glEntry.getAccountNo());
-			glEntry1.setAmount(Math.abs(glEntry.getAmount()));
+			glEntry1.setAmount(glEntry.getAmount());
 			glEntry1.setOrganisation(glEntry.getBranch());
 			glEntry1.setOrgCoy(user.getOrganisation().getOrgCoy());
 			glEntry1.setBranch(glEntry.getBranch());
@@ -380,8 +380,10 @@ public class LedgerPostingBoImpl implements LedgerPostingBo{
 			glEntry1.setPostingDate(new Date(System.currentTimeMillis()));
 			
 			if (glEntry.getPostCode().equals("DR")) {
+				System.out.println("equals DR");
 				glEntry1.setPostCode("CR");
 			} else {
+				System.out.println("equals CR");
 				glEntry1.setPostCode("DR");
 			}
 

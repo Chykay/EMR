@@ -62,7 +62,7 @@
 						<span th:if="${glEntry.refNo2 != 'REVERSED' and glEntry.refNo2  != 'REVERSAL'}">
 							<a class="btn btn-xs btn-danger tooltips reverse" 
 								title="Reverse Entry"   th:id="${glEntry.batchNo}" 
-								href="#"> <i
+								th:href="@{/ledger/gen_ledger/reversal/{id} (id=${glEntry.batchNo})}" id="loading_img"> <i
 									class="fa fa-reply"></i>
 							</a>
 						</span>
@@ -78,7 +78,7 @@
 <script type="text/javascript">
 /*<![CDATA[*/
 
-	$(".reverse").click(function(){
+	$(".revserse").click(function(){
 		var batchNo = this.id;
 		
 		$.ajax({
@@ -96,6 +96,7 @@
 		bAutoWidth : false
 		,
 		"aoColumns" : [ 
+		{ "bSortable" : true },
 		{ "bSortable" : true },
 		{ "bSortable" : true },
 		{ "bSortable" : true },
