@@ -35,6 +35,11 @@ public class PersonnelSearchForm {
 	public void setMycriteriavalue(String mycriteriavalue) {
 		this.mycriteriavalue = mycriteriavalue;
 	}
+
+	public void setPersonnelid(int i) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 }

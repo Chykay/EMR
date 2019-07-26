@@ -242,7 +242,7 @@ public class CustomerTransactionController {
 	public String saveActionpay(
 			@Valid @ModelAttribute("custtranForm") CustomerTransactionForm tranform,
 			BindingResult result, RedirectAttributes redirectAttributes,
-			Model model) {
+			Model model ) {
 		if (userIdentity.getCurrentPointId() != 10) {
 			userIdentity.setCurrentUrl("redirect:/transaction/customer");
 			return "redirect:/visits/queue/10";
@@ -275,9 +275,7 @@ public class CustomerTransactionController {
 			} else {
 				crl = gcrl;
 			}
-		}
-
-		catch (Exception e) {
+		} catch (Exception e) {
 			crl = gcrl;
 		}
 		custtran.setEffectivedate(new Date(System.currentTimeMillis()));

@@ -11,7 +11,7 @@
 
 
 
-<div class="container" id="printableArea"   xmlns:th="http://www.thymeleaf.org">
+<div class="container" id="printableArea"  xmlns:th="http://www.thymeleaf.org">
 
   <span style="float: left;"> 
 								<img th:if="${@userIdentity.getOrganisation().getOrgCoy().getLogo() == null}" id="avatar2"
@@ -23,18 +23,10 @@
 									alt="" class="img-responsive" style="width:100px; height:100px"/>
 								</span>
 
-<div style="padding-top: 25px">  <span style="float: left;"> <h2><span th:text="${@userIdentity.getOrganisation().getOrgCoy().getName()}"></span></h2> </span></div>
+<div style="padding-top: 25px">  <th:block style="float: left;"> <h2><span th:text="${@userIdentity.getOrganisation().getOrgCoy().getName()}"></span></h2> </th:block></div>
 <br></br>
-<br></br>
-<br></br>
-<br></br>
-<p style="float: center;"><h4>Balance Sheet For <span th:text="${companyBS.name}"></span></h4></p>
-
-	
-	
-<th:block th:each=" branchBS : ${companyBS.branchAccCharts}">
-
-  <p style="float: center;"><h4>Balance Sheet For <span th:text="${branchBS.name}"></span></h4></p>
+<th:block style="float: center;"><h4>Balance Sheet as at <span th:text="${#dates.format(#dates.createNow(), 'dd MMM yyyy')}"></span> For: <span th:text="${companyBS.companyName}"></span></h4>
+</th:block>
 
 
 <table class="table table-condensed" id="printtable">
@@ -49,10 +41,17 @@
       </tr>
     </thead>
     <tbody>
-     <th:block th:replace="ledger/reports/bal_sheet/branchFragment :: branch(balSheetList=${branchBS.accChartEntries}, margin=0)">Balance Sheet</th:block>
+     <th:block th:replace="ledger/reports/bal_sheet/branchFragment :: branch(balSheetList=${companyBS.accChartEntries}, margin=0)">Balance Sheet</th:block>
 
+	<!-- <tr> <td  th:text="${#numbers.formatDecimal(T(java.lang.Math).abs(companyBS.), 0, 'COMMA', 2, 'POINT')}"></td></tr> -->
     </tbody>
   </table>
-</th:block>
-  </div>
+<!-- 
+
+
+
+<div th:replace="ledger/reports/bal_sheet/branchFragment :: branch(balSheetList=${companyBS.accChartEntries})">Sidebar</div>
+
+ -->
+</div>
   	

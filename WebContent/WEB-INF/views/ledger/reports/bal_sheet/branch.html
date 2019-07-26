@@ -23,12 +23,10 @@
 									alt="" class="img-responsive" style="width:100px; height:100px"/>
 								</span>
 
-<div style="padding-top: 25px">  <span style="float: left;"> <h2><span th:text="${@userIdentity.getOrganisation().getOrgCoy().getName()}"></span></h2> </span></div>
+<div style="padding-top: 25px">  <th:block style="float: left;"> <h2><span th:text="${@userIdentity.getOrganisation().getOrgCoy().getName()}"></span></h2> </th:block></div>
 <br></br>
-<br></br>
-<br></br>
-<br></br>
-<p style="float: center;"><h4>Balance Sheet as at <span th:text="${#dates.format(#dates.createNow(), 'dd MMM yyyy')}"></span> For Branch: <span th:text="${branchBS.name}"></span> of <span th:text="${branchBS.companyName}"></span></h4></p>
+<th:block style="float: center;"><h4>Balance Sheet as at <span th:text="${#dates.format(#dates.createNow(), 'dd MMM yyyy')}"></span> For Branch: <span th:text="${branchBS.branchName}"></span> of <span th:text="${branchBS.companyName}"></span></h4>
+</th:block>
 
 
 <table class="table table-condensed" id="printtable">

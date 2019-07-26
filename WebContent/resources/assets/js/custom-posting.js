@@ -1,8 +1,8 @@
 /*<![CDATA[*/
 
 $(document).ready(function() {
-	getLedgers($("#pAccountNo"), "GA");
-	getLedgers($("#rAccountNo"), "GA");
+	/*getLedgers($("#pAccountNo"), "GA");
+	getLedgers($("#rAccountNo"), "GA");*/
     $('#pAccountNo').select2();
     $('#rAccountNo').select2();
 });

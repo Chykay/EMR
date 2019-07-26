@@ -6,9 +6,7 @@ import javax.servlet.http.HttpSession;
 
 import org.calminfotech.hrunit.forms.PersonnelSearchForm;
 import org.calminfotech.hrunit.models.StaffRegistration;
-import org.calminfotech.ledger.forms.CustAccSearchForm;
-import org.calminfotech.ledger.models.CustomerAccount;
-/*import org.calminfotech.inventory.models.StockCurrentBalance;*/
+import org.calminfotech.inventory.models.StockCurrentBalance;
 import org.calminfotech.patient.forms.PatientSearchForm;
 import org.calminfotech.system.forms.AdmissionSearchForm;
 import org.calminfotech.system.forms.AllergySearchForm;
@@ -28,16 +26,20 @@ import org.calminfotech.user.utils.UserIdentity;
 import org.calminfotech.utils.models.Admissionwinsearch;
 import org.calminfotech.utils.models.Allergywinsearch;
 import org.calminfotech.utils.models.Billingwinsearch;
+//import org.calminfotech.utils.models.Consumablewinsearch;
 import org.calminfotech.utils.models.Count;
 import org.calminfotech.utils.models.Diseaseswinsearch;
 import org.calminfotech.utils.models.Drugwinsearch;
 import org.calminfotech.utils.models.Examinationwinsearch;
+import org.calminfotech.utils.models.Hmowinsearch;
 import org.calminfotech.utils.models.Inventorywinsearch;
 import org.calminfotech.utils.models.Laboratorywinsearch;
 import org.calminfotech.utils.models.Patientsearch;
 import org.calminfotech.utils.models.Patientwinsearch;
 import org.calminfotech.utils.models.Personnelwinsearch;
+//import org.calminfotech.utils.models.Procedurewinsearch;
 import org.calminfotech.utils.models.Surgerywinsearch;
+import org.calminfotech.utils.models.Vendorwinsearch;
 import org.calminfotech.utils.models.Xraywinsearch;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
@@ -146,6 +148,84 @@ public class SearchUtility {
 		return list;
 	}
 
+	public List searchVendorwin(PatientSearchForm patientsearchForm,
+			HttpSession session) {
+
+		int batch = 100;
+		String sqlct = "";
+		String hsql = "";
+
+		sqlct = "select count(*) as num from vw_vendor_list v inner join organisations o on v.organisation_id=o.id where v.name like '%' + ? + '%' and o.company_id=? ";
+		hsql = "from Vendorwinsearch where name  like '%' + ? + '%' and organisation.orgCoy.Id =?";
+
+		Query count = sessionFactory.getCurrentSession().createSQLQuery(sqlct)
+				.addEntity(Count.class);
+		count.setParameter(0, patientsearchForm.getMycriteriavalue().trim());
+		count.setParameter(1, userIdentity.getOrganisation().getOrgCoy()
+				.getId());
+
+		List<Count> clist = count.list();
+
+		Query query = sessionFactory
+				.getCurrentSession()
+				.createQuery(hsql)
+				.setParameter(0, patientsearchForm.getMycriteriavalue().trim())
+				.setParameter(1,
+						userIdentity.getOrganisation().getOrgCoy().getId())
+
+				.setMaxResults(batch)
+
+				.setFirstResult(patientsearchForm.getMysp());
+		List<Vendorwinsearch> list = query.list();
+
+		patientsearchForm.setMysp(patientsearchForm.getMysp() + batch);
+
+		if (patientsearchForm.getMysp() > clist.get(0).getNum()) {
+			patientsearchForm.setMysp(0);
+		}
+
+		return list;
+	}
+
+	public List searchHmowin(PatientSearchForm patientsearchForm,
+			HttpSession session) {
+
+		int batch = 100;
+		String sqlct = "";
+		String hsql = "";
+
+		sqlct = "select count(*) as num from vw_hmo_list v inner join organisations o on v.organisation_id=o.id where v.name like '%' + ? + '%' and o.company_id=? ";
+		hsql = "from Hmowinsearch where name  like '%' + ? + '%' and organisation.orgCoy.Id =?";
+
+		Query count = sessionFactory.getCurrentSession().createSQLQuery(sqlct)
+				.addEntity(Count.class);
+		count.setParameter(0, patientsearchForm.getMycriteriavalue().trim());
+		count.setParameter(1, userIdentity.getOrganisation().getOrgCoy()
+				.getId());
+
+		List<Count> clist = count.list();
+
+		Query query = sessionFactory
+				.getCurrentSession()
+				.createQuery(hsql)
+				.setParameter(0, patientsearchForm.getMycriteriavalue().trim())
+				.setParameter(1,
+						userIdentity.getOrganisation().getOrgCoy().getId())
+
+				.setMaxResults(batch)
+
+				.setFirstResult(patientsearchForm.getMysp());
+		List<Hmowinsearch> list = query.list();
+
+		patientsearchForm.setMysp(patientsearchForm.getMysp() + batch);
+
+		if (patientsearchForm.getMysp() > clist.get(0).getNum()) {
+			patientsearchForm.setMysp(0);
+		}
+
+		return list;
+	}
+
 	public List searchAllergywin(AllergySearchForm allergySearchForm,
 			HttpSession session) {
 
@@ -186,20 +266,22 @@ public class SearchUtility {
 		String p = "";
 		if (billingSearchForm.getBillingtypeId().intValue() == 1
 				|| billingSearchForm.getBillingtypeId().intValue() == 3
-				|| billingSearchForm.getBillingtypeId().intValue() == 8) {
+				|| billingSearchForm.getBillingtypeId().intValue() == 8
+				|| billingSearchForm.getBillingtypeId().intValue() == 9
+
+		) {
 
 			sqlct = "select count(*) as num from vw_billitem_list  v inner join organisations o on v.organisation_id=o.id where v.name  like '%' + ? + '%'  and v.globalitemtype_id = ?  and o.company_id= ?";
 			hsql = "from Billingwinsearch where name  like '%' + ? + '%' and globalitemtypeId = ?  and organisation.orgCoy.Id= ? ";
 			p = "3";
 		}
 
-		// 2 Drug 4 Laboratory 5 Surgery 6 xray 7 Allergy 9 Admision === General
+		// 2 Drug 4 Laboratory 5 Surgery 6 xray 7 Allergy 8 Admision === General
 		if (billingSearchForm.getBillingtypeId().intValue() == 2
 				|| billingSearchForm.getBillingtypeId().intValue() == 4
 				|| billingSearchForm.getBillingtypeId().intValue() == 5
 				|| billingSearchForm.getBillingtypeId().intValue() == 6
-				|| billingSearchForm.getBillingtypeId().intValue() == 7
-				|| billingSearchForm.getBillingtypeId().intValue() == 9) {
+				|| billingSearchForm.getBillingtypeId().intValue() == 7) {
 
 			sqlct = "select count(*) as num from vw_billitem_list  where name  like '%' + ? + '%'  and globalitemtype_id = ? ";
 			hsql = "from Billingwinsearch where name  like '%' + ? + '%' and globalitemtypeId = ?  ";
@@ -254,10 +336,11 @@ public class SearchUtility {
 
 		if (globalitemSearchForm.getGlobaltypeId().intValue() == 1
 				|| globalitemSearchForm.getGlobaltypeId().intValue() == 3
-				|| globalitemSearchForm.getGlobaltypeId().intValue() == 8) {
+				|| globalitemSearchForm.getGlobaltypeId().intValue() == 8
+				|| globalitemSearchForm.getGlobaltypeId().intValue() == 9) {
 
 			sqlct = "select count(*) as num from globalitem_item  v inner join organisations o on v.organisation_id=o.id where globalitem_name   like '%' + ? + '%'  and globalitemtype_id = ?  and o.company_id= ? and v.is_deleted=0";
-			hsql = "from GlobalItem where GlobalitemName  like '%' + ? + '%' and globalitemtype.globalitemTypeId = ?  and organisation.orgCoy.Id= ? and isDeleted=0";
+			hsql = "from GlobalItem where GlobalitemName  like '%' + ? + '%' and globalitemtype.globalitemTypeId = ?  and organisation.orgCoy.Id= ? and isDeleted=0 order by itemId desc ";
 			p = "3";
 		}
 
@@ -266,8 +349,7 @@ public class SearchUtility {
 				|| globalitemSearchForm.getGlobaltypeId().intValue() == 4
 				|| globalitemSearchForm.getGlobaltypeId().intValue() == 5
 				|| globalitemSearchForm.getGlobaltypeId().intValue() == 6
-				|| globalitemSearchForm.getGlobaltypeId().intValue() == 7
-				|| globalitemSearchForm.getGlobaltypeId().intValue() == 9) {
+				|| globalitemSearchForm.getGlobaltypeId().intValue() == 7) {
 			sqlct = "select count(*) as num from globalitem_item where globalitem_name  like '%' + ? + '%'  and globalitemtype_id = ? and is_deleted=0";
 			hsql = "from GlobalItem where GlobalitemName  like '%' + ? + '%' and globalitemtype.globalitemTypeId = ? and isDeleted=0";
 			p = "2";
@@ -283,6 +365,7 @@ public class SearchUtility {
 		}
 
 		List<Count> clist = count.list();
+		System.out.print("clist " + clist.get(0).getNum());
 
 		Query query = sessionFactory
 				.getCurrentSession()
@@ -295,6 +378,52 @@ public class SearchUtility {
 			query.setParameter(2, userIdentity.getOrganisation().getOrgCoy()
 					.getId());
 		}
+		query.setMaxResults(batch);
+		query.setFirstResult(globalitemSearchForm.getMysp());
+		List<GlobalItem> list = query.list();
+
+		globalitemSearchForm.setMysp(globalitemSearchForm.getMysp() + batch);
+
+		if (globalitemSearchForm.getMysp() > clist.get(0).getNum()) {
+			globalitemSearchForm.setMysp(0);
+		}
+
+		return list;
+
+	}
+
+	public List searchGlobalitemALL(GlobalitemSearchForm globalitemSearchForm,
+			HttpSession session) {
+
+		// 1 equip 3 service 8 Admision===
+		// List list=null;
+		int batch = 100;
+		String sqlct = "";
+		String hsql = "";
+		String p = "";
+		// not shared 1. Equipment 3. Services 8. Admission
+
+		sqlct = "select count(*) as num from globalitem_item  v inner join organisations o on v.organisation_id=o.id where globalitem_name   like '%' + ? + '%'    and o.company_id= ? and v.is_deleted=0";
+		hsql = "from GlobalItem where GlobalitemName  like '%' + ? + '%'   and organisation.orgCoy.Id= ? and isDeleted=0 order by itemId desc ";
+
+		Query count = sessionFactory.getCurrentSession().createSQLQuery(sqlct)
+				.addEntity(Count.class);
+		count.setParameter(0, globalitemSearchForm.getMycriteriavalue().trim());
+		// count.setParameter(1, globalitemSearchForm.getGlobaltypeId());
+		count.setParameter(1, userIdentity.getOrganisation().getOrgCoy()
+				.getId());
+
+		List<Count> clist = count.list();
+
+		Query query = sessionFactory
+				.getCurrentSession()
+				.createQuery(hsql)
+				.setParameter(0,
+						globalitemSearchForm.getMycriteriavalue().trim());
+		//
+		query.setParameter(1, userIdentity.getOrganisation().getOrgCoy()
+				.getId());
+
 		query.setMaxResults(batch);
 		query.setFirstResult(globalitemSearchForm.getMysp());
 		List<GlobalItem> list = query.list();
@@ -484,6 +613,10 @@ public class SearchUtility {
 		return list;
 	}
 
+	
+
+	
+
 	public List searchXraywin(XraySearchForm xraySearchForm, HttpSession session) {
 
 		int batch = 100;
@@ -555,7 +688,7 @@ public class SearchUtility {
 		String sqlct = "";
 		String hsql = "";
 
-		sqlct = "select count(*) as num from diseases v inner join organisations o on v.organisation_id=o.id where diseases_name  like '%' + ? + '%'  and diseasestype_id = ? and  organisation_id =? and is_deleted=0";
+		sqlct = "select count(*) as num from diseases v inner join organisations o on v.organisation_id=o.id where diseases_name  like '%' + ? + '%'  and diseasestype_id = ? and  organisation_id =? and v.is_deleted=0";
 		hsql = "from Diseases v where v.diseasesName  like '%' + ? + '%' and v.diseasesType.diseasesTypeId = ? and  v.organisation.orgCoy.Id =? and v.isDeleted=0 ";
 
 		Query count = sessionFactory.getCurrentSession().createSQLQuery(sqlct)
@@ -707,9 +840,13 @@ public class SearchUtility {
 		String p = "";
 		if (inventorySearchForm.getInventorytypeId().intValue() == 1
 				|| inventorySearchForm.getInventorytypeId().intValue() == 3
-				|| inventorySearchForm.getInventorytypeId().intValue() == 8) {
+				|| inventorySearchForm.getInventorytypeId().intValue() == 8
+				|| inventorySearchForm.getInventorytypeId().intValue() == 9) {
 
-			sqlct = "select count(*) as num from vw_inventory_list where name  like '%' + ? + '%'  and globalitemtype_id = ?  and organisation_id= ?";
+			// sqlct =
+			// "select count(*) as num from vw_inventory_list where name  like '%' + ? + '%'  and globalitemtype_id = ?  and organisation_id= ?";
+			sqlct = "select count(*) as num from vw_inventory_list  v inner join organisations o on v.organisation_id=o.id where v.name   like '%' + ? + '%'    and o.organisation_id= ? ";
+
 			hsql = "from Inventorywinsearch where name  like '%' + ? + '%' and globalitemtypeId = ?  and organisation_id= ? ";
 			p = "3";
 		}
@@ -719,8 +856,7 @@ public class SearchUtility {
 				|| inventorySearchForm.getInventorytypeId().intValue() == 4
 				|| inventorySearchForm.getInventorytypeId().intValue() == 5
 				|| inventorySearchForm.getInventorytypeId().intValue() == 6
-				|| inventorySearchForm.getInventorytypeId().intValue() == 7
-				|| inventorySearchForm.getInventorytypeId().intValue() == 9) {
+				|| inventorySearchForm.getInventorytypeId().intValue() == 7) {
 
 			sqlct = "select count(*) as num from vw_inventory_list  where name  like '%' + ? + '%'  and globalitemtype_id = ? ";
 			hsql = "from Inventorywinsearch where name  like '%' + ? + '%' and globalitemtypeId = ?  ";
@@ -750,6 +886,52 @@ public class SearchUtility {
 		query.setMaxResults(batch);
 		query.setFirstResult(inventorySearchForm.getMysp());
 		List<Inventorywinsearch> list = query.list();
+
+		inventorySearchForm.setMysp(inventorySearchForm.getMysp() + batch);
+
+		if (inventorySearchForm.getMysp() > clist.get(0).getNum()) {
+			inventorySearchForm.setMysp(0);
+		}
+
+		return list;
+
+	}
+
+	public List searchInventorywinALL(InventorySearchForm inventorySearchForm,
+			HttpSession session) {
+
+		// 1 equip 3 service 8 Admision===
+		// List list=null;
+		int batch = 100;
+		String sqlct = "";
+		String hsql = "";
+		String p = "";
+		// not shared 1. Equipment 3. Services 8. Admission
+
+		sqlct = "select count(*) as num from vw_inventory_list  v inner join organisations o on v.organisation_id=o.id where v.name   like '%' + ? + '%'    and o.company_id= ? ";
+		hsql = "from Inventorywinsearch where name like '%' + ? + '%'   and organisation.orgCoy.Id= ? order by id desc ";
+
+		Query count = sessionFactory.getCurrentSession().createSQLQuery(sqlct)
+				.addEntity(Count.class);
+		count.setParameter(0, inventorySearchForm.getMycriteriavalue().trim());
+		// count.setParameter(1, globalitemSearchForm.getGlobaltypeId());
+		count.setParameter(1, userIdentity.getOrganisation().getOrgCoy()
+				.getId());
+
+		List<Count> clist = count.list();
+
+		Query query = sessionFactory
+				.getCurrentSession()
+				.createQuery(hsql)
+				.setParameter(0,
+						inventorySearchForm.getMycriteriavalue().trim());
+
+		query.setParameter(1, userIdentity.getOrganisation().getOrgCoy()
+				.getId());
+
+		query.setMaxResults(batch);
+		query.setFirstResult(inventorySearchForm.getMysp());
+		List<GlobalItem> list = query.list();
 
 		inventorySearchForm.setMysp(inventorySearchForm.getMysp() + batch);
 
@@ -795,15 +977,15 @@ public class SearchUtility {
 		query.setParameter(3, userIdentity.getOrganisation().getId());
 		query.setMaxResults(batch);
 		query.setFirstResult(inventorySearchForm.getMysp());
-		/*List<StockCurrentBalance> list = query.list();
-*/
+		List<StockCurrentBalance> list = query.list();
+
 		inventorySearchForm.setMysp(inventorySearchForm.getMysp() + batch);
 
 		if (inventorySearchForm.getMysp() > clist.get(0).getNum()) {
 			inventorySearchForm.setMysp(0);
 		}
 
-		return null;
+		return list;
 
 	}
 
@@ -841,7 +1023,7 @@ public class SearchUtility {
 		query.setParameter(3, userIdentity.getOrganisation().getId());
 		// query.setMaxResults(batch);
 		// query.setFirstResult(inventorySearchForm.getMysp());
-		//List<StockCurrentBalance> list = query.list();
+		List<StockCurrentBalance> list = query.list();
 
 		// inventorySearchForm.setMysp(inventorySearchForm.getMysp() + batch);
 
@@ -849,50 +1031,8 @@ public class SearchUtility {
 		// inventorySearchForm.setMysp(0);
 		// }
 
-		return null;
-
-	}
-	
-	
-	public List searchCustAccWin(CustAccSearchForm custAccSearchForm,
-			HttpSession session) {
-
-		int batch = 100;
-		String sqlct = "";
-		String hsql = "";
-
-		/*sqlct = "select count(*) as num from vw_patient_list v inner join organisations o on v.organisation_id=o.id where v.name like '%' + ? + '%' and o.company_id=? ";
-		*/
-		hsql = "from CustomerAccount where account_no  like '%' + ? + '%' and organisation.orgCoy.Id =?";
-
-		/*Query count = sessionFactory.getCurrentSession().createSQLQuery(sqlct)
-				.addEntity(Count.class);
-		count.setParameter(0, custAccSearchForm.getMycriteriavalue().trim());
-		count.setParameter(1, userIdentity.getOrganisation().getOrgCoy()
-				.getId());
-
-		List<Count> clist = count.list();*/
-
-		Query query = sessionFactory
-				.getCurrentSession()
-				.createQuery(hsql)
-				.setParameter(0, custAccSearchForm.getMycriteriavalue().trim())
-				.setParameter(1,
-						userIdentity.getOrganisation().getOrgCoy().getId())
-
-				.setMaxResults(batch)
-
-				.setFirstResult(custAccSearchForm.getMysp());
-		List<CustomerAccount> list = query.list();
-
-		custAccSearchForm.setMysp(custAccSearchForm.getMysp() + batch);
-
-		/*if (custAccSearchForm.getMysp() > clist.get(0).getNum()) {
-			custAccSearchForm.setMysp(0);
-		}*/
-
 		return list;
-	}
 
+	}
 
 }

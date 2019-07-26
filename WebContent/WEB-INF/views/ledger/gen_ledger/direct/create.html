@@ -31,7 +31,7 @@
 				<!-- <div class="form-group">
 					<label for="pAccountType" class="col-sm-3 control-label no-padding-right">Account Type:</label>
 					<div class="col-sm-9">
-						<select th:field="*{pAccountType}" size="" class="col-xs-10 col-sm-7" style="margin-top:0px;"  required="required">
+						<select th:field="*{pAccountType}"  class="col-xs-10 col-sm-7" style="margin-top:0px;"  required="required">
 							<option value="">Select account type</option>
 							<option th:value="GA">GL</option>
 							<option th:value="CA">Customer</option>
@@ -57,13 +57,14 @@
 					<label for="pAccountNo" class="col-sm-3 control-label no-padding-right">Posting Account:</label>
 					<div class="col-sm-9">
 						
-						<select th:field="*{pAccountNo}" id="pAccountNo" size="" class="col-xs-10 col-sm-7" style="margin-top:0px;"  required="required">
+						<select th:field="*{pAccountNo}" id="pAccountNo"  class="col-xs-10 col-sm-7" style="margin-top:0px;"  required="required">
 							<option
 								th:each="generalLedger: ${generalLedgers}" 
-								th:value="${generalLedger.id}"
-								th:text="${generalLedger.name}">
+								th:value="${generalLedger.accountNo}"
+								th:text="|${generalLedger.accountNo}-${generalLedger.name}|">
 							</option>
 						</select>
+						
 						<span class="text-danger" th:if="${#fields.hasErrors('pAccountNo')}"
 							th:errors="*{pAccountNo}">
 						</span>
@@ -141,7 +142,7 @@
 					<label for="pDescription" class="col-sm-3 control-label no-padding-right">Description:</label>
 					<div class="col-sm-9">
 						<input type="text" class="col-xs-12 col-sm-12" 
-							th:field="*{pDescription}"
+							th:field="*{pDescription}" onblur="setDesc()"
 							/> 
 					<span
 							class="text-danger" th:if="${#fields.hasErrors('pDescription')}"
@@ -162,7 +163,13 @@
 				<div class="form-group">
 					<label for="rAccountNo" class="col-sm-3 control-label no-padding-right">Account:</label>
 					<div class="col-sm-9">
-						<select th:field="*{rAccountNo}" size="" style="margin-top:0px;" class="col-xs-10 col-sm-7"  required="required" ></select>
+						<select th:field="*{rAccountNo}" id="rAccountNo"  class="col-xs-10 col-sm-7" style="margin-top:0px;"  required="required">
+							<option
+								th:each="generalLedger: ${generalLedgers}" 
+								th:value="${generalLedger.accountNo}"
+								th:text="|${generalLedger.accountNo}-${generalLedger.name}|">
+							</option>
+						</select>
 						<span class="text-danger" th:if="${#fields.hasErrors('rAccountNo')}"
 							th:errors="*{rAccountNo}">
 						</span>

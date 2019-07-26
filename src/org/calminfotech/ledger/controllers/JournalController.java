@@ -10,10 +10,12 @@ import org.calminfotech.ledger.forms.JournalForm;
 import org.calminfotech.ledger.models.JournalEntry;
 import org.calminfotech.ledger.models.JournalHeader;
 import org.calminfotech.ledger.models.LedgerAccount;
+import org.calminfotech.ledger.reports.models.Response;
 import org.calminfotech.ledger.utility.LedgerException;
 import org.calminfotech.system.boInterface.OrganisationBo;
 import org.calminfotech.system.models.Organisation;
 import org.calminfotech.user.utils.UserIdentity;
+import org.calminfotech.utils.Alert;
 import org.calminfotech.utils.annotations.Layout;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 @Controller
@@ -34,13 +37,13 @@ public class JournalController {
 	@Autowired
 	private JournalBo journalBo;
 
+	@Autowired
+	private Alert alert;
+
 	/*	
 	
 	@Autowired
 	private PostCodeDaoImpl postCodeDaoImpl;
-
-	@Autowired
-	private Alert alert;
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -142,17 +145,19 @@ public class JournalController {
 	
 	
 	@RequestMapping(value = {"/edit"}, method=RequestMethod.POST, consumes = "application/json")
-	public String edit(@RequestBody Object journal) {
+	public Response edit(@RequestBody Object journal, RedirectAttributes redirectAttributes) {
 		try {
 			this.journalBo.manageJournal(journal);
-			
+
+			alert.setAlert(redirectAttributes, Alert.DANGER, "IT'S ALIVE");
 			
 		} catch (LedgerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e.getMessage());
+			
+			alert.setAlert(redirectAttributes, Alert.DANGER, e.getMessage());
 		}
-		
-		return "redirect:/ledger/journal/index";
+		 Response response = new Response("Done", journal);
+		    return response;
 	}
 	
 }

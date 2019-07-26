@@ -4,18 +4,26 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.calminfotech.ledger.boInterface.LedgerPostingBo;
+import org.calminfotech.billing.boInterface.CustomerTransactionBo;
+import org.calminfotech.billing.models.CustomerTransaction;
 import org.calminfotech.ledger.boInterface.JournalBo;
+import org.calminfotech.ledger.boInterface.LedgerPostingBo;
 import org.calminfotech.ledger.daoInterface.JournalDao;
 import org.calminfotech.ledger.models.GLEntry;
 import org.calminfotech.ledger.models.JournalEntry;
 import org.calminfotech.ledger.models.JournalHeader;
 import org.calminfotech.ledger.utility.LedgerException;
 import org.calminfotech.ledger.utility.LedgerUtility;
+import org.calminfotech.patient.boInterface.PatientBo;
+import org.calminfotech.patient.models.Patient;
 import org.calminfotech.system.boInterface.OrganisationBo;
+import org.calminfotech.system.boInterface.SettingBo;
+import org.calminfotech.system.models.SettingsAssignment;
 import org.calminfotech.user.utils.UserIdentity;
+import org.calminfotech.utils.AutoGenerate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -38,12 +46,30 @@ public class JournalBoImpl implements JournalBo{
 	@Autowired
 	private OrganisationBo organisationBo;
 	
-	/*@Autowired
-	private CustomerAccBo cAccBo;
+	@Autowired
+	private PatientBo patientBo;
+	
+	@Autowired
+	private CustomerTransactionBo customerTransactionBo;
+	
+	
 
 	@Autowired
 	private SettingBo settingBo;
 
+	
+	/*@Autowired
+	private CustomerAccBo cAccBo;
+
+	@Autowired
+	private PatientPaymentOptionBo patientPaymentOptionBo;
+	
+	@Autowired
+	private SettingBo settingBo;
+
+	@Autowired
+	private Alert alert;
+	
 	@Autowired
 	private LedgerAccBo ledgerAccBo;
 	
@@ -148,8 +174,8 @@ public class JournalBoImpl implements JournalBo{
 		this.removeEntries(journalID);
 		for (JsonElement jsonElement : entries) {
 			JournalEntry journalEntry = new JournalEntry();
-			JsonObject jEntryObj = jsonElement.getAsJsonObject();/*
-			journalEntry.setAccountType(jEntryObj.get("account_type").getAsString());*/
+			JsonObject jEntryObj = jsonElement.getAsJsonObject();
+			journalEntry.setAccountType(jEntryObj.get("account_type").getAsString());
 			journalEntry.setAccountNo(jEntryObj.get("account_no").getAsString());
 			journalEntry.setAmount(Float.parseFloat(jEntryObj.get("amount").getAsString().replace(",", "")));
 			journalEntry.setPostCode(jEntryObj.get("post_code").getAsString());
@@ -176,10 +202,14 @@ public class JournalBoImpl implements JournalBo{
 		
 		if (action.contains("post")) {
 			if (Math.abs(totCredit) - Math.abs(totDebit) == 0) {
-				this.postJournal(journalID);
-				/*return true;
+				try {
+					this.postJournal(journalID);
+				} catch (LedgerException e) {
+					System.out.println(e.getExceptionMsg());
+				}
 			} else {
-				return false;*/
+
+				throw new LedgerException("Total credit and total debit are not equal");
 			}
 		}
 		
@@ -195,7 +225,7 @@ public class JournalBoImpl implements JournalBo{
 		this.journalDao.removeEntries(journalID);
 	}
 
-	@Override
+	@Transactional
 	public void postJournal(String journalID) throws LedgerException {
 		JournalHeader journalHeader = this.getJournalHeader(journalID);
 		journalHeader.setStatus("POSTED");
@@ -220,6 +250,82 @@ public class JournalBoImpl implements JournalBo{
 			gLEntry.setRef_no3(journalID);
 			gLEntry.setBranch(journalEntry.getBranch());
 			
+			if (journalEntry.getAccountType().equals("CA")) {
+				CustomerTransaction custtran = new CustomerTransaction();
+				
+				Double crl = 0.00;
+				Double gcrl = 0.00;
+				// Double pcrl = 0.00;
+
+				SettingsAssignment setass1 = this.settingBo.fetchsettings(
+						"CREDIT_LIMIT", userIdentity.getOrganisation().getId());
+
+				if (setass1 != null) {
+					try {
+						gcrl = Double.parseDouble(setass1.getSettings_value());
+					} catch (Exception e)
+
+					{
+						gcrl = 0.00;
+
+					}
+				}
+
+				try {
+					Double vt = this.patientBo.getPatientById(Integer.parseInt(journalEntry.getAccountNo()))
+							.getCreditlimit().doubleValue();
+					if (vt != 0.00) {
+						crl = vt;
+					} else {
+						crl = gcrl;
+					}
+				} catch (Exception e) {
+					crl = gcrl;
+				}
+				custtran.setEffectivedate(new Date(System.currentTimeMillis()));
+				custtran.setDescription(journalEntry.getDescription());
+				custtran.setPatient(this.patientBo.getPatientById(Integer.parseInt(journalEntry.getAccountNo())));
+				custtran.setDrcr(journalEntry.getPostCode());
+				custtran.setCode(new AutoGenerate().mygen());
+
+				if (journalEntry.getPostCode().equalsIgnoreCase("dr")) {
+					
+					if (((Double) custtran.getPatient().getMfig()
+							.get("totcustavailablebal") + journalEntry.getAmount()) > crl) {
+						throw new LedgerException("payment limit exceeded");
+					
+						//return "redirect:/transaction/customer";
+
+					}
+
+					custtran.setAmount((double) journalEntry.getAmount());
+					custtran.setTrantype("withdrawal");
+
+				} else {
+					custtran.setAmount((double) -journalEntry.getAmount());
+					custtran.setTrantype("deposit");
+
+				}
+
+				custtran.setCreatedBy(userIdentity.getUsername());
+				custtran.setUser(userIdentity.getUser());
+				custtran.setCreatedDate(new Date(System.currentTimeMillis()));
+				custtran.setOrganisation(userIdentity.getOrganisation());
+				custtran.setPaymode(null);
+				custtran.setDeleted(false);
+
+				this.customerTransactionBo.save(custtran);
+				
+				String customerGl = this.settingBo.fetchsettings("customer-GLP", 2).getSettings_value();
+				Patient patient = this.patientBo.getPatientById(Integer.parseInt(journalEntry.getAccountNo()));
+				
+				gLEntry.setBranch(patient.getOrganisation());
+				gLEntry.setAccountNo(customerGl);
+			} else if (journalEntry.getAccountType().equals("VA")){
+				System.out.println("Vendor");
+			} else if (journalEntry.getAccountType().equals("HA")){
+				System.out.println("HMO");
+			}
 			/*if (journalEntry.getAccountType().contains("CA")) {
 				CustomerEntry customerEntry= new CustomerEntry();
 				customerEntry.setAccountNo(journalEntry.getAccountNo());
@@ -251,7 +357,13 @@ public class JournalBoImpl implements JournalBo{
 				gLEntry.setBranch(customerAccount.getOrganisation().getId());
 				gLEntry.setAccountNo(customerGl);
 			} */
-			this.ledgerPostingBo.GLEntry(gLEntry);
+			
+			try {
+				this.ledgerPostingBo.GLEntry(gLEntry);
+			} catch (LedgerException e) {
+				System.out.println("Here here olaKolade" + e.getExceptionMsg());	
+				throw new LedgerException("abraham");
+			}
 		}
 	}
 }

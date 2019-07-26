@@ -7,6 +7,8 @@ import org.calminfotech.ledger.models.LedgerAccount;
 public interface LedgerAccDao {
 
 	public List<LedgerAccount> fetchAll(int company_id);
+	
+	public List<LedgerAccount> fetchPostingGLS(int company_id);
 
 	public List<LedgerAccount> fetchTop100(int company_id);
 

@@ -30,7 +30,7 @@ public class JournalDaoImpl implements JournalDao {
 				.createQuery("FROM JournalEntry WHERE company_id = ? AND organisation_id = ? ")
 				.setParameter(0, userIdentity.getOrganisation().getOrgCoy().getId())
 				.setParameter(1, userIdentity.getOrganisation().getId())/*
-				.setParameter(2, this.settingBo.fetchsettings("interbank-GLP", 2).getSettings_value())*/
+				.setParameter(2, this.settingBo.fetchsettings("interbranch-GLP", 2).getSettings_value())*/
 				.list();
 
 		return entries;
@@ -67,7 +67,7 @@ public class JournalDaoImpl implements JournalDao {
 				.createQuery("FROM JournalHeader WHERE company_id = ? AND organisation_id = ? ")
 				.setParameter(0, userIdentity.getOrganisation().getOrgCoy().getId())
 				.setParameter(1, userIdentity.getOrganisation().getId())
-				/*.setParameter(2, this.settingBo.fetchsettings("interbank-GLP", 2).getSettings_value())*/
+				/*.setParameter(2, this.settingBo.fetchsettings("interbranch-GLP", 2).getSettings_value())*/
 				.list();
 
 		return entries;
@@ -80,7 +80,7 @@ public class JournalDaoImpl implements JournalDao {
 				.setParameter(0, userIdentity.getOrganisation().getOrgCoy().getId())
 				.setParameter(1, userIdentity.getOrganisation().getId())
 				.setParameter(2, journalID)/*
-				.setParameter(2, this.settingBo.fetchsettings("interbank-GLP", 2).getSettings_value())*/
+				.setParameter(2, this.settingBo.fetchsettings("interbranch-GLP", 2).getSettings_value())*/
 				.list();
 		
 		if (list.size() > 0) 
@@ -97,7 +97,7 @@ public class JournalDaoImpl implements JournalDao {
 					.setParameter(0, userIdentity.getOrganisation().getOrgCoy().getId())
 					.setParameter(1, userIdentity.getOrganisation().getId())
 					.setParameter(2, journalID)/*
-					.setParameter(2, this.settingBo.fetchsettings("interbank-GLP", 2).getSettings_value())*/
+					.setParameter(2, this.settingBo.fetchsettings("interbranch-GLP", 2).getSettings_value())*/
 					.list();
 
 			if (entries.size() > 0 ) 

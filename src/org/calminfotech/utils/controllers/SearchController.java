@@ -5,8 +5,6 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.calminfotech.hrunit.forms.PersonnelSearchForm;
-import org.calminfotech.ledger.forms.CustAccSearchForm;
-import org.calminfotech.ledger.models.CustomerAccount;
 import org.calminfotech.patient.forms.PatientSearchForm;
 import org.calminfotech.system.forms.AdmissionSearchForm;
 import org.calminfotech.system.forms.AllergySearchForm;
@@ -21,11 +19,13 @@ import org.calminfotech.system.forms.SurgerySearchForm;
 import org.calminfotech.system.forms.XraySearchForm;
 import org.calminfotech.utils.SearchUtility;
 import org.calminfotech.utils.annotations.Layout;
+import org.calminfotech.utils.models.Personnelwinsearch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -59,7 +59,7 @@ public class SearchController {
 			BindingResult result, RedirectAttributes redirectAttributes) {
 
 		// List patientList = searchBo.searchPatient(searchForm, session);
-		List patientList = searchUtilBo.searchPatientwin(patientSearchForm,
+		List<?> patientList = searchUtilBo.searchPatientwin(patientSearchForm,
 				session);
 
 		model.addAttribute("patient", patientList);
@@ -71,7 +71,6 @@ public class SearchController {
 	@RequestMapping(value = { "/patientsearchwin" })
 	@Layout("layouts/blank")
 	public String searchblank(Model model, HttpSession session) {
-		// List<Patient> plist =
 		// this.patientBo.fetchAllByOrganisation(userIdentity.getOrganisation().getId());
 		// model.addAttribute("plist",plist);
 		PatientSearchForm pf = new PatientSearchForm();
@@ -89,7 +88,7 @@ public class SearchController {
 			BindingResult result, RedirectAttributes redirectAttributes) {
 
 		// List patientList = searchBo.searchPatient(searchForm, session);
-		List patientList = searchUtilBo.searchPatientwin(patientSearchForm,
+		List<?> patientList = searchUtilBo.searchPatientwin(patientSearchForm,
 				session);
 
 		model.addAttribute("patient", patientList);
@@ -98,10 +97,68 @@ public class SearchController {
 	}
 
 	// search test
+	@RequestMapping(value = { "/vendorsearchwin" })
+	@Layout("layouts/blank")
+	public String searchblankv(Model model, HttpSession session) {
+		// List<Vendor> plist =
+		// this.vendorBo.fetchAllByOrganisation(userIdentity.getOrganisation().getId());
+		// model.addAttribute("plist",plist);
+		PatientSearchForm pf = new PatientSearchForm();
+		pf.setMysp(0);
+		model.addAttribute("vendorSearch", pf);
+		return "search/vendorsearchwin";
+	}
+
+	@RequestMapping(value = { "/vendorsearchwin" }, method = RequestMethod.POST)
+	@Layout("layouts/blank")
+	public String searchblankpostv(
+			Model model,
+			HttpSession session,
+			@ModelAttribute("vendorSearch") PatientSearchForm PatientSearchForm,
+			BindingResult result, RedirectAttributes redirectAttributes) {
+
+		// List vendorList = searchBo.searchVendor(searchForm, session);
+		List<?> vendorList = searchUtilBo.searchVendorwin(PatientSearchForm,
+				session);
+
+		model.addAttribute("vendor", vendorList);
+
+		return "search/vendorsearchwin";
+	}
+	// search test
+		@RequestMapping(value = { "/hmosearchwin" })
+		@Layout("layouts/blank")
+		public String searchblankvhmo(Model model, HttpSession session) {
+			// this.vendorBo.fetchAllByOrganisation(userIdentity.getOrganisation().getId());
+			// model.addAttribute("plist",plist);
+			PatientSearchForm pf = new PatientSearchForm();
+			pf.setMysp(0);
+			model.addAttribute("hmoSearch", pf);
+			return "search/hmosearchwin";
+		}
+
+		@RequestMapping(value = { "/hmosearchwin" }, method = RequestMethod.POST)
+		@Layout("layouts/blank")
+		public String searchblankpostvhmo(
+				Model model,
+				HttpSession session,
+				@ModelAttribute("hmoSearch") PatientSearchForm PatientSearchForm,
+				BindingResult result, RedirectAttributes redirectAttributes) {
+
+			// List vendorList = searchBo.searchVendor(searchForm, session);
+			List<?> hmoList = searchUtilBo.searchHmowin(PatientSearchForm,
+					session);
+
+			model.addAttribute("hmo", hmoList);
+
+			return "search/hmosearchwin";
+		}
+
+	// search test
 	@RequestMapping(value = { "/appointmentpatientsearchwin" })
 	@Layout("layouts/blank")
 	public String searchblankapp(Model model, HttpSession session) {
-		// List<Patient> plist =
+
 		// this.patientBo.fetchAllByOrganisation(userIdentity.getOrganisation().getId());
 		// model.addAttribute("plist",plist);
 		PatientSearchForm pf = new PatientSearchForm();
@@ -119,7 +176,7 @@ public class SearchController {
 			BindingResult result, RedirectAttributes redirectAttributes) {
 
 		// List patientList = searchBo.searchPatient(searchForm, session);
-		List patientList = searchUtilBo.searchPatientwin(patientSearchForm,
+		List<?> patientList = searchUtilBo.searchPatientwin(patientSearchForm,
 				session);
 
 		model.addAttribute("patient", patientList);
@@ -149,7 +206,7 @@ public class SearchController {
 			BindingResult result, RedirectAttributes redirectAttributes) {
 
 		// List patientList = searchBo.searchPatient(searchForm, session);
-		List patientList = searchUtilBo.searchPatientwin(patientSearchForm,
+		List<?> patientList = searchUtilBo.searchPatientwin(patientSearchForm,
 				session);
 
 		model.addAttribute("patient", patientList);
@@ -179,7 +236,7 @@ public class SearchController {
 			BindingResult result, RedirectAttributes redirectAttributes) {
 
 		// List patientList = searchBo.searchPatient(searchForm, session);
-		List allergyList = searchUtilBo.searchAllergywin(allergySearchForm,
+		List<?> allergyList = searchUtilBo.searchAllergywin(allergySearchForm,
 				session);
 
 		model.addAttribute("allergy", allergyList);
@@ -196,6 +253,7 @@ public class SearchController {
 		// model.addAttribute("plist",plist);
 		PersonnelSearchForm pf = new PersonnelSearchForm();
 		pf.setMysp(0);
+		pf.setPersonnelid(0);
 		model.addAttribute("personnelSearch", pf);
 		return "search/personnelsearchwin";
 	}
@@ -209,11 +267,10 @@ public class SearchController {
 			BindingResult result, RedirectAttributes redirectAttributes) {
 
 		// List patientList = searchBo.searchPatient(searchForm, session);
-		List personnelList = searchUtilBo.searchPersonnelwin(
-				personnelSearchForm, session);
+		List<Personnelwinsearch> personnelList = searchUtilBo
+				.searchPersonnelwin(personnelSearchForm, session);
 		System.out.print("ggggggggg");
 		System.out.print(personnelList.size());
-		System.out.print("ggggggggg");
 
 		model.addAttribute("personnel", personnelList);
 
@@ -243,7 +300,7 @@ public class SearchController {
 			BindingResult result, RedirectAttributes redirectAttributes) {
 
 		// List patientList = searchBo.searchPatient(searchForm, session);
-		List billingitemList = searchUtilBo.searchBillingitemwin(
+		List<?> billingitemList = searchUtilBo.searchBillingitemwin(
 				billingitemSearchForm, session);
 
 		model.addAttribute("billingitem", billingitemList);
@@ -274,7 +331,7 @@ public class SearchController {
 			BindingResult result, RedirectAttributes redirectAttributes) {
 
 		// List patientList = searchBo.searchPatient(searchForm, session);
-		List examinationList = searchUtilBo.searchExaminationwin(
+		List<?> examinationList = searchUtilBo.searchExaminationwin(
 				examinationSearchForm, session);
 
 		model.addAttribute("examination", examinationList);
@@ -306,7 +363,7 @@ public class SearchController {
 			BindingResult result, RedirectAttributes redirectAttributes) {
 
 		// List patientList = searchBo.searchPatient(searchForm, session);
-		List laboratoryList = searchUtilBo.searchLaboratorywin(
+		List<?> laboratoryList = searchUtilBo.searchLaboratorywin(
 				laboratorySearchForm, session);
 
 		model.addAttribute("laboratory", laboratoryList);
@@ -338,7 +395,7 @@ public class SearchController {
 			BindingResult result, RedirectAttributes redirectAttributes) {
 
 		// List patientList = searchBo.searchPatient(searchForm, session);
-		List diseasesList = searchUtilBo.searchDiseaseswin(diseasesSearchForm,
+		List<?> diseasesList = searchUtilBo.searchDiseaseswin(diseasesSearchForm,
 				session);
 
 		model.addAttribute("diseases", diseasesList);
@@ -370,7 +427,7 @@ public class SearchController {
 			BindingResult result, RedirectAttributes redirectAttributes) {
 
 		// List patientList = searchBo.searchPatient(searchForm, session);
-		List surgeryList = searchUtilBo.searchSurgerywin(surgerySearchForm,
+		List<?> surgeryList = searchUtilBo.searchSurgerywin(surgerySearchForm,
 				session);
 
 		model.addAttribute("surgery", surgeryList);
@@ -400,13 +457,42 @@ public class SearchController {
 			BindingResult result, RedirectAttributes redirectAttributes) {
 
 		// List patientList = searchBo.searchPatient(searchForm, session);
-		List drugList = searchUtilBo.searchDrugwin(drugSearchForm, session);
+		List<?> drugList = searchUtilBo.searchDrugwin(drugSearchForm, session);
 
 		model.addAttribute("drug", drugList);
 
 		// system.out
 		return "search/drugsearchwin";
 	}
+
+	// search test
+	@RequestMapping(value = { "/consumablesearchwin" })
+	@Layout("layouts/blank")
+	public String searchblankdrucon(Model model, HttpSession session) {
+		// List<Patient> plist =
+		// this.patientBo.fetchAllByOrganisation(userIdentity.getOrganisation().getId());
+		// model.addAttribute("plist",plist);
+		DrugSearchForm pf = new DrugSearchForm();
+		pf.setMysp(0);
+		model.addAttribute("drugSearch", pf);
+
+		return "search/consumablesearchwin";
+	}
+
+	@RequestMapping(value = { "/proceduresearchwin" })
+	@Layout("layouts/blank")
+	public String searchblankdrugproc(Model model, HttpSession session) {
+		// List<Patient> plist =
+		// this.patientBo.fetchAllByOrganisation(userIdentity.getOrganisation().getId());
+		// model.addAttribute("plist",plist);
+		DrugSearchForm pf = new DrugSearchForm();
+		pf.setMysp(0);
+		model.addAttribute("drugSearch", pf);
+
+		return "search/proceduresearchwin";
+	}
+
+	
 
 	// search test
 	@RequestMapping(value = { "/xraysearchwin" })
@@ -429,7 +515,7 @@ public class SearchController {
 			BindingResult result, RedirectAttributes redirectAttributes) {
 
 		// List patientList = searchBo.searchPatient(searchForm, session);
-		List xrayList = searchUtilBo.searchXraywin(xraySearchForm, session);
+		List<?> xrayList = searchUtilBo.searchXraywin(xraySearchForm, session);
 
 		model.addAttribute("xray", xrayList);
 
@@ -460,7 +546,7 @@ public class SearchController {
 			BindingResult result, RedirectAttributes redirectAttributes) {
 
 		// List patientList = searchBo.searchPatient(searchForm, session);
-		List admissionList = searchUtilBo.searchAdmissionwin(
+		List<?> admissionList = searchUtilBo.searchAdmissionwin(
 				admissionSearchForm, session);
 
 		model.addAttribute("admission", admissionList);
@@ -491,7 +577,7 @@ public class SearchController {
 			BindingResult result, RedirectAttributes redirectAttributes) {
 
 		// List patientList = searchBo.searchPatient(searchForm, session);
-		List inventoryList = searchUtilBo.searchInventorywin(
+		List<?> inventoryList = searchUtilBo.searchInventorywinALL(
 				inventorySearchForm, session);
 
 		model.addAttribute("inventory", inventoryList);
@@ -521,7 +607,7 @@ public class SearchController {
 			BindingResult result, RedirectAttributes redirectAttributes) {
 
 		// List patientList = searchBo.searchPatient(searchForm, session);
-		List inventoryList = searchUtilBo.searchInventorywin(
+		List<?> inventoryList = searchUtilBo.searchInventorywinALL(
 				inventorySearchForm, session);
 
 		model.addAttribute("inventory", inventoryList);
@@ -539,7 +625,8 @@ public class SearchController {
 		GlobalitemSearchForm pf = new GlobalitemSearchForm();
 		pf.setMysp(0);
 		model.addAttribute("globalitemSearch", pf);
-		return "search/globalitemsearchwin";
+
+		return "search/globalitemwinsearchitem";
 	}
 
 	@RequestMapping(value = { "/globalitemsearchwin" }, method = RequestMethod.POST)
@@ -551,12 +638,42 @@ public class SearchController {
 			BindingResult result, RedirectAttributes redirectAttributes) {
 
 		// List patientList = searchBo.searchPatient(searchForm, session);
-		List globalitemList = searchUtilBo.searchGlobalitem(
+		List<?> globalitemList = searchUtilBo.searchGlobalitem(
 				globalItemsearchForm, session);
 
-		model.addAttribute("globalitemlist", globalitemList);
+		model.addAttribute("globalitemList", globalitemList);
 
-		return "search/globalitemsearchwin";
+		return "search/globalitemwinsearchitem";
+	}
+
+	@RequestMapping(value = { "/globalitemsearchwinall" })
+	@Layout("layouts/blank")
+	public String searchglobalblankall(Model model, HttpSession session) {
+		// List<Patient> plist =
+		// this.patientBo.fetchAllByOrganisation(userIdentity.getOrganisation().getId());
+		// model.addAttribute("plist",plist);
+		GlobalitemSearchForm pf = new GlobalitemSearchForm();
+		pf.setMysp(0);
+		model.addAttribute("globalitemSearch", pf);
+
+		return "search/globalitemwinsearchitemall";
+	}
+
+	@RequestMapping(value = { "/globalitemsearchwinall" }, method = RequestMethod.POST)
+	@Layout("layouts/blank")
+	public String searchglobalblankpostall(
+			Model model,
+			HttpSession session,
+			@ModelAttribute("globalitemSearch") GlobalitemSearchForm globalItemsearchForm,
+			BindingResult result, RedirectAttributes redirectAttributes) {
+
+		// List patientList = searchBo.searchPatient(searchForm, session);
+		List<?> globalitemList = searchUtilBo.searchGlobalitemALL(
+				globalItemsearchForm, session);
+
+		model.addAttribute("globalitemList", globalitemList);
+
+		return "search/globalitemwinsearchitemall";
 	}
 
 	@RequestMapping(value = { "/datetimer" })
@@ -566,34 +683,44 @@ public class SearchController {
 		return "search/datetimercontent";
 	}
 	
-	@RequestMapping(value = { "/customer_acc" })
-	@Layout("layouts/blank")
-	public String custAccSearch(Model model, HttpSession session) {
-		// List<Patient> plist =
-		// this.patientBo.fetchAllByOrganisation(userIdentity.getOrganisation().getId());
-		// model.addAttribute("plist",plist);
-		CustAccSearchForm cForm = new CustAccSearchForm();
-		cForm.setMysp(0);
-		model.addAttribute("custAccSearch", cForm);
-		return "search/cust_acc_search_win";
-	}
+	// search test
+		@RequestMapping(value = { "/productsearchwin/{product_type}" })
+		@Layout("layouts/blank")
+		public String productsearch(Model model, HttpSession session) {
+			// List<Vendor> plist =
+			// this.vendorBo.fetchAllByOrganisation(userIdentity.getOrganisation().getId());
+			// model.addAttribute("plist",plist);
+			PatientSearchForm pf = new PatientSearchForm();
+			pf.setMysp(0);
+			model.addAttribute("productSearch", pf);
+			return "search/productsearchwin";
+		}
 
-	@SuppressWarnings("unchecked")
-	@RequestMapping(value = { "/customer_acc" }, method = RequestMethod.POST)
-	@Layout("layouts/blank")
-	public String custAccSearch(
-			Model model,
-			HttpSession session,
-			@ModelAttribute("custAccSearch") CustAccSearchForm custAccSearch,
-			BindingResult result, RedirectAttributes redirectAttributes) {
+		@RequestMapping(value = { "/productsearchwin/{productType}" }, method = RequestMethod.POST)
+		@Layout("layouts/blank")
+		public String productsearch(
+				Model model,
+				HttpSession session,
+				@ModelAttribute("productSearch") PatientSearchForm productSearchForm,
+				BindingResult result, RedirectAttributes redirectAttributes, @PathVariable String productType) {
 
-		// List patientList = searchBo.searchPatient(searchForm, session);
-		List<CustomerAccount> custAccList = searchUtilBo.searchCustAccWin(custAccSearch,
-				session);
+			if (productType.equals("CA")) {
+				List<?> patientList = searchUtilBo.searchPatientwin(productSearchForm, session);
+				
+				model.addAttribute("productList", patientList);
+			} else if(productType.equals("HA")) {
+				List<?> hmoList = searchUtilBo.searchHmowin(productSearchForm, session);
+				
+				model.addAttribute("productList", hmoList);
+			} else if(productType.equals("VA")) {
 
-		model.addAttribute("customerAccs", custAccList);
+				List<?> vendorList = searchUtilBo.searchVendorwin(productSearchForm, session);
+				
+				model.addAttribute("productList", vendorList);
+			}
 
-		return "search/cust_acc_search_win";
-	}
+
+			return "search/productsearchwin";
+		}
 
 }

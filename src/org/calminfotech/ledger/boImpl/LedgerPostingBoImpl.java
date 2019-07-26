@@ -4,8 +4,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.calminfotech.ledger.boInterface.CustomerAccBo;
-import org.calminfotech.ledger.boInterface.LedgerPostingBo;
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
+import org.calminfotech.ledger.boInterface.LedgerPostingBo;
 import org.calminfotech.ledger.daoInterface.LedgerPostingDao;
 import org.calminfotech.ledger.forms.GLPostingForm;
 import org.calminfotech.ledger.models.CustomerEntry;
@@ -24,6 +24,7 @@ import org.calminfotech.user.utils.UserIdentity;
 import org.calminfotech.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class LedgerPostingBoImpl implements LedgerPostingBo{
@@ -59,6 +60,11 @@ public class LedgerPostingBoImpl implements LedgerPostingBo{
 	}
 	
 	@Override
+	public GenLedgBalance getBalanceCompany(String account_no, int company_id)  throws LedgerException{
+		return this.ledgerPostingDao.getBalanceCompany(account_no, company_id);
+	}
+	
+	@Transactional
 	public void GLPosting(GLPostingForm glPostingForm) throws LedgerException {
 		GLEntry gLEntry1 = new GLEntry();
 		GLEntry gLEntry2 = new GLEntry();
@@ -78,14 +84,12 @@ public class LedgerPostingBoImpl implements LedgerPostingBo{
 		gLEntry1.setDescription(glPostingForm.getPDescription());
 		gLEntry1.setCreated_by(userIdentity.getUser());
 		gLEntry1.setBatchNo(batch_no);
-		System.out.println(glPostingForm.getPostingDate());
 		gLEntry1.setPostingDate(DateUtils.formatStringToDate(glPostingForm.getPostingDate()));
 		
 		
 		
 		gLEntry2.setCreate_date(new Date(System.currentTimeMillis()));
 		gLEntry2.setAccountNo(glPostingForm.getRAccountNo());
-		System.out.println(gLEntry2.getAccountNo());
 		gLEntry2.setOrganisation(this.userIdentity.getOrganisation());
 		gLEntry2.setOrgCoy(this.userIdentity.getOrganisation().getOrgCoy());
 		gLEntry2.setRefNo1(glPostingForm.getRefNo1());
@@ -167,7 +171,7 @@ public class LedgerPostingBoImpl implements LedgerPostingBo{
 	}
 	
 
-	@Override
+	@Transactional
 	public void GLEntry(GLEntry glEntry) throws LedgerException 
 	{
 		LedgerAccount ledgerAccount = new LedgerAccount();
@@ -194,7 +198,7 @@ public class LedgerPostingBoImpl implements LedgerPostingBo{
 			System.out.println("different branches: " + glEntry.getBranch() + " : " + glEntry.getOrganisation().getId());
 			System.out.println(Math.abs(glEntry.getAmount()));
 			glEntry.setAmount(Math.abs(glEntry.getAmount()));
-			this.interbankBalancing(glEntry);
+			this.interbranchBalancing(glEntry);
 		}
 		
 	}
@@ -247,19 +251,19 @@ public class LedgerPostingBoImpl implements LedgerPostingBo{
 		return (Float) null;
 	}
 	
-	public void interbankBalancing(GLEntry glEntry) throws LedgerException {
+	public void interbranchBalancing(GLEntry glEntry) throws LedgerException {
 
 		// inter branch posting when the branch and the organisation ARE different
 		/*
 		 * Initialization
 		 */
 		/*SettingsAssignment settingsAssignment = new SettingsAssignment();
-		settingsAssignment.setSettings_code("interbank-GLP");
+		settingsAssignment.setSettings_code("interbranch-GLP");
 		*/
 		
 		Organisation org = this.userIdentity.getOrganisation();
 		float amount = glEntry.getAmount();
-		SettingsAssignment settingsAssignment = this.settingBo.fetchsettings("interbank-GLP", org.getOrgCoy().getId());
+		SettingsAssignment settingsAssignment = this.settingBo.fetchsettings("interbranch-GLP", org.getOrgCoy().getId());
 		String sysAccountNo = settingsAssignment.getSettings_value();
 		this.getBalance(sysAccountNo, org.getId(), org.getOrgCoy().getId());
 		User user = new User();
@@ -367,7 +371,7 @@ public class LedgerPostingBoImpl implements LedgerPostingBo{
 			
 			GLEntry glEntry1 = new GLEntry();
 			glEntry1.setAccountNo(glEntry.getAccountNo());
-			glEntry1.setAmount(glEntry.getAmount());
+			glEntry1.setAmount(Math.abs(glEntry.getAmount()));
 			glEntry1.setOrganisation(glEntry.getBranch());
 			glEntry1.setOrgCoy(user.getOrganisation().getOrgCoy());
 			glEntry1.setBranch(glEntry.getBranch());
@@ -379,10 +383,8 @@ public class LedgerPostingBoImpl implements LedgerPostingBo{
 			glEntry1.setPostingDate(new Date(System.currentTimeMillis()));
 			
 			if (glEntry.getPostCode().equals("DR")) {
-				System.out.println("equals DR");
 				glEntry1.setPostCode("CR");
 			} else {
-				System.out.println("equals CR");
 				glEntry1.setPostCode("DR");
 			}
 

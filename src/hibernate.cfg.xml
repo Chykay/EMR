@@ -173,6 +173,8 @@
 	<mapping class="org.calminfotech.utils.models.Allergywinsearch" /> 
 
       <mapping class="org.calminfotech.utils.models.Patientwinsearch" /> 
+      <mapping class="org.calminfotech.utils.models.Hmowinsearch" /> 
+      <mapping class="org.calminfotech.utils.models.Vendorwinsearch" /> 
 
      <mapping class="org.calminfotech.utils.models.Personnelwinsearch" /> 
      <mapping class="org.calminfotech.utils.models.Laboratorywinsearch" />
@@ -413,10 +415,7 @@
 		 <mapping class="org.calminfotech.ledger.models.TotalingCode" />
 		 
 		 <mapping class="org.calminfotech.ledger.reports.models.AccChartEntry" />
-		 <mapping class="org.calminfotech.ledger.reports.models.BranchAccChart" />
-		 <mapping class="org.calminfotech.ledger.reports.models.BranchTB" />
-		 <mapping class="org.calminfotech.ledger.reports.models.CompanyAccChart" />
-		 <mapping class="org.calminfotech.ledger.reports.models.CompanyTB" />
+		 <mapping class="org.calminfotech.ledger.reports.models.AccChartReport" />
 		 <mapping class="org.calminfotech.ledger.reports.models.TBReport" />
 		 <mapping class="org.calminfotech.ledger.reports.models.TrialBalEntry" />
 		 

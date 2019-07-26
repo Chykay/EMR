@@ -103,7 +103,7 @@ public class ReportsController {
 	public String branchBalSheet(Model model, @PathVariable int branchID, @PathVariable String type) {
 
 		
-		model.addAttribute("branchBS", this.reportsBo.addReserve(branchID, type));
+		model.addAttribute("branchBS", this.reportsBo.getCoAReportWithReserveGL(branchID, type, "branch"));
 
 		return "ledger/reports/bal_sheet/branch";
 	}
@@ -113,7 +113,7 @@ public class ReportsController {
 	@RequestMapping(value = "/bal_sheet/{companyID}/{type}", method = RequestMethod.GET)
 	public String companyBalSheet(Model model, @PathVariable int companyID, @PathVariable String type) {
 
-		model.addAttribute("companyBS", this.reportsBo.getCompanyCoA(companyID, type, "balSheet"));
+		model.addAttribute("companyBS", this.reportsBo.getCoAReportWithReserveGL(this.userIdentity.getOrganisation().getId(), type, "company"));
 
 		return "ledger/reports/bal_sheet/company";
 	}
@@ -132,7 +132,7 @@ public class ReportsController {
 	@RequestMapping(value = "/P_L/branch/{branchID}/{type}", method = RequestMethod.GET)
 	public String branchPandL(Model model, @PathVariable int branchID, @PathVariable String type) {
 		
-		model.addAttribute("branchPL", this.reportsBo.getBranchCoA(branchID, type, "PandL"));
+		model.addAttribute("branchPL", this.reportsBo.getCoAReport(branchID, type, "PandL", "branch"));
 
 		return "ledger/reports/P_L/branch";
 	}
@@ -141,7 +141,7 @@ public class ReportsController {
 	@RequestMapping(value = "/P_L/{companyID}/{type}", method = RequestMethod.GET)
 	public String companyPandL(Model model, @PathVariable int companyID, @PathVariable String type) {
 
-		model.addAttribute("companyPL", this.reportsBo.getCompanyCoA(companyID, type, "PandL"));
+		model.addAttribute("companyPL",  this.reportsBo.getCoAReport(this.userIdentity.getOrganisation().getId(), type, "PandL", "company"));
 
 		return "ledger/reports/P_L/company";
 	}

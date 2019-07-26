@@ -4,7 +4,7 @@ window.branches = "";
 window.random = 1;
 const saveBtn = document.getElementById('save');
 const postBtn = document.getElementById('post');
-//const searchButtons = document.querySelectorAll('.custSearch');
+//const searchButtons = document.querySelectorAll('.searchBtn');
 
 if(saveBtn != null){
 	saveBtn.addEventListener('click', (e) => {
@@ -24,7 +24,7 @@ if(postBtn != null) {
  
 $(document).ready(function(){
 	getAccounts("GET GL", "GA");
-	$(".accountNo").select2().trigger("change");
+	$(".accountNo").select2({width: "180px", height: "36px"}).trigger("change");
 	$(".accountNo").each(function() {
 		$(this).trigger("change.select2");
 	});
@@ -56,8 +56,9 @@ $('.add').click(function(){
 	     return oldval.replace(/\d*$/,nrs);
 	  });
 	};
-	markup = '<div style="display:inline-table;"><input type="text" class="accountNoSearch" id="accountNoSearch"  th:value="${journalEntry.accountNo}" required="required" disabled="disabled" style="display:none;"/><button type="button" class="custSearch btn btn-xs btn-primary" style="display:none;">searcn</button></div><select id="postCode"  required="required"><option value="">Select..</option><option value="DR">GL Debit</option><option value="CR">GL Credit</option></select><select id="branchID"  required="required">' + window.branches + '</select><input type="text" id="amount"  placeholder="amount"  required="required" /><input type="text" id="refNo"  placeholder="ref no"  required="required" /><input type="text" id="desc"  placeholder="description"  required="required" /><button type="button" class="btn btn-xs btn-default delete"><i class="fa fa-trash-o"></i></button>';
-	$(div).addClass("journal").html(markup);
+	markup = '<div style="display:inline-table;"><input type="text" class="accountNoSearch" id="accountNoSearch"  th:value="${journalEntry.accountNo}" required="required" disabled="disabled" style="display:none;"/><button type="button" class="searchBtn btn btn-xs btn-primary" style="display:none;"><i class="fa fa-search"></i></button></div><select id="postCode"  required="required"><option value="">Select..</option><option value="DR">GL Debit</option><option value="CR">GL Credit</option></select><select id="branchID"  required="required">' + window.branches + '</select><input type="text" id="amount"  placeholder="amount"  required="required" /><input type="text" id="refNo"  placeholder="ref no"  required="required" /><input type="text" id="desc"  placeholder="description"  required="required" /><button type="button" class="btn btn-xs btn-default delete"><i class="fa fa-trash-o"></i></button>';
+	$(div).addClass("journal").css({"display": "inline-table", "width": "100%", "margin-top": "10px"}).html(markup);
+
 	$(div).prepend($dup);
 	
 	select = document.createElement('select');
@@ -70,7 +71,7 @@ $('.add').click(function(){
 	var opt5 = document.createElement('option');
 	
 	opt.value = '';
-	opt.innerHTML = 'Select Ledgers';
+	opt.innerHTML = 'Select...';
 	
 	opt2.value = 'GA';
 	opt2.innerHTML = 'GL';
@@ -95,15 +96,13 @@ $('.add').click(function(){
 	$(div).prepend(select);
 
 	$('form').append(div);
-	$src.select2({width: "120px"});
+	$src.select2({width: "180px", height: "36px"});
 	$src.trigger("change.select2");
-	$dup.select2({width: "120px"});
+	$dup.select2({width: "180px", height: "36px"});
 
 	window.random++;
-	accNoElem = $src.parent().find('.select2-container');
-	accNoElem[0].style.display = "none";
-	accNoElem1 = $dup.parent().find('.select2-container');
-	accNoElem1[0].style.display = "none";
+	
+	accountSetup($dup.parent(), "");
 });
 
 
@@ -111,8 +110,8 @@ $(document.body).on("click", ".delete", function(){
 	$(this).parent().remove();
 });
 
-$(document.body).on("click", ".custSearch", function(){
-	custSearch($(this));
+$(document.body).on("click", ".searchBtn", function(){
+	searchButton($(this));
 });
 
 function getBranches() {
@@ -141,22 +140,24 @@ function getBranches() {
  
 function selectOptions() {
 	$("select").each(function(){
-		var selValue = $(this)[0].value;
 		var selClass = $(this)[0].className;
-		var options = $(this)[0]["options"];
+		if(selClass == "postCode")
+			var selValue = $(this)[0].value;
+		else
+			var selValue = $(this)[0]["attributes"]["value"]["value"];
 		
+		
+		console.log(selClass, selValue);
 		if(selClass == "accountType") {
-			//console.log("setting up account no");
-			accountSetup($(this).parent(), $(this)[0].value);
-		} else if(selClass == "accountNo") {
-			//console.log
-			//var options = $(this)[0]["options"];
-			console.log(options, $(this));
-		}
+			console.log("setting up account no");
+			console.log("2", selValue);
+			accountSetup($(this).parent(), selValue);
+		} 
 
 		
 
-		//console.log("now setting up selected account no");
+		console.log("now setting up selected account no");
+		var options = $(this)[0]["options"];
 		$.each(options, function( index ) {
 			if(this.value == selValue) {
 				this.selected = true;
@@ -170,9 +171,8 @@ function selectOptions() {
 function accountSetup(journalElem, acc_type) {
 	accNoElem = journalElem.find('.select2-container');
 	
-	searchBtn = journalElem.find('.custSearch')[0];
+	searchBtn = journalElem.find('.searchBtn')[0];
 	accNoSearchElem = journalElem.find('#accountNoSearch')[0];
-	console.log("yup", acc_type, accNoElem);
 	//console.log(journalElem, acc_type, accNoElem, searchElem);
 			
 	if(acc_type == 'GA') {
@@ -180,11 +180,19 @@ function accountSetup(journalElem, acc_type) {
 		searchBtn.style.display = "none";
 		accNoSearchElem.style.display = "none";
 		
+		if(accNoSearchElem["attributes"]["value"]){
+			alert("if");
+			console.log(accNoSearchElem["attributes"]["value"]);
+			accNoSearchElem["attributes"]["value"]["value"] = "";
+		}
+		
+		
 	} else if(acc_type == '') {
 		accNoElem[0].style.display = "none";
 		accNoSearchElem.style.display="none";
 		searchBtn.style.display="none";
 	} else {
+		
 		accNoElem[0].style.display = "none";
 		accNoSearchElem.style.display="inline-block";
 		searchBtn.style.display="inline-block";
@@ -216,17 +224,22 @@ function getAccounts(elem, account_type) {
 	
 }
    
-function custSearch(searchBtn) {
+function searchButton(searchBtn) {
 	window.searchBtn = searchBtn;
-	var myWindow = window.open("/../" + window.location.pathname.split('/')[1] + "/search/customer_acc/", "MsgWindow", "width=500, height=500");
+	var acc_type = $(searchBtn).parent().parent().find('.accountType option:selected')[0].value;
+	alert(acc_type);
+	
+	var myWindow = window.open("/../" + window.location.pathname.split('/')[1] + "/search/productsearchwin/" + acc_type, "MsgWindow", "width=500, height=500");
+	
+	
 	myWindow.focus();
 	
 	return false
 }
 
-function updateAccNo(customerAccNo){
+function updateAccNo(productAccNo){
 	const accNoSearch = window.searchBtn.parent().find('#accountNoSearch')[0];
-	accNoSearch.value = customerAccNo;
+	accNoSearch.value = productAccNo;
 }
 
 function onSubmit(action){
@@ -286,7 +299,7 @@ function onSubmit(action){
 			};
 			
 			if (account_type == "GA"){
-				entry.account_no = $(this).find('#accountNo option:selected')[0].value;
+				entry.account_no = $(this).find('.accountNo option:selected')[0].value;
 			} else {
 				entry.account_no = $(this).find('#accountNoSearch')[0].value;
 			}
@@ -302,7 +315,6 @@ function onSubmit(action){
 		$.ajax({
 			type: "POST",
 			contentType: "application/json",
-			'processData': false,
 			url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/journal/edit',
 			beforeSend : function() {
 				$.gritter.add({
@@ -314,15 +326,22 @@ function onSubmit(action){
 			data: JSON.stringify(journal),
 			dataType: "json",
 			
-			success: function(response, data){
-				alert("yuppie");
-				window.location = '/../'+ window.location.pathname.split('/')[1] + '/ledger/journal/index';
+			success : function(result) {
+		        if(result.status == "Done"){
+		        	alert("done");
+		        } else {
+		        	alert("not dne");
+		        }
+				//window.location = '/../'+ window.location.pathname.split('/')[1] + '/ledger/journal/index';
 			},
-			error: function(response){
-				// alert("nopppiee");
-				window.location = '/../'+ window.location.pathname.split('/')[1] + '/ledger/journal/index';
+			error: function(e){
+				alert("Error!")
+		        console.log("ERROR: ", e);
 			}
 		});
+		
+		return false;
 	}
+	return false;
 }
 		/*]]>*/

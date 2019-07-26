@@ -29,7 +29,7 @@ public class CustomerAccDaoImpl implements CustomerAccDao {
 				.createQuery(" from CustomerAccount WHERE organisation_id = ? AND company_id = ? AND account_no != ?")
 				.setParameter(0, branch_id)
 				.setParameter(1, company_id)
-				.setParameter(2, this.settingBo.fetchsettings("interbank-GLP", 2).getSettings_value())
+				.setParameter(2, this.settingBo.fetchsettings("interbranch-GLP", 2).getSettings_value())
 				.list();
 		return customerAccounts;
 	}
