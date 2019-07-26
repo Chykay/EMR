@@ -345,8 +345,10 @@ public class ReportsBo {
 		accChartReport.setCompanyName(this.userIdentity.getOrganisation().getOrgCoy().getName());
 		
 		//ONLY USED FOR P_L
-		accChartReport.setBalance(Math.abs(rootAccCharts.get(0).getTotBalance()) - Math.abs(rootAccCharts.get(1).getTotBalance()));
-		
+
+		if(chartType.equals("PandL"))
+			accChartReport.setBalance(rootAccCharts.get(0).getTotBalance() - rootAccCharts.get(1).getTotBalance());
+
 		return accChartReport;	
 	}
 
@@ -364,6 +366,8 @@ public class ReportsBo {
 				if (returnedSelf.getAccChartEntries().size() > 0) {
 					accChartEntry.setAccChartEntries(returnedSelf.getAccChartEntries());
 					accChartEntry.setHasChildren(1);
+					//accChartEntry.setShow(1);
+					parent.setShow(returnedSelf.getShow());
 				} else {
 					returnedSelf = this.getCoALedgers(accChartEntry.getId(), viewType, chartType, rangeType, branchID);
 					
@@ -433,6 +437,9 @@ public class ReportsBo {
 			accChartEntries.add(accChartEntry);
 		}
 		
+		if(accChartEntries.size() > 0){
+			parent.setShow(1);
+		}
 		parent.setAccChartEntries(accChartEntries);
 		parent.setTotBalance(totBalance);
 		return parent;
