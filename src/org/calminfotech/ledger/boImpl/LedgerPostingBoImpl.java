@@ -59,6 +59,11 @@ public class LedgerPostingBoImpl implements LedgerPostingBo{
 		return this.ledgerPostingDao.getBalance(account_no, branch_id, company_id);
 	}
 	
+	@Override
+	public GenLedgBalance getBalanceCompany(String account_no, int company_id)  throws LedgerException{
+		return this.ledgerPostingDao.getBalanceCompany(account_no, company_id);
+	}
+	
 	@Transactional
 	public void GLPosting(GLPostingForm glPostingForm) throws LedgerException {
 		GLEntry gLEntry1 = new GLEntry();
@@ -79,14 +84,12 @@ public class LedgerPostingBoImpl implements LedgerPostingBo{
 		gLEntry1.setDescription(glPostingForm.getPDescription());
 		gLEntry1.setCreated_by(userIdentity.getUser());
 		gLEntry1.setBatchNo(batch_no);
-		System.out.println(glPostingForm.getPostingDate());
 		gLEntry1.setPostingDate(DateUtils.formatStringToDate(glPostingForm.getPostingDate()));
 		
 		
 		
 		gLEntry2.setCreate_date(new Date(System.currentTimeMillis()));
 		gLEntry2.setAccountNo(glPostingForm.getRAccountNo());
-		System.out.println(gLEntry2.getAccountNo());
 		gLEntry2.setOrganisation(this.userIdentity.getOrganisation());
 		gLEntry2.setOrgCoy(this.userIdentity.getOrganisation().getOrgCoy());
 		gLEntry2.setRefNo1(glPostingForm.getRefNo1());

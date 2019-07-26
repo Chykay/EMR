@@ -4,14 +4,16 @@ import java.util.List;
 
 /*@Entity
 @org.hibernate.annotations.Entity(dynamicInsert = true)*/
-public class BranchAccChart {
+public class AccChartReport {
 	
 	//@Id
 	private Integer id;
 
 	private String name;
-	
+
 	private String companyName;
+	
+	private String branchName;
 	
 	private float balance;
 
@@ -57,6 +59,14 @@ public class BranchAccChart {
 
 	public void setBalance(float balance) {
 		this.balance = balance;
+	}
+
+	public String getBranchName() {
+		return branchName;
+	}
+
+	public void setBranchName(String branchName) {
+		this.branchName = branchName;
 	}
 	
 	
