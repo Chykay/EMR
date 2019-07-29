@@ -4,16 +4,17 @@
 			<th:block th:switch="${PandLItem.hasChildren}">
 				<th:block  th:case="1">
 					<tr >
-						<td colspan="3"><b  th:style="'margin-left:'+@{${margin}}+'px;'" th:text="${PandLItem.name}"></b></td>
+						<td colspan="2"><b  th:style="'margin-left:'+@{${margin}}+'px;'" th:text="${PandLItem.name}"></b></td>
+						<td th:text="${#numbers.formatDecimal(PandLItem.totBalance, 0, 'COMMA', 2, 'POINT')}" ></td>
 					</tr>
 					<tr>						
 				    	<td  th:case="1" th:replace="ledger/reports/P_L/branchFragment :: branch(PandLList=${PandLItem.accChartEntries}, margin=${margin + 20})">P and L</td>				    	
 					</tr>
 					
-				    <tr>
+				  <!--   <tr>
 				    	<td colspan="2"><i><b><span  th:style="'margin-left:'+@{${margin}}+'px;'"  th:text="|Total ${PandLItem.name}:|"></span></b></i></td>
 				    	<td th:text="${#numbers.formatDecimal(PandLItem.totBalance, 0, 'COMMA', 2, 'POINT')}" ></td>
-				    </tr>
+				    </tr> -->
 				</th:block>
 				<th:block  th:case="0">
 					<tr>

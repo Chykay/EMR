@@ -10,8 +10,12 @@ public interface LedgerCatBo {
 	public List<LedgerCategory> fetchAll();
 
 	public List<LedgerCategory> fetchParents(int id);
-	
+
 	public LedgerCategory getLedgerById(int id);
+
+	public List<LedgerCategory> getCatsWithoutLedgerChildren();
+
+	public List<LedgerCategory> getCatsWithoutCatsChildren();
 	
 	public LedgerCategory save(LedgerCatForm ledgerCatForm);
 	

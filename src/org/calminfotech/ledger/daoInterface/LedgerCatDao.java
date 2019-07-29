@@ -21,4 +21,9 @@ public interface LedgerCatDao {
  * 
 	public List<LedgerCategory> fetchAllByOrgg(int orgID);
 	public List<LedgerCategory> fetchByLedgType(ArrayList<Integer> ledgerTypes);*/
+
+
+	List<LedgerCategory> getCatsWithoutCatsChildren();
+	
+	List<LedgerCategory> getCatsWithoutLedgerChildren();
 }

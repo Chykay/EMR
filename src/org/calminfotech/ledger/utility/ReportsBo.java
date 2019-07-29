@@ -272,7 +272,6 @@ public class ReportsBo {
 		}
 		
 		for (AccChartEntry accChartEntry : rootAccCharts) {
-
 			AccChartEntry self = this.getCoACategories(descAccCharts, accChartEntry.getId(), viewType, chartType, rangeType, branchID);
 			accChartEntry.setShow(self.getShow());
 		
@@ -348,7 +347,7 @@ public class ReportsBo {
 
 		if(chartType.equals("PandL"))
 			accChartReport.setBalance(rootAccCharts.get(0).getTotBalance() - rootAccCharts.get(1).getTotBalance());
-
+		
 		return accChartReport;	
 	}
 

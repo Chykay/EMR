@@ -79,5 +79,15 @@ public class LedgerCatBoImpl implements LedgerCatBo {
 		return ledgerCategory;
 	}
 
+	@Override
+	public List<LedgerCategory> getCatsWithoutLedgerChildren() {
+		return this.ledgerCatDao.getCatsWithoutLedgerChildren();
+	}
+
+	@Override
+	public List<LedgerCategory> getCatsWithoutCatsChildren() {
+		return this.ledgerCatDao.getCatsWithoutCatsChildren();
+	}
+
 	
 }
