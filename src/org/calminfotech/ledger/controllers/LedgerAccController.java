@@ -80,7 +80,7 @@ public class LedgerAccController {
 	public String create(Model model) {		
 		
 		List<TotalingCode> totalingCodes = this.ledgerTotallingBo.fetchAllActive();
-		List<LedgerCategory> ledgerCats = this.ledgerCatBo.fetchAll();
+		List<LedgerCategory> ledgerCats = this.ledgerCatBo.getCatsWithoutCatsChildren();
 		
 		model.addAttribute("ledgerAccForm", new LedgerAccForm());
 		model.addAttribute("ledgerCats", ledgerCats);
