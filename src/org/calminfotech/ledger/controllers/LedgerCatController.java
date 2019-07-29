@@ -72,7 +72,7 @@ public class LedgerCatController {
 	@RequestMapping(value = {"/create"}, method=RequestMethod.GET)
 	public String create(Model model) {		
 		
-		List<LedgerCategory> ledgerCats = this.ledgerCatBo.fetchAll();
+		List<LedgerCategory> ledgerCats = this.ledgerCatBo.getCatsWithoutLedgerChildren();
 		//List<LedgerType> ledgerTypes = this.ledgerTypesImpl.fetchAll();
 		
 		model.addAttribute("ledgerCats", ledgerCats);

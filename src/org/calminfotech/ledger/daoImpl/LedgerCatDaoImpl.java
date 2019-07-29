@@ -34,8 +34,9 @@ public class LedgerCatDaoImpl implements LedgerCatDao {
 	public List<LedgerCategory> fetchParents(int id){
 		
 		List<LedgerCategory> ledgerCats = sessionFactory.getCurrentSession()
-				.createQuery(" from LedgerCategory WHERE id != ?")
+				.createQuery(" from LedgerCategory WHERE id != ? AND company_id = ?")
 				.setParameter(0, id)
+				.setParameter(1, this.userIdentity.getOrganisation().getOrgCoy().getId())
 				.list();
 		return ledgerCats;
 	}
@@ -43,8 +44,10 @@ public class LedgerCatDaoImpl implements LedgerCatDao {
 	@SuppressWarnings("unchecked")
 	public LedgerCategory getLedgerById(int id){
 		List<LedgerCategory> list = this.sessionFactory.getCurrentSession()
-		.createQuery("FROM LedgerCategory WHERE id = ?")
-		.setParameter(0, id).list();
+		.createQuery("FROM LedgerCategory WHERE id = ? AND company_id = ?")
+		.setParameter(0, id)
+		.setParameter(1, this.userIdentity.getOrganisation().getOrgCoy().getId())
+		.list();
 		
 		if (list.size() > 0)
 			return (LedgerCategory) list.get(0);
@@ -52,21 +55,42 @@ public class LedgerCatDaoImpl implements LedgerCatDao {
 		return null;
 	}
 	
-	public void save(LedgerCategory balSheetCat){
-		this.sessionFactory.getCurrentSession().save(balSheetCat);
+	@SuppressWarnings("unchecked")
+	public List<LedgerCategory> getCatsWithoutLedgerChildren() {
+		List<LedgerCategory> ledgerCats = sessionFactory.getCurrentSession()
+				.createQuery("SELECT A from LedgerCategory A WHERE A.id NOT IN (SELECT B.ledgerCatID FROM LedgerAccount B WHERE B.orgCoy.id = :companyID) AND A.orgCoy.id  = :companyID")
+				.setParameter("companyID", this.userIdentity.getOrganisation().getOrgCoy().getId())
+				.list();
+		
+		return ledgerCats;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<LedgerCategory> getCatsWithoutCatsChildren() {
+		List<LedgerCategory> ledgerCats = sessionFactory.getCurrentSession()
+				.createQuery("SELECT A from LedgerCategory A WHERE A.id NOT IN (SELECT B.parentID FROM LedgerCategory B WHERE B.orgCoy.id  = :companyID) AND A.orgCoy.id  = :companyID")
+				.setParameter("companyID", this.userIdentity.getOrganisation().getOrgCoy().getId())
+				.list();
+		
+		return ledgerCats;
 	}
 	
-	public void delete(LedgerCategory balSheetCat){
+	public void save(LedgerCategory ledgerCategory){
+		this.sessionFactory.getCurrentSession().save(ledgerCategory);
+	}
+	
+	public void delete(LedgerCategory ledgerCategory){
 		System.out.println("Deleting");
-		this.sessionFactory.getCurrentSession().delete(balSheetCat);
+		this.sessionFactory.getCurrentSession().delete(ledgerCategory);
 		this.sessionFactory.getCurrentSession().flush();
 	}
 	
-	public void update(LedgerCategory balSheetCat){
+	public void update(LedgerCategory ledgerCategory){
 		System.out.println("Updating");
-		this.sessionFactory.getCurrentSession().update(balSheetCat);
+		this.sessionFactory.getCurrentSession().update(ledgerCategory);
 	}
 
+	
 	/*@SuppressWarnings("unchecked")
 	@Override
 	public List<LedgerCategory> fetchAllByOrgg(int orgID) {
