@@ -82,7 +82,6 @@ public class JournalDaoImpl implements JournalDao {
 				.setParameter(2, journalID)/*
 				.setParameter(2, this.settingBo.fetchsettings("interbranch-GLP", 2).getSettings_value())*/
 				.list();
-		
 		if (list.size() > 0) 
 			return list.get(0);
 		return null;

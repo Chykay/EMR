@@ -115,6 +115,7 @@ public class JournalController {
 	@Layout(value = "layouts/form_wizard_layout")
 	@RequestMapping(value = {"/edit/{id}"}, method=RequestMethod.GET)
 	public String edit(Model model, @PathVariable("id") String journalID) {
+		
 		JournalForm journalForm = new JournalForm();
 		JournalHeader journalHeader = null;
 		List<JournalEntry> journalEntries = null;

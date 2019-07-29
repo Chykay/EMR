@@ -243,6 +243,8 @@ function updateAccNo(productAccNo){
 }
 
 function onSubmit(action){
+	
+	console.log(token, header);
 	var isFormValid = true;
 	$("#form input, textarea, select").each(function(){
 		if ($.trim($(this).val()).length == 0){
@@ -311,17 +313,23 @@ function onSubmit(action){
 			"journalHeader": header,
 			"journalEntries": journalEntries
 		}
-			
+		
+		var urL = '/../'+ window.location.pathname.split('/')[1] + '/ledger/journal/edit';
+		
+		alert(urL);
+		
 		$.ajax({
 			type: "POST",
 			contentType: "application/json",
-			url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/journal/edit',
+			url : urL,
 			beforeSend : function() {
 				$.gritter.add({
 					title : "Progress...",
 					text : "Processing Journal Entries...",
 					time : 3000
 				}); 
+				    
+				  
 			},
 			data: JSON.stringify(journal),
 			dataType: "json",
