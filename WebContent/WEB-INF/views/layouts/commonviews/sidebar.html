@@ -1155,11 +1155,41 @@
 						</a>
 						<b class="arrow"></b>
 					</li>
-					<li class="">
-						<a th:href="@{/ledger/reports/GL}"> 
-							<i class="menu-icon fa fa-caret-right"></i> GL Reports
+					<li>
+						<a href="#" class="dropdown-toggle"> 
+							<i class="menu-icon fa fa-caret-right"></i> 
+							<span class="menu-text">
+								Products
+							</span> 
+							<b class="arrow fa fa-angle-down"></b>
 						</a>
-						<b class="arrow"></b>
+					
+						<ul class="submenu">
+							<li class="">
+								<a th:href="@{/ledger/reports/GL}"> 
+									<i class="menu-icon fa fa-caret-right"></i> GL Reports
+								</a>
+								<b class="arrow"></b>
+							</li>
+							<li class="">
+								<a th:href="@{/ledger/reports/GL}"> 
+									<i class="menu-icon fa fa-caret-right"></i> Patients
+								</a>
+								<b class="arrow"></b>
+							</li>
+							<li class="">
+								<a th:href="@{/ledger/reports/GL}"> 
+									<i class="menu-icon fa fa-caret-right"></i> HMO
+								</a>
+								<b class="arrow"></b>
+							</li>
+							<li class="">
+								<a th:href="@{/ledger/reports/GL}"> 
+									<i class="menu-icon fa fa-caret-right"></i> Vendor
+								</a>
+								<b class="arrow"></b>
+							</li>
+						</ul>
 					</li>
 					<li>
 					<a href="#" class="dropdown-toggle"> 
@@ -1328,20 +1358,8 @@
 					
 				<ul class="submenu">
 					 <li class="">
-					 	<a th:href="@{/ledger/setup/P_L}"> 
-					 		<i class="menu-icon fa fa-caret-right"></i> P and L
-						</a> 
-						<b class="arrow"></b>
-					</li> 
-					 <li class="">
 					 	<a th:href="@{/ledger/setup/banks/index}"> 
 					 		<i class="menu-icon fa fa-caret-right"></i> Bank GL
-						</a> 
-						<b class="arrow"></b>
-					</li> 
-					 <li class="">
-					 	<a th:href="@{/ledger/ledger_cat/index}"> 
-					 		<i class="menu-icon fa fa-caret-right"></i> Interface Accounts
 						</a> 
 						<b class="arrow"></b>
 					</li> 

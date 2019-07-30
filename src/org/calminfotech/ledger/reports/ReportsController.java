@@ -5,7 +5,6 @@ import java.util.List;
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
 import org.calminfotech.ledger.boInterface.LedgerTotallingBo;
 import org.calminfotech.ledger.models.LedgerAccount;
-import org.calminfotech.ledger.models.TotalingCode;
 import org.calminfotech.ledger.utility.ReportsBo;
 import org.calminfotech.system.boInterface.OrganisationBo;
 import org.calminfotech.system.models.Organisation;
@@ -47,21 +46,6 @@ public class ReportsController {
 	private OrganisationBo organisationBo;
 	
 
-
-	@Layout("layouts/reportblank")
-	@RequestMapping(value = "/sample", method = RequestMethod.GET)
-	public String listAll(Model model) {
-
-		List<TotalingCode> totalingCodes = this.ledgerTotallingBo.fetchAll();
-		
-		model.addAttribute("totalingAccounts", totalingCodes);
-		
-		for (TotalingCode totalingCode : totalingCodes) {
-			System.out.println(totalingCode.getName());
-		}
-		return "ledger/reports/sample";
-	}
-
 	@Layout("layouts/datatable")
 	@RequestMapping(value = "/TB", method = RequestMethod.GET)
 	public String trialBalance(Model model) {
@@ -71,7 +55,6 @@ public class ReportsController {
 		return "ledger/reports/tb/index";
 	}
 	
-
 	@Layout("layouts/reportblank")
 	@RequestMapping(value = "/TB/branch/{branchID}", method = RequestMethod.GET)
 	public String branchTB(Model model, @PathVariable int branchID) {
@@ -97,7 +80,6 @@ public class ReportsController {
 		return "ledger/reports/bal_sheet/index";
 	}
 	
-	
 	@Layout("layouts/reportblank")
 	@RequestMapping(value = "/bal_sheet/branch/{branchID}/{type}", method = RequestMethod.GET)
 	public String branchBalSheet(Model model, @PathVariable int branchID, @PathVariable String type) {
@@ -107,7 +89,6 @@ public class ReportsController {
 
 		return "ledger/reports/bal_sheet/branch";
 	}
-	
 	
 	@Layout("layouts/reportblank")
 	@RequestMapping(value = "/bal_sheet/{companyID}/{type}", method = RequestMethod.GET)
@@ -127,7 +108,6 @@ public class ReportsController {
 		return "ledger/reports/P_L/index";
 	}
 	
-	
 	@Layout("layouts/reportblank")
 	@RequestMapping(value = "/P_L/branch/{branchID}/{type}", method = RequestMethod.GET)
 	public String branchPandL(Model model, @PathVariable int branchID, @PathVariable String type) {
@@ -146,7 +126,6 @@ public class ReportsController {
 		return "ledger/reports/P_L/company";
 	}
 	
-	
 	@Layout("layouts/datatable")
 	@RequestMapping(value = "/GL", method = RequestMethod.GET)
 	public String indexGL(Model model) {
@@ -161,7 +140,6 @@ public class ReportsController {
 		return "ledger/reports/GL/index";
 	}
 
-	
 	@Layout("layouts/reportblank")
 	@RequestMapping(value = "/GL/{accountNo}", method = RequestMethod.GET)
 	public String generalLedger(Model model, @PathVariable String accountNo) {
@@ -171,7 +149,6 @@ public class ReportsController {
 		return "ledger/reports/GL/report";
 	}
 
-	
 	@Layout("layouts/reportblank")
 	@RequestMapping(value = "/GL/{company_id}/{accountNo}", method = RequestMethod.GET)
 	public String generalLedgerCompany(Model model, @PathVariable Integer company_id, @PathVariable String accountNo) {

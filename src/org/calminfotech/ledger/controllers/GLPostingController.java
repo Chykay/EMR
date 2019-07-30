@@ -24,15 +24,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import net.sf.json.JSONArray;
-/*
-import org.json.simple.JSONObject;*/
-import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping(value = "/ledger/gen_ledger")
@@ -100,7 +94,6 @@ public class GLPostingController {
 		return "/ledger/gen_ledger/direct/create";
 	}
 
-	
 	@RequestMapping(value = {"/direct/post"}, method=RequestMethod.POST)
 	public String postGl(@Valid @ModelAttribute("posting") GLPostingForm glPostingForm, BindingResult result, Model model,
 			RedirectAttributes redirectAttributes) {
@@ -138,7 +131,6 @@ public class GLPostingController {
 		
 		return "redirect:/ledger/gen_ledger/index";
 	}
-	
 	
 	@Layout("layouts/datatable")
 	@RequestMapping(value = {"/listings"}, method=RequestMethod.GET)
@@ -256,7 +248,6 @@ public class GLPostingController {
 		return "/ledger/gen_ledger/listGL";
 	}
 	
-	/* REVERSE ENTRY */
 	@RequestMapping(value = {"/reversal/{batch_no}"}, method=RequestMethod.GET)
 	public String GLReversal(@PathVariable("batch_no") String batch_no, Model model) {
 		
@@ -270,39 +261,4 @@ public class GLPostingController {
 		return "redirect:/ledger/gen_ledger/index";
 	}
 	
-
-	@RequestMapping(value = {"/direct/dummy"}, method=RequestMethod.POST)
-	public Object dummy(@RequestBody Object jsonObject){
-		
-		JSONArray array = (JSONArray)jsonObject;
-		//List <String> names = null;
-		
-		System.out.println(jsonObject);
-		System.out.println(array.get(0));
-		
-		JSONObject jObject = (JSONObject)array.get(0);
-		
-
-		System.out.println(jObject.get("age"));
-		return jsonObject;
-	
-		
-	}
-	
-/*	 GET ALL JOURNAL ENTRIES
-	@RequestMapping(value = {"/journal/index"}, method=RequestMethod.GET)
-	public String indexJ(Model model) {		
-		
-		List<JournalEntry> journalEntries = null;
-		try {
-			journalEntries = this.genLedgerBo.getJournalEntries();
-		} catch (LedgerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		model.addAttribute("journalEntries", journalEntries);
-		return "/ledger/gen_ledger/journal/index";
-	}*/
-	
-
 }
