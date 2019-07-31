@@ -31,4 +31,5 @@ public interface LedgerAccBo {
 
 	public boolean isUsed(String accountNo);
 	
+	public boolean productInterfaceAccCheck();
 }

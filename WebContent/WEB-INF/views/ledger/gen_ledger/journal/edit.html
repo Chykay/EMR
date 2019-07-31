@@ -1,4 +1,5 @@
 <th:block xmlns:th="http://www.thymeleaf.org">
+
 <div class="page-header">
 	<h1>
 		Posting
@@ -36,23 +37,23 @@
 					th:errors="*{journalHeader.description}"></span>
 			</div>  
 		</div>
-		<th:bloock th:if="${journalHeader.status  != 'POSTED' }">
+		<th:bloock th:if="${journalHeader.status  != 'POSTED' }" style="margin-bottom:20px;">
 			<button type="button" class="btn btn-primary add">New Entry</button> 
 			<button type="submit" class="btn btn-success" id="save">Save Entries</button>
 	 		<button type="submit" class="btn btn-default" id="post">Post Entries</button>
 	 	</th:bloock>
-		 <div th:each="journalEntry, counter : ${journalEntries}" class=" journal nothing">
+		 <div th:each="journalEntry, counter : ${journalEntries}" class=" journal" style="display:inline-table;width:100%;margin-top: 10px;">
 		    <select class="accountType" required="required" th:value="${journalEntry.accountType}">
 		        <option value="">Select..</option>
-		        <option value="CA">Customer</option>
 		        <option value="GA">GL</option>
+		        <option value="CA">Customer</option>
 		        <option value="HA">HMO</option>
 		        <option value="VA">Vendor</option>
 		    </select>
 		    <select class="accountNo" th:id="'accountNo' + ${counter.index}"   style="margin-top:0px; width: 120px;"  required="required"  th:value="${journalEntry.accountNo}" hidden="hidden">
 		    		<option th:each="generalLedger: ${generalLedgers}" 
-							th:value="${generalLedger.id}"
-							th:text="${generalLedger.name}">
+							th:value="${generalLedger.accountNo}"
+							th:text="|${generalLedger.accountNo}-${generalLedger.name}|">
 					</option>
 			</select>
 		   <div style="display:inline-table;"> 
@@ -61,14 +62,14 @@
 		    		<option th:value="${journalEntry.accountNo}" selected="selected">Select..</option>
 				</select>
 				 -->
-				<button type="button" class="custSearch btn btn-xs btn-primary" style="display:none;">searcn</button> 
+				<button type="button" class="searchBtn btn btn-xs btn-primary" style="display:none;"><i class="fa fa-search"></i></button> 
 		   	</div>
-		    <select id="postCode" required="required">
+		    <select class="postCode" id="postCode" required="required">
 		        <option th:value="${journalEntry.postCode}">Select..</option>
 		        <option value="DR">GL Debit</option>
 		        <option value="CR">GL Credit</option>
 		    </select>
-		    <select id="branchID" th:value="${journalEntry.branchID}" required="required">
+		    <select  class="branchID" id="branchID" th:value="${journalEntry.branch.id}" required="required">
 		    </select>
 		    
 		   <input type="text" id="amount" class="amount"  placeholder="amount" th:value="${journalEntry.amount}" 

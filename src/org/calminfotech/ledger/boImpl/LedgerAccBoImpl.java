@@ -7,6 +7,7 @@ import org.calminfotech.ledger.boInterface.LedgerAccBo;
 import org.calminfotech.ledger.daoInterface.LedgerAccDao;
 import org.calminfotech.ledger.forms.LedgerAccForm;
 import org.calminfotech.ledger.models.LedgerAccount;
+import org.calminfotech.system.boInterface.SettingBo;
 import org.calminfotech.user.utils.UserIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,9 @@ public class LedgerAccBoImpl implements LedgerAccBo {
 
 	@Autowired
 	private UserIdentity userIdentity;
+	
+	@Autowired
+	private SettingBo settingBo;
 	
 
 	public List<LedgerAccount> fetchAll(int company_id){
@@ -153,5 +157,18 @@ public class LedgerAccBoImpl implements LedgerAccBo {
 
 	public boolean isUsed(String accountNo) {
 		return this.ledgerAccDao.isUsed(accountNo);
+	}
+	
+	public boolean productInterfaceAccCheck() {
+		boolean isSet = false;
+
+		if(
+			this.settingBo.fetchsettings("PATIENT_REC_ACT", this.userIdentity.getOrganisation().getOrgCoy().getId()) != null
+			&& this.settingBo.fetchsettings("VENDOR_PAY_ACT", this.userIdentity.getOrganisation().getOrgCoy().getId()) != null  
+			&& this.settingBo.fetchsettings("HMO_REC_ACT", this.userIdentity.getOrganisation().getOrgCoy().getId())  != null
+		)
+			isSet = true;
+		
+		return isSet;
 	}
 }

@@ -146,9 +146,10 @@ public class LedgerPostingDaoImpl implements LedgerPostingDao {
 	@SuppressWarnings("unchecked")
 	public List<GLEntry> getGLEntries(int org_id){
 		List<GLEntry> entries = sessionFactory.getCurrentSession()
-				.createQuery("FROM GLEntry WHERE company_id = ? AND organisation_id = ? ")
+				.createQuery("FROM GLEntry WHERE company_id = ? AND organisation_id = ?  ORDER BY create_date DESC")
 				.setParameter(0, userIdentity.getOrganisation().getOrgCoy().getId())
 				.setParameter(1, org_id)
+				.setMaxResults(100)
 				.list();
 		
 		
@@ -186,7 +187,7 @@ public class LedgerPostingDaoImpl implements LedgerPostingDao {
 				.createQuery("FROM CustomerEntry WHERE company_id = ? AND organisation_id = ? ")
 				.setParameter(0, userIdentity.getOrganisation().getOrgCoy().getId())
 				.setParameter(1, userIdentity.getOrganisation().getId())/*
-				.setParameter(2, this.settingBo.fetchsettings("interbank-GLP", 2).getSettings_value())*/
+				.setParameter(2, this.settingBo.fetchsettings("interbranch-GLP", 2).getSettings_value())*/
 				.list();
 		
 		return entries;
@@ -212,7 +213,7 @@ public class LedgerPostingDaoImpl implements LedgerPostingDao {
 				.createQuery("FROM JournalEntry WHERE company_id = ? AND organisation_id = ? ")/*
 				.setParameter(0, this.userIdentity.getOrganisation().getOrgCoy().getId())
 				.setParameter(1, this.userIdentity.getOrganisation().getId())
-				.setParameter(2, this.settingBo.fetchsettings("interbank-GLP", 2).getSettings_value())*/
+				.setParameter(2, this.settingBo.fetchsettings("interbranch-GLP", 2).getSettings_value())*/
 				.list();
 
 		return entries;
@@ -231,7 +232,7 @@ public class LedgerPostingDaoImpl implements LedgerPostingDao {
 				.setParameter(3, start_date)
 				.setParameter(4, end_date)
 				/*
-				.setParameter(2, this.settingBo.fetchsettings("interbank-GLP", 2).getSettings_value())*/
+				.setParameter(2, this.settingBo.fetchsettings("interbranch-GLP", 2).getSettings_value())*/
 				.list();
 		
 		return entries;
@@ -247,7 +248,7 @@ public class LedgerPostingDaoImpl implements LedgerPostingDao {
 				.setParameter(0, userIdentity.getOrganisation().getOrgCoy().getId())
 				.setParameter(1, account_no)
 				/*
-				.setParameter(2, this.settingBo.fetchsettings("interbank-GLP", 2).getSettings_value())*/
+				.setParameter(2, this.settingBo.fetchsettings("interbranch-GLP", 2).getSettings_value())*/
 				.list();
 		
 		return entries;

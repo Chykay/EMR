@@ -173,6 +173,8 @@
 	<mapping class="org.calminfotech.utils.models.Allergywinsearch" /> 
 
       <mapping class="org.calminfotech.utils.models.Patientwinsearch" /> 
+      <mapping class="org.calminfotech.utils.models.Hmowinsearch" /> 
+      <mapping class="org.calminfotech.utils.models.Vendorwinsearch" /> 
 
      <mapping class="org.calminfotech.utils.models.Personnelwinsearch" /> 
      <mapping class="org.calminfotech.utils.models.Laboratorywinsearch" />
