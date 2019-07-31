@@ -53,7 +53,7 @@
 		    <select class="accountNo" th:id="'accountNo' + ${counter.index}"   style="margin-top:0px; width: 120px;"  required="required"  th:value="${journalEntry.accountNo}" hidden="hidden">
 		    		<option th:each="generalLedger: ${generalLedgers}" 
 							th:value="${generalLedger.accountNo}"
-							th:text="${generalLedger.name}">
+							th:text="|${generalLedger.accountNo}-${generalLedger.name}|">
 					</option>
 			</select>
 		   <div style="display:inline-table;"> 

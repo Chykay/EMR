@@ -181,7 +181,6 @@ function accountSetup(journalElem, acc_type) {
 		accNoSearchElem.style.display = "none";
 		
 		if(accNoSearchElem["attributes"]["value"]){
-			alert("if");
 			console.log(accNoSearchElem["attributes"]["value"]);
 			accNoSearchElem["attributes"]["value"]["value"] = "";
 		}
@@ -227,7 +226,6 @@ function getAccounts(elem, account_type) {
 function searchButton(searchBtn) {
 	window.searchBtn = searchBtn;
 	var acc_type = $(searchBtn).parent().parent().find('.accountType option:selected')[0].value;
-	alert(acc_type);
 	
 	var myWindow = window.open("/../" + window.location.pathname.split('/')[1] + "/search/productsearchwin/" + acc_type, "MsgWindow", "width=500, height=500");
 	
@@ -244,7 +242,6 @@ function updateAccNo(productAccNo){
 
 function onSubmit(action){
 	
-	console.log(token, header);
 	var isFormValid = true;
 	$("#form input, textarea, select").each(function(){
 		if ($.trim($(this).val()).length == 0){
@@ -314,14 +311,12 @@ function onSubmit(action){
 			"journalEntries": journalEntries
 		}
 		
-		var urL = '/../'+ window.location.pathname.split('/')[1] + '/ledger/journal/edit';
 		
-		alert(urL);
 		
 		$.ajax({
 			type: "POST",
 			contentType: "application/json",
-			url : urL,
+			url :  '/../'+ window.location.pathname.split('/')[1] + '/ledger/journal/edit',
 			beforeSend : function() {
 				$.gritter.add({
 					title : "Progress...",
@@ -340,11 +335,10 @@ function onSubmit(action){
 		        } else {
 		        	alert("not dne");
 		        }
-				//window.location = '/../'+ window.location.pathname.split('/')[1] + '/ledger/journal/index';
+		        window.location.replace( '/../'+ window.location.pathname.split('/')[1] + '/ledger/journal/index');
 			},
 			error: function(e){
-				alert("Error!")
-		        console.log("ERROR: ", e);
+				window.location.replace( '/../'+ window.location.pathname.split('/')[1] + '/ledger/journal/index');
 			}
 		});
 		

@@ -10,7 +10,6 @@ import org.calminfotech.ledger.forms.JournalForm;
 import org.calminfotech.ledger.models.JournalEntry;
 import org.calminfotech.ledger.models.JournalHeader;
 import org.calminfotech.ledger.models.LedgerAccount;
-import org.calminfotech.ledger.reports.models.Response;
 import org.calminfotech.ledger.utility.LedgerException;
 import org.calminfotech.system.boInterface.OrganisationBo;
 import org.calminfotech.system.models.Organisation;
@@ -146,7 +145,7 @@ public class JournalController {
 	
 	
 	@RequestMapping(value = {"/edit"}, method=RequestMethod.POST, consumes = "application/json")
-	public Response edit(@RequestBody Object journal, RedirectAttributes redirectAttributes) {
+	public String edit(@RequestBody Object journal, RedirectAttributes redirectAttributes) {
 		try {
 			this.journalBo.manageJournal(journal);
 
@@ -157,8 +156,41 @@ public class JournalController {
 			
 			alert.setAlert(redirectAttributes, Alert.DANGER, e.getMessage());
 		}
-		 Response response = new Response("Done", journal);
-		    return response;
+		return "redirect:/ledger/journal/index";
+		
+	}
+	
+
+	@Layout(value = "layouts/form_wizard_layout")
+	@RequestMapping(value = {"/delete/{id}"}, method=RequestMethod.GET)
+	public String delete(Model model, @PathVariable("id") String journalID) {
+		
+		JournalForm journalForm = new JournalForm();
+		JournalHeader journalHeader = null;
+		List<JournalEntry> journalEntries = null;
+		
+		try {
+			journalHeader = this.journalBo.getJournalHeader(journalID);
+			journalEntries = this.journalBo.getJournalEntriesByJournalID(journalID);
+		} catch (LedgerException e) {
+			e.printStackTrace();
+		}
+		
+		journalForm.setJournalHeader(journalHeader);
+		if (journalEntries == null) {
+			System.out.println("null");
+			model.addAttribute("journalEntries", new JournalEntry());
+		} else {
+			System.out.println("not null" + journalEntries.get(0).getAccountNo());
+			
+			model.addAttribute("journalEntries", journalEntries);
+		}
+
+		Organisation org = userIdentity.getOrganisation();
+		List<LedgerAccount> ledgerAccounts = this.ledgerAccBo.fetchAll(org.getOrgCoy().getId());
+		model.addAttribute("generalLedgers", ledgerAccounts);
+		model.addAttribute("journalHeader", journalHeader);
+		return "/ledger/gen_ledger/journal/edit";
 	}
 	
 }

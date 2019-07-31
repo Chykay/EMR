@@ -133,7 +133,7 @@ public class SettingDaoImpl implements SettingDao {
 		List<String> list = this.sessionFactory
 				.getCurrentSession()
 				.createQuery(
-						"select settings_value from SettingsAssignment where settings_code LIKE '%' + 'GLP' + '%' and company_id=?")
+						"select settings_value from SettingsAssignment where company_id=?")
 				.setParameter(0, company_id)
 				.list();
 
