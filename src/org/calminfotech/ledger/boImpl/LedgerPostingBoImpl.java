@@ -198,7 +198,7 @@ public class LedgerPostingBoImpl implements LedgerPostingBo{
 			System.out.println("different branches: " + glEntry.getBranch() + " : " + glEntry.getOrganisation().getId());
 			System.out.println(Math.abs(glEntry.getAmount()));
 			glEntry.setAmount(Math.abs(glEntry.getAmount()));
-			this.interbankBalancing(glEntry);
+			this.interbranchBalancing(glEntry);
 		}
 		
 	}
@@ -251,14 +251,14 @@ public class LedgerPostingBoImpl implements LedgerPostingBo{
 		return (Float) null;
 	}
 	
-	public void interbankBalancing(GLEntry glEntry) throws LedgerException {
+	public void interbranchBalancing(GLEntry glEntry) throws LedgerException {
 
 		// inter branch posting when the branch and the organisation ARE different
 		/*
 		 * Initialization
 		 */
 		/*SettingsAssignment settingsAssignment = new SettingsAssignment();
-		settingsAssignment.setSettings_code("interbank-GLP");
+		settingsAssignment.setSettings_code("interbranch-GLP");
 		*/
 		
 		Organisation org = this.userIdentity.getOrganisation();

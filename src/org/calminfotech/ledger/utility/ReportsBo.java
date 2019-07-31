@@ -344,9 +344,9 @@ public class ReportsBo {
 		accChartReport.setCompanyName(this.userIdentity.getOrganisation().getOrgCoy().getName());
 		
 		//ONLY USED FOR P_L
+
 		if(chartType.equals("PandL"))
 			accChartReport.setBalance(rootAccCharts.get(0).getTotBalance() - rootAccCharts.get(1).getTotBalance());
-
 		
 		return accChartReport;	
 	}

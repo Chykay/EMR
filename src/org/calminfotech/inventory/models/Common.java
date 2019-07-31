@@ -26,6 +26,11 @@ public class Common {
 	@JoinColumn(name = "organisation_id")
 	protected Organisation organisation;
 
+	
+	public Organisation getOrganisation() {
+		return organisation;
+	}
+
 	public void setOrganisation(Organisation organisation) {
 		this.organisation = organisation;
 	}

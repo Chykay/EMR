@@ -66,7 +66,9 @@
 							 
 								<a class="btn btn-xs btn-danger tooltips" 
 									title="Delete Item details"   th:id="${journalHeader.id}"  onclick="return Confirm(this.id)"
-									th:href="@{/ledger/journal/delete/{id}(id=${journalHeader.journalID}) }"> <i
+									href="#"
+									> 
+									<!-- th:href="@{/ledger/journal/delete/{id}(id=${journalHeader.journalID}) }" --><i
 										class="fa fa-trash-o"></i>
 								</a>
 							</th:block>
