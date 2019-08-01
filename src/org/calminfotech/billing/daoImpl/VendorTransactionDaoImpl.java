@@ -95,4 +95,17 @@ public class VendorTransactionDaoImpl implements VendorTransactionDao {
 
 		return list;
 	}
+
+	@SuppressWarnings("unchecked")
+	public List<VendorTransaction> fetchAllByVendor(int vendor_id) {
+		//TODO company; branch wahala
+		List<VendorTransaction> list = sessionFactory
+				.getCurrentSession()
+				.createQuery(
+						"from VendorTransaction where vendor_id = ? AND organisation.orgCoy.Id=?  ORDER BY effectivedate DESC")
+				.setParameter(0, vendor_id)
+				.setParameter(1, userIdentity.getOrganisation().getOrgCoy().getId())
+				.list();
+		return list;
+	}
 }

@@ -4,7 +4,14 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.calminfotech.billing.boInterface.CustomerTransactionBo;
+import org.calminfotech.billing.boInterface.HmoTransactionBo;
+import org.calminfotech.billing.boInterface.VendorTransactionBo;
+import org.calminfotech.billing.models.CustomerTransaction;
+import org.calminfotech.billing.models.VendorTransaction;
+import org.calminfotech.hmo.models.HmoTransaction;
 import org.calminfotech.hrunit.forms.PersonnelSearchForm;
+import org.calminfotech.ledger.forms.LedgerListingForm;
 import org.calminfotech.patient.forms.PatientSearchForm;
 import org.calminfotech.system.forms.AdmissionSearchForm;
 import org.calminfotech.system.forms.AllergySearchForm;
@@ -36,7 +43,16 @@ public class SearchController {
 
 	@Autowired
 	private SearchUtility searchUtilBo;
-
+	
+	@Autowired
+	private CustomerTransactionBo customerTransactionBo;
+	
+	@Autowired
+	private HmoTransactionBo hmoTransactionBo;
+	
+	@Autowired
+	private VendorTransactionBo vendorTransactionBo;
+	
 	// search test
 	@RequestMapping(value = { "/patientreportsearchwin" })
 	@Layout("layouts/blank")
@@ -684,43 +700,84 @@ public class SearchController {
 	}
 	
 	// search test
-		@RequestMapping(value = { "/productsearchwin/{product_type}" })
-		@Layout("layouts/blank")
-		public String productsearch(Model model, HttpSession session) {
-			// List<Vendor> plist =
-			// this.vendorBo.fetchAllByOrganisation(userIdentity.getOrganisation().getId());
-			// model.addAttribute("plist",plist);
-			PatientSearchForm pf = new PatientSearchForm();
-			pf.setMysp(0);
-			model.addAttribute("productSearch", pf);
-			return "search/productsearchwin";
+	@RequestMapping(value = { "/productsearchwin/{product_type}" })
+	@Layout("layouts/blank")
+	public String productsearch(Model model, HttpSession session) {
+		// List<Vendor> plist =
+		// this.vendorBo.fetchAllByOrganisation(userIdentity.getOrganisation().getId());
+		// model.addAttribute("plist",plist);
+		PatientSearchForm pf = new PatientSearchForm();
+		pf.setMysp(0);
+		model.addAttribute("productSearch", pf);
+		return "search/productsearchwin";
+	}
+
+	@RequestMapping(value = { "/productsearchwin/{productType}" }, method = RequestMethod.POST)
+	@Layout("layouts/blank")
+	public String productsearch(
+			Model model,
+			HttpSession session,
+			@ModelAttribute("productSearch") PatientSearchForm productSearchForm,
+			BindingResult result, RedirectAttributes redirectAttributes, @PathVariable String productType) {
+
+		if (productType.equals("CA")) {
+			List<?> patientList = searchUtilBo.searchPatientwin(productSearchForm, session);
+			
+			model.addAttribute("productList", patientList);
+		} else if(productType.equals("HA")) {
+			List<?> hmoList = searchUtilBo.searchHmowin(productSearchForm, session);
+			
+			model.addAttribute("productList", hmoList);
+		} else if(productType.equals("VA")) {
+
+			List<?> vendorList = searchUtilBo.searchVendorwin(productSearchForm, session);
+			
+			model.addAttribute("productList", vendorList);
 		}
 
-		@RequestMapping(value = { "/productsearchwin/{productType}" }, method = RequestMethod.POST)
-		@Layout("layouts/blank")
-		public String productsearch(
-				Model model,
-				HttpSession session,
-				@ModelAttribute("productSearch") PatientSearchForm productSearchForm,
-				BindingResult result, RedirectAttributes redirectAttributes, @PathVariable String productType) {
 
-			if (productType.equals("CA")) {
-				List<?> patientList = searchUtilBo.searchPatientwin(productSearchForm, session);
-				
-				model.addAttribute("productList", patientList);
-			} else if(productType.equals("HA")) {
-				List<?> hmoList = searchUtilBo.searchHmowin(productSearchForm, session);
-				
-				model.addAttribute("productList", hmoList);
-			} else if(productType.equals("VA")) {
+		return "search/productsearchwin";
+	}
+	
+	@RequestMapping(value = { "/product_trans_searchwin/{product_type}/{id}" })
+	@Layout("layouts/blank")
+	public String productListingsSearch(Model model, HttpSession session, @PathVariable("id") int id) {
+		// List<Vendor> plist =
+		// this.vendorBo.fetchAllByOrganisation(userIdentity.getOrganisation().getId());
+		// model.addAttribute("plist",plist);
+		LedgerListingForm pf = new LedgerListingForm();
+		pf.setAccountNo(String.valueOf(id));
+		//pf.setMysp(0);
+		model.addAttribute("productSearch", pf);
+		return "search/product_trans_searchwin";
+	}
 
-				List<?> vendorList = searchUtilBo.searchVendorwin(productSearchForm, session);
-				
-				model.addAttribute("productList", vendorList);
-			}
+	@RequestMapping(value = { "/product_trans_searchwin/{product_type}/{id}" }, method = RequestMethod.POST)
+	@Layout("layouts/blank")
+	public String productListingsSearch(
+			Model model,
+			HttpSession session,
+			@ModelAttribute("productSearch") LedgerListingForm productSearchForm,
+			BindingResult result, RedirectAttributes redirectAttributes, @PathVariable("product_type") String productType,
+			@PathVariable("id") int id) {
 
+		if (productType.equals("CA")) {
+			List<CustomerTransaction> patientList = customerTransactionBo.fetchAllByCustomer(id);
+			
+			model.addAttribute("productList", patientList);
+		} else if(productType.equals("HA")) {
+			List<HmoTransaction> hmoList = hmoTransactionBo.fetchAllByHMO(id);
+			
+			model.addAttribute("productList", hmoList);
+		} else if(productType.equals("VA")) {
 
-			return "search/productsearchwin";
+			List<VendorTransaction> vendorList = vendorTransactionBo.fetchAllByVendor(id);
+			
+			model.addAttribute("productList", vendorList);
 		}
+
+
+		return "search/product_trans_searchwin";
+	}
 
 }

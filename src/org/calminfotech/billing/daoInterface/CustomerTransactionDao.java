@@ -22,4 +22,6 @@ public interface CustomerTransactionDao {
 
 	public List<CustomerTransaction> fetchAllByOrganisation();
 
+	List<CustomerTransaction> fetchAllByCustomer(int customer_id);
+
 }

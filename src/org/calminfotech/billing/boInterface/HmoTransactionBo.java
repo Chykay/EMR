@@ -20,4 +20,7 @@ public interface HmoTransactionBo {
 	public List<HmoTransaction> fetchAllByOrganisation50();
 
 	List<HmoTransaction> fetchAllByOrganisation();
+	
+	public List<HmoTransaction> fetchAllByHMO(int hmo_id);
+
 }

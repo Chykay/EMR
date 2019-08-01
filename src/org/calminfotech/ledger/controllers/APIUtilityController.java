@@ -113,7 +113,7 @@ public class APIUtilityController {
 			System.err.println("error oo");
 		if (end_date.equals("")) start_date = "2999-01-01";
 		try {
-			 glEntries = this.ledgerPostingBo.getGLEntriesListing(account_no, start_date, end_date);
+			 glEntries = this.ledgerPostingBo.getBranchGLEntriesWithRange(account_no, start_date, end_date);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
@@ -149,7 +149,7 @@ public class APIUtilityController {
 		
 		List<CustomerEntry>  customerEntries = null;
 		try {
-			customerEntries = this.ledgerPostingBo.getCustEntriesListing(account_no, start_date, end_date);
+			//customerEntries = this.ledgerPostingBo.getCustEntriesListing(account_no, start_date, end_date);
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.err.println("error oo");

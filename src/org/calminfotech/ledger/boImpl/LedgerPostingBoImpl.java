@@ -345,7 +345,7 @@ public class LedgerPostingBoImpl implements LedgerPostingBo{
 		return this.ledgerPostingDao.getLedgerStat(account_no, branch_id, company_id);
 	}
 	
-	public List<GLEntry> getGLEntries(int org_id) {
+	public List<GLEntry> getBranchGLEntries(int org_id) {
 		return this.addNameToGLEntries(this.ledgerPostingDao.getGLEntries(org_id));
 	}
 
@@ -394,7 +394,7 @@ public class LedgerPostingBoImpl implements LedgerPostingBo{
 		
 	}
 
-	@Override
+/*	@Override
 	public List<CustomerEntry> getCustEntries() {
 
 		return this.ledgerPostingDao.getCustEntries();
@@ -475,6 +475,11 @@ public class LedgerPostingBoImpl implements LedgerPostingBo{
 		
 	}
 
+	@Override
+	public List<CustomerEntry> getCustEntriesListing(String account_no, String start_date, String end_date) throws LedgerException {
+		return this.ledgerPostingDao.getCustEntriesListing(account_no, start_date, end_date);
+	}*/
+
 	private List<CustomerEntry> getCustEntriesByBatch_no(String batch_no) {
 		return this.ledgerPostingDao.getCustEntriesByBatch_no(batch_no);
 	}
@@ -485,19 +490,15 @@ public class LedgerPostingBoImpl implements LedgerPostingBo{
 	}
 
 	@Override
-	public List<GLEntry> getGLEntriesListing(String account_no, String start_date, String end_date) throws LedgerException {
+	public List<GLEntry> getBranchGLEntriesWithRange(String account_no, String start_date, String end_date) throws LedgerException {
 		return this.ledgerPostingDao.getGLEntriesListing(account_no, start_date, end_date);
 	}
 	
 	@Override
-	public List<GLEntry> getGLEntriesListingCom(String account_no, String start_date, String end_date) throws LedgerException {
+	public List<GLEntry> getCompanyGLEntriesWithRange(String account_no, String start_date, String end_date) throws LedgerException {
 		return this.ledgerPostingDao.getGLEntriesListingCom(account_no, start_date, end_date);
 	}
 
-	@Override
-	public List<CustomerEntry> getCustEntriesListing(String account_no, String start_date, String end_date) throws LedgerException {
-		return this.ledgerPostingDao.getCustEntriesListing(account_no, start_date, end_date);
-	}
 	
 	public List<GLEntry> addNameToGLEntries(List<GLEntry> glEntries) {
 		

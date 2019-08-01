@@ -101,7 +101,7 @@ public class Hmo {
 	private Date modifiedDate;
 
 	@Column(name = "is_deleted")
-	private boolean isDeleted;
+	public boolean isDeleted;
 
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "patient_id")

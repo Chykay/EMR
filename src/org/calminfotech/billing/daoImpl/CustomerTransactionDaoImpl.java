@@ -99,4 +99,21 @@ public class CustomerTransactionDaoImpl implements CustomerTransactionDao {
 
 		return list;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<CustomerTransaction> fetchAllByCustomer(int customer_id) {
+
+		//TODO company; branch wahala
+		List<CustomerTransaction> list = sessionFactory
+				.getCurrentSession()
+				.createQuery(
+						"from CustomerTransaction  where organisation.orgCoy.Id=?  and patient_id = ?  ORDER BY effectivedate desc")
+				.setParameter(0,
+						userIdentity.getOrganisation().getOrgCoy().getId())
+				.setParameter(1, customer_id)
+				.list();
+
+		return list;
+	}
 }

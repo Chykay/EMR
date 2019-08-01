@@ -18,6 +18,7 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.calminfotech.billing.models.VendorTransaction;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 

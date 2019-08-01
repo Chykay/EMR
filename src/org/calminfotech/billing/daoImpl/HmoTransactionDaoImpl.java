@@ -98,4 +98,21 @@ public class HmoTransactionDaoImpl implements HmoTransactionDao {
 
 		return list;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<HmoTransaction> fetchAllByHMO(int hmo_id) {
+
+		//TODO company; branch wahala
+		List<HmoTransaction> list = sessionFactory
+				.getCurrentSession()
+				.createQuery(
+						"from HmoTransaction  where organisation.orgCoy.Id=?  and hmo_id = ?  ORDER BY effectivedate desc")
+				.setParameter(0,
+						userIdentity.getOrganisation().getOrgCoy().getId())
+				.setParameter(1, hmo_id)
+				.list();
+
+		return list;
+	}
 }

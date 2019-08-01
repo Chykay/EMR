@@ -45,9 +45,6 @@ public class HmoTransaction {
 	@Column(name = "created_date")
 	private Date createdDate;
 
-	@Column(name = "code")
-	private String code;
-
 	public Integer getId() {
 		return id;
 	}
@@ -134,14 +131,6 @@ public class HmoTransaction {
 	 * 
 	 * public void setMfig(Map mfig) { this.mfig = mfig; }
 	 */
-
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
 
 	public String getDrcr() {
 		return drcr;

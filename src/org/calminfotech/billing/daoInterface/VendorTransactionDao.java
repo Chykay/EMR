@@ -22,4 +22,6 @@ public interface VendorTransactionDao {
 
 	public List<VendorTransaction> fetchAllByOrganisation();
 
+	public List<VendorTransaction> fetchAllByVendor(int vendor_id);
+
 }

@@ -69,7 +69,7 @@
 		        <option value="DR">GL Debit</option>
 		        <option value="CR">GL Credit</option>
 		    </select>
-		    <select  class="branchID" id="branchID" th:value="${journalEntry.branch.id}" required="required">
+		    <select  class="branchID" id="branchID" th:value="${journalEntry.branch.id != null} ?  : " required="required">
 		    </select>
 		    
 		   <input type="text" id="amount" class="amount"  placeholder="amount" th:value="${journalEntry.amount}" 

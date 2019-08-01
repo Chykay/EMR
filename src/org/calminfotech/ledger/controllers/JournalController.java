@@ -132,7 +132,6 @@ public class JournalController {
 			model.addAttribute("journalEntries", new JournalEntry());
 		} else {
 			System.out.println("not null" + journalEntries.get(0).getAccountNo());
-			
 			model.addAttribute("journalEntries", journalEntries);
 		}
 

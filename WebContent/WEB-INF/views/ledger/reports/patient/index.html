@@ -1,6 +1,6 @@
 <div class="page-header">
 	<h1>
-		All Account
+		All patient
 	</h1>
 </div>
 
@@ -25,13 +25,13 @@
 
 <div class="row">
 	<div class="col-xs-12">
-		<div class="table-header">List of Accounts</div>
+		<div class="table-header">List of patients</div>
 		<table id="dTable"
 			class="table table-striped table-bordered table-hover">
 			<!-- Table heading -->
 			 <thead>
 				<tr>
-					<th>Account Number</th>
+					<th>patient Number</th>
 					<th>Name</th>
 					<th>Active</th>
 					
@@ -41,44 +41,42 @@
 
 			<!-- Table body -->
 			<tbody>
-				<tr th:each="account : ${accounts}">
-					<td th:text="${account.accountNo}">Account Number</td>
-					<td th:text="${account.name}">Name</td>
+				<tr th:each="patient : ${patients}">
+					<td th:text="${patient.patientId}">patient Number</td>
+					<td th:text="|${patient.surname} ${patient.firstName}|">Name</td>
 					<td>
-					    <span th:if="${account.isActive}">Active</span>
-					    <span th:if="${!account.isActive}">Inactive</span>
+					    <span th:if="${patient.isDeleted}">Active</span>
+					    <span th:if="${!patient.isDeleted}">Inactive</span>
 					</td>
 						
 					<td>
 					
-							<a class="btn btn-xs btn-primary tooltips"
+							<a class="btn btn-xs btn-primary tooltips search"
 								title="View All Entries"
-								th:href="@{/ledger/gen_ledger/listings/{id}(id=${account.accountNo}) }"> <i
+								th:id="${patient.patientId}"
+								> <i
 									class="fa fa-eye"></i>
 							</a> 
 						
+						<!-- th:href="@{/ledger/gen_ledger/listings/patients/{id}(id=${patient.patientId}) }"
+						
 							<a class="btn btn-xs btn-warning tooltips"
 								title="View All Entries Company"
-								th:href="@{/ledger/gen_ledger/listings/{comp_id}/{id}(id=${account.accountNo}, comp_id=${account.orgCoy.id}) }"> <i
+								th:href="@{/ledger/gen_ledger/listings/patients/{comp_id}/{id}(id=${patient.patientNo}, comp_id=${patient.orgCoy.id}) }"> <i
 									class="fa fa-eye"></i>
 							</a> 
 						
 						
 						 <a class="btn btn-xs btn-danger tooltips" 
-							title="Print All Entries"   th:id="${account.id}" 
-							th:href="@{/ledger/reports/GL/{id}(id=${account.accountNo}) }"> Print
+							title="Print All Entries"   th:id="${patient.id}" 
+							th:href="@{/ledger/reports/patients/{id}(id=${patient.patientId}) }"> Print
 						</a> 
 						
 						 <a class="btn btn-xs btn-warning tooltips" 
-							title="Print All Entries Company"   th:id="${account.id}" 
-							th:href="@{/ledger/reports/GL/{comp_id}/{id}(id=${account.accountNo}, comp_id=${account.orgCoy.id}) }"> Print
-						</a> 
-							<!-- <a class="btn btn-xs btn-primary tooltips"
-							title="view category details" 		
-							th:href="@{/ledger/ledger_acc/view/{id} (id=${account.id}) }"> <i
-								class="fa fa-eye"></i>
-						</a>  
-						 th:href="@{/ledger/reports/GL/{id}(id=${account.accountNo}) }" -->
+							title="Print All Entries Company"   th:id="${patient.id}" 
+							th:href="@{/ledger/reports/patients/{comp_id}/{id}(id=${patient.patientNo}, comp_id=${patient.orgCoy.id}) }"> Print
+						</a>  -->
+							
 					</td>
 				</tr>
 			</tbody>
@@ -91,59 +89,29 @@
 
 <script type="text/javascript">
 /*<![CDATA[*/
-$(".deleteBtn").click( function (){
-	var id = this.id;
-	var status = null;
-	$.ajax({
-		type : "GET",
-		url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/status/'	+ id,
-		async: false,
-		success : function(value) {
-			//if value is true, then you can't delete 
-			status = value;
-		}
-	});
+$(".search").click( function (){
+		var patient_id = this.id;
+		
+		var myWindow = window.open("/../" + window.location.pathname.split('/')[1] + "/search/product_trans_searchwin/CA/" + patient_id, "MsgWindow", "width=500, height=500");
+		
+		myWindow.focus();
+		
+		return false
 	
-	if(status == "true"){
-		alert("cannot delete ledger, it has a balance already");
-		/* $.gritter.add({
-			title : "Invalid Action!",
-			text : "cannot delete ledger, it has a balance already",
-			time : 4000
-		});  */
-	} else {
-		onDelete(id);
-	}
 	
 });
 
-function onDelete(id) {
-	$.ajax({
-		type : "GET",
-		url : '/../'+ window.location.pathname.split('/')[1] + '/ledger/ledger_acc/delete/'	+ id,
-		beforeSend : function() {
-			 /* $.gritter.add({
-				title : "Progress...",
-				text : "Deleting ledger...",
-				time : 3000
-			});  */
-		},
-		success : function() {
-			 /* $.gritter.add({
-				title : "Success!",
-				text : "Ledger deleted",
-				time : 4000
-			});  */
-		},
-		error : function() {
-			/* $.gritter.add({
-				title : "Error!",
-				text : "Error deleting ledger",
-				time : 4000
-			}); */
 
-		}
-	});
+function printReport(id, start_date, end_date){
+
+	if(start_date == '')
+		start_date = '-';
+	
+	if(end_date == '')
+		end_date = '-';
+	console.log(start_date, end_date);
+	window.location.replace('/../'+ window.location.pathname.split('/')[1] + '/ledger/reports/patients/' + id + '/' + start_date +
+		'/' + end_date)
 }
 /*]]>*/
 </script>

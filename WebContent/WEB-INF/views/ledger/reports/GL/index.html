@@ -53,13 +53,13 @@
 					
 							<a class="btn btn-xs btn-primary tooltips"
 								title="View All Entries"
-								th:href="@{/ledger/gen_ledger/listings/{id}(id=${account.accountNo}) }"> <i
+								th:href="@{/ledger/gen_ledger/listings/GL/{id}(id=${account.accountNo}) }"> <i
 									class="fa fa-eye"></i>
 							</a> 
 						
 							<a class="btn btn-xs btn-warning tooltips"
 								title="View All Entries Company"
-								th:href="@{/ledger/gen_ledger/listings/{comp_id}/{id}(id=${account.accountNo}, comp_id=${account.orgCoy.id}) }"> <i
+								th:href="@{/ledger/gen_ledger/listings/GL/{comp_id}/{id}(id=${account.accountNo}, comp_id=${account.orgCoy.id}) }"> <i
 									class="fa fa-eye"></i>
 							</a> 
 						

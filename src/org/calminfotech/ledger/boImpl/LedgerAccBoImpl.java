@@ -163,7 +163,7 @@ public class LedgerAccBoImpl implements LedgerAccBo {
 		boolean isSet = false;
 
 		if(
-			this.settingBo.fetchsettings("PATIENT_REC_ACT", this.userIdentity.getOrganisation().getOrgCoy().getId()) != null
+			this.settingBo.fetchsettings("GL_PATIENT_REC_ACT", this.userIdentity.getOrganisation().getOrgCoy().getId()) != null
 			&& this.settingBo.fetchsettings("VENDOR_PAY_ACT", this.userIdentity.getOrganisation().getOrgCoy().getId()) != null  
 			&& this.settingBo.fetchsettings("HMO_REC_ACT", this.userIdentity.getOrganisation().getOrgCoy().getId())  != null
 		)

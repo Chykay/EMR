@@ -22,4 +22,6 @@ public interface HmoTransactionDao {
 
 	public List<HmoTransaction> fetchAllByOrganisation();
 
+	public List<HmoTransaction> fetchAllByHMO(int hmo_id);
+
 }

@@ -28,7 +28,7 @@
 <br></br>
 <br></br>
 <br></br>
-<p style="float: center;"><h4>GL REPORT for: <span th:text="${gLReport.name}"></span> <th:block th:text="|(Branch: ${gLReport.branchName}; Company: ${gLReport.companyName})|"></th:block></h4></p>
+<p style="float: center;"><h4>GL REPORT for: <span th:text="${hmoReport.name}"></span> <th:block th:text="|(Branch: ${hmoReport.branchName}; Company: ${hmoReport.companyName})|"></th:block></h4></p>
 
 	
 	
@@ -39,7 +39,7 @@
     				
 		<th>Create Date</th>
 		<th>Effective Date</th>
-		<th>Account No</th>
+		<th>Description</th>
 		<th>DR</th>
 		<th>CR</th>
 				
@@ -47,12 +47,12 @@
       </tr>
     </thead>
     <tbody>
-     	<tr th:each="reportEntry : *{gLReport.entries}">
+     	<tr th:each="reportEntry : *{hmoReport.entries}">
  	
 					
 					<td th:text="${reportEntry.createDate}"></td> 
 					<td th:text="${reportEntry.effectiveDate}"></td> 
-					<td th:text="${reportEntry.accountNo}"></td> 
+					<td th:text="${reportEntry.name}"></td> 
 					<td th:text="${#numbers.formatDecimal(reportEntry.debit, 0, 'COMMA', 2, 'POINT')}" ></td>
 					<td th:text="${#numbers.formatDecimal(reportEntry.credit, 0, 'COMMA', 2, 'POINT')}" ></td>
 					
@@ -61,10 +61,11 @@
       </tr>
       <tr>
       	<td></td>
+      	<td></td>
       	<td>TOTAL</td>
-      	<td th:text="${#numbers.formatDecimal(gLReport.totDebit, 0, 'COMMA', 2, 'POINT')}"></td>
-      	<td th:text="${#numbers.formatDecimal(gLReport.totCredit, 0, 'COMMA', 2, 'POINT')}"></td>
-      	<td th:text="${#numbers.formatDecimal(gLReport.totBalance, 0, 'COMMA', 2, 'POINT')}"></td>      	
+      	<td th:text="${#numbers.formatDecimal(hmoReport.totDebit, 0, 'COMMA', 2, 'POINT')}"></td>
+      	<td th:text="${#numbers.formatDecimal(hmoReport.totCredit, 0, 'COMMA', 2, 'POINT')}"></td>
+      	<td th:text="${#numbers.formatDecimal(hmoReport.totBalance, 0, 'COMMA', 2, 'POINT')}"></td>      	
       </tr> 
     </tbody>
   </table>

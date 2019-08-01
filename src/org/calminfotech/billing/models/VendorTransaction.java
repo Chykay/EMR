@@ -116,10 +116,9 @@ public class VendorTransaction {
 	@JoinColumn(name = "paymodeid")
 	private Paymode paymode;
 
-	// TODO i DON'T HAVE THIS
-	/*@ManyToOne
+	@ManyToOne
 	@JoinColumn(name = "vendor_id")
-	private Vendor vendor;*/
+	private Vendor vendor;
 
 	/*
 	 * @Transient private Map mfig;
@@ -178,13 +177,13 @@ public class VendorTransaction {
 		this.paymode = paymode;
 	}
 
-	/*public Vendor getVendor() {
+	public Vendor getVendor() {
 		return vendor;
 	}
 
 	public void setVendor(Vendor vendor) {
 		this.vendor = vendor;
-	}*/
+	}
 
 	@Column(name = "created_by")
 	private String createdBy;
@@ -250,9 +249,5 @@ public class VendorTransaction {
 		this.user = user;
 	}
 
-	public void setVendor(Vendor vendorDetailsById) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
 }

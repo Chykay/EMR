@@ -345,7 +345,7 @@
 		<mapping class="org.calminfotech.billing.models.BillInvoicePayment" />
 		<mapping class="org.calminfotech.billing.models.BillInvoicePaymentSummary" />
 		<mapping class="org.calminfotech.billing.models.CustomerTransaction" />
-		
+		<mapping class="org.calminfotech.billing.models.VendorTransaction" />
 	
 		
 		<mapping class="org.calminfotech.billing.models.GetBillItem" />
@@ -378,7 +378,6 @@
 		<mapping class="org.calminfotech.inventory.models.PointStockIn" />
 		<mapping class="org.calminfotech.inventory.models.PointStockInLine"/>
 		<mapping class="org.calminfotech.inventory.models.PointStockOpeningBalance" />
-		<mapping class="org.calminfotech.inventory.models.VendorTransaction" />
 		
 	
 		<!-- visit queue stuffs --> 

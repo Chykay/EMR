@@ -1,4 +1,4 @@
-package org.calminfotech.ledger.controllers;
+/*package org.calminfotech.ledger.controllers;
 
 import java.util.List;
 
@@ -111,7 +111,7 @@ public class CustomerAccController {
 		return "/ledger/customer_acc/list";
 	}
 	
-	/* REVERSE ENTRY */
+	 REVERSE ENTRY 
 	@RequestMapping(value = {"/reversal/{batchNo}"}, method=RequestMethod.GET)
 	public String GLReversal(@PathVariable("batchNo") String batchNo, Model model) {
 		
@@ -125,7 +125,7 @@ public class CustomerAccController {
 		return "/ledger/gen_ledger/index";
 	}
 	
-	/* SHOW ALL */
+	 SHOW ALL 
 	@RequestMapping(value = {"/view/{id}"}, method=RequestMethod.GET)
 	public String show(Model model, @PathVariable int id) {
 		LedgerAccount genLedger = this.ledgerAccBo.getLedgerById(id);
@@ -133,7 +133,7 @@ public class CustomerAccController {
 		return "/ledger/ledger_acc/show";
 	}
 	
-	/* CREATE */
+	 CREATE 
 	@Layout(value = "layouts/form_wizard_layout")
 	@RequestMapping(value = {"/create"}, method=RequestMethod.GET)
 	public String create(Model model) {		
@@ -164,7 +164,7 @@ public class CustomerAccController {
 	
 	
 	
-	/* UPDATE */
+	 UPDATE 
 	@RequestMapping(value = {"/edit/{id}"}, method=RequestMethod.GET)
 	public String update(Model model, @PathVariable int id, HttpServletRequest request) {
 		LedgerAccount genLedger = this.ledgerAccBo.getLedgerById(id);
@@ -211,7 +211,7 @@ public class CustomerAccController {
 	}
 	
 		
-	/* DELETE */
+	 DELETE 
 	@RequestMapping(value={"/delete/{id}"}, method=RequestMethod.GET)
 	public String delete(@PathVariable int id) {
 		LedgerAccount genLedger = this.ledgerAccBo.getLedgerById(id);
@@ -230,3 +230,4 @@ public class CustomerAccController {
 		return "ledger/customer_acc/search";
 	}
 }
+*/

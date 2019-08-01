@@ -69,4 +69,9 @@ public class HmoTransactionBoImpl implements HmoTransactionBo {
 		return customerTranDao.fetchAllByOrganisation50();
 	}
 
+	@Override
+	public List<HmoTransaction> fetchAllByHMO(int hmo_id) {
+		return customerTranDao.fetchAllByHMO(hmo_id);
+	}
+
 }

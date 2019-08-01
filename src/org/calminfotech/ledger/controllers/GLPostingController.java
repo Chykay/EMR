@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.calminfotech.billing.boInterface.CustomerTransactionBo;
+import org.calminfotech.billing.models.CustomerTransaction;
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
 import org.calminfotech.ledger.boInterface.LedgerPostingBo;
 import org.calminfotech.ledger.daoImpl.PostCodeDaoImpl;
@@ -47,18 +49,11 @@ public class GLPostingController {
 	@Autowired
 	private LedgerAccBo ledgerAccBo;
 
-	/*	
-	@Autowired
-	private SessionFactory sessionFactory;
-	@Autowired
-	private BalSheetCatBo balSheetCatBo;
-
-	@Autowired
-	private TotAccBo totAccBo;
-	*/
-
 	@Autowired
 	private UserIdentity userIdentity;
+	
+	@Autowired
+	private CustomerTransactionBo customerTransactionBo;
 
 	
 	/* GET ALL GL ENTRIES*/
@@ -68,7 +63,7 @@ public class GLPostingController {
 		
 		List<GLEntry> glEntries = null;
 		try {
-			glEntries = this.ledgerPostingBo.getGLEntries(this.userIdentity.getOrganisation().getId());
+			glEntries = this.ledgerPostingBo.getBranchGLEntries(this.userIdentity.getOrganisation().getId());
 		} catch (LedgerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -153,7 +148,7 @@ public class GLPostingController {
 		if (end_date.equals("")) end_date = "2999-01-01";
 		System.out.println(account_no + " : " + start_date + " : " + end_date);
 		try {
-			glEntries = this.ledgerPostingBo.getGLEntriesListing(account_no, start_date, end_date);
+			glEntries = this.ledgerPostingBo.getBranchGLEntriesWithRange(account_no, start_date, end_date);
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.err.println("error oo");
@@ -167,7 +162,7 @@ public class GLPostingController {
 	}
 
 	@Layout("layouts/datatable")
-	@RequestMapping(value = {"/listings/{id}"}, method=RequestMethod.GET)
+	@RequestMapping(value = {"/listings/GL/{id}"}, method=RequestMethod.GET)
 	public String listingsGL(Model model, @PathVariable("id") String accountNo) {
 		
 		List<GLEntry> glEntries = null;
@@ -183,7 +178,7 @@ public class GLPostingController {
 	}
 
 	@Layout("layouts/datatable")
-	@RequestMapping(value = {"/listings/{id}"}, method=RequestMethod.POST)
+	@RequestMapping(value = {"/listings/GL/{id}"}, method=RequestMethod.POST)
 	public String postListingsGL(Model model, @PathVariable("id") String accountNo, @Valid @ModelAttribute("criteria") LedgerListingForm criteria) {
 		String start_date = criteria.getStartDate();
 		String end_date = criteria.getEndDate();
@@ -195,7 +190,7 @@ public class GLPostingController {
 		if (end_date.equals("")) end_date = "2999-01-01";
 		System.out.println(account_no + " : " + start_date + " : " + end_date);
 		try {
-			glEntries = this.ledgerPostingBo.getGLEntriesListing(account_no, start_date, end_date);
+			glEntries = this.ledgerPostingBo.getBranchGLEntriesWithRange(account_no, start_date, end_date);
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.err.println("error oo");
@@ -209,7 +204,7 @@ public class GLPostingController {
 	}
 
 	@Layout("layouts/datatable")
-	@RequestMapping(value = {"/listings/{company_id}/{id}"}, method=RequestMethod.GET)
+	@RequestMapping(value = {"/listings/GL/{company_id}/{id}"}, method=RequestMethod.GET)
 	public String listingsGLCompany(Model model, @PathVariable("company_id") int company_id, @PathVariable("id") String accountNo) {
 		
 		List<GLEntry> glEntries = null;
@@ -225,7 +220,7 @@ public class GLPostingController {
 	}
 
 	@Layout("layouts/datatable")
-	@RequestMapping(value = {"/listings/{company_id}/{id}"}, method=RequestMethod.POST)
+	@RequestMapping(value = {"/listings/GL/{company_id}/{id}"}, method=RequestMethod.POST)
 	public String listingsGLCompany(Model model, @PathVariable("company_id") int company_id,  @PathVariable("id") String accountNo, @Valid @ModelAttribute("criteria") LedgerListingForm criteria) {
 		String start_date = criteria.getStartDate();
 		String end_date = criteria.getEndDate();
@@ -235,7 +230,7 @@ public class GLPostingController {
 
 		if (end_date.equals("")) end_date = "2999-01-01";
 		try {
-			glEntries = this.ledgerPostingBo.getGLEntriesListingCom(account_no, start_date, end_date);
+			glEntries = this.ledgerPostingBo.getCompanyGLEntriesWithRange(account_no, start_date, end_date);
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.err.println("error oo");
@@ -247,6 +242,37 @@ public class GLPostingController {
 		
 		return "/ledger/gen_ledger/listGL";
 	}
+	
+	@Layout("layouts/datatable")
+	@RequestMapping(value = {"/listings/patients/{id}"}, method=RequestMethod.GET)
+	public String listingsPatients(Model model, @PathVariable("id") int patientID) {
+		
+		List<CustomerTransaction> customerTransactions = null;
+		model.addAttribute("criteria", new LedgerListingForm());
+		
+		customerTransactions = this.customerTransactionBo.fetchAllByCustomer(patientID);
+		
+		model.addAttribute("customerTransactions", customerTransactions);
+		return "/ledger/gen_ledger/listCust";
+	}
+
+	@Layout("layouts/datatable")
+	@RequestMapping(value = {"/listings/patients/{id}"}, method=RequestMethod.POST)
+	public String postListingsCustomer(Model model, @PathVariable("id") int patientID, @Valid @ModelAttribute("criteria") LedgerListingForm criteria) {
+		// String start_date = criteria.getStartDate();
+		// String end_date = criteria.getEndDate();
+		
+		List<CustomerTransaction> customerTransactions = null;
+		
+		customerTransactions = this.customerTransactionBo.fetchAllByCustomer(patientID);
+		
+		model.addAttribute("customerTransactions", customerTransactions);
+		model.addAttribute("criteria", criteria);
+		
+		
+		return "/ledger/gen_ledger/listCust";
+	}
+
 	
 	@RequestMapping(value = {"/reversal/{batch_no}"}, method=RequestMethod.GET)
 	public String GLReversal(@PathVariable("batch_no") String batch_no, Model model) {

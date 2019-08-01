@@ -20,4 +20,6 @@ public interface CustomerTransactionBo {
 	public List<CustomerTransaction> fetchAllByOrganisation50();
 
 	List<CustomerTransaction> fetchAllByOrganisation();
+
+	List<CustomerTransaction> fetchAllByCustomer(int customer_id);
 }

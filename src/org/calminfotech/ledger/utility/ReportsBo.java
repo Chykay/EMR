@@ -4,6 +4,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.calminfotech.billing.boInterface.CustomerTransactionBo;
+import org.calminfotech.billing.boInterface.HmoTransactionBo;
+import org.calminfotech.billing.boInterface.VendorTransactionBo;
+import org.calminfotech.billing.models.CustomerTransaction;
+import org.calminfotech.hmo.boInterface.HmoBo;
+import org.calminfotech.hmo.models.Hmo;
+import org.calminfotech.hmo.models.HmoTransaction;
+import org.calminfotech.inventory.exceptions.RecordNotFoundException;
+import org.calminfotech.inventory.models.Vendor;
+import org.calminfotech.inventory.serviceInterface.VendorManagerInterface;
 import org.calminfotech.ledger.boInterface.GLMappingBo;
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
 import org.calminfotech.ledger.boInterface.LedgerCatBo;
@@ -18,6 +28,8 @@ import org.calminfotech.ledger.reports.models.AccChartEntry;
 import org.calminfotech.ledger.reports.models.AccChartReport;
 import org.calminfotech.ledger.reports.models.TBReport;
 import org.calminfotech.ledger.reports.models.TrialBalEntry;
+import org.calminfotech.patient.boInterface.PatientBo;
+import org.calminfotech.patient.models.Patient;
 import org.calminfotech.system.boInterface.OrganisationBo;
 import org.calminfotech.system.models.Organisation;
 import org.calminfotech.user.utils.UserIdentity;
@@ -49,6 +61,24 @@ public class ReportsBo {
 	
 	@Autowired
 	private GLMappingBo glSetupBo;
+	
+	@Autowired
+	private CustomerTransactionBo customerTransactionBo;
+	
+	@Autowired
+	private PatientBo patientBo;
+	
+	@Autowired
+	private HmoTransactionBo hmoTransactionBo;
+	
+	@Autowired
+	private HmoBo hmoBo;
+	
+	@Autowired
+	private VendorTransactionBo vendorTransactionBo;
+	
+	@Autowired
+	private VendorManagerInterface vendorManagerInterface;
 
 	public TBReport getBranchTB(int org_id) {
 		List<TrialBalEntry> trialBalEntries = new ArrayList<TrialBalEntry>();
@@ -165,7 +195,7 @@ public class ReportsBo {
 		LedgerAccount ledgerAccount = this.ledgerAccBo.getLedgerByAccount_no(accountNo);
 		
 		try {
-			glEntries = this.ledgerPostingBo.getGLEntriesListing(accountNo, "", "2222-09-09");
+			glEntries = this.ledgerPostingBo.getBranchGLEntriesWithRange(accountNo, "", "2222-09-09");
 		} catch (LedgerException e) {
 			e.printStackTrace();
 		}
@@ -211,7 +241,7 @@ public class ReportsBo {
 		LedgerAccount ledgerAccount = this.ledgerAccBo.getLedgerByAccount_no(accountNo);
 		
 		try {
-			glEntries = this.ledgerPostingBo.getGLEntriesListingCom(accountNo, "", "2222-09-09");
+			glEntries = this.ledgerPostingBo.getCompanyGLEntriesWithRange(accountNo, "", "2222-09-09");
 		} catch (LedgerException e) {
 			e.printStackTrace();
 		}
@@ -247,6 +277,137 @@ public class ReportsBo {
 		return tbReport;
 	}
 
+	public TBReport customerReport(int id, String startDate, String endDate) {
+		TBReport tbReport = new TBReport();
+		List<TrialBalEntry> trialBalEntries = new ArrayList<TrialBalEntry>();
+		float totDebit = 0, totCredit = 0;
+		List<CustomerTransaction> customerTransactions = new ArrayList<CustomerTransaction>();
+		
+		Patient patient = this.patientBo.getPatientById(id);
+		
+		customerTransactions = this.customerTransactionBo.fetchAllByCustomer(id);
+		
+		for (CustomerTransaction customerTransaction : customerTransactions) {
+			String postCode = customerTransaction.getDrcr();
+			float amount = (float) Math.abs(customerTransaction.getAmount());
+			
+			TrialBalEntry trialBalEntry = new TrialBalEntry();
+			trialBalEntry.setAccountNo(String.valueOf(id));
+			trialBalEntry.setName(customerTransaction.getDescription());
+			trialBalEntry.setCreateDate(customerTransaction.getCreatedDate().toString());
+			trialBalEntry.setEffectiveDate(customerTransaction.getEffectivedate().toString());
+			
+			if (postCode.equals("DR")) {
+				trialBalEntry.setDebit(amount);
+				totDebit += amount;
+			} else {
+				trialBalEntry.setCredit(amount);
+				totCredit += amount;
+			}
+				
+			
+			trialBalEntries.add(trialBalEntry);
+		}
+		
+		tbReport.setName(patient.getFirstName().concat(" " + patient.getSurname()));
+		tbReport.setEntries(trialBalEntries);
+		tbReport.setTotCredit(totCredit);
+		tbReport.setTotDebit(totDebit);
+		tbReport.setTotBalance(totCredit - totDebit);
+		tbReport.setBranchName(this.userIdentity.getOrganisation().getName());
+		tbReport.setCompanyName(this.userIdentity.getOrganisation().getOrgCoy().getName());
+		return tbReport;
+	}
+	
+	public TBReport hmoReport(int id, String startDate, String endDate) {
+		TBReport tbReport = new TBReport();
+		List<TrialBalEntry> trialBalEntries = new ArrayList<TrialBalEntry>();
+		float totDebit = 0, totCredit = 0;
+		List<HmoTransaction> hmoTransactions = new ArrayList<HmoTransaction>();
+		
+		Hmo hmo = this.hmoBo.getHmoById(id);
+		
+		hmoTransactions = this.hmoTransactionBo.fetchAllByHMO(id);
+		
+		for (HmoTransaction hmoTransaction : hmoTransactions) {
+			String postCode = hmoTransaction.getDrcr();
+			float amount = (float) Math.abs(hmoTransaction.getAmount());
+			
+			TrialBalEntry trialBalEntry = new TrialBalEntry();
+			trialBalEntry.setAccountNo(String.valueOf(id));
+			trialBalEntry.setName(hmoTransaction.getDescription());
+			trialBalEntry.setCreateDate(hmoTransaction.getCreatedDate().toString());
+			trialBalEntry.setEffectiveDate(hmoTransaction.getEffectivedate().toString());
+			
+			if (postCode.equals("DR")) {
+				trialBalEntry.setDebit(amount);
+				totDebit += amount;
+			} else {
+				trialBalEntry.setCredit(amount);
+				totCredit += amount;
+			}
+				
+			
+			trialBalEntries.add(trialBalEntry);
+		}
+		
+		tbReport.setName(hmo.getName());
+		tbReport.setEntries(trialBalEntries);
+		tbReport.setTotCredit(totCredit);
+		tbReport.setTotDebit(totDebit);
+		tbReport.setTotBalance(totCredit - totDebit);
+		tbReport.setBranchName(this.userIdentity.getOrganisation().getName());
+		tbReport.setCompanyName(this.userIdentity.getOrganisation().getOrgCoy().getName());
+		return tbReport;
+	}
+	
+	public TBReport vendorReport(int id, String startDate, String endDate) {
+		TBReport tbReport = new TBReport();
+		List<TrialBalEntry> trialBalEntries = new ArrayList<TrialBalEntry>();
+		float totDebit = 0, totCredit = 0;
+		List<org.calminfotech.billing.models.VendorTransaction> vendorTransactions = this.vendorTransactionBo.fetchAllByVendor(id);
+		
+		Vendor vendor = new Vendor();
+		try {
+			vendor = this.vendorManagerInterface.getVendorDetailsById(id);
+		} catch (RecordNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		for (org.calminfotech.billing.models.VendorTransaction vendorTransaction : vendorTransactions) {
+			String postCode = vendorTransaction.getDrcr();
+			float amount = (float) Math.abs(vendorTransaction.getAmount());
+			
+			TrialBalEntry trialBalEntry = new TrialBalEntry();
+			trialBalEntry.setAccountNo(String.valueOf(id));
+			trialBalEntry.setName(vendorTransaction.getDescription());
+			trialBalEntry.setCreateDate(vendorTransaction.getCreatedDate().toString());
+			trialBalEntry.setEffectiveDate(vendorTransaction.getEffectivedate().toString());
+			
+			if (postCode.equals("DR")) {
+				trialBalEntry.setDebit(amount);
+				totDebit += amount;
+			} else {
+				trialBalEntry.setCredit(amount);
+				totCredit += amount;
+			}
+				
+			
+			trialBalEntries.add(trialBalEntry);
+		}
+		
+		tbReport.setName(vendor.getVendorName());
+		tbReport.setEntries(trialBalEntries);
+		tbReport.setTotCredit(totCredit);
+		tbReport.setTotDebit(totDebit);
+		tbReport.setTotBalance(totCredit - totDebit);
+		tbReport.setBranchName(this.userIdentity.getOrganisation().getName());
+		tbReport.setCompanyName(this.userIdentity.getOrganisation().getOrgCoy().getName());
+		return tbReport;
+	}
+	
 	public AccChartReport getCoAReport(int branchID, String viewType, String chartType, String rangeType) {
 		List<LedgerCategory> ledgerCategories = this.ledgerCatBo.fetchAll();
 
@@ -505,5 +666,6 @@ public class ReportsBo {
 		}
 		return accChartReport;
 	}
+
 
 }

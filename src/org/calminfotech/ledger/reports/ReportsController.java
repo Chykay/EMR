@@ -1,11 +1,19 @@
 package org.calminfotech.ledger.reports;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.calminfotech.hmo.boInterface.HmoBo;
+import org.calminfotech.hmo.models.Hmo;
+import org.calminfotech.inventory.exceptions.RecordNotFoundException;
+import org.calminfotech.inventory.models.Vendor;
+import org.calminfotech.inventory.serviceInterface.VendorManagerInterface;
 import org.calminfotech.ledger.boInterface.LedgerAccBo;
 import org.calminfotech.ledger.boInterface.LedgerTotallingBo;
 import org.calminfotech.ledger.models.LedgerAccount;
 import org.calminfotech.ledger.utility.ReportsBo;
+import org.calminfotech.patient.boInterface.PatientBo;
+import org.calminfotech.patient.models.Patient;
 import org.calminfotech.system.boInterface.OrganisationBo;
 import org.calminfotech.system.models.Organisation;
 import org.calminfotech.user.utils.UserIdentity;
@@ -44,6 +52,18 @@ public class ReportsController {
 	
 	@Autowired
 	private OrganisationBo organisationBo;
+	
+	@Autowired
+	private PatientBo patientBo;
+	
+	@Autowired
+	private HmoBo hmoBo;
+	
+	@Autowired
+	private VendorManagerInterface vendorManagerInterface;
+	
+	/*@Autowired
+	private */
 	
 
 	@Layout("layouts/datatable")
@@ -157,4 +177,85 @@ public class ReportsController {
 
 		return "ledger/reports/GL/com_report";
 	}
+	
+	@Layout("layouts/datatable")
+	@RequestMapping(value = "/patients", method = RequestMethod.GET)
+	public String indexCustomer(Model model) {
+		Organisation org = userIdentity.getOrganisation();
+		
+			List<Patient> patients = this.patientBo.fetchAllByOrganisation(org.getId());
+			model.addAttribute("patients", patients);
+		
+		
+		return "ledger/reports/patient/index";
+	}
+
+	@Layout("layouts/reportblank")
+	@RequestMapping(value = "/patients/{id}/{start_date}/{end_date}", method = RequestMethod.GET)
+	public String customer(Model model, @PathVariable("id") int id, @PathVariable("start_date") String startDate,
+			@PathVariable("end_date") String endDate ) {
+		
+		model.addAttribute("customerReport", this.reportsBo.customerReport(id, startDate, endDate));
+
+		return "ledger/reports/patient/report";
+	}
+
+	@Layout("layouts/datatable")
+	@RequestMapping(value = "/hmos", method = RequestMethod.GET)
+	public String indexHMO(Model model) {
+		Organisation org = userIdentity.getOrganisation();
+		
+			List<Hmo> hmos = this.hmoBo.fetchAll(org);
+			model.addAttribute("hmos", hmos);
+		
+		
+		return "ledger/reports/HMO/index";
+	}
+
+	@Layout("layouts/reportblank")
+	@RequestMapping(value = "/hmos/{id}/{start_date}/{end_date}", method = RequestMethod.GET)
+	public String hmo(Model model, @PathVariable("id") int id, @PathVariable("start_date") String startDate,
+			@PathVariable("end_date") String endDate ) {
+		
+		model.addAttribute("hmoReport", this.reportsBo.hmoReport(id, startDate, endDate));
+
+		return "ledger/reports/HMO/report";
+	}
+
+	@Layout("layouts/datatable")
+	@RequestMapping(value = "/vendors", method = RequestMethod.GET)
+	public String indexVendor(Model model) {
+		
+			List<Vendor> vendors = new ArrayList<Vendor>();
+			try {
+				vendors = this.vendorManagerInterface.getVendorsList();
+			} catch (RecordNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			model.addAttribute("vendors", vendors);
+		
+		
+		return "ledger/reports/vendor/index";
+	}
+
+	@Layout("layouts/reportblank")
+	@RequestMapping(value = "/vendors/{id}/{start_date}/{end_date}", method = RequestMethod.GET)
+	public String vendor(Model model, @PathVariable("id") int id, @PathVariable("start_date") String startDate,
+			@PathVariable("end_date") String endDate ) {
+		
+		model.addAttribute("vendorReport", this.reportsBo.vendorReport(id, startDate, endDate));
+
+		return "ledger/reports/vendor/report";
+	}
+
+	/*@Layout("layouts/reportblank")
+	@RequestMapping(value = "/GL/{company_id}/{accountNo}", method = RequestMethod.GET)
+	public String generalLedgerCompany(Model model, @PathVariable Integer company_id, @PathVariable String accountNo) {
+		
+		model.addAttribute("gLReport", this.reportsBo.GLReportCompany(company_id, accountNo));
+
+		return "ledger/reports/GL/com_report";
+	}*/
 }

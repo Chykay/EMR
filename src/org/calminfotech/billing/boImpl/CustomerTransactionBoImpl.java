@@ -68,5 +68,10 @@ public class CustomerTransactionBoImpl implements CustomerTransactionBo {
 		// TODO Auto-generated method stub
 		return customerTranDao.fetchAllByOrganisation50();
 	}
+	
+	@Override
+	public List<CustomerTransaction> fetchAllByCustomer(int customer_id) {
+		return customerTranDao.fetchAllByCustomer(customer_id);
+	}
 
 }

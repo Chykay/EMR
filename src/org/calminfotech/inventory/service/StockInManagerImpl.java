@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.calminfotech.billing.boInterface.VendorTransactionBo;
+import org.calminfotech.billing.models.VendorTransaction;
 import org.calminfotech.hrunit.models.HrunitCategory;
 import org.calminfotech.inventory.daoInterface.StockInDaoInterface;
 import org.calminfotech.inventory.daoInterface.VendorDaoInterface;
@@ -22,7 +23,6 @@ import org.calminfotech.inventory.models.StockCurrentBalance;
 import org.calminfotech.inventory.models.StockIn;
 import org.calminfotech.inventory.models.StockInLine;
 import org.calminfotech.inventory.models.Vendor;
-import org.calminfotech.inventory.models.VendorTransaction;
 import org.calminfotech.inventory.serviceInterface.InventoryManagerInterface;
 import org.calminfotech.inventory.serviceInterface.StockInManagerInterface;
 import org.calminfotech.inventory.utils.UnitOfMeasureConverter;

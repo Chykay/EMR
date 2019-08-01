@@ -40,7 +40,7 @@ public class Common {
 	protected Date modifiedDate;
 
 	@Column(name = "is_deleted")
-	protected boolean isDeleted = false;
+	public boolean isDeleted = false;
 
 	@Column(name = "is_active")
 	protected Boolean active = true;
@@ -69,9 +69,9 @@ public class Common {
 		this.modifiedDate = modifiedDate;
 	}
 
-	public boolean isDeleted() {
+	/*public boolean isDeleted() {
 		return isDeleted;
-	}
+	}*/
 
 	public void setDeleted(boolean isDeleted) {
 		this.isDeleted = isDeleted;
